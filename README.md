@@ -1,3 +1,5 @@
+![AISEC 2026 — AI Security Incidents](assets/branding/AISEC2026.png)
+
 # ai_security_incidents_2026
 
 A VERIS-coded catalogue of **2026 software-security incidents in which AI was materially involved** — as a cause, a weapon, a target, the loot, or the tool that found (or wrote) the flaw.
