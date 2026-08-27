@@ -2,7 +2,7 @@
   "title": "All 2026 AI-related software-security incidents (VERIS-coded), consolidated with corrected original sources",
   "generated": "2026-08-26",
   "author": "dave.farago@mediform.io",
-  "description": "Union of ai_software_security_incidents_2026.json (35 incidents; AISEC-2026-*) and merged_incidents_2026_VERIS_described.json (64 incidents; MRG-2026-*). Incident contents are identical to the source files; only each incident's `sources` field is rewritten to cite the corrected ORIGINAL sources. CVE validation (2026-08-26): every incident additionally carries `validated_cve` (corrected list of CVE IDs) and `validated_cve_details` (per-CVE relation, CVE.org metadata, KEV status, removed IDs with reasons); see `cve_validation`. VERIS action.*.cve fields were aligned on 2026-08-27 to hold only validated `exploited` CVEs (previous values in `validated_cve_details.veris_cve_before`; see `cve_validation.veris_action_cve_alignment`).",
+  "description": "Union of ai_software_security_incidents_2026.json (35 incidents) and merged_incidents_2026_VERIS_described.json (64 incidents). Incident contents are identical to the source files; only each incident's `sources` field is rewritten to cite the corrected ORIGINAL sources. CVE validation (2026-08-26): every incident additionally carries `validated_cve` (corrected list of CVE IDs) and `validated_cve_details` (per-CVE relation, CVE.org metadata, KEV status, removed IDs with reasons); see `cve_validation`. VERIS action.*.cve fields were aligned on 2026-08-27 to hold only validated `exploited` CVEs (previous values in `validated_cve_details.veris_cve_before`; see `cve_validation.veris_action_cve_alignment`). Incident IDs (see `id_scheme`): prefix DB = found through an incident database (AIID/VCDB), DR = found only through a deep-research report; the number is the position in the 2026-08-27 priority ranking and is frozen.",
   "methodology_ref": "VERIS_Methodology_for_AI_Security_Incidents_concise.md",
   "source_corrections": {
     "ChatGPT_deep-research-report": "ChatGPT_DeepResearch_ai_incidents_2026.md",
@@ -63,9 +63,19 @@
       "False positive": 5
     }
   },
+  "id_scheme": {
+    "assigned_on": "2026-08-27",
+    "prefix_rule": "DB = at least one source is an incident register (AI Incident Database export or vz-risk/VCDB); DR = sources are deep-research reports only (ChatGPT / Claude Code / Grok). No incident had both kinds of source.",
+    "number_rule": "Position (001-099) in the priority ranking of 2026-08-27 (observed severity desc, potential severity as tiebreaker, order within ties as in ranking_table). The number is unique across both prefixes and matches the '#' used in the Markdown report.",
+    "stability": "Frozen: IDs are never renumbered. Later re-ranking is reflected in ranking_table only; new incidents continue from 100.",
+    "counts": {
+      "DB": 50,
+      "DR": 49
+    }
+  },
   "ranking_table": [
     {
-      "id": "AISEC-2026-017",
+      "id": "DB-2026-001",
       "incident": "LiteLLM AI-gateway PyPI supply-chain compromise (TeamPCP) — terabytes of credentials from 2,500+ orgs",
       "date": "2026-03-24",
       "status": "Confirmed",
@@ -76,7 +86,7 @@
       "validated_cve": "CVE-2026-33634"
     },
     {
-      "id": "MRG-2026-015",
+      "id": "DR-2026-002",
       "incident": "Mexican government mega-breach via jailbroken Claude Code",
       "date": "Dec 2025 – Feb 2026 (disclosed ~25 Feb)",
       "status": "Confirmed",
@@ -87,7 +97,7 @@
       "validated_cve": ""
     },
     {
-      "id": "AISEC-2026-005",
+      "id": "DB-2026-003",
       "incident": "Autonomous offensive agent (CodeWall) breached McKinsey's Lilli AI platform via SQLi in 2 hours",
       "date": "2026-02-28",
       "status": "Confirmed",
@@ -98,7 +108,7 @@
       "validated_cve": ""
     },
     {
-      "id": "AISEC-2026-013",
+      "id": "DB-2026-004",
       "incident": "Novo Nordisk breach — clinical-trial data AND internal AI model assets stolen (FulcrumSec)",
       "date": "2026-03-01",
       "status": "Confirmed",
@@ -109,7 +119,7 @@
       "validated_cve": ""
     },
     {
-      "id": "AISEC-2026-023",
+      "id": "DB-2026-005",
       "incident": "'Miasma' worm targeted AI coding agents via poisoned Microsoft/Azure repos (73 repos disabled)",
       "date": "2026-06-05",
       "status": "Confirmed",
@@ -120,7 +130,7 @@
       "validated_cve": ""
     },
     {
-      "id": "AISEC-2026-028",
+      "id": "DB-2026-006",
       "incident": "OpenAI evaluation agents escaped their sandbox via Artifactory 0-days and breached Hugging Face",
       "date": "2026-07-09",
       "status": "Confirmed",
@@ -131,7 +141,7 @@
       "validated_cve": "CVE-2026-66014; CVE-2026-65617; CVE-2026-65924; CVE-2026-65923; CVE-2026-65925; CVE-2026-65921; CVE-2026-66015; CVE-2026-66018"
     },
     {
-      "id": "MRG-2026-012",
+      "id": "DR-2026-007",
       "incident": "Hermes + OpenClaw multi-agent campaign against Taiwanese government systems",
       "date": "1–4 Jul 2026",
       "status": "Confirmed",
@@ -142,7 +152,7 @@
       "validated_cve": ""
     },
     {
-      "id": "MRG-2026-018",
+      "id": "DR-2026-008",
       "incident": "Langflow RCEs actively exploited (CVE-2026-33017, CVE-2026-9198; CISA KEV) with AI-driven exploitation",
       "date": "2026",
       "status": "Confirmed",
@@ -153,7 +163,7 @@
       "validated_cve": "CVE-2026-33017; CVE-2026-9198; CVE-2025-3248; CVE-2025-34291; CVE-2026-55255; CVE-2026-0770; CVE-2026-21858; CVE-2025-68613"
     },
     {
-      "id": "MRG-2026-025",
+      "id": "DR-2026-009",
       "incident": "AI-assisted intrusion against a Mexican municipal water utility with attempted IT->OT movement (Dragos)",
       "date": "Jan 2026 compromise (disclosed 6 May 2026)",
       "status": "Confirmed",
@@ -164,7 +174,7 @@
       "validated_cve": ""
     },
     {
-      "id": "MRG-2026-037",
+      "id": "DR-2026-010",
       "incident": "Trivy double compromise - 'hackerbot-claw' autonomous Claude-powered attack bot + TeamPCP re-poisoning",
       "date": "Feb - Mar 2026",
       "status": "Confirmed",
@@ -175,7 +185,7 @@
       "validated_cve": "CVE-2026-28353; CVE-2026-33634"
     },
     {
-      "id": "MRG-2026-060",
+      "id": "DR-2026-011",
       "incident": "JADEPUFFER - first documented agentic ransomware (Langflow CVE-2025-3248 entry; destroyed a production database)",
       "date": "Jun - Jul 2026 (published 1 Jul)",
       "status": "Confirmed",
@@ -186,7 +196,7 @@
       "validated_cve": "CVE-2025-3248; CVE-2021-29441"
     },
     {
-      "id": "MRG-2026-062",
+      "id": "DR-2026-012",
       "incident": "CHAINDROP (keyv/cacheable) npm worm - 452 packages; persistence hooks planted in .claude/settings.json and .vscode/tasks.json (CVE-2026-45321)",
       "date": "4 Aug 2026",
       "status": "Confirmed",
@@ -197,7 +207,7 @@
       "validated_cve": ""
     },
     {
-      "id": "AISEC-2026-002",
+      "id": "DB-2026-013",
       "incident": "Malicious ClawHub 'skills' weaponise OpenClaw agents (ClawHavoc) — AMOS stealer / credential theft",
       "date": "2026-02-01",
       "status": "Confirmed",
@@ -208,7 +218,7 @@
       "validated_cve": ""
     },
     {
-      "id": "AISEC-2026-008",
+      "id": "DB-2026-014",
       "incident": "Cursor agent (Claude Opus 4.6) deleted PocketOS production DB + all backups via over-scoped Railway token",
       "date": "2026-04-25",
       "status": "Confirmed",
@@ -219,7 +229,7 @@
       "validated_cve": ""
     },
     {
-      "id": "AISEC-2026-012",
+      "id": "DB-2026-015",
       "incident": "CBSE OnMark exam platform exposed 9.3M student rows; vendor processed student data via Google Gemini",
       "date": "2026-05-30",
       "status": "Confirmed",
@@ -230,7 +240,7 @@
       "validated_cve": ""
     },
     {
-      "id": "AISEC-2026-015",
+      "id": "DB-2026-016",
       "incident": "Chat & Ask AI (Codeway) Firebase misconfiguration exposed ~300M messages / 25M users",
       "date": "2026-02-01",
       "status": "Confirmed",
@@ -241,7 +251,7 @@
       "validated_cve": ""
     },
     {
-      "id": "AISEC-2026-022",
+      "id": "DB-2026-017",
       "incident": "Attackers abused Meta's AI-powered support (HTS) tool to hijack 20,225 Instagram accounts",
       "date": "2026-06-02",
       "status": "Confirmed",
@@ -252,7 +262,7 @@
       "validated_cve": ""
     },
     {
-      "id": "AISEC-2026-031",
+      "id": "DB-2026-018",
       "incident": "Autonomous 'Hermes' AI agent (YOLO mode) ran post-exploitation against Thailand's Ministry of Finance",
       "date": "2026-06-15",
       "status": "Confirmed",
@@ -263,7 +273,7 @@
       "validated_cve": "CVE-2026-43503; CVE-2026-31431; CVE-2026-43284; CVE-2026-43500; CVE-2021-4034; CVE-2021-3156; CVE-2017-7269"
     },
     {
-      "id": "AISEC-2026-033",
+      "id": "DB-2026-019",
       "incident": "Anthropic's Claude models breached three real companies during cyber evaluations (misconfig internet)",
       "date": "2026-04-01",
       "status": "Confirmed",
@@ -274,7 +284,7 @@
       "validated_cve": ""
     },
     {
-      "id": "MRG-2026-009",
+      "id": "DR-2026-020",
       "incident": "Sysdig May 10 — AI-agent-driven intrusion from marimo CVE-2026-39987 to full PostgreSQL dump in under an hour",
       "date": "10 May 2026",
       "status": "Confirmed",
@@ -285,7 +295,7 @@
       "validated_cve": "CVE-2026-39987"
     },
     {
-      "id": "MRG-2026-016",
+      "id": "DR-2026-021",
       "incident": "LLMjacking industrialized — Operation Bizarre Bazaar marketplace + Sysdig 'VAPT' autonomous pipeline",
       "date": "Dec 2025 – Jun 2026",
       "status": "Confirmed",
@@ -296,7 +306,7 @@
       "validated_cve": ""
     },
     {
-      "id": "MRG-2026-051",
+      "id": "DR-2026-022",
       "incident": "TeamPCP 'Mini Shai-Hulud' / TanStack npm worm (170+ packages; OpenAI employee devices, Mistral, UiPath)",
       "date": "May 2026",
       "status": "Confirmed",
@@ -307,7 +317,7 @@
       "validated_cve": "CVE-2026-45321; CVE-2026-45758"
     },
     {
-      "id": "MRG-2026-053",
+      "id": "DR-2026-023",
       "incident": "Sysdig May 29 - agentic container/Kubernetes escape via marimo RCE, Docker-socket abuse, host root & cluster-secret extraction",
       "date": "29 May 2026",
       "status": "Confirmed",
@@ -318,7 +328,7 @@
       "validated_cve": "CVE-2026-39987"
     },
     {
-      "id": "MRG-2026-058",
+      "id": "DB-2026-024",
       "incident": "Cannabis Club Systems - public URLs / IDOR exposed 1,082,680 members (VCDB; no AI component)",
       "date": "2026 (disclosed 28 Jun)",
       "status": "Confirmed",
@@ -329,7 +339,7 @@
       "validated_cve": ""
     },
     {
-      "id": "MRG-2026-043",
+      "id": "DR-2026-025",
       "incident": "axios npm trojan - backdoored axios@1.14.1 / 0.30.4 dropping a RAT (Sapphire Sleet / North Korea)",
       "date": "31 Mar 2026",
       "status": "Confirmed",
@@ -340,7 +350,7 @@
       "validated_cve": "CVE-2026-34841"
     },
     {
-      "id": "AISEC-2026-001",
+      "id": "DB-2026-026",
       "incident": "Moltbook (AI-agent social network) exposed database — 1.5M API tokens, DMs, emails",
       "date": "2026-01-31",
       "status": "Confirmed",
@@ -351,7 +361,7 @@
       "validated_cve": ""
     },
     {
-      "id": "AISEC-2026-004",
+      "id": "DB-2026-027",
       "incident": "Model-capability extraction: DeepSeek, Moonshot & MiniMax distilled Claude via fraudulent accounts",
       "date": "2026-02-23",
       "status": "Confirmed",
@@ -362,7 +372,7 @@
       "validated_cve": ""
     },
     {
-      "id": "AISEC-2026-006",
+      "id": "DB-2026-028",
       "incident": "Claude Code agent destroyed DataTalks.Club production infrastructure via terraform destroy",
       "date": "2026-02-26",
       "status": "Confirmed",
@@ -373,7 +383,7 @@
       "validated_cve": ""
     },
     {
-      "id": "AISEC-2026-009",
+      "id": "DB-2026-029",
       "incident": "Meta internal AI agent's inaccurate advice caused SEV1 — unauthorized data access for ~2 hours",
       "date": "2026-03-18",
       "status": "Confirmed",
@@ -384,7 +394,7 @@
       "validated_cve": ""
     },
     {
-      "id": "AISEC-2026-010",
+      "id": "DB-2026-030",
       "incident": "AI deepfakes bypassed Aadhaar facial authentication to hijack identity, open accounts (Ahmedabad)",
       "date": "2026-04-28",
       "status": "Confirmed",
@@ -395,7 +405,7 @@
       "validated_cve": ""
     },
     {
-      "id": "AISEC-2026-019",
+      "id": "DB-2026-031",
       "incident": "MyLovely.AI (AI companion) breach exposed 113,000 explicit prompts, ~70k tied to user IDs",
       "date": "2026-04-01",
       "status": "Confirmed",
@@ -406,7 +416,7 @@
       "validated_cve": ""
     },
     {
-      "id": "AISEC-2026-020",
+      "id": "DB-2026-032",
       "incident": "Context.ai (AI tool) compromise cascaded to Vercel via an employee OAuth token",
       "date": "2026-04-18",
       "status": "Confirmed",
@@ -417,7 +427,7 @@
       "validated_cve": ""
     },
     {
-      "id": "AISEC-2026-021",
+      "id": "DB-2026-033",
       "incident": "US community bank self-reported feeding customer data (incl. SSNs) into an unauthorized AI app",
       "date": "2026-05-07",
       "status": "Confirmed",
@@ -428,7 +438,7 @@
       "validated_cve": ""
     },
     {
-      "id": "AISEC-2026-034",
+      "id": "DB-2026-034",
       "incident": "ClarityCheck (reverse image / identity-verification) exposed 9M+ facial-recognition images",
       "date": "2026-08-01",
       "status": "Confirmed",
@@ -439,7 +449,7 @@
       "validated_cve": ""
     },
     {
-      "id": "MRG-2026-003",
+      "id": "DR-2026-035",
       "incident": "Cline CLI unauthorized npm publication (cline@2.3.0) via prompt-injectable Claude GitHub Action ('Clinejection')",
       "date": "17 Feb 2026 (reported 1 Jan, disclosed 9 Feb)",
       "status": "Confirmed",
@@ -450,7 +460,7 @@
       "validated_cve": ""
     },
     {
-      "id": "MRG-2026-006",
+      "id": "DR-2026-036",
       "incident": "Vibe-coding vulnerability wave / Vibe Security Radar AI-authored-vulnerability corpus",
       "date": "Jan – Aug 2026 (Radar snapshot 16 Aug)",
       "status": "Confirmed",
@@ -461,7 +471,7 @@
       "validated_cve": "CVE-2026-25505; CVE-2025-46724; CVE-2026-25481; CVE-2025-62615; CVE-2026-1979; CVE-2026-28473; CVE-2026-26321; CVE-2026-28472; CVE-2026-27487; CVE-2026-27486; CVE-2026-28478; CVE-2026-29612; CVE-2026-28451; CVE-2026-27203; CVE-2026-27695; CVE-2026-27795; CVE-2026-32049; CVE-2026-32034; CVE-2026-32045; CVE-2026-32021; CVE-2026-32001; CVE-2026-22171; CVE-2026-32057; CVE-2026-32002; CVE-2025-70040; CVE-2026-32247; CVE-2026-32232; CVE-2026-32231; CVE-2026-32111; CVE-2026-32974; CVE-2026-32890; CVE-2026-32891; CVE-2026-33331; CVE-2026-34218; CVE-2026-35670; CVE-2026-33890; CVE-2026-34076; CVE-2026-33994; CVE-2026-35646; CVE-2026-74881; CVE-2026-41406; CVE-2026-41365; CVE-2026-41329; CVE-2026-41376; CVE-2026-41345; CVE-2026-49956; CVE-2026-41334; CVE-2026-39974; CVE-2026-39888; CVE-2026-5802; CVE-2026-40069; CVE-2026-40070; CVE-2026-40162; CVE-2026-40113; CVE-2026-40159; CVE-2026-56676; CVE-2026-43576; CVE-2026-43582; CVE-2026-40583; CVE-2026-35570; CVE-2026-6830; CVE-2026-40599; CVE-2026-32885; CVE-2026-41495; CVE-2026-42282; CVE-2026-7147; CVE-2026-7235; CVE-2026-7386; CVE-2026-7445; CVE-2026-7589; CVE-2026-7590; CVE-2026-7600; CVE-2026-42333; CVE-2026-42860; CVE-2026-44220; CVE-2026-44335; CVE-2026-42278; CVE-2026-44427; CVE-2026-44788; CVE-2026-44430; CVE-2026-2393; CVE-2026-45001; CVE-2026-30635; CVE-2026-44219; CVE-2026-45136; CVE-2026-45288; CVE-2026-44791; CVE-2026-46383; CVE-2026-45582; CVE-2026-45707; CVE-2026-47091; CVE-2026-33637; CVE-2026-45792; CVE-2026-48989; CVE-2026-9366; CVE-2026-9806; CVE-2026-45555; CVE-2026-47390; CVE-2026-10108; CVE-2026-47396; CVE-2026-48527; CVE-2026-47137; CVE-2026-44653; CVE-2026-10291; CVE-2026-10855; CVE-2026-11330; CVE-2026-54362; CVE-2026-53633; CVE-2026-49401; CVE-2026-55197; CVE-2026-58195; CVE-2026-46672; CVE-2026-55448; CVE-2026-52812; CVE-2026-49291; CVE-2026-48797; CVE-2026-13591; CVE-2026-58138; CVE-2026-59726; CVE-2026-8147; CVE-2026-53812; CVE-2026-59101; CVE-2026-50180; CVE-2026-14611; CVE-2026-32718; CVE-2026-34050; CVE-2026-34599; CVE-2026-54769; CVE-2026-42148; CVE-2026-56678; CVE-2026-61462; CVE-2026-54052; CVE-2026-56679; CVE-2026-53598; CVE-2026-55668; CVE-2026-47133; CVE-2026-63102; CVE-2026-56443; CVE-2026-58432; CVE-2026-72774; CVE-2026-65598; CVE-2026-72770; CVE-2026-59259; CVE-2026-59221; CVE-2026-73308; CVE-2026-73299; CVE-2026-50569; CVE-2026-55389; CVE-2026-50570; CVE-2026-50568; CVE-2026-14869; CVE-2026-54249; CVE-2026-16326; CVE-2026-47211; CVE-2026-66065; CVE-2026-18446; CVE-2026-70485; CVE-2026-18980; CVE-2026-71556; CVE-2026-19282; CVE-2026-59233"
     },
     {
-      "id": "MRG-2026-019",
+      "id": "DR-2026-037",
       "incident": "Ollama 'Bleeding Llama' heap out-of-bounds read (CVE-2026-7482) + mass exposed servers",
       "date": "2026 (175k exposed reported Jan, fixed 0.17.1)",
       "status": "Confirmed",
@@ -472,7 +482,7 @@
       "validated_cve": "CVE-2026-7482; CVE-2026-5757"
     },
     {
-      "id": "MRG-2026-020",
+      "id": "DR-2026-038",
       "incident": "Sears Home Services AI chatbot / scheduling databases exposed ~3.7M records",
       "date": "2026",
       "status": "Confirmed",
@@ -483,7 +493,7 @@
       "validated_cve": ""
     },
     {
-      "id": "MRG-2026-031",
+      "id": "DR-2026-039",
       "incident": "OpenClaw one-click RCE (CVE-2026-25253) + 40,000+ exposed instances",
       "date": "Feb 2026 (disclosed 3 Feb)",
       "status": "Confirmed",
@@ -494,7 +504,7 @@
       "validated_cve": "CVE-2026-25253; CVE-2026-24763; CVE-2026-25157; CVE-2026-25593; CVE-2026-28472"
     },
     {
-      "id": "MRG-2026-033",
+      "id": "DR-2026-040",
       "incident": "LLM-powered malware & AI-crime mapping — GTIG AI Threat Tracker (HONESTCUE, COINBAIT) + Anthropic MITRE ATT&CK report",
       "date": "Feb - Jun 2026 (12 Feb, 3 Jun)",
       "status": "Confirmed",
@@ -505,7 +515,7 @@
       "validated_cve": ""
     },
     {
-      "id": "MRG-2026-039",
+      "id": "DB-2026-041",
       "incident": "RXNT (EHR SaaS) - hacking via partner (VCDB; no AI component)",
       "date": "1 Mar 2026",
       "status": "Confirmed",
@@ -516,7 +526,7 @@
       "validated_cve": ""
     },
     {
-      "id": "MRG-2026-045",
+      "id": "DR-2026-042",
       "incident": "Meta model reached and compromised an external firm via the same Irregular evaluator misconfiguration",
       "date": "disclosed Jul 2026",
       "status": "Confirmed",
@@ -527,7 +537,7 @@
       "validated_cve": ""
     },
     {
-      "id": "MRG-2026-046",
+      "id": "DB-2026-043",
       "incident": "Clinical Registry Solutions - Akira ransomware / extortion (VCDB; no AI component)",
       "date": "9 Apr 2026",
       "status": "Confirmed",
@@ -538,7 +548,7 @@
       "validated_cve": ""
     },
     {
-      "id": "MRG-2026-048",
+      "id": "DR-2026-044",
       "incident": "GlassWorm OpenVSX worm force-installs a malicious extension across Cursor & Windsurf (Solana C2)",
       "date": "Apr 2026",
       "status": "Confirmed",
@@ -549,7 +559,7 @@
       "validated_cve": ""
     },
     {
-      "id": "MRG-2026-050",
+      "id": "DR-2026-045",
       "incident": "node-ipc npm backdoor harvesting AI-tooling credentials via DNS exfiltration",
       "date": "14 May 2026",
       "status": "Confirmed",
@@ -560,7 +570,7 @@
       "validated_cve": ""
     },
     {
-      "id": "MRG-2026-052",
+      "id": "DR-2026-046",
       "incident": "Red Hat (@redhat-cloud-services) & node-gyp 'Miasma Phantom Gyp' npm worm waves (Shai-Hulud descendants)",
       "date": "May - Jun 2026",
       "status": "Confirmed",
@@ -571,7 +581,7 @@
       "validated_cve": ""
     },
     {
-      "id": "MRG-2026-055",
+      "id": "DB-2026-047",
       "incident": "Mackay Sugar - The Gentlemen ransomware (VCDB; no AI component)",
       "date": "10 Jun 2026",
       "status": "Confirmed",
@@ -582,7 +592,7 @@
       "validated_cve": ""
     },
     {
-      "id": "MRG-2026-056",
+      "id": "DB-2026-048",
       "incident": "Eastman Kodak - ShinyHunters hacking / extortion (VCDB; no AI component)",
       "date": "Jun 2026",
       "status": "Confirmed",
@@ -593,7 +603,7 @@
       "validated_cve": ""
     },
     {
-      "id": "AISEC-2026-014",
+      "id": "DB-2026-049",
       "incident": "Lena Health (AI care-coordination) breached via unpatched vuln — Twilio call recordings, patient PHI",
       "date": "2025-12-01",
       "status": "Confirmed",
@@ -604,7 +614,7 @@
       "validated_cve": ""
     },
     {
-      "id": "AISEC-2026-016",
+      "id": "DB-2026-050",
       "incident": "Miko AI toy left thousands of children's toy-conversation audio responses in a public database",
       "date": "2026-02-11",
       "status": "Confirmed",
@@ -615,7 +625,7 @@
       "validated_cve": ""
     },
     {
-      "id": "AISEC-2026-026",
+      "id": "DB-2026-051",
       "incident": "Breach of an AI solution vendor exposed Korean Ministry of SMEs startup-program applicant data",
       "date": "2026-06-22",
       "status": "Confirmed",
@@ -626,7 +636,7 @@
       "validated_cve": ""
     },
     {
-      "id": "AISEC-2026-027",
+      "id": "DB-2026-052",
       "incident": "ChatGPT-assisted cyberattack took Bandai Channel offline (~1.36M members potentially exposed)",
       "date": "2025-11-01",
       "status": "Confirmed",
@@ -637,7 +647,7 @@
       "validated_cve": ""
     },
     {
-      "id": "MRG-2026-029",
+      "id": "DB-2026-053",
       "incident": "Elmwood Home Care — LockBit 5.0 ransomware (VCDB; no AI component)",
       "date": "24 Jan 2026",
       "status": "Confirmed",
@@ -648,7 +658,7 @@
       "validated_cve": ""
     },
     {
-      "id": "MRG-2026-035",
+      "id": "DB-2026-054",
       "incident": "Lifepoint Health - use of stolen credentials (VCDB; no AI component)",
       "date": "22 Feb 2026",
       "status": "Confirmed",
@@ -659,7 +669,7 @@
       "validated_cve": ""
     },
     {
-      "id": "MRG-2026-041",
+      "id": "DB-2026-055",
       "incident": "Southern California University of Health Sciences - hacking / exfiltration of 2,206 records (VCDB; no AI component)",
       "date": "23 Mar 2026",
       "status": "Confirmed",
@@ -670,7 +680,7 @@
       "validated_cve": ""
     },
     {
-      "id": "MRG-2026-007",
+      "id": "DR-2026-056",
       "incident": "'Comment & Control' (Black Hat USA 2026) — GitHub-issue prompt injection drives RCE/credential theft in Claude Code, Gemini CLI, Codex, Copilot",
       "date": "Apr 2026 & 5 Aug 2026",
       "status": "Confirmed",
@@ -681,7 +691,7 @@
       "validated_cve": "CVE-2026-12537; CVE-2026-54316"
     },
     {
-      "id": "MRG-2026-021",
+      "id": "DR-2026-057",
       "incident": "RufRoot (CVE-2026-59726, CVSS 10.0) in Ruflo/Claude Flow + max-severity agent-harness CVEs (Langroid, LiteLLM)",
       "date": "2026",
       "status": "Confirmed",
@@ -692,7 +702,7 @@
       "validated_cve": "CVE-2026-59726; CVE-2026-54769; CVE-2026-54760; CVE-2026-55615; CVE-2026-42208; CVE-2026-49468"
     },
     {
-      "id": "MRG-2026-044",
+      "id": "DR-2026-058",
       "incident": "Project Glasswing / Claude Mythos Preview mass zero-day discovery (WolfSSL CVE-2026-5194, FreeBSD CVE-2026-4747; early Mythos sandbox escape)",
       "date": "Apr - Jun 2026",
       "status": "Confirmed",
@@ -703,7 +713,7 @@
       "validated_cve": "CVE-2026-5194; CVE-2026-4747; CVE-2026-44471; CVE-2026-5398; CVE-2026-6386; CVE-2026-5588; CVE-2026-31402; CVE-2026-31554; CVE-2026-43185; CVE-2026-64015; CVE-2026-32316; CVE-2026-33721; CVE-2026-5199; CVE-2024-47711"
     },
     {
-      "id": "MRG-2026-047",
+      "id": "DR-2026-059",
       "incident": "Anthropic MCP STDIO transport design RCE in official SDKs (~200k deployments, 14 CVEs)",
       "date": "15 Apr 2026",
       "status": "Confirmed",
@@ -714,7 +724,7 @@
       "validated_cve": "CVE-2025-65720; CVE-2026-30623; CVE-2026-30624; CVE-2026-30618; CVE-2026-30617; CVE-2026-30616; CVE-2026-30625; CVE-2026-30615; CVE-2026-26015; CVE-2026-40933; CVE-2026-54449; CVE-2026-42271; CVE-2025-49596; CVE-2026-22252; CVE-2026-22688; CVE-2025-54994; CVE-2025-54136"
     },
     {
-      "id": "MRG-2026-059",
+      "id": "DR-2026-060",
       "incident": "Cursor 'DuneSlide' zero-click prompt-injection RCE (CVE-2026-50548 / CVE-2026-50549)",
       "date": "reported Feb 2026, fixed 2 Apr, disclosed Jul 2026",
       "status": "Confirmed",
@@ -725,7 +735,7 @@
       "validated_cve": "CVE-2026-50548; CVE-2026-50549"
     },
     {
-      "id": "AISEC-2026-003",
+      "id": "DB-2026-061",
       "incident": "DJI Romo robot-vacuum cloud authorization flaw exposed ~7,000 homes' camera/mic/maps",
       "date": "2026-01-01",
       "status": "Confirmed",
@@ -736,7 +746,7 @@
       "validated_cve": ""
     },
     {
-      "id": "MRG-2026-004",
+      "id": "DR-2026-062",
       "incident": "Claude Code project-file RCE & vulnerability cluster (Check Point + others)",
       "date": "25 Feb 2026 disclosure, cluster Feb – Aug 2026",
       "status": "Confirmed",
@@ -747,7 +757,7 @@
       "validated_cve": "CVE-2025-59536; CVE-2026-21852; CVE-2026-24887; CVE-2026-39861; CVE-2026-54316; CVE-2026-24052; CVE-2026-24053; CVE-2026-25722; CVE-2026-25723; CVE-2026-25724; CVE-2026-25725; CVE-2026-33068; CVE-2026-35603; CVE-2026-40068; CVE-2026-46406; CVE-2026-55607"
     },
     {
-      "id": "MRG-2026-011",
+      "id": "DR-2026-063",
       "incident": "Snowflake GitHub Actions shell injection found & exploited by Wiz Red Agent (internal Jira token)",
       "date": "23 Jun 2026 (vulnerable PR merged 18 Jun)",
       "status": "Confirmed",
@@ -758,7 +768,7 @@
       "validated_cve": ""
     },
     {
-      "id": "MRG-2026-030",
+      "id": "DR-2026-064",
       "incident": "'Emerging techniques & AI-slop reckoning' — Ghostcommit image prompt injection, fake Claude Code lures, mouse5212 stealer, Mozilla 0DIN, curl bug-bounty pause",
       "date": "Jan – Jul 2026",
       "status": "Confirmed",
@@ -769,7 +779,7 @@
       "validated_cve": ""
     },
     {
-      "id": "MRG-2026-054",
+      "id": "DR-2026-065",
       "incident": "claude-code-action permission bypass - one malicious GitHub issue hijacks any public repo running the Claude Code GitHub Action",
       "date": "disclosed Jun 2026 (reported Jan)",
       "status": "Confirmed",
@@ -780,7 +790,7 @@
       "validated_cve": ""
     },
     {
-      "id": "AISEC-2026-007",
+      "id": "DB-2026-066",
       "incident": "Claude Cowork agent deleted ~15 years of family photos via terminal (bypassed Trash)",
       "date": "2026-02-07",
       "status": "Confirmed",
@@ -791,7 +801,7 @@
       "validated_cve": ""
     },
     {
-      "id": "AISEC-2026-018",
+      "id": "DB-2026-067",
       "incident": "Anthropic accidentally published Claude Code's source map to npm (v2.1.88), exposing internals",
       "date": "2026-03-31",
       "status": "Confirmed",
@@ -802,7 +812,7 @@
       "validated_cve": ""
     },
     {
-      "id": "AISEC-2026-024",
+      "id": "DB-2026-068",
       "incident": "Meta's AI training program (MCI) exposed monitored-employee data to the whole workforce",
       "date": "2026-06-22",
       "status": "Confirmed",
@@ -813,7 +823,7 @@
       "validated_cve": ""
     },
     {
-      "id": "AISEC-2026-025",
+      "id": "DB-2026-069",
       "incident": "AI-built ('vibe-coded') pharmacy website leaked patients' private contact-form messages",
       "date": "2026-06-01",
       "status": "Confirmed",
@@ -824,7 +834,7 @@
       "validated_cve": ""
     },
     {
-      "id": "AISEC-2026-029",
+      "id": "DB-2026-070",
       "incident": "Anthropic Claude 'share' links were indexed by search engines, exposing shared chats",
       "date": "2026-07-27",
       "status": "Confirmed",
@@ -835,7 +845,7 @@
       "validated_cve": ""
     },
     {
-      "id": "AISEC-2026-030",
+      "id": "DB-2026-071",
       "incident": "OpenAI crawler accessed exposed Universa insurance customer data before detection",
       "date": "2026-07-07",
       "status": "Confirmed",
@@ -846,7 +856,7 @@
       "validated_cve": ""
     },
     {
-      "id": "AISEC-2026-032",
+      "id": "DB-2026-072",
       "incident": "Loma Linda University Health uploaded a patient-data file to an external AI platform (research)",
       "date": "2026-05-25",
       "status": "Confirmed",
@@ -857,7 +867,7 @@
       "validated_cve": ""
     },
     {
-      "id": "AISEC-2026-035",
+      "id": "DB-2026-073",
       "incident": "Alation (AI data-catalog vendor) confirmed a cyberattack (details undisclosed)",
       "date": "2026-08-18",
       "status": "Confirmed",
@@ -868,7 +878,7 @@
       "validated_cve": ""
     },
     {
-      "id": "MRG-2026-036",
+      "id": "DB-2026-074",
       "incident": "Meta AI smart glasses exposed intimate user imagery/video to human reviewers in Kenya (AIID 1418)",
       "date": "27 Feb 2026",
       "status": "False positive",
@@ -879,7 +889,7 @@
       "validated_cve": ""
     },
     {
-      "id": "MRG-2026-057",
+      "id": "DB-2026-075",
       "incident": "Southern Design RV - CMD Organization extortion (VCDB; no AI component)",
       "date": "~20 Jun 2026",
       "status": "Confirmed",
@@ -890,7 +900,7 @@
       "validated_cve": ""
     },
     {
-      "id": "MRG-2026-032",
+      "id": "DB-2026-076",
       "incident": "Melbourne Football Club — insider privilege abuse (VCDB; no AI component)",
       "date": "4 Feb 2026",
       "status": "Confirmed",
@@ -901,7 +911,7 @@
       "validated_cve": ""
     },
     {
-      "id": "AISEC-2026-011",
+      "id": "DB-2026-077",
       "incident": "Hidden prompt injection in a Brazilian labour-court petition targeted the Galileu AI (blocked — near miss)",
       "date": "2026-05-12",
       "status": "Near miss",
@@ -912,7 +922,7 @@
       "validated_cve": ""
     },
     {
-      "id": "MRG-2026-001",
+      "id": "DR-2026-078",
       "incident": "Google GTIG — first AI-developed zero-day exploit used by a cybercrime actor (2FA bypass)",
       "date": "11 May 2026 (disclosure)",
       "status": "Confirmed",
@@ -923,7 +933,7 @@
       "validated_cve": ""
     },
     {
-      "id": "MRG-2026-005",
+      "id": "DR-2026-079",
       "incident": "XBOW autonomous discovery of critical Microsoft RCEs",
       "date": "Mar – Jul 2026 (disclosures)",
       "status": "Confirmed",
@@ -934,7 +944,7 @@
       "validated_cve": "CVE-2026-21536; CVE-2026-32191; CVE-2026-32194"
     },
     {
-      "id": "MRG-2026-008",
+      "id": "DR-2026-080",
       "incident": "Microsoft 'Prompts become shells' — Semantic Kernel MCP RCE + prompt-to-shell paths in LangChain/AutoGen/CrewAI/LiteLLM",
       "date": "7 May 2026 (disclosure)",
       "status": "Confirmed",
@@ -945,7 +955,7 @@
       "validated_cve": "CVE-2026-25592; CVE-2026-26030; CVE-2026-30623; CVE-2025-65720"
     },
     {
-      "id": "MRG-2026-010",
+      "id": "DR-2026-081",
       "incident": "Microsoft 365 Copilot 'SearchLeak' zero-click data exfiltration (CVE-2026-42824)",
       "date": "15 Jun 2026 (disclosure)",
       "status": "Confirmed",
@@ -956,7 +966,7 @@
       "validated_cve": "CVE-2026-42824"
     },
     {
-      "id": "MRG-2026-013",
+      "id": "DR-2026-082",
       "incident": "UK AISI cyber-capability evaluation — unsanctioned agent actions against real people/projects",
       "date": "25–28 Jul 2026 (disclosed 4 Aug)",
       "status": "Confirmed",
@@ -967,7 +977,7 @@
       "validated_cve": ""
     },
     {
-      "id": "MRG-2026-014",
+      "id": "DR-2026-083",
       "incident": "Microsoft Copilot 'CoSnitch' zero-click indirect prompt injection (CVE-2026-24301)",
       "date": "18 Aug 2026 (disclosure)",
       "status": "Confirmed",
@@ -978,7 +988,7 @@
       "validated_cve": "CVE-2026-24301"
     },
     {
-      "id": "MRG-2026-017",
+      "id": "DR-2026-084",
       "incident": "Exim 'Dead.Letter' unauthenticated RCE (CVE-2026-45185) found by XBOW",
       "date": "2026",
       "status": "Confirmed",
@@ -989,7 +999,7 @@
       "validated_cve": "CVE-2026-45185"
     },
     {
-      "id": "MRG-2026-022",
+      "id": "DR-2026-085",
       "incident": "Google Mandiant Agentic Vulnerability Discovery Harness (AVDH) — 100+ criticals in two days, 12+ CVEs",
       "date": "2026",
       "status": "Confirmed",
@@ -1000,7 +1010,7 @@
       "validated_cve": "CVE-2026-13242; CVE-2026-55803; CVE-2026-55804"
     },
     {
-      "id": "MRG-2026-026",
+      "id": "DR-2026-086",
       "incident": "Gemini calendar-invite prompt injection, ChatGPT hidden DNS exfiltration, Codex branch-name command injection (vendor fixes)",
       "date": "Jan – Mar 2026",
       "status": "Confirmed",
@@ -1011,7 +1021,7 @@
       "validated_cve": ""
     },
     {
-      "id": "MRG-2026-038",
+      "id": "DR-2026-087",
       "incident": "Microsoft 365 Copilot 'EchoLeak' (CVE-2025-32711) + Excel XSS zero-click Copilot Agent egress (CVE-2026-26144)",
       "date": "Mar - May 2026",
       "status": "Confirmed",
@@ -1022,7 +1032,7 @@
       "validated_cve": "CVE-2025-32711; CVE-2026-26144"
     },
     {
-      "id": "MRG-2026-042",
+      "id": "DR-2026-088",
       "incident": "AI as defender - OpenAI Aardvark/Codex Security CVEs, Wiz AI-assisted GitHub Enterprise RCE (CVE-2026-3854), Google Big Sleep/CodeMender",
       "date": "Mar 2026 onward",
       "status": "Confirmed",
@@ -1033,7 +1043,7 @@
       "validated_cve": "CVE-2026-3854; CVE-2026-24881; CVE-2026-24882; CVE-2025-32988; CVE-2025-32989; CVE-2025-64175; CVE-2026-25242; CVE-2025-35430; CVE-2025-35431; CVE-2025-35432; CVE-2025-35433; CVE-2025-35434; CVE-2025-35435; CVE-2025-35436; CVE-2025-32990; CVE-2026-14431; CVE-2026-15903; CVE-2026-17658; CVE-2026-19162; CVE-2026-76045; CVE-2026-76021"
     },
     {
-      "id": "MRG-2026-061",
+      "id": "DR-2026-089",
       "incident": "'Week of Sandbox Escapes' - Cursor hooks (CVE-2026-48124), Codex CLI 'GitPwned', Docker-socket escape, Antigravity bypasses",
       "date": "Jul 2026",
       "status": "Confirmed",
@@ -1044,7 +1054,7 @@
       "validated_cve": "CVE-2026-48124; CVE-2026-73218; CVE-2026-73217"
     },
     {
-      "id": "MRG-2026-063",
+      "id": "DR-2026-090",
       "incident": "Atlassian Rovo 'RovoBlast' zero-click indirect prompt injection",
       "date": "7 Aug 2026 (disclosure)",
       "status": "Confirmed",
@@ -1055,7 +1065,7 @@
       "validated_cve": ""
     },
     {
-      "id": "MRG-2026-064",
+      "id": "DR-2026-091",
       "incident": "GPT-5.6-Cyber V8 memory-corruption / heap-sandbox-escape chain reported to Google (CVE-2026-15903)",
       "date": "10 Aug 2026 (disclosure)",
       "status": "Confirmed",
@@ -1066,7 +1076,7 @@
       "validated_cve": "CVE-2026-15903"
     },
     {
-      "id": "MRG-2026-002",
+      "id": "DR-2026-092",
       "incident": "Microsoft Copilot 'Reprompt' — link-seeded indirect prompt injection exfiltrating consumer Copilot data",
       "date": "14 Jan 2026 (disclosure)",
       "status": "Confirmed",
@@ -1077,7 +1087,7 @@
       "validated_cve": ""
     },
     {
-      "id": "MRG-2026-023",
+      "id": "DR-2026-093",
       "incident": "Google AI-assisted Chrome bug hunting found more issues in a short window than many prior cycles",
       "date": "2026",
       "status": "Confirmed",
@@ -1088,7 +1098,7 @@
       "validated_cve": "CVE-2026-76021"
     },
     {
-      "id": "MRG-2026-040",
+      "id": "DR-2026-094",
       "incident": "Claude Opus 4.6 Firefox vulnerability-discovery campaign (22 vulnerabilities, 14 high; Firefox 148)",
       "date": "6 Mar 2026 (disclosure)",
       "status": "Confirmed",
@@ -1099,7 +1109,7 @@
       "validated_cve": "CVE-2026-2763; CVE-2026-2764; CVE-2026-2796; CVE-2026-2797; CVE-2026-2765; CVE-2026-2766; CVE-2026-2769; CVE-2026-2799; CVE-2026-2770; CVE-2026-2771; CVE-2026-2772; CVE-2026-2773; CVE-2026-2774; CVE-2026-2775; CVE-2026-2785; CVE-2026-2804; CVE-2026-2786; CVE-2026-2805; CVE-2026-2787; CVE-2026-2788; CVE-2026-2789; CVE-2026-2791; CVE-2026-4702; CVE-2026-4723; CVE-2026-4724; CVE-2026-4704; CVE-2026-4705; CVE-2026-4718"
     },
     {
-      "id": "MRG-2026-049",
+      "id": "DR-2026-095",
       "incident": "Claude Mythos Preview Firefox discovery wave (271 vulnerabilities fixed in Firefox 150)",
       "date": "21 Apr 2026 (disclosure)",
       "status": "Confirmed",
@@ -1110,7 +1120,7 @@
       "validated_cve": "CVE-2026-6784; CVE-2026-6785; CVE-2026-6786; CVE-2026-6746; CVE-2026-6757; CVE-2026-6758"
     },
     {
-      "id": "MRG-2026-024",
+      "id": "DB-2026-096",
       "incident": "Border Patrol facial recognition identified legal observer Nicole Cleland; Global Entry revoked (AIID 1362)",
       "date": "10 Jan 2026",
       "status": "False positive",
@@ -1121,7 +1131,7 @@
       "validated_cve": ""
     },
     {
-      "id": "MRG-2026-027",
+      "id": "DB-2026-097",
       "incident": "DHS agents threatened legal observers with a 'domestic terrorist' database while using AI-enabled surveillance (AIID 1390)",
       "date": "21 Jan 2026",
       "status": "False positive",
@@ -1132,7 +1142,7 @@
       "validated_cve": ""
     },
     {
-      "id": "MRG-2026-034",
+      "id": "DB-2026-098",
       "incident": "Grok disclosed adult performer Siri Dahl's legal name and birthdate - doxxing (AIID 1443)",
       "date": "19 Feb 2026",
       "status": "False positive",
@@ -1143,7 +1153,7 @@
       "validated_cve": ""
     },
     {
-      "id": "MRG-2026-028",
+      "id": "DB-2026-099",
       "incident": "NotebookLM voice-replication lawsuit — David Greene v. Google (AIID 1386)",
       "date": "23 Jan 2026",
       "status": "False positive",
@@ -1156,7 +1166,7 @@
   ],
   "incidents": [
     {
-      "id": "AISEC-2026-017",
+      "id": "DB-2026-001",
       "title": "LiteLLM AI-gateway PyPI supply-chain compromise (TeamPCP) — terabytes of credentials from 2,500+ orgs",
       "date": "2026-03-24",
       "sources": [
@@ -1175,7 +1185,7 @@
         "schema_version": "1.4.1",
         "schema_name": "vcdb",
         "source_id": "vcdb",
-        "incident_id": "AISEC-2026-017",
+        "incident_id": "DB-2026-001",
         "security_incident": "Confirmed",
         "confidence": "High",
         "reference": "https://docs.litellm.ai/blog/security-update-march-2026; https://securitylabs.datadoghq.com/articles/litellm-compromised-pypi-teampcp-supply-chain-campaign/; https://techcrunch.com/2026/03/31/mercor-says-it-was-hit-by-cyberattack-tied-to-compromise-of-open-source-litellm-project/; https://exposure.cloudsek.com/ai-supply-chain-incident; https://github.com/vz-risk/VCDB/issues/23174; https://github.com/vz-risk/VCDB/issues/24173",
@@ -1398,7 +1408,7 @@
       }
     },
     {
-      "id": "MRG-2026-015",
+      "id": "DR-2026-002",
       "title": "Mexican government mega-breach via jailbroken Claude Code",
       "date": "Dec 2025 – Feb 2026 (disclosed ~25 Feb)",
       "sources": [
@@ -1410,7 +1420,7 @@
         "schema_version": "1.4.1",
         "schema_name": "vcdb",
         "source_id": "vcdb",
-        "incident_id": "MRG-2026-015",
+        "incident_id": "DR-2026-002",
         "security_incident": "Confirmed",
         "confidence": "Medium",
         "reference": "https://socradar.io/blog/mexican-government-breach-claude-chatgpt/; https://www.upguard.com/news/sat-data-breach-2026-03-02",
@@ -1545,7 +1555,7 @@
       }
     },
     {
-      "id": "AISEC-2026-005",
+      "id": "DB-2026-003",
       "title": "Autonomous offensive agent (CodeWall) breached McKinsey's Lilli AI platform via SQLi in 2 hours",
       "date": "2026-02-28",
       "sources": [
@@ -1559,7 +1569,7 @@
         "schema_version": "1.4.1",
         "schema_name": "vcdb",
         "source_id": "vcdb",
-        "incident_id": "AISEC-2026-005",
+        "incident_id": "DB-2026-003",
         "security_incident": "Confirmed",
         "confidence": "High",
         "reference": "https://codewall.ai/blog/how-we-hacked-mckinseys-ai-platform; https://www.theregister.com/2026/03/09/mckinsey_ai_chatbot_hacked/; https://incidentdatabase.ai/cite/1412",
@@ -1726,7 +1736,7 @@
       }
     },
     {
-      "id": "AISEC-2026-013",
+      "id": "DB-2026-004",
       "title": "Novo Nordisk breach — clinical-trial data AND internal AI model assets stolen (FulcrumSec)",
       "date": "2026-03-01",
       "sources": [
@@ -1750,7 +1760,7 @@
         "schema_version": "1.4.1",
         "schema_name": "vcdb",
         "source_id": "vcdb",
-        "incident_id": "FE704346-BF9A-4435-927B-16A7ECF24C43",
+        "incident_id": "DB-2026-004",
         "security_incident": "Confirmed",
         "confidence": "High",
         "reference": "https://www.novonordisk.com/news-and-media/latest-news/incident-update.html; https://www.securityweek.com/ozempic-maker-novo-nordisk-says-hackers-breached-it-systems/; https://www.bleepingcomputer.com/news/security/pharmaceutical-giant-novo-nordisk-discloses-security-breach/; https://github.com/vz-risk/VCDB/issues/23372",
@@ -1920,7 +1930,7 @@
       }
     },
     {
-      "id": "AISEC-2026-023",
+      "id": "DB-2026-005",
       "title": "'Miasma' worm targeted AI coding agents via poisoned Microsoft/Azure repos (73 repos disabled)",
       "date": "2026-06-05",
       "sources": [
@@ -1934,7 +1944,7 @@
         "schema_version": "1.4.1",
         "schema_name": "vcdb",
         "source_id": "vcdb",
-        "incident_id": "AISEC-2026-023",
+        "incident_id": "DB-2026-005",
         "security_incident": "Confirmed",
         "confidence": "High",
         "reference": "https://www.stepsecurity.io/blog/miasma-worm-hits-microsoft-again-azure-functions-action-and-72-other-repositories-disabled-after-supply-chain-attack-targeting-ai-coding-agents; https://www.govinfosecurity.com/miasma-worm-hits-microsofts-ai-coding-ecosystem-a-31912; https://github.com/vz-risk/VCDB/issues/23310",
@@ -2121,7 +2131,7 @@
       }
     },
     {
-      "id": "AISEC-2026-028",
+      "id": "DB-2026-006",
       "title": "OpenAI evaluation agents escaped their sandbox via Artifactory 0-days and breached Hugging Face",
       "date": "2026-07-09",
       "sources": [
@@ -2140,7 +2150,7 @@
         "schema_version": "1.4.1",
         "schema_name": "vcdb",
         "source_id": "vcdb",
-        "incident_id": "AISEC-2026-028",
+        "incident_id": "DB-2026-006",
         "security_incident": "Confirmed",
         "confidence": "High",
         "reference": "https://openai.com/index/hugging-face-model-evaluation-security-incident/; https://huggingface.co/blog/security-incident-july-2026; https://huggingface.co/blog/agent-intrusion-technical-timeline; https://www.bleepingcomputer.com/news/security/openai-models-used-artifactory-zero-days-to-escape-to-the-internet/; https://github.com/vz-risk/VCDB/issues/23753",
@@ -2518,7 +2528,7 @@
       }
     },
     {
-      "id": "MRG-2026-012",
+      "id": "DR-2026-007",
       "title": "Hermes + OpenClaw multi-agent campaign against Taiwanese government systems",
       "date": "1–4 Jul 2026",
       "sources": [
@@ -2533,7 +2543,7 @@
         "schema_version": "1.4.1",
         "schema_name": "vcdb",
         "source_id": "vcdb",
-        "incident_id": "MRG-2026-012",
+        "incident_id": "DR-2026-007",
         "security_incident": "Confirmed",
         "confidence": "Medium",
         "reference": "https://www.theregister.com/security/2026/08/12/near-autonomous_ai_agents_attack_taiwans_nuclear_safety_agency/5287055",
@@ -2671,7 +2681,7 @@
       }
     },
     {
-      "id": "MRG-2026-018",
+      "id": "DR-2026-008",
       "title": "Langflow RCEs actively exploited (CVE-2026-33017, CVE-2026-9198; CISA KEV) with AI-driven exploitation",
       "date": "2026",
       "sources": [
@@ -2683,7 +2693,7 @@
         "schema_version": "1.4.1",
         "schema_name": "vcdb",
         "source_id": "vcdb",
-        "incident_id": "MRG-2026-018",
+        "incident_id": "DR-2026-008",
         "security_incident": "Confirmed",
         "confidence": "High",
         "reference": "https://thehackernews.com/2026/08/cisa-flags-langflow-rce-tomcat-and-n.html; https://www.sysdig.com/blog/cve-2026-33017-how-attackers-compromised-langflow-ai-pipelines-in-20-hours",
@@ -2995,7 +3005,7 @@
       }
     },
     {
-      "id": "MRG-2026-025",
+      "id": "DR-2026-009",
       "title": "AI-assisted intrusion against a Mexican municipal water utility with attempted IT->OT movement (Dragos)",
       "date": "Jan 2026 compromise (disclosed 6 May 2026)",
       "sources": [
@@ -3007,7 +3017,7 @@
         "schema_version": "1.4.1",
         "schema_name": "vcdb",
         "source_id": "vcdb",
-        "incident_id": "MRG-2026-025",
+        "incident_id": "DR-2026-009",
         "security_incident": "Confirmed",
         "confidence": "High",
         "reference": "https://www.dragos.com/blog/ai-assisted-ics-attack-water-utility",
@@ -3136,7 +3146,7 @@
       }
     },
     {
-      "id": "MRG-2026-037",
+      "id": "DR-2026-010",
       "title": "Trivy double compromise - 'hackerbot-claw' autonomous Claude-powered attack bot + TeamPCP re-poisoning",
       "date": "Feb - Mar 2026",
       "sources": [
@@ -3148,7 +3158,7 @@
         "schema_version": "1.4.1",
         "schema_name": "vcdb",
         "source_id": "vcdb",
-        "incident_id": "MRG-2026-037",
+        "incident_id": "DR-2026-010",
         "security_incident": "Confirmed",
         "confidence": "High",
         "reference": "https://orca.security/resources/blog/hackerbot-claw-github-actions-attack/; https://www.wiz.io/blog/trivy-compromised-teampcp-supply-chain-attack",
@@ -3354,7 +3364,7 @@
       }
     },
     {
-      "id": "MRG-2026-060",
+      "id": "DR-2026-011",
       "title": "JADEPUFFER - first documented agentic ransomware (Langflow CVE-2025-3248 entry; destroyed a production database)",
       "date": "Jun - Jul 2026 (published 1 Jul)",
       "sources": [
@@ -3366,7 +3376,7 @@
         "schema_version": "1.4.1",
         "schema_name": "vcdb",
         "source_id": "vcdb",
-        "incident_id": "MRG-2026-060",
+        "incident_id": "DR-2026-011",
         "security_incident": "Confirmed",
         "confidence": "High",
         "reference": "https://www.sysdig.com/blog/jadepuffer-agentic-ransomware-for-automated-database-extortion; https://cyberscoop.com/sysdig-judepuffer-ai-agentic-ransomware-attack/",
@@ -3567,7 +3577,7 @@
       }
     },
     {
-      "id": "MRG-2026-062",
+      "id": "DR-2026-012",
       "title": "CHAINDROP (keyv/cacheable) npm worm - 452 packages; persistence hooks planted in .claude/settings.json and .vscode/tasks.json (CVE-2026-45321)",
       "date": "4 Aug 2026",
       "sources": [
@@ -3579,7 +3589,7 @@
         "schema_version": "1.4.1",
         "schema_name": "vcdb",
         "source_id": "vcdb",
-        "incident_id": "MRG-2026-062",
+        "incident_id": "DR-2026-012",
         "security_incident": "Confirmed",
         "confidence": "High",
         "reference": "https://www.elastic.co/security-labs/shai-hulud-chaindrop-npm-supply-chain; https://safedep.io/malicious-npm-packages-claude-code-hooks/; CVE-2026-45321",
@@ -3730,7 +3740,7 @@
           {
             "cve": "CVE-2026-45321",
             "state": "PUBLISHED",
-            "reason": "Belongs to the 11 May 2026 @tanstack/* npm compromise (MRG-2026-051), not to the 4 Aug 2026 keyv/cacheable CHAINDROP worm."
+            "reason": "Belongs to the 11 May 2026 @tanstack/* npm compromise (DR-2026-022), not to the 4 Aug 2026 keyv/cacheable CHAINDROP worm."
           }
         ],
         "cves": [],
@@ -3818,7 +3828,7 @@
       }
     },
     {
-      "id": "AISEC-2026-002",
+      "id": "DB-2026-013",
       "title": "Malicious ClawHub 'skills' weaponise OpenClaw agents (ClawHavoc) — AMOS stealer / credential theft",
       "date": "2026-02-01",
       "sources": [
@@ -3832,7 +3842,7 @@
         "schema_version": "1.4.1",
         "schema_name": "vcdb",
         "source_id": "vcdb",
-        "incident_id": "AISEC-2026-002",
+        "incident_id": "DB-2026-013",
         "security_incident": "Confirmed",
         "confidence": "High",
         "reference": "https://www.koi.ai/blog/clawhavoc-341-malicious-clawedbot-skills-found-by-the-bot-they-were-targeting; https://www.bitdefender.com/en-us/blog/labs/helpful-skills-or-hidden-payloads-bitdefender-labs-dives-deep-into-the-openclaw-malicious-skill-trap; https://thehackernews.com/2026/02/researchers-find-341-malicious-clawhub.html; https://incidentdatabase.ai/cite/1368",
@@ -3988,7 +3998,7 @@
       }
     },
     {
-      "id": "AISEC-2026-008",
+      "id": "DB-2026-014",
       "title": "Cursor agent (Claude Opus 4.6) deleted PocketOS production DB + all backups via over-scoped Railway token",
       "date": "2026-04-25",
       "sources": [
@@ -4002,7 +4012,7 @@
         "schema_version": "1.4.1",
         "schema_name": "vcdb",
         "source_id": "vcdb",
-        "incident_id": "AISEC-2026-008",
+        "incident_id": "DB-2026-014",
         "security_incident": "Confirmed",
         "confidence": "High",
         "reference": "https://www.theregister.com/2026/04/27/cursoropus_agent_snuffs_out_pocketos/; https://www.tomshardware.com/tech-industry/artificial-intelligence/claude-powered-ai-coding-agent-deletes-entire-company-database-in-9-seconds-backups-zapped-after-cursor-tool-powered-by-anthropics-claude-goes-rogue; https://incidentdatabase.ai/cite/1469",
@@ -4143,7 +4153,7 @@
       }
     },
     {
-      "id": "AISEC-2026-012",
+      "id": "DB-2026-015",
       "title": "CBSE OnMark exam platform exposed 9.3M student rows; vendor processed student data via Google Gemini",
       "date": "2026-05-30",
       "sources": [
@@ -4157,7 +4167,7 @@
         "schema_version": "1.4.1",
         "schema_name": "vcdb",
         "source_id": "vcdb",
-        "incident_id": "AISEC-2026-012",
+        "incident_id": "DB-2026-015",
         "security_incident": "Confirmed",
         "confidence": "Medium",
         "reference": "https://www.thehindu.com/news/national/cbse-says-onmark-portal-vulnerabilities-contained-amid-security-concerns/article71044420.ece; https://incidentdatabase.ai/cite/1507",
@@ -4303,7 +4313,7 @@
       }
     },
     {
-      "id": "AISEC-2026-015",
+      "id": "DB-2026-016",
       "title": "Chat & Ask AI (Codeway) Firebase misconfiguration exposed ~300M messages / 25M users",
       "date": "2026-02-01",
       "sources": [
@@ -4317,7 +4327,7 @@
         "schema_version": "1.4.1",
         "schema_name": "vcdb",
         "source_id": "vcdb",
-        "incident_id": "AISEC-2026-015",
+        "incident_id": "DB-2026-016",
         "security_incident": "Confirmed",
         "confidence": "Medium",
         "reference": "https://www.malwarebytes.com/blog/news/2026/02/ai-chat-app-leak-exposes-300-million-messages-tied-to-25-million-users; https://github.com/vz-risk/VCDB/issues/23041",
@@ -4450,7 +4460,7 @@
       }
     },
     {
-      "id": "AISEC-2026-022",
+      "id": "DB-2026-017",
       "title": "Attackers abused Meta's AI-powered support (HTS) tool to hijack 20,225 Instagram accounts",
       "date": "2026-06-02",
       "sources": [
@@ -4469,7 +4479,7 @@
         "schema_version": "1.4.1",
         "schema_name": "vcdb",
         "source_id": "vcdb",
-        "incident_id": "AISEC-2026-022",
+        "incident_id": "DB-2026-017",
         "security_incident": "Confirmed",
         "confidence": "High",
         "reference": "https://www.bleepingcomputer.com/news/security/meta-ai-support-data-breach-affects-20-000-instagram-accounts/; https://github.com/vz-risk/VCDB/issues/23309; https://github.com/vz-risk/VCDB/issues/23466",
@@ -4625,7 +4635,7 @@
       }
     },
     {
-      "id": "AISEC-2026-031",
+      "id": "DB-2026-018",
       "title": "Autonomous 'Hermes' AI agent (YOLO mode) ran post-exploitation against Thailand's Ministry of Finance",
       "date": "2026-06-15",
       "sources": [
@@ -4639,7 +4649,7 @@
         "schema_version": "1.4.1",
         "schema_name": "vcdb",
         "source_id": "vcdb",
-        "incident_id": "AISEC-2026-031",
+        "incident_id": "DB-2026-018",
         "security_incident": "Confirmed",
         "confidence": "Medium",
         "reference": "https://hunt.io/blog/thailand-ministry-finance-targeted-with-hermes-ai-agent; https://www.bleepingcomputer.com/news/security/hermes-ai-agent-used-to-automate-attack-on-thai-finance-ministry/; https://www.darkreading.com/cyberattacks-data-breaches/ai-agent-espionage-attack-thai-ministry-finance; https://github.com/vz-risk/VCDB/issues/23850",
@@ -4924,7 +4934,7 @@
       }
     },
     {
-      "id": "AISEC-2026-033",
+      "id": "DB-2026-019",
       "title": "Anthropic's Claude models breached three real companies during cyber evaluations (misconfig internet)",
       "date": "2026-04-01",
       "sources": [
@@ -4938,7 +4948,7 @@
         "schema_version": "1.4.1",
         "schema_name": "vcdb",
         "source_id": "vcdb",
-        "incident_id": "AISEC-2026-033",
+        "incident_id": "DB-2026-019",
         "security_incident": "Confirmed",
         "confidence": "High",
         "reference": "https://www.anthropic.com/news/investigating-incidents-cybersecurity-evals; https://techcrunch.com/2026/07/30/anthropic-says-its-own-ai-models-breached-three-companies-during-security-tests/; https://github.com/vz-risk/VCDB/issues/24066",
@@ -5106,7 +5116,7 @@
       }
     },
     {
-      "id": "MRG-2026-009",
+      "id": "DR-2026-020",
       "title": "Sysdig May 10 — AI-agent-driven intrusion from marimo CVE-2026-39987 to full PostgreSQL dump in under an hour",
       "date": "10 May 2026",
       "sources": [
@@ -5121,7 +5131,7 @@
         "schema_version": "1.4.1",
         "schema_name": "vcdb",
         "source_id": "vcdb",
-        "incident_id": "MRG-2026-009",
+        "incident_id": "DR-2026-020",
         "security_incident": "Confirmed",
         "confidence": "High",
         "reference": "https://www.sysdig.com/blog/ai-agent-at-the-wheel-how-an-attacker-used-llms-to-move-from-a-cve-to-an-internal-database-in-4-pivots; CVE-2026-39987",
@@ -5290,7 +5300,7 @@
       }
     },
     {
-      "id": "MRG-2026-016",
+      "id": "DR-2026-021",
       "title": "LLMjacking industrialized — Operation Bizarre Bazaar marketplace + Sysdig 'VAPT' autonomous pipeline",
       "date": "Dec 2025 – Jun 2026",
       "sources": [
@@ -5302,7 +5312,7 @@
         "schema_version": "1.4.1",
         "schema_name": "vcdb",
         "source_id": "vcdb",
-        "incident_id": "MRG-2026-016",
+        "incident_id": "DR-2026-021",
         "security_incident": "Confirmed",
         "confidence": "Medium",
         "reference": "https://www.pillar.security/blog/operation-bizarre-bazaar-first-attributed-llmjacking-campaign-with-commercial-marketplace-monetization",
@@ -5432,7 +5442,7 @@
       }
     },
     {
-      "id": "MRG-2026-051",
+      "id": "DR-2026-022",
       "title": "TeamPCP 'Mini Shai-Hulud' / TanStack npm worm (170+ packages; OpenAI employee devices, Mistral, UiPath)",
       "date": "May 2026",
       "sources": [
@@ -5444,7 +5454,7 @@
         "schema_version": "1.4.1",
         "schema_name": "vcdb",
         "source_id": "vcdb",
-        "incident_id": "MRG-2026-051",
+        "incident_id": "DR-2026-022",
         "security_incident": "Confirmed",
         "confidence": "High",
         "reference": "https://www.wiz.io/blog/mini-shai-hulud-strikes-again-tanstack-more-npm-packages-compromised; https://tanstack.com/blog/npm-supply-chain-compromise-postmortem",
@@ -5604,7 +5614,7 @@
             "cisa_kev": true,
             "kev_date_added": "2026-05-27",
             "title": "Malware in 42 @tanstack/* packages exfiltrates cloud credentials, GitHub tokens, and SSH keys",
-            "note": "GitHub-CNA record (GHSA-g7cv-rxg3-hmpx): 84 malicious versions across 42 @tanstack/* packages published 2026-05-11 via the compromised trusted-publisher OIDC binding; CVSS 9.6; CISA KEV 2026-05-27. This ID was mis-filed under the CHAINDROP incident (MRG-2026-062) in the original data.",
+            "note": "GitHub-CNA record (GHSA-g7cv-rxg3-hmpx): 84 malicious versions across 42 @tanstack/* packages published 2026-05-11 via the compromised trusted-publisher OIDC binding; CVSS 9.6; CISA KEV 2026-05-27. This ID was mis-filed under the CHAINDROP incident (DR-2026-012) in the original data.",
             "record_url": "https://www.cve.org/CVERecord?id=CVE-2026-45321"
           },
           {
@@ -5687,7 +5697,7 @@
       }
     },
     {
-      "id": "MRG-2026-053",
+      "id": "DR-2026-023",
       "title": "Sysdig May 29 - agentic container/Kubernetes escape via marimo RCE, Docker-socket abuse, host root & cluster-secret extraction",
       "date": "29 May 2026",
       "sources": [
@@ -5699,7 +5709,7 @@
         "schema_version": "1.4.1",
         "schema_name": "vcdb",
         "source_id": "vcdb",
-        "incident_id": "MRG-2026-053",
+        "incident_id": "DR-2026-023",
         "security_incident": "Confirmed",
         "confidence": "High",
         "reference": "https://www.sysdig.com/blog/agentic-threat-actor-hits-the-orchestration-plane-ai-agent-driven-container-escape; CVE-2026-39987",
@@ -5874,7 +5884,7 @@
       }
     },
     {
-      "id": "MRG-2026-058",
+      "id": "DB-2026-024",
       "title": "Cannabis Club Systems - public URLs / IDOR exposed 1,082,680 members (VCDB; no AI component)",
       "date": "2026 (disclosed 28 Jun)",
       "sources": [
@@ -5888,7 +5898,7 @@
         "schema_version": "1.4.1",
         "schema_name": "vcdb",
         "source_id": "vcdb",
-        "incident_id": "MRG-2026-058",
+        "incident_id": "DB-2026-024",
         "security_incident": "Confirmed",
         "confidence": "Medium",
         "reference": "https://github.com/vz-risk/VCDB (Cannabis Club Systems, issue #23569); CC_MIT_VCDB_2026_security_incidents.md",
@@ -6000,7 +6010,7 @@
       }
     },
     {
-      "id": "MRG-2026-043",
+      "id": "DR-2026-025",
       "title": "axios npm trojan - backdoored axios@1.14.1 / 0.30.4 dropping a RAT (Sapphire Sleet / North Korea)",
       "date": "31 Mar 2026",
       "sources": [
@@ -6012,7 +6022,7 @@
         "schema_version": "1.4.1",
         "schema_name": "vcdb",
         "source_id": "vcdb",
-        "incident_id": "MRG-2026-043",
+        "incident_id": "DR-2026-025",
         "security_incident": "Confirmed",
         "confidence": "High",
         "reference": "https://www.huntress.com/blog/supply-chain-compromise-axios-npm-package; https://www.microsoft.com/en-us/security/blog/2026/04/01/mitigating-the-axios-npm-supply-chain-compromise/",
@@ -6195,7 +6205,7 @@
       }
     },
     {
-      "id": "AISEC-2026-001",
+      "id": "DB-2026-026",
       "title": "Moltbook (AI-agent social network) exposed database — 1.5M API tokens, DMs, emails",
       "date": "2026-01-31",
       "sources": [
@@ -6214,7 +6224,7 @@
         "schema_version": "1.4.1",
         "schema_name": "vcdb",
         "source_id": "vcdb",
-        "incident_id": "AISEC-2026-001",
+        "incident_id": "DB-2026-026",
         "security_incident": "Confirmed",
         "confidence": "High",
         "reference": "https://www.wiz.io/blog/exposed-moltbook-database-reveals-millions-of-api-keys; https://incidentdatabase.ai/cite/1364; https://github.com/vz-risk/VCDB/issues/23023",
@@ -6369,7 +6379,7 @@
       }
     },
     {
-      "id": "AISEC-2026-004",
+      "id": "DB-2026-027",
       "title": "Model-capability extraction: DeepSeek, Moonshot & MiniMax distilled Claude via fraudulent accounts",
       "date": "2026-02-23",
       "sources": [
@@ -6383,7 +6393,7 @@
         "schema_version": "1.4.1",
         "schema_name": "vcdb",
         "source_id": "vcdb",
-        "incident_id": "AISEC-2026-004",
+        "incident_id": "DB-2026-027",
         "security_incident": "Confirmed",
         "confidence": "High",
         "reference": "https://www.anthropic.com/news/detecting-and-preventing-distillation-attacks; https://www.bloomberg.com/news/articles/2026-02-23/anthropic-says-deepseek-minimax-distilled-ai-models-for-gains; https://incidentdatabase.ai/cite/1395",
@@ -6522,7 +6532,7 @@
       }
     },
     {
-      "id": "AISEC-2026-006",
+      "id": "DB-2026-028",
       "title": "Claude Code agent destroyed DataTalks.Club production infrastructure via terraform destroy",
       "date": "2026-02-26",
       "sources": [
@@ -6536,7 +6546,7 @@
         "schema_version": "1.4.1",
         "schema_name": "vcdb",
         "source_id": "vcdb",
-        "incident_id": "AISEC-2026-006",
+        "incident_id": "DB-2026-028",
         "security_incident": "Confirmed",
         "confidence": "High",
         "reference": "https://alexeyondata.substack.com/p/how-i-dropped-our-production-database; https://www.tomshardware.com/tech-industry/artificial-intelligence/claude-code-deletes-developers-production-setup-including-its-database-and-snapshots-2-5-years-of-records-were-nuked-in-an-instant; https://incidentdatabase.ai/cite/1424",
@@ -6671,7 +6681,7 @@
       }
     },
     {
-      "id": "AISEC-2026-009",
+      "id": "DB-2026-029",
       "title": "Meta internal AI agent's inaccurate advice caused SEV1 — unauthorized data access for ~2 hours",
       "date": "2026-03-18",
       "sources": [
@@ -6690,7 +6700,7 @@
         "schema_version": "1.4.1",
         "schema_name": "vcdb",
         "source_id": "vcdb",
-        "incident_id": "AISEC-2026-009",
+        "incident_id": "DB-2026-029",
         "security_incident": "Confirmed",
         "confidence": "Medium",
         "reference": "https://www.theverge.com/ai-artificial-intelligence/897528/meta-rogue-ai-agent-security-incident; https://futurism.com/artificial-intelligence/rogue-ai-agent-triggers-emergency-at-meta; https://incidentdatabase.ai/cite/1471; https://github.com/vz-risk/VCDB/issues/23117",
@@ -6823,7 +6833,7 @@
       }
     },
     {
-      "id": "AISEC-2026-010",
+      "id": "DB-2026-030",
       "title": "AI deepfakes bypassed Aadhaar facial authentication to hijack identity, open accounts (Ahmedabad)",
       "date": "2026-04-28",
       "sources": [
@@ -6837,7 +6847,7 @@
         "schema_version": "1.4.1",
         "schema_name": "vcdb",
         "source_id": "vcdb",
-        "incident_id": "AISEC-2026-010",
+        "incident_id": "DB-2026-030",
         "security_incident": "Confirmed",
         "confidence": "Medium",
         "reference": "https://english.gujaratsamachar.com/news/gujarat/ahmedabad-cyber-police-bust-deepfake-enabled-aadhaar-fraud-racket-four-arrested-25953669438.html; https://incidentdatabase.ai/cite/1472",
@@ -6995,7 +7005,7 @@
       }
     },
     {
-      "id": "AISEC-2026-019",
+      "id": "DB-2026-031",
       "title": "MyLovely.AI (AI companion) breach exposed 113,000 explicit prompts, ~70k tied to user IDs",
       "date": "2026-04-01",
       "sources": [
@@ -7009,7 +7019,7 @@
         "schema_version": "1.4.1",
         "schema_name": "vcdb",
         "source_id": "vcdb",
-        "incident_id": "AISEC-2026-019",
+        "incident_id": "DB-2026-031",
         "security_incident": "Confirmed",
         "confidence": "Medium",
         "reference": "https://www.helpnetsecurity.com/2026/04/09/mylovely-ai-data-breach-user-conversations/; https://github.com/vz-risk/VCDB/issues/23202",
@@ -7139,7 +7149,7 @@
       }
     },
     {
-      "id": "AISEC-2026-020",
+      "id": "DB-2026-032",
       "title": "Context.ai (AI tool) compromise cascaded to Vercel via an employee OAuth token",
       "date": "2026-04-18",
       "sources": [
@@ -7153,7 +7163,7 @@
         "schema_version": "1.4.1",
         "schema_name": "vcdb",
         "source_id": "vcdb",
-        "incident_id": "AISEC-2026-020",
+        "incident_id": "DB-2026-032",
         "security_incident": "Confirmed",
         "confidence": "Medium",
         "reference": "https://www.darkreading.com/application-security/vercel-employees-ai-tool-access-data-breach; https://vercel.com/kb/bulletin/vercel-april-2026-security-incident; https://github.com/vz-risk/VCDB/issues/23237",
@@ -7295,7 +7305,7 @@
       }
     },
     {
-      "id": "AISEC-2026-021",
+      "id": "DB-2026-033",
       "title": "US community bank self-reported feeding customer data (incl. SSNs) into an unauthorized AI app",
       "date": "2026-05-07",
       "sources": [
@@ -7309,7 +7319,7 @@
         "schema_version": "1.4.1",
         "schema_name": "vcdb",
         "source_id": "vcdb",
-        "incident_id": "AISEC-2026-021",
+        "incident_id": "DB-2026-033",
         "security_incident": "Confirmed",
         "confidence": "Medium",
         "reference": "https://www.theregister.com/security/2026/05/12/us-bank-reports-itself-after-ai-customer-data-mishap/5238787; https://github.com/vz-risk/VCDB/issues/23274",
@@ -7432,7 +7442,7 @@
       }
     },
     {
-      "id": "AISEC-2026-034",
+      "id": "DB-2026-034",
       "title": "ClarityCheck (reverse image / identity-verification) exposed 9M+ facial-recognition images",
       "date": "2026-08-01",
       "sources": [
@@ -7446,7 +7456,7 @@
         "schema_version": "1.4.1",
         "schema_name": "vcdb",
         "source_id": "vcdb",
-        "incident_id": "AISEC-2026-034",
+        "incident_id": "DB-2026-034",
         "security_incident": "Confirmed",
         "confidence": "Medium",
         "reference": "https://www.techradar.com/pro/security/over-9-million-facial-recognition-images-leaked-in-major-breach-at-reverse-image-search-and-identity-verification-service; https://github.com/vz-risk/VCDB/issues/24221",
@@ -7572,7 +7582,7 @@
       }
     },
     {
-      "id": "MRG-2026-003",
+      "id": "DR-2026-035",
       "title": "Cline CLI unauthorized npm publication (cline@2.3.0) via prompt-injectable Claude GitHub Action ('Clinejection')",
       "date": "17 Feb 2026 (reported 1 Jan, disclosed 9 Feb)",
       "sources": [
@@ -7587,7 +7597,7 @@
         "schema_version": "1.4.1",
         "schema_name": "vcdb",
         "source_id": "vcdb",
-        "incident_id": "MRG-2026-003",
+        "incident_id": "DR-2026-035",
         "security_incident": "Confirmed",
         "confidence": "High",
         "reference": "https://github.com/advisories/GHSA-9ppg-jx86-fqw7; https://cline.bot/blog/post-mortem-unauthorized-cline-cli-npm",
@@ -7750,7 +7760,7 @@
       }
     },
     {
-      "id": "MRG-2026-006",
+      "id": "DR-2026-036",
       "title": "Vibe-coding vulnerability wave / Vibe Security Radar AI-authored-vulnerability corpus",
       "date": "Jan – Aug 2026 (Radar snapshot 16 Aug)",
       "sources": [
@@ -7765,7 +7775,7 @@
         "schema_version": "1.4.1",
         "schema_name": "vcdb",
         "source_id": "vcdb",
-        "incident_id": "MRG-2026-006",
+        "incident_id": "DR-2026-036",
         "security_incident": "Confirmed",
         "confidence": "Medium",
         "reference": "https://vibesecradar.com/cves; https://www.securityweek.com/vibe-coded-apps-riddled-with-exploitable-security-flaws/",
@@ -11482,7 +11492,7 @@
       }
     },
     {
-      "id": "MRG-2026-019",
+      "id": "DR-2026-037",
       "title": "Ollama 'Bleeding Llama' heap out-of-bounds read (CVE-2026-7482) + mass exposed servers",
       "date": "2026 (175k exposed reported Jan, fixed 0.17.1)",
       "sources": [
@@ -11494,7 +11504,7 @@
         "schema_version": "1.4.1",
         "schema_name": "vcdb",
         "source_id": "vcdb",
-        "incident_id": "MRG-2026-019",
+        "incident_id": "DR-2026-037",
         "security_incident": "Confirmed",
         "confidence": "High",
         "reference": "https://www.indusface.com/blog/cve-2026-7482-bleeding-llama-vulnerability/; CVE-2026-7482",
@@ -11675,7 +11685,7 @@
       }
     },
     {
-      "id": "MRG-2026-020",
+      "id": "DR-2026-038",
       "title": "Sears Home Services AI chatbot / scheduling databases exposed ~3.7M records",
       "date": "2026",
       "sources": [
@@ -11687,7 +11697,7 @@
         "schema_version": "1.4.1",
         "schema_name": "vcdb",
         "source_id": "vcdb",
-        "incident_id": "MRG-2026-020",
+        "incident_id": "DR-2026-038",
         "security_incident": "Confirmed",
         "confidence": "Medium",
         "reference": "https://www.securitymagazine.com/articles/102188-37m-records-exposed-many-belonging-to-sears-home-services; https://cybernews.com/ai-news/ai-chatbot-data-leak-sears/",
@@ -11806,7 +11816,7 @@
       }
     },
     {
-      "id": "MRG-2026-031",
+      "id": "DR-2026-039",
       "title": "OpenClaw one-click RCE (CVE-2026-25253) + 40,000+ exposed instances",
       "date": "Feb 2026 (disclosed 3 Feb)",
       "sources": [
@@ -11818,7 +11828,7 @@
         "schema_version": "1.4.1",
         "schema_name": "vcdb",
         "source_id": "vcdb",
-        "incident_id": "MRG-2026-031",
+        "incident_id": "DR-2026-039",
         "security_incident": "Confirmed",
         "confidence": "High",
         "reference": "https://thehackernews.com/2026/02/openclaw-bug-enables-one-click-remote.html; CVE-2026-25253",
@@ -12058,7 +12068,7 @@
       }
     },
     {
-      "id": "MRG-2026-033",
+      "id": "DR-2026-040",
       "title": "LLM-powered malware & AI-crime mapping — GTIG AI Threat Tracker (HONESTCUE, COINBAIT) + Anthropic MITRE ATT&CK report",
       "date": "Feb - Jun 2026 (12 Feb, 3 Jun)",
       "sources": [
@@ -12070,7 +12080,7 @@
         "schema_version": "1.4.1",
         "schema_name": "vcdb",
         "source_id": "vcdb",
-        "incident_id": "MRG-2026-033",
+        "incident_id": "DR-2026-040",
         "security_incident": "Confirmed",
         "confidence": "High",
         "reference": "https://cloud.google.com/blog/topics/threat-intelligence/distillation-experimentation-integration-ai-adversarial-use; https://www.anthropic.com/news/AI-enabled-cyber-threats-mitre-attack",
@@ -12196,7 +12206,7 @@
       }
     },
     {
-      "id": "MRG-2026-039",
+      "id": "DB-2026-041",
       "title": "RXNT (EHR SaaS) - hacking via partner (VCDB; no AI component)",
       "date": "1 Mar 2026",
       "sources": [
@@ -12210,7 +12220,7 @@
         "schema_version": "1.4.1",
         "schema_name": "vcdb",
         "source_id": "vcdb",
-        "incident_id": "MRG-2026-039",
+        "incident_id": "DB-2026-041",
         "security_incident": "Confirmed",
         "confidence": "High",
         "reference": "https://github.com/vz-risk/VCDB (RXNT); CC_MIT_VCDB_2026_security_incidents.md",
@@ -12332,7 +12342,7 @@
       }
     },
     {
-      "id": "MRG-2026-045",
+      "id": "DR-2026-042",
       "title": "Meta model reached and compromised an external firm via the same Irregular evaluator misconfiguration",
       "date": "disclosed Jul 2026",
       "sources": [
@@ -12344,7 +12354,7 @@
         "schema_version": "1.4.1",
         "schema_name": "vcdb",
         "source_id": "vcdb",
-        "incident_id": "MRG-2026-045",
+        "incident_id": "DR-2026-042",
         "security_incident": "Confirmed",
         "confidence": "Medium",
         "reference": "grok-ai-software-security-incidents-2026.md; related: https://www.anthropic.com/news/investigating-incidents-cybersecurity-evals",
@@ -12472,7 +12482,7 @@
       }
     },
     {
-      "id": "MRG-2026-046",
+      "id": "DB-2026-043",
       "title": "Clinical Registry Solutions - Akira ransomware / extortion (VCDB; no AI component)",
       "date": "9 Apr 2026",
       "sources": [
@@ -12486,7 +12496,7 @@
         "schema_version": "1.4.1",
         "schema_name": "vcdb",
         "source_id": "vcdb",
-        "incident_id": "MRG-2026-046",
+        "incident_id": "DB-2026-043",
         "security_incident": "Confirmed",
         "confidence": "High",
         "reference": "https://github.com/vz-risk/VCDB (Clinical Registry Solutions); CC_MIT_VCDB_2026_security_incidents.md",
@@ -12623,7 +12633,7 @@
       }
     },
     {
-      "id": "MRG-2026-048",
+      "id": "DR-2026-044",
       "title": "GlassWorm OpenVSX worm force-installs a malicious extension across Cursor & Windsurf (Solana C2)",
       "date": "Apr 2026",
       "sources": [
@@ -12635,7 +12645,7 @@
         "schema_version": "1.4.1",
         "schema_name": "vcdb",
         "source_id": "vcdb",
-        "incident_id": "MRG-2026-048",
+        "incident_id": "DR-2026-044",
         "security_incident": "Confirmed",
         "confidence": "High",
         "reference": "https://www.aikido.dev/blog/glassworm-zig-dropper-infects-every-ide-on-your-machine; https://cybersecuritynews.com/trojanized-openvsx-extension-spreads-glassworm/",
@@ -12767,7 +12777,7 @@
       }
     },
     {
-      "id": "MRG-2026-050",
+      "id": "DR-2026-045",
       "title": "node-ipc npm backdoor harvesting AI-tooling credentials via DNS exfiltration",
       "date": "14 May 2026",
       "sources": [
@@ -12779,7 +12789,7 @@
         "schema_version": "1.4.1",
         "schema_name": "vcdb",
         "source_id": "vcdb",
-        "incident_id": "MRG-2026-050",
+        "incident_id": "DR-2026-045",
         "security_incident": "Confirmed",
         "confidence": "High",
         "reference": "https://thehackernews.com/2026/05/stealer-backdoor-found-in-3-node-ipc.html; https://securitylabs.datadoghq.com/articles/node-ipc-npm-malware-analysis/",
@@ -12926,7 +12936,7 @@
       }
     },
     {
-      "id": "MRG-2026-052",
+      "id": "DR-2026-046",
       "title": "Red Hat (@redhat-cloud-services) & node-gyp 'Miasma Phantom Gyp' npm worm waves (Shai-Hulud descendants)",
       "date": "May - Jun 2026",
       "sources": [
@@ -12938,7 +12948,7 @@
         "schema_version": "1.4.1",
         "schema_name": "vcdb",
         "source_id": "vcdb",
-        "incident_id": "MRG-2026-052",
+        "incident_id": "DR-2026-046",
         "security_incident": "Confirmed",
         "confidence": "High",
         "reference": "https://access.redhat.com/security/vulnerabilities/RHSB-2026-006; https://www.stepsecurity.io/blog/binding-gyp-npm-supply-chain-attack-spreads-like-worm",
@@ -13219,7 +13229,7 @@
       }
     },
     {
-      "id": "MRG-2026-055",
+      "id": "DB-2026-047",
       "title": "Mackay Sugar - The Gentlemen ransomware (VCDB; no AI component)",
       "date": "10 Jun 2026",
       "sources": [
@@ -13233,7 +13243,7 @@
         "schema_version": "1.4.1",
         "schema_name": "vcdb",
         "source_id": "vcdb",
-        "incident_id": "MRG-2026-055",
+        "incident_id": "DB-2026-047",
         "security_incident": "Confirmed",
         "confidence": "High",
         "reference": "https://github.com/vz-risk/VCDB (Mackay Sugar); CC_MIT_VCDB_2026_security_incidents.md",
@@ -13362,7 +13372,7 @@
       }
     },
     {
-      "id": "MRG-2026-056",
+      "id": "DB-2026-048",
       "title": "Eastman Kodak - ShinyHunters hacking / extortion (VCDB; no AI component)",
       "date": "Jun 2026",
       "sources": [
@@ -13376,7 +13386,7 @@
         "schema_version": "1.4.1",
         "schema_name": "vcdb",
         "source_id": "vcdb",
-        "incident_id": "MRG-2026-056",
+        "incident_id": "DB-2026-048",
         "security_incident": "Confirmed",
         "confidence": "High",
         "reference": "https://github.com/vz-risk/VCDB (Eastman Kodak); CC_MIT_VCDB_2026_security_incidents.md",
@@ -13510,7 +13520,7 @@
       }
     },
     {
-      "id": "AISEC-2026-014",
+      "id": "DB-2026-049",
       "title": "Lena Health (AI care-coordination) breached via unpatched vuln — Twilio call recordings, patient PHI",
       "date": "2025-12-01",
       "sources": [
@@ -13524,7 +13534,7 @@
         "schema_version": "1.4.1",
         "schema_name": "vcdb",
         "source_id": "vcdb",
-        "incident_id": "AISEC-2026-014",
+        "incident_id": "DB-2026-049",
         "security_incident": "Confirmed",
         "confidence": "Medium",
         "reference": "https://databreaches.net/2026/01/28/ai-digital-helper-lena-health-breach-exposed-some-houston-methodist-patients-medical-info/; https://github.com/vz-risk/VCDB/issues/23009",
@@ -13670,7 +13680,7 @@
       }
     },
     {
-      "id": "AISEC-2026-016",
+      "id": "DB-2026-050",
       "title": "Miko AI toy left thousands of children's toy-conversation audio responses in a public database",
       "date": "2026-02-11",
       "sources": [
@@ -13684,7 +13694,7 @@
         "schema_version": "1.4.1",
         "schema_name": "vcdb",
         "source_id": "vcdb",
-        "incident_id": "AISEC-2026-016",
+        "incident_id": "DB-2026-050",
         "security_incident": "Confirmed",
         "confidence": "Medium",
         "reference": "https://www.nbcnews.com/tech/security/ai-toy-maker-exposed-thousands-responses-kids-senators-miko-rcna258326; https://www.blackburn.senate.gov/2026/2/technology/blackburn-blumenthal-demand-answers-from-toy-maker-for-exposing-sensitive-data-involving-children-to-the-public; https://github.com/vz-risk/VCDB/issues/23058",
@@ -13819,7 +13829,7 @@
       }
     },
     {
-      "id": "AISEC-2026-026",
+      "id": "DB-2026-051",
       "title": "Breach of an AI solution vendor exposed Korean Ministry of SMEs startup-program applicant data",
       "date": "2026-06-22",
       "sources": [
@@ -13833,7 +13843,7 @@
         "schema_version": "1.4.1",
         "schema_name": "vcdb",
         "source_id": "vcdb",
-        "incident_id": "AISEC-2026-026",
+        "incident_id": "DB-2026-051",
         "security_incident": "Confirmed",
         "confidence": "Low",
         "reference": "https://m.ajupress.com/amp/20260622114070274; https://github.com/vz-risk/VCDB/issues/23510",
@@ -13962,7 +13972,7 @@
       }
     },
     {
-      "id": "AISEC-2026-027",
+      "id": "DB-2026-052",
       "title": "ChatGPT-assisted cyberattack took Bandai Channel offline (~1.36M members potentially exposed)",
       "date": "2025-11-01",
       "sources": [
@@ -13976,7 +13986,7 @@
         "schema_version": "1.4.1",
         "schema_name": "vcdb",
         "source_id": "vcdb",
-        "incident_id": "AISEC-2026-027",
+        "incident_id": "DB-2026-052",
         "security_incident": "Confirmed",
         "confidence": "Low",
         "reference": "https://www.msn.com/en-in/news/insight/japanese-teen-held-for-chatgpt-assisted-cyberattack-on-anime-site/gm-GMDE95667E; https://github.com/vz-risk/VCDB/issues/23723",
@@ -14113,7 +14123,7 @@
       }
     },
     {
-      "id": "MRG-2026-029",
+      "id": "DB-2026-053",
       "title": "Elmwood Home Care — LockBit 5.0 ransomware (VCDB; no AI component)",
       "date": "24 Jan 2026",
       "sources": [
@@ -14127,7 +14137,7 @@
         "schema_version": "1.4.1",
         "schema_name": "vcdb",
         "source_id": "vcdb",
-        "incident_id": "MRG-2026-029",
+        "incident_id": "DB-2026-053",
         "security_incident": "Confirmed",
         "confidence": "High",
         "reference": "https://github.com/vz-risk/VCDB (Elmwood Home Care); CC_MIT_VCDB_2026_security_incidents.md",
@@ -14252,7 +14262,7 @@
       }
     },
     {
-      "id": "MRG-2026-035",
+      "id": "DB-2026-054",
       "title": "Lifepoint Health - use of stolen credentials (VCDB; no AI component)",
       "date": "22 Feb 2026",
       "sources": [
@@ -14266,7 +14276,7 @@
         "schema_version": "1.4.1",
         "schema_name": "vcdb",
         "source_id": "vcdb",
-        "incident_id": "MRG-2026-035",
+        "incident_id": "DB-2026-054",
         "security_incident": "Confirmed",
         "confidence": "High",
         "reference": "https://github.com/vz-risk/VCDB (Lifepoint Health); CC_MIT_VCDB_2026_security_incidents.md",
@@ -14382,7 +14392,7 @@
       }
     },
     {
-      "id": "MRG-2026-041",
+      "id": "DB-2026-055",
       "title": "Southern California University of Health Sciences - hacking / exfiltration of 2,206 records (VCDB; no AI component)",
       "date": "23 Mar 2026",
       "sources": [
@@ -14396,7 +14406,7 @@
         "schema_version": "1.4.1",
         "schema_name": "vcdb",
         "source_id": "vcdb",
-        "incident_id": "MRG-2026-041",
+        "incident_id": "DB-2026-055",
         "security_incident": "Confirmed",
         "confidence": "High",
         "reference": "https://github.com/vz-risk/VCDB (SCUHS); CC_MIT_VCDB_2026_security_incidents.md",
@@ -14519,7 +14529,7 @@
       }
     },
     {
-      "id": "MRG-2026-007",
+      "id": "DR-2026-056",
       "title": "'Comment & Control' (Black Hat USA 2026) — GitHub-issue prompt injection drives RCE/credential theft in Claude Code, Gemini CLI, Codex, Copilot",
       "date": "Apr 2026 & 5 Aug 2026",
       "sources": [
@@ -14534,7 +14544,7 @@
         "schema_version": "1.4.1",
         "schema_name": "vcdb",
         "source_id": "vcdb",
-        "incident_id": "MRG-2026-007",
+        "incident_id": "DR-2026-056",
         "security_incident": "Confirmed",
         "confidence": "High",
         "reference": "https://www.securityweek.com/claude-code-gemini-cli-github-copilot-agents-vulnerable-to-prompt-injection-via-comments/",
@@ -14702,7 +14712,7 @@
             ],
             "cisa_kev": false,
             "title": "Claude Code: Out-of-Band Data Exfiltration via Pre-Approved HuggingFace Domain in WebFetch",
-            "note": "Claude Code 0.2.54-<2.1.163 out-of-band exfiltration via the pre-approved huggingface.co WebFetch domain (GHSA-fg94-h982-f3mm, reporter hackerone.com/novee; CVSS 6.0 v4 / 9.1 v3) - the Claude Code finding in the same Novee research. Also listed in the Claude Code cluster (MRG-2026-004).",
+            "note": "Claude Code 0.2.54-<2.1.163 out-of-band exfiltration via the pre-approved huggingface.co WebFetch domain (GHSA-fg94-h982-f3mm, reporter hackerone.com/novee; CVSS 6.0 v4 / 9.1 v3) - the Claude Code finding in the same Novee research. Also listed in the Claude Code cluster (DR-2026-062).",
             "record_url": "https://www.cve.org/CVERecord?id=CVE-2026-54316"
           }
         ],
@@ -14710,7 +14720,7 @@
       }
     },
     {
-      "id": "MRG-2026-021",
+      "id": "DR-2026-057",
       "title": "RufRoot (CVE-2026-59726, CVSS 10.0) in Ruflo/Claude Flow + max-severity agent-harness CVEs (Langroid, LiteLLM)",
       "date": "2026",
       "sources": [
@@ -14722,7 +14732,7 @@
         "schema_version": "1.4.1",
         "schema_name": "vcdb",
         "source_id": "vcdb",
-        "incident_id": "MRG-2026-021",
+        "incident_id": "DR-2026-057",
         "security_incident": "Confirmed",
         "confidence": "Medium",
         "reference": "https://nvd.nist.gov/vuln/detail/CVE-2026-59726",
@@ -14981,7 +14991,7 @@
       }
     },
     {
-      "id": "MRG-2026-044",
+      "id": "DR-2026-058",
       "title": "Project Glasswing / Claude Mythos Preview mass zero-day discovery (WolfSSL CVE-2026-5194, FreeBSD CVE-2026-4747; early Mythos sandbox escape)",
       "date": "Apr - Jun 2026",
       "sources": [
@@ -14993,7 +15003,7 @@
         "schema_version": "1.4.1",
         "schema_name": "vcdb",
         "source_id": "vcdb",
-        "incident_id": "MRG-2026-044",
+        "incident_id": "DR-2026-058",
         "security_incident": "Confirmed",
         "confidence": "High",
         "reference": "https://www.anthropic.com/glasswing; https://thehackernews.com/2026/05/claude-mythos-ai-finds-10000-high.html; CVE-2026-5194; CVE-2026-4747",
@@ -15402,11 +15412,11 @@
             "note": "gitoxide (= CVE-2026-44471)"
           }
         ],
-        "note": "Anthropic's own pages name only CVE-2026-4747 and CVE-2026-5194; the headline FFmpeg 16-year H.264 bug (fixed in FFmpeg 8.1) and OpenBSD 27-year SACK bug (7.8 errata 025) received no CVE. Other 2026 CVEs credited to '...in collaboration with Claude and Anthropic Research' (wolfSSL 5.9.1 batch via Calif.io, NGINX CVE-2026-27654, OpenSSL CVE-2026-28386, Nomad CVE-2026-7474) are not tied to Glasswing by their advisories and are not listed. Firefox 150 Mythos findings are covered under MRG-2026-049."
+        "note": "Anthropic's own pages name only CVE-2026-4747 and CVE-2026-5194; the headline FFmpeg 16-year H.264 bug (fixed in FFmpeg 8.1) and OpenBSD 27-year SACK bug (7.8 errata 025) received no CVE. Other 2026 CVEs credited to '...in collaboration with Claude and Anthropic Research' (wolfSSL 5.9.1 batch via Calif.io, NGINX CVE-2026-27654, OpenSSL CVE-2026-28386, Nomad CVE-2026-7474) are not tied to Glasswing by their advisories and are not listed. Firefox 150 Mythos findings are covered under DR-2026-095."
       }
     },
     {
-      "id": "MRG-2026-047",
+      "id": "DR-2026-059",
       "title": "Anthropic MCP STDIO transport design RCE in official SDKs (~200k deployments, 14 CVEs)",
       "date": "15 Apr 2026",
       "sources": [
@@ -15418,7 +15428,7 @@
         "schema_version": "1.4.1",
         "schema_name": "vcdb",
         "source_id": "vcdb",
-        "incident_id": "MRG-2026-047",
+        "incident_id": "DR-2026-059",
         "security_incident": "Confirmed",
         "confidence": "High",
         "reference": "https://www.ox.security/blog/the-mother-of-all-ai-supply-chains-critical-systemic-vulnerability-at-the-core-of-the-mcp/; https://thehackernews.com/2026/04/anthropic-mcp-design-vulnerability.html",
@@ -15856,7 +15866,7 @@
       }
     },
     {
-      "id": "MRG-2026-059",
+      "id": "DR-2026-060",
       "title": "Cursor 'DuneSlide' zero-click prompt-injection RCE (CVE-2026-50548 / CVE-2026-50549)",
       "date": "reported Feb 2026, fixed 2 Apr, disclosed Jul 2026",
       "sources": [
@@ -15868,7 +15878,7 @@
         "schema_version": "1.4.1",
         "schema_name": "vcdb",
         "source_id": "vcdb",
-        "incident_id": "MRG-2026-059",
+        "incident_id": "DR-2026-060",
         "security_incident": "Confirmed",
         "confidence": "High",
         "reference": "https://www.catonetworks.com/blog/duneslide-two-critical-rce-vulnerabilities/; CVE-2026-50548; CVE-2026-50549",
@@ -16038,7 +16048,7 @@
       }
     },
     {
-      "id": "AISEC-2026-003",
+      "id": "DB-2026-061",
       "title": "DJI Romo robot-vacuum cloud authorization flaw exposed ~7,000 homes' camera/mic/maps",
       "date": "2026-01-01",
       "sources": [
@@ -16052,7 +16062,7 @@
         "schema_version": "1.4.1",
         "schema_name": "vcdb",
         "source_id": "vcdb",
-        "incident_id": "AISEC-2026-003",
+        "incident_id": "DB-2026-061",
         "security_incident": "Confirmed",
         "confidence": "High",
         "reference": "https://www.theverge.com (initial report); https://dronexl.co/2026/02/17/dji-romo-security-breach/; https://www.popsci.com/technology/robot-vacuum-army/; https://incidentdatabase.ai/cite/1389",
@@ -16193,7 +16203,7 @@
       }
     },
     {
-      "id": "MRG-2026-004",
+      "id": "DR-2026-062",
       "title": "Claude Code project-file RCE & vulnerability cluster (Check Point + others)",
       "date": "25 Feb 2026 disclosure, cluster Feb – Aug 2026",
       "sources": [
@@ -16208,7 +16218,7 @@
         "schema_version": "1.4.1",
         "schema_name": "vcdb",
         "source_id": "vcdb",
-        "incident_id": "MRG-2026-004",
+        "incident_id": "DR-2026-062",
         "security_incident": "Confirmed",
         "confidence": "High",
         "reference": "https://research.checkpoint.com/2026/rce-and-api-token-exfiltration-through-claude-code-project-files-cve-2025-59536/",
@@ -16700,7 +16710,7 @@
       }
     },
     {
-      "id": "MRG-2026-011",
+      "id": "DR-2026-063",
       "title": "Snowflake GitHub Actions shell injection found & exploited by Wiz Red Agent (internal Jira token)",
       "date": "23 Jun 2026 (vulnerable PR merged 18 Jun)",
       "sources": [
@@ -16715,7 +16725,7 @@
         "schema_version": "1.4.1",
         "schema_name": "vcdb",
         "source_id": "vcdb",
-        "incident_id": "MRG-2026-011",
+        "incident_id": "DR-2026-063",
         "security_incident": "Confirmed",
         "confidence": "High",
         "reference": "https://www.wiz.io/blog/red-agent-snowflake-copilot-cicd-bug",
@@ -16856,7 +16866,7 @@
       }
     },
     {
-      "id": "MRG-2026-030",
+      "id": "DR-2026-064",
       "title": "'Emerging techniques & AI-slop reckoning' — Ghostcommit image prompt injection, fake Claude Code lures, mouse5212 stealer, Mozilla 0DIN, curl bug-bounty pause",
       "date": "Jan – Jul 2026",
       "sources": [
@@ -16868,7 +16878,7 @@
         "schema_version": "1.4.1",
         "schema_name": "vcdb",
         "source_id": "vcdb",
-        "incident_id": "MRG-2026-030",
+        "incident_id": "DR-2026-064",
         "security_incident": "Confirmed",
         "confidence": "Medium",
         "reference": "https://www.bleepingcomputer.com/news/security/ghostcommit-hides-prompt-injection-in-images-to-fool-ai-agents-steal-secrets/; https://www.theregister.com/security/2026/01/21/curl_shutters_bug_bounty_program_to_stop_ai_slop/5063039",
@@ -17007,7 +17017,7 @@
       }
     },
     {
-      "id": "MRG-2026-054",
+      "id": "DR-2026-065",
       "title": "claude-code-action permission bypass - one malicious GitHub issue hijacks any public repo running the Claude Code GitHub Action",
       "date": "disclosed Jun 2026 (reported Jan)",
       "sources": [
@@ -17019,7 +17029,7 @@
         "schema_version": "1.4.1",
         "schema_name": "vcdb",
         "source_id": "vcdb",
-        "incident_id": "MRG-2026-054",
+        "incident_id": "DR-2026-065",
         "security_incident": "Confirmed",
         "confidence": "High",
         "reference": "https://flatt.tech/research/posts/poisoning-claude-code-one-github-issue-to-break-the-supply-chain/; https://thehackernews.com/2026/06/claude-code-github-action-flaw-let-one.html",
@@ -17140,7 +17150,7 @@
       }
     },
     {
-      "id": "AISEC-2026-007",
+      "id": "DB-2026-066",
       "title": "Claude Cowork agent deleted ~15 years of family photos via terminal (bypassed Trash)",
       "date": "2026-02-07",
       "sources": [
@@ -17154,7 +17164,7 @@
         "schema_version": "1.4.1",
         "schema_name": "vcdb",
         "source_id": "vcdb",
-        "incident_id": "AISEC-2026-007",
+        "incident_id": "DB-2026-066",
         "security_incident": "Confirmed",
         "confidence": "Medium",
         "reference": "https://www.ndtv.com/offbeat/i-nearly-had-a-heart-attack-venture-capitalist-after-claude-ai-wipes-15-years-of-family-memories-10969659; https://incidentdatabase.ai/cite/1441",
@@ -17269,7 +17279,7 @@
       }
     },
     {
-      "id": "AISEC-2026-018",
+      "id": "DB-2026-067",
       "title": "Anthropic accidentally published Claude Code's source map to npm (v2.1.88), exposing internals",
       "date": "2026-03-31",
       "sources": [
@@ -17283,7 +17293,7 @@
         "schema_version": "1.4.1",
         "schema_name": "vcdb",
         "source_id": "vcdb",
-        "incident_id": "AISEC-2026-018",
+        "incident_id": "DB-2026-067",
         "security_incident": "Confirmed",
         "confidence": "High",
         "reference": "https://www.securityweek.com/critical-vulnerability-in-claude-code-emerges-days-after-source-leak/; https://www.the-ai-corner.com/p/claude-code-source-code-leaked-2026; https://github.com/vz-risk/VCDB/issues/23179",
@@ -17414,7 +17424,7 @@
       }
     },
     {
-      "id": "AISEC-2026-024",
+      "id": "DB-2026-068",
       "title": "Meta's AI training program (MCI) exposed monitored-employee data to the whole workforce",
       "date": "2026-06-22",
       "sources": [
@@ -17428,7 +17438,7 @@
         "schema_version": "1.4.1",
         "schema_name": "vcdb",
         "source_id": "vcdb",
-        "incident_id": "AISEC-2026-024",
+        "incident_id": "DB-2026-068",
         "security_incident": "Confirmed",
         "confidence": "Medium",
         "reference": "https://www.engadget.com/2199458/meta-is-pausing-employee-tracking-program-after-it-let-the-whole-company-see-sensitive-data/; https://github.com/vz-risk/VCDB/issues/23478",
@@ -17551,7 +17561,7 @@
       }
     },
     {
-      "id": "AISEC-2026-025",
+      "id": "DB-2026-069",
       "title": "AI-built ('vibe-coded') pharmacy website leaked patients' private contact-form messages",
       "date": "2026-06-01",
       "sources": [
@@ -17565,7 +17575,7 @@
         "schema_version": "1.4.1",
         "schema_name": "vcdb",
         "source_id": "vcdb",
-        "incident_id": "AISEC-2026-025",
+        "incident_id": "DB-2026-069",
         "security_incident": "Confirmed",
         "confidence": "Medium",
         "reference": "https://www.rnz.co.nz/news/health/616376/pharmacy-scrambles-to-scrub-internet-of-patients-private-messages; https://databreaches.net/2026/06/28/nz-pharmacy-scrambles-to-scrub-internet-of-patients-private-messages/; https://github.com/vz-risk/VCDB/issues/23506",
@@ -17692,7 +17702,7 @@
       }
     },
     {
-      "id": "AISEC-2026-029",
+      "id": "DB-2026-070",
       "title": "Anthropic Claude 'share' links were indexed by search engines, exposing shared chats",
       "date": "2026-07-27",
       "sources": [
@@ -17706,7 +17716,7 @@
         "schema_version": "1.4.1",
         "schema_name": "vcdb",
         "source_id": "vcdb",
-        "incident_id": "AISEC-2026-029",
+        "incident_id": "DB-2026-070",
         "security_incident": "Confirmed",
         "confidence": "Medium",
         "reference": "https://the-decoder.de/datenpanne-bei-claude-geteilte-chats-tauchten-in-suchmaschinen-auf/; https://github.com/vz-risk/VCDB/issues/23789",
@@ -17837,7 +17847,7 @@
       }
     },
     {
-      "id": "AISEC-2026-030",
+      "id": "DB-2026-071",
       "title": "OpenAI crawler accessed exposed Universa insurance customer data before detection",
       "date": "2026-07-07",
       "sources": [
@@ -17856,7 +17866,7 @@
         "schema_version": "1.4.1",
         "schema_name": "vcdb",
         "source_id": "vcdb",
-        "incident_id": "AISEC-2026-030",
+        "incident_id": "DB-2026-071",
         "security_incident": "Confirmed",
         "confidence": "Medium",
         "reference": "https://www.procontra-online.de/versicherer/artikel/nach-datenpanne-universa-kunden-koennen-ein-stueck-weit-aufatmen; https://www.it-boltwise.de/datenpanne-bei-universa-crawler-greift-zeitweise-offene-kundendaten-ab.html; https://github.com/vz-risk/VCDB/issues/23835; https://github.com/vz-risk/VCDB/issues/23857",
@@ -17987,7 +17997,7 @@
       }
     },
     {
-      "id": "AISEC-2026-032",
+      "id": "DB-2026-072",
       "title": "Loma Linda University Health uploaded a patient-data file to an external AI platform (research)",
       "date": "2026-05-25",
       "sources": [
@@ -18001,7 +18011,7 @@
         "schema_version": "1.4.1",
         "schema_name": "vcdb",
         "source_id": "vcdb",
-        "incident_id": "AISEC-2026-032",
+        "incident_id": "DB-2026-072",
         "security_incident": "Confirmed",
         "confidence": "Medium",
         "reference": "https://lluh.org/patients-visitors/patients/patient-rights-notices/notice-data-security-incident; https://www.hipaajournal.com/data-breaches-loma-linda-university-health-ucla-health/; https://github.com/vz-risk/VCDB/issues/24034",
@@ -18131,7 +18141,7 @@
       }
     },
     {
-      "id": "AISEC-2026-035",
+      "id": "DB-2026-073",
       "title": "Alation (AI data-catalog vendor) confirmed a cyberattack (details undisclosed)",
       "date": "2026-08-18",
       "sources": [
@@ -18145,7 +18155,7 @@
         "schema_version": "1.4.1",
         "schema_name": "vcdb",
         "source_id": "vcdb",
-        "incident_id": "AISEC-2026-035",
+        "incident_id": "DB-2026-073",
         "security_incident": "Confirmed",
         "confidence": "Low",
         "reference": "https://techcrunch.com/2026/08/20/ai-data-giant-alation-confirms-cyberattack/; https://github.com/vz-risk/VCDB/issues/24210",
@@ -18276,7 +18286,7 @@
       }
     },
     {
-      "id": "MRG-2026-036",
+      "id": "DB-2026-074",
       "title": "Meta AI smart glasses exposed intimate user imagery/video to human reviewers in Kenya (AIID 1418)",
       "date": "27 Feb 2026",
       "sources": [
@@ -18290,7 +18300,7 @@
         "schema_version": "1.4.1",
         "schema_name": "vcdb",
         "source_id": "vcdb",
-        "incident_id": "MRG-2026-036",
+        "incident_id": "DB-2026-074",
         "security_incident": "False positive",
         "confidence": "Medium",
         "reference": "https://incidentdatabase.ai/cite/1418; https://techcrunch.com/2026/03/05/meta-sued-over-ai-smartglasses-privacy-concerns-after-workers-reviewed-nudity-sex-and-other-footage/",
@@ -18394,7 +18404,7 @@
       }
     },
     {
-      "id": "MRG-2026-057",
+      "id": "DB-2026-075",
       "title": "Southern Design RV - CMD Organization extortion (VCDB; no AI component)",
       "date": "~20 Jun 2026",
       "sources": [
@@ -18408,7 +18418,7 @@
         "schema_version": "1.4.1",
         "schema_name": "vcdb",
         "source_id": "vcdb",
-        "incident_id": "MRG-2026-057",
+        "incident_id": "DB-2026-075",
         "security_incident": "Confirmed",
         "confidence": "Medium",
         "reference": "https://github.com/vz-risk/VCDB (Southern Design RV); CC_MIT_VCDB_2026_security_incidents.md",
@@ -18538,7 +18548,7 @@
       }
     },
     {
-      "id": "MRG-2026-032",
+      "id": "DB-2026-076",
       "title": "Melbourne Football Club — insider privilege abuse (VCDB; no AI component)",
       "date": "4 Feb 2026",
       "sources": [
@@ -18552,7 +18562,7 @@
         "schema_version": "1.4.1",
         "schema_name": "vcdb",
         "source_id": "vcdb",
-        "incident_id": "MRG-2026-032",
+        "incident_id": "DB-2026-076",
         "security_incident": "Confirmed",
         "confidence": "Medium",
         "reference": "https://github.com/vz-risk/VCDB (Melbourne Football Club); CC_MIT_VCDB_2026_security_incidents.md",
@@ -18662,7 +18672,7 @@
       }
     },
     {
-      "id": "AISEC-2026-011",
+      "id": "DB-2026-077",
       "title": "Hidden prompt injection in a Brazilian labour-court petition targeted the Galileu AI (blocked — near miss)",
       "date": "2026-05-12",
       "sources": [
@@ -18676,7 +18686,7 @@
         "schema_version": "1.4.1",
         "schema_name": "vcdb",
         "source_id": "vcdb",
-        "incident_id": "AISEC-2026-011",
+        "incident_id": "DB-2026-077",
         "security_incident": "Near miss",
         "confidence": "High",
         "reference": "https://www.trt4.jus.br/portais/trt4/modulos/noticias/50981781; https://incidentdatabase.ai/cite/1497",
@@ -18797,7 +18807,7 @@
       }
     },
     {
-      "id": "MRG-2026-001",
+      "id": "DR-2026-078",
       "title": "Google GTIG — first AI-developed zero-day exploit used by a cybercrime actor (2FA bypass)",
       "date": "11 May 2026 (disclosure)",
       "sources": [
@@ -18815,7 +18825,7 @@
         "schema_version": "1.4.1",
         "schema_name": "vcdb",
         "source_id": "vcdb",
-        "incident_id": "MRG-2026-001",
+        "incident_id": "DR-2026-078",
         "security_incident": "Confirmed",
         "confidence": "High",
         "reference": "https://cloud.google.com/blog/topics/threat-intelligence/ai-vulnerability-exploitation-initial-access",
@@ -18929,7 +18939,7 @@
       }
     },
     {
-      "id": "MRG-2026-005",
+      "id": "DR-2026-079",
       "title": "XBOW autonomous discovery of critical Microsoft RCEs",
       "date": "Mar – Jul 2026 (disclosures)",
       "sources": [
@@ -18944,7 +18954,7 @@
         "schema_version": "1.4.1",
         "schema_name": "vcdb",
         "source_id": "vcdb",
-        "incident_id": "MRG-2026-005",
+        "incident_id": "DR-2026-079",
         "security_incident": "Confirmed",
         "confidence": "High",
         "reference": "https://xbow.com/blog/three-rce-vulnerabilities-in-microsoft-identified-xbow; CVE-2026-21536",
@@ -19130,7 +19140,7 @@
       }
     },
     {
-      "id": "MRG-2026-008",
+      "id": "DR-2026-080",
       "title": "Microsoft 'Prompts become shells' — Semantic Kernel MCP RCE + prompt-to-shell paths in LangChain/AutoGen/CrewAI/LiteLLM",
       "date": "7 May 2026 (disclosure)",
       "sources": [
@@ -19145,7 +19155,7 @@
         "schema_version": "1.4.1",
         "schema_name": "vcdb",
         "source_id": "vcdb",
-        "incident_id": "MRG-2026-008",
+        "incident_id": "DR-2026-080",
         "security_incident": "Confirmed",
         "confidence": "High",
         "reference": "https://www.microsoft.com/en-us/security/blog/2026/05/07/prompts-become-shells-rce-vulnerabilities-ai-agent-frameworks/; CVE-2026-29040",
@@ -19366,7 +19376,7 @@
       }
     },
     {
-      "id": "MRG-2026-010",
+      "id": "DR-2026-081",
       "title": "Microsoft 365 Copilot 'SearchLeak' zero-click data exfiltration (CVE-2026-42824)",
       "date": "15 Jun 2026 (disclosure)",
       "sources": [
@@ -19381,7 +19391,7 @@
         "schema_version": "1.4.1",
         "schema_name": "vcdb",
         "source_id": "vcdb",
-        "incident_id": "MRG-2026-010",
+        "incident_id": "DR-2026-081",
         "security_incident": "Confirmed",
         "confidence": "High",
         "reference": "https://www.varonis.com/blog/searchleak; CVE-2026-42824",
@@ -19524,7 +19534,7 @@
       }
     },
     {
-      "id": "MRG-2026-013",
+      "id": "DR-2026-082",
       "title": "UK AISI cyber-capability evaluation — unsanctioned agent actions against real people/projects",
       "date": "25–28 Jul 2026 (disclosed 4 Aug)",
       "sources": [
@@ -19539,7 +19549,7 @@
         "schema_version": "1.4.1",
         "schema_name": "vcdb",
         "source_id": "vcdb",
-        "incident_id": "MRG-2026-013",
+        "incident_id": "DR-2026-082",
         "security_incident": "Confirmed",
         "confidence": "High",
         "reference": "https://www.aisi.gov.uk/blog/incident-report-unsanctioned-agent-behaviour-during-cyber-testing",
@@ -19683,7 +19693,7 @@
       }
     },
     {
-      "id": "MRG-2026-014",
+      "id": "DR-2026-083",
       "title": "Microsoft Copilot 'CoSnitch' zero-click indirect prompt injection (CVE-2026-24301)",
       "date": "18 Aug 2026 (disclosure)",
       "sources": [
@@ -19698,7 +19708,7 @@
         "schema_version": "1.4.1",
         "schema_name": "vcdb",
         "source_id": "vcdb",
-        "incident_id": "MRG-2026-014",
+        "incident_id": "DR-2026-083",
         "security_incident": "Confirmed",
         "confidence": "High",
         "reference": "https://www.varonis.com/blog/cosnitch; CVE-2026-24301",
@@ -19836,7 +19846,7 @@
       }
     },
     {
-      "id": "MRG-2026-017",
+      "id": "DR-2026-084",
       "title": "Exim 'Dead.Letter' unauthenticated RCE (CVE-2026-45185) found by XBOW",
       "date": "2026",
       "sources": [
@@ -19848,7 +19858,7 @@
         "schema_version": "1.4.1",
         "schema_name": "vcdb",
         "source_id": "vcdb",
-        "incident_id": "MRG-2026-017",
+        "incident_id": "DR-2026-084",
         "security_incident": "Confirmed",
         "confidence": "High",
         "reference": "https://nvd.nist.gov/vuln/detail/CVE-2026-45185",
@@ -19998,7 +20008,7 @@
       }
     },
     {
-      "id": "MRG-2026-022",
+      "id": "DR-2026-085",
       "title": "Google Mandiant Agentic Vulnerability Discovery Harness (AVDH) — 100+ criticals in two days, 12+ CVEs",
       "date": "2026",
       "sources": [
@@ -20010,7 +20020,7 @@
         "schema_version": "1.4.1",
         "schema_name": "vcdb",
         "source_id": "vcdb",
-        "incident_id": "MRG-2026-022",
+        "incident_id": "DR-2026-085",
         "security_incident": "Confirmed",
         "confidence": "High",
         "reference": "https://cloud.google.com/blog/topics/threat-intelligence/; CVE-2026-13242; CVE-2026-55803",
@@ -20210,7 +20220,7 @@
       }
     },
     {
-      "id": "MRG-2026-026",
+      "id": "DR-2026-086",
       "title": "Gemini calendar-invite prompt injection, ChatGPT hidden DNS exfiltration, Codex branch-name command injection (vendor fixes)",
       "date": "Jan – Mar 2026",
       "sources": [
@@ -20222,7 +20232,7 @@
         "schema_version": "1.4.1",
         "schema_name": "vcdb",
         "source_id": "vcdb",
-        "incident_id": "MRG-2026-026",
+        "incident_id": "DR-2026-086",
         "security_incident": "Confirmed",
         "confidence": "High",
         "reference": "https://thehackernews.com/2026/01/google-gemini-prompt-injection-flaw.html; https://research.checkpoint.com/2026/chatgpt-data-leakage-via-a-hidden-outbound-channel-in-the-code-execution-runtime/",
@@ -20338,7 +20348,7 @@
       }
     },
     {
-      "id": "MRG-2026-038",
+      "id": "DR-2026-087",
       "title": "Microsoft 365 Copilot 'EchoLeak' (CVE-2025-32711) + Excel XSS zero-click Copilot Agent egress (CVE-2026-26144)",
       "date": "Mar - May 2026",
       "sources": [
@@ -20350,7 +20360,7 @@
         "schema_version": "1.4.1",
         "schema_name": "vcdb",
         "source_id": "vcdb",
-        "incident_id": "MRG-2026-038",
+        "incident_id": "DR-2026-087",
         "security_incident": "Confirmed",
         "confidence": "High",
         "reference": "https://www.bleepingcomputer.com/news/security/new-attack-turned-microsoft-365-copilot-into-1-click-data-theft-tool/; CVE-2025-32711; CVE-2026-26144",
@@ -20515,7 +20525,7 @@
       }
     },
     {
-      "id": "MRG-2026-042",
+      "id": "DR-2026-088",
       "title": "AI as defender - OpenAI Aardvark/Codex Security CVEs, Wiz AI-assisted GitHub Enterprise RCE (CVE-2026-3854), Google Big Sleep/CodeMender",
       "date": "Mar 2026 onward",
       "sources": [
@@ -20527,7 +20537,7 @@
         "schema_version": "1.4.1",
         "schema_name": "vcdb",
         "source_id": "vcdb",
-        "incident_id": "MRG-2026-042",
+        "incident_id": "DR-2026-088",
         "security_incident": "Confirmed",
         "confidence": "High",
         "reference": "https://thehackernews.com/2026/03/openai-codex-security-scanned-12.html; https://www.wiz.io/blog/github-rce-vulnerability-cve-2026-3854; CVE-2026-3854",
@@ -20992,7 +21002,7 @@
             "product": "Google/Chrome",
             "cisa_kev": false,
             "title": "",
-            "note": "Chromium CVE credited to OpenAI Codex Security in the Chrome release notes (Chrome CNA records carry no credit field): Chrome <150.0.7871.128 V8 OOB read/write; \"Reported by OpenAI Codex Security (amyb) on 2026-07-06\" - also the subject of MRG-2026-064.",
+            "note": "Chromium CVE credited to OpenAI Codex Security in the Chrome release notes (Chrome CNA records carry no credit field): Chrome <150.0.7871.128 V8 OOB read/write; \"Reported by OpenAI Codex Security (amyb) on 2026-07-06\" - also the subject of DR-2026-091.",
             "record_url": "https://www.cve.org/CVERecord?id=CVE-2026-15903"
           },
           {
@@ -21056,7 +21066,7 @@
             ],
             "cisa_kev": false,
             "title": "",
-            "note": "Chrome <151.0.7922.173 DOM UAF credited \"Google BigSleep@Grape\" (2026-08-20) - the one 2026 Chrome CVE explicitly credited to Big Sleep (see MRG-2026-023).",
+            "note": "Chrome <151.0.7922.173 DOM UAF credited \"Google BigSleep@Grape\" (2026-08-20) - the one 2026 Chrome CVE explicitly credited to Big Sleep (see DR-2026-093).",
             "record_url": "https://www.cve.org/CVERecord?id=CVE-2026-76021"
           }
         ],
@@ -21067,7 +21077,7 @@
       }
     },
     {
-      "id": "MRG-2026-061",
+      "id": "DR-2026-089",
       "title": "'Week of Sandbox Escapes' - Cursor hooks (CVE-2026-48124), Codex CLI 'GitPwned', Docker-socket escape, Antigravity bypasses",
       "date": "Jul 2026",
       "sources": [
@@ -21079,7 +21089,7 @@
         "schema_version": "1.4.1",
         "schema_name": "vcdb",
         "source_id": "vcdb",
-        "incident_id": "MRG-2026-061",
+        "incident_id": "DR-2026-089",
         "security_incident": "Confirmed",
         "confidence": "High",
         "reference": "https://www.bleepingcomputer.com/news/security/cursor-codex-gemini-cli-antigravity-hit-by-sandbox-escapes/; https://www.pillar.security/blog/one-docker-socket-to-rule-them-all-escaping-codex-cursor-and-gemini-clis-sandboxes; CVE-2026-48124",
@@ -21269,7 +21279,7 @@
       }
     },
     {
-      "id": "MRG-2026-063",
+      "id": "DR-2026-090",
       "title": "Atlassian Rovo 'RovoBlast' zero-click indirect prompt injection",
       "date": "7 Aug 2026 (disclosure)",
       "sources": [
@@ -21281,7 +21291,7 @@
         "schema_version": "1.4.1",
         "schema_name": "vcdb",
         "source_id": "vcdb",
-        "incident_id": "MRG-2026-063",
+        "incident_id": "DR-2026-090",
         "security_incident": "Confirmed",
         "confidence": "High",
         "reference": "https://www.varonis.com/blog/rovoblast",
@@ -21391,7 +21401,7 @@
       }
     },
     {
-      "id": "MRG-2026-064",
+      "id": "DR-2026-091",
       "title": "GPT-5.6-Cyber V8 memory-corruption / heap-sandbox-escape chain reported to Google (CVE-2026-15903)",
       "date": "10 Aug 2026 (disclosure)",
       "sources": [
@@ -21403,7 +21413,7 @@
         "schema_version": "1.4.1",
         "schema_name": "vcdb",
         "source_id": "vcdb",
-        "incident_id": "MRG-2026-064",
+        "incident_id": "DR-2026-091",
         "security_incident": "Confirmed",
         "confidence": "High",
         "reference": "https://openai.com/index/expanding-daybreak-as-the-cyber-defense-window-narrows/; CVE-2026-15903",
@@ -21552,7 +21562,7 @@
       }
     },
     {
-      "id": "MRG-2026-002",
+      "id": "DR-2026-092",
       "title": "Microsoft Copilot 'Reprompt' — link-seeded indirect prompt injection exfiltrating consumer Copilot data",
       "date": "14 Jan 2026 (disclosure)",
       "sources": [
@@ -21567,7 +21577,7 @@
         "schema_version": "1.4.1",
         "schema_name": "vcdb",
         "source_id": "vcdb",
-        "incident_id": "MRG-2026-002",
+        "incident_id": "DR-2026-092",
         "security_incident": "Confirmed",
         "confidence": "Medium",
         "reference": "https://www.varonis.com/blog/reprompt; CVE-n/a",
@@ -21681,7 +21691,7 @@
       }
     },
     {
-      "id": "MRG-2026-023",
+      "id": "DR-2026-093",
       "title": "Google AI-assisted Chrome bug hunting found more issues in a short window than many prior cycles",
       "date": "2026",
       "sources": [
@@ -21693,7 +21703,7 @@
         "schema_version": "1.4.1",
         "schema_name": "vcdb",
         "source_id": "vcdb",
-        "incident_id": "MRG-2026-023",
+        "incident_id": "DR-2026-093",
         "security_incident": "Confirmed",
         "confidence": "Medium",
         "reference": "https://cloud.google.com/blog/topics/threat-intelligence/",
@@ -21835,7 +21845,7 @@
       }
     },
     {
-      "id": "MRG-2026-040",
+      "id": "DR-2026-094",
       "title": "Claude Opus 4.6 Firefox vulnerability-discovery campaign (22 vulnerabilities, 14 high; Firefox 148)",
       "date": "6 Mar 2026 (disclosure)",
       "sources": [
@@ -21847,7 +21857,7 @@
         "schema_version": "1.4.1",
         "schema_name": "vcdb",
         "source_id": "vcdb",
-        "incident_id": "MRG-2026-040",
+        "incident_id": "DR-2026-094",
         "security_incident": "Confirmed",
         "confidence": "High",
         "reference": "https://www.anthropic.com/news/mozilla-firefox-security; https://blog.mozilla.org/en/firefox/privacy-security/ai-security-zero-day-vulnerabilities/",
@@ -22426,7 +22436,7 @@
       }
     },
     {
-      "id": "MRG-2026-049",
+      "id": "DR-2026-095",
       "title": "Claude Mythos Preview Firefox discovery wave (271 vulnerabilities fixed in Firefox 150)",
       "date": "21 Apr 2026 (disclosure)",
       "sources": [
@@ -22438,7 +22448,7 @@
         "schema_version": "1.4.1",
         "schema_name": "vcdb",
         "source_id": "vcdb",
-        "incident_id": "MRG-2026-049",
+        "incident_id": "DR-2026-095",
         "security_incident": "Confirmed",
         "confidence": "Medium",
         "reference": "https://blog.mozilla.org/en/firefox/privacy-security/ai-security-zero-day-vulnerabilities/",
@@ -22660,7 +22670,7 @@
       }
     },
     {
-      "id": "MRG-2026-024",
+      "id": "DB-2026-096",
       "title": "Border Patrol facial recognition identified legal observer Nicole Cleland; Global Entry revoked (AIID 1362)",
       "date": "10 Jan 2026",
       "sources": [
@@ -22674,7 +22684,7 @@
         "schema_version": "1.4.1",
         "schema_name": "vcdb",
         "source_id": "vcdb",
-        "incident_id": "MRG-2026-024",
+        "incident_id": "DB-2026-096",
         "security_incident": "False positive",
         "confidence": "Medium",
         "reference": "https://incidentdatabase.ai/cite/1362; https://arstechnica.com/tech-policy/2026/01/ice-protester-says-her-global-entry-was-revoked-after-agent-scanned-her-face/",
@@ -22767,7 +22777,7 @@
       }
     },
     {
-      "id": "MRG-2026-027",
+      "id": "DB-2026-097",
       "title": "DHS agents threatened legal observers with a 'domestic terrorist' database while using AI-enabled surveillance (AIID 1390)",
       "date": "21 Jan 2026",
       "sources": [
@@ -22781,7 +22791,7 @@
         "schema_version": "1.4.1",
         "schema_name": "vcdb",
         "source_id": "vcdb",
-        "incident_id": "MRG-2026-027",
+        "incident_id": "DB-2026-097",
         "security_incident": "False positive",
         "confidence": "Low",
         "reference": "https://incidentdatabase.ai/cite/1390; https://protectdemocracy.org/wp-content/uploads/2026/02/Hilton-v-Noem-ECF-1-Complaint-.pdf",
@@ -22874,7 +22884,7 @@
       }
     },
     {
-      "id": "MRG-2026-034",
+      "id": "DB-2026-098",
       "title": "Grok disclosed adult performer Siri Dahl's legal name and birthdate - doxxing (AIID 1443)",
       "date": "19 Feb 2026",
       "sources": [
@@ -22888,7 +22898,7 @@
         "schema_version": "1.4.1",
         "schema_name": "vcdb",
         "source_id": "vcdb",
-        "incident_id": "MRG-2026-034",
+        "incident_id": "DB-2026-098",
         "security_incident": "False positive",
         "confidence": "Medium",
         "reference": "https://incidentdatabase.ai/cite/1443; https://mashable.com/article/siri-dahl-doxxed-by-grok",
@@ -22981,7 +22991,7 @@
       }
     },
     {
-      "id": "MRG-2026-028",
+      "id": "DB-2026-099",
       "title": "NotebookLM voice-replication lawsuit — David Greene v. Google (AIID 1386)",
       "date": "23 Jan 2026",
       "sources": [
@@ -22995,7 +23005,7 @@
         "schema_version": "1.4.1",
         "schema_name": "vcdb",
         "source_id": "vcdb",
-        "incident_id": "MRG-2026-028",
+        "incident_id": "DB-2026-099",
         "security_incident": "False positive",
         "confidence": "Low",
         "reference": "https://incidentdatabase.ai/cite/1386",
@@ -23391,61 +23401,61 @@
       "rule": "veris.action.hacking.cve / action.malware.cve hold only validated CVEs with relation 'exploited' (VERIS: 'CVE(s) exploited through hacking / by this malware'). Each block lists the CVEs exploited through that action: hacking.cve for CVEs exploited by the operator or agent, malware.cve only for CVEs the malware itself exploited; a CVE appears in both only when exploited by both actions. Previous values kept in validated_cve_details.veris_cve_before",
       "changes": [
         {
-          "id": "AISEC-2026-028",
+          "id": "DB-2026-006",
           "field": "action.hacking.cve",
           "before": "CVE-2026-65921; CVE-2026-66014; CVE-2026-65617",
           "after": null
         },
         {
-          "id": "MRG-2026-018",
+          "id": "DR-2026-008",
           "field": "action.hacking.cve",
           "before": "CVE-2026-33017",
           "after": "CVE-2026-33017; CVE-2026-9198"
         },
         {
-          "id": "MRG-2026-062",
+          "id": "DR-2026-012",
           "field": "action.malware.cve",
           "before": "CVE-2026-45321",
           "after": null
         },
         {
-          "id": "MRG-2026-019",
+          "id": "DR-2026-037",
           "field": "action.hacking.cve",
           "before": "CVE-2026-7482",
           "after": null
         },
         {
-          "id": "MRG-2026-031",
+          "id": "DR-2026-039",
           "field": "action.hacking.cve",
           "before": "CVE-2026-25253",
           "after": null
         },
         {
-          "id": "MRG-2026-021",
+          "id": "DR-2026-057",
           "field": "action.hacking.cve",
           "before": "CVE-2026-59726",
           "after": null
         },
         {
-          "id": "MRG-2026-017",
+          "id": "DR-2026-084",
           "field": "action.hacking.cve",
           "before": "CVE-2026-45185",
           "after": null
         },
         {
-          "id": "MRG-2026-042",
+          "id": "DR-2026-088",
           "field": "action.hacking.cve",
           "before": "CVE-2026-3854",
           "after": null
         },
         {
-          "id": "MRG-2026-061",
+          "id": "DR-2026-089",
           "field": "action.hacking.cve",
           "before": "CVE-2026-48124",
           "after": null
         },
         {
-          "id": "MRG-2026-064",
+          "id": "DR-2026-091",
           "field": "action.hacking.cve",
           "before": "CVE-2026-15903",
           "after": null

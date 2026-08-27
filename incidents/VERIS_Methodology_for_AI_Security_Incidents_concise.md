@@ -144,6 +144,8 @@ Capture at least:
 
 VERIS has a native `confidence` field. Use it rather than inventing a separate generic evidence-confidence field.
 
+**Incident ID scheme (2026 corpus).** `incident_id` is `DB-2026-nnn` when the incident was found through an incident database (AI Incident Database, VERIS Community Database) and `DR-2026-nnn` when it was found only through a deep-research report. `nnn` is the incident's position in the priority ranking at the time IDs were assigned (2026-08-27) and is unique across both prefixes; it is frozen — later re-ranking changes the ranking table, not the ID, and new incidents continue the sequence. Register record locators (e.g. VCDB UUIDs) belong in `sources`, not in `incident_id`.
+
 ### 4.2 Actor
 
 Identify who or what caused the event where possible:
@@ -876,3 +878,4 @@ This preserves standardization where a mature framework exists and makes the gen
 
 - **2026-08-27** — After validating every CVE citation in the 2026 corpus: added CVE validation rules and the `relation` vocabulary (§6.4), non-CVE identifiers (§6.6), guidance for AI-discovered and aggregate incidents (§6.7), workflow step 7 (§9.2), the validated CVE layer and the file map of as-cited vs. validated fields (§10.2), three further mistakes (§11) and vulnerability-database references (§13). VERIS core, severity rubric and observed/potential model unchanged.
 - **2026-08-27 (b)** — Made the two-layer structure (as-cited / validated) the standing rule for all incidents, with the VERIS `action.*.cve` fields derived from the validated layer (§6.4, §10.2). The 2026 corpus's VERIS action fields were aligned accordingly (10 fields; previous values kept in `validated_cve_details.veris_cve_before`).
+- **2026-08-27 (c)** — Documented the incident ID scheme (§4.1): `DB-`/`DR-` prefix by provenance, frozen rank number.
