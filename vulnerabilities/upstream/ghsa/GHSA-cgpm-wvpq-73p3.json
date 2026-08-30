@@ -1,0 +1,58 @@
+{
+ "credits": [],
+ "cve_id": null,
+ "cvss": {
+  "score": null,
+  "vector_string": null
+ },
+ "cvss_severities": {
+  "cvss_v3": {
+   "score": 0.0,
+   "vector_string": null
+  },
+  "cvss_v4": {
+   "score": 0.0,
+   "vector_string": null
+  }
+ },
+ "cwes": [
+  {
+   "cwe_id": "CWE-506",
+   "name": "Embedded Malicious Code"
+  }
+ ],
+ "description": "Any computer that has this package installed or running should be considered fully compromised. All secrets and keys stored on that computer should be rotated immediately from a different computer. The package should be removed, but as full control of the computer may have been given to an outside entity, there is no guarantee that removing the package will remove all malicious software resulting from installing it.",
+ "ghsa_id": "GHSA-cgpm-wvpq-73p3",
+ "github_reviewed_at": "2026-08-04T13:01:44Z",
+ "html_url": "https://github.com/advisories/GHSA-cgpm-wvpq-73p3",
+ "identifiers": [
+  {
+   "type": "GHSA",
+   "value": "GHSA-cgpm-wvpq-73p3"
+  }
+ ],
+ "nvd_published_at": null,
+ "published_at": "2026-08-04T13:01:44Z",
+ "references": [
+  "https://github.com/advisories/GHSA-cgpm-wvpq-73p3"
+ ],
+ "repository_advisory_url": null,
+ "severity": "critical",
+ "source_code_location": "",
+ "summary": "Malware in @keyv/postgres",
+ "type": "malware",
+ "updated_at": "2026-08-04T13:01:45Z",
+ "url": "https://api.github.com/advisories/GHSA-cgpm-wvpq-73p3",
+ "vulnerabilities": [
+  {
+   "first_patched_version": null,
+   "package": {
+    "ecosystem": "npm",
+    "name": "@keyv/postgres"
+   },
+   "vulnerable_functions": [],
+   "vulnerable_version_range": "= 6.0.0"
+  }
+ ],
+ "withdrawn_at": null
+}

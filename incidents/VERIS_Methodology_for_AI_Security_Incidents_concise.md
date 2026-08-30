@@ -340,11 +340,12 @@ Two rules therefore apply.
 | `exploited-unconfirmed` | same disclosure batch and consistent with the described attack chain, but no source confirms the ID | no |
 | `attempted` | exploitation was attempted in the incident but did not succeed / was not needed | no |
 | `toolkit` | an exploit for the CVE was present in the attacker's recovered tooling; use against the victim not confirmed | no |
-| `primary` | the incident *is* this vulnerability or its disclosure (product-vulnerability incidents) | no |
+| `self-vulnerability` | the incident *is* the disclosure of this vulnerability — a flaw in legitimate software; no exploitation by an attacker in this incident is asserted (displayed as *self (vulnerability)*) | no |
+| `self-malicious-release` | the incident *is* the publication and execution of the artefact this ID identifies — a package or extension version that is malware by design (CNA CWE-506, advisory type *malware*); harm is realized, the countermeasure is removal and credential rotation, not patching (displayed as *self (malicious release)*) | no |
 | `discovered` | the CVE is credited to the AI system or AI-assisted team the incident is about | no |
 | `related` | same product cluster, disclosure batch or campaign, explicitly linked by the sources | no |
 
-Only `exploited` CVEs belong in `action.hacking.cve` / `action.malware.cve`; all other relations live in the report layer (§10.2).
+Only `exploited` CVEs belong in `action.hacking.cve` / `action.malware.cve`; all other relations live in the report layer (§10.2). Where a single ordering of relations is needed (sorting, tie-breaking), use: exploited > self-malicious-release > exploited-unconfirmed > attempted > toolkit > self-vulnerability > discovered > related.
 
 **Evidence signals.** A CISA KEV listing is recorded as a per-CVE flag: it is evidence that the CVE is exploited *somewhere*, not that it was exploited in *this* incident. CVSS is recorded together with its version, because CNA scores (often v4.0) and NVD scores (often v3.1) differ.
 
@@ -879,3 +880,4 @@ This preserves standardization where a mature framework exists and makes the gen
 - **2026-08-27** — After validating every CVE citation in the 2026 corpus: added CVE validation rules and the `relation` vocabulary (§6.4), non-CVE identifiers (§6.6), guidance for AI-discovered and aggregate incidents (§6.7), workflow step 7 (§9.2), the validated CVE layer and the file map of as-cited vs. validated fields (§10.2), three further mistakes (§11) and vulnerability-database references (§13). VERIS core, severity rubric and observed/potential model unchanged.
 - **2026-08-27 (b)** — Made the two-layer structure (as-cited / validated) the standing rule for all incidents, with the VERIS `action.*.cve` fields derived from the validated layer (§6.4, §10.2). The 2026 corpus's VERIS action fields were aligned accordingly (10 fields; previous values kept in `validated_cve_details.veris_cve_before`).
 - **2026-08-27 (c)** — Documented the incident ID scheme (§4.1): `DB-`/`DR-` prefix by provenance, frozen rank number.
+- **2026-08-29** — §6.4 Rule 2: relation `primary` split into `self-vulnerability` / `self-malicious-release`; relevance order stated. Applied to the 2026 corpus (196 / 4 links); recorded in `cve_validation.relation_revision`.

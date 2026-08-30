@@ -1354,7 +1354,7 @@
         "cves": [
           {
             "cve": "CVE-2026-33634",
-            "relation": "primary",
+            "relation": "self-malicious-release",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "GitHub_M",
@@ -3312,7 +3312,7 @@
         "cves": [
           {
             "cve": "CVE-2026-28353",
-            "relation": "primary",
+            "relation": "self-malicious-release",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "GitHub_M",
@@ -3330,7 +3330,7 @@
           },
           {
             "cve": "CVE-2026-33634",
-            "relation": "primary",
+            "relation": "self-malicious-release",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "GitHub_M",
@@ -5600,7 +5600,7 @@
         "cves": [
           {
             "cve": "CVE-2026-45321",
-            "relation": "primary",
+            "relation": "self-malicious-release",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "GitHub_M",
@@ -8222,7 +8222,7 @@
         "cves": [
           {
             "cve": "CVE-2026-25505",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "GitHub_M",
@@ -8241,7 +8241,7 @@
           },
           {
             "cve": "CVE-2025-46724",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "GitHub_M",
@@ -8259,7 +8259,7 @@
           },
           {
             "cve": "CVE-2026-25481",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "GitHub_M",
@@ -8277,7 +8277,7 @@
           },
           {
             "cve": "CVE-2025-62615",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "GitHub_M",
@@ -8295,7 +8295,7 @@
           },
           {
             "cve": "CVE-2026-1979",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "VulDB",
@@ -8315,7 +8315,7 @@
           },
           {
             "cve": "CVE-2026-28473",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "VulnCheck",
@@ -8334,7 +8334,7 @@
           },
           {
             "cve": "CVE-2026-26321",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "GitHub_M",
@@ -8352,7 +8352,7 @@
           },
           {
             "cve": "CVE-2026-28472",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "VulnCheck",
@@ -8371,7 +8371,7 @@
           },
           {
             "cve": "CVE-2026-27487",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "GitHub_M",
@@ -8389,7 +8389,7 @@
           },
           {
             "cve": "CVE-2026-27486",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "GitHub_M",
@@ -8407,7 +8407,7 @@
           },
           {
             "cve": "CVE-2026-28478",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "VulnCheck",
@@ -8426,7 +8426,7 @@
           },
           {
             "cve": "CVE-2026-29612",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "VulnCheck",
@@ -8445,7 +8445,7 @@
           },
           {
             "cve": "CVE-2026-28451",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "VulnCheck",
@@ -8461,7 +8461,7 @@
           },
           {
             "cve": "CVE-2026-27203",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "GitHub_M",
@@ -8480,7 +8480,7 @@
           },
           {
             "cve": "CVE-2026-27695",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "GitHub_M",
@@ -8498,7 +8498,7 @@
           },
           {
             "cve": "CVE-2026-27795",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "GitHub_M",
@@ -8516,7 +8516,7 @@
           },
           {
             "cve": "CVE-2026-32049",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "VulnCheck",
@@ -8535,7 +8535,7 @@
           },
           {
             "cve": "CVE-2026-32034",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "VulnCheck",
@@ -8554,7 +8554,7 @@
           },
           {
             "cve": "CVE-2026-32045",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "VulnCheck",
@@ -8573,7 +8573,7 @@
           },
           {
             "cve": "CVE-2026-32021",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "VulnCheck",
@@ -8592,7 +8592,7 @@
           },
           {
             "cve": "CVE-2026-32001",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "VulnCheck",
@@ -8611,7 +8611,7 @@
           },
           {
             "cve": "CVE-2026-22171",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "VulnCheck",
@@ -8630,7 +8630,7 @@
           },
           {
             "cve": "CVE-2026-32057",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "VulnCheck",
@@ -8649,7 +8649,7 @@
           },
           {
             "cve": "CVE-2026-32002",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "VulnCheck",
@@ -8668,7 +8668,7 @@
           },
           {
             "cve": "CVE-2025-70040",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "mitre",
@@ -8681,7 +8681,7 @@
           },
           {
             "cve": "CVE-2026-32247",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "GitHub_M",
@@ -8699,7 +8699,7 @@
           },
           {
             "cve": "CVE-2026-32232",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "GitHub_M",
@@ -8718,7 +8718,7 @@
           },
           {
             "cve": "CVE-2026-32231",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "GitHub_M",
@@ -8737,7 +8737,7 @@
           },
           {
             "cve": "CVE-2026-32111",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "GitHub_M",
@@ -8755,7 +8755,7 @@
           },
           {
             "cve": "CVE-2026-32974",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "VulnCheck",
@@ -8774,7 +8774,7 @@
           },
           {
             "cve": "CVE-2026-32890",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "GitHub_M",
@@ -8793,7 +8793,7 @@
           },
           {
             "cve": "CVE-2026-32891",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "GitHub_M",
@@ -8813,7 +8813,7 @@
           },
           {
             "cve": "CVE-2026-33331",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "GitHub_M",
@@ -8831,7 +8831,7 @@
           },
           {
             "cve": "CVE-2026-34218",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "GitHub_M",
@@ -8849,7 +8849,7 @@
           },
           {
             "cve": "CVE-2026-35670",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "VulnCheck",
@@ -8868,7 +8868,7 @@
           },
           {
             "cve": "CVE-2026-33890",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "GitHub_M",
@@ -8886,7 +8886,7 @@
           },
           {
             "cve": "CVE-2026-34076",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "GitHub_M",
@@ -8904,7 +8904,7 @@
           },
           {
             "cve": "CVE-2026-33994",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "GitHub_M",
@@ -8922,7 +8922,7 @@
           },
           {
             "cve": "CVE-2026-35646",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "VulnCheck",
@@ -8941,7 +8941,7 @@
           },
           {
             "cve": "CVE-2026-74881",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "VulnCheck",
@@ -8959,7 +8959,7 @@
           },
           {
             "cve": "CVE-2026-41406",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "VulnCheck",
@@ -8978,7 +8978,7 @@
           },
           {
             "cve": "CVE-2026-41365",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "VulnCheck",
@@ -8997,7 +8997,7 @@
           },
           {
             "cve": "CVE-2026-41329",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "VulnCheck",
@@ -9016,7 +9016,7 @@
           },
           {
             "cve": "CVE-2026-41376",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "VulnCheck",
@@ -9035,7 +9035,7 @@
           },
           {
             "cve": "CVE-2026-41345",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "VulnCheck",
@@ -9054,7 +9054,7 @@
           },
           {
             "cve": "CVE-2026-49956",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "VulnCheck",
@@ -9073,7 +9073,7 @@
           },
           {
             "cve": "CVE-2026-41334",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "VulnCheck",
@@ -9092,7 +9092,7 @@
           },
           {
             "cve": "CVE-2026-39974",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "GitHub_M",
@@ -9110,7 +9110,7 @@
           },
           {
             "cve": "CVE-2026-39888",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "GitHub_M",
@@ -9129,7 +9129,7 @@
           },
           {
             "cve": "CVE-2026-5802",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "VulDB",
@@ -9149,7 +9149,7 @@
           },
           {
             "cve": "CVE-2026-40069",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "GitHub_M",
@@ -9167,7 +9167,7 @@
           },
           {
             "cve": "CVE-2026-40070",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "GitHub_M",
@@ -9185,7 +9185,7 @@
           },
           {
             "cve": "CVE-2026-40162",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "GitHub_M",
@@ -9203,7 +9203,7 @@
           },
           {
             "cve": "CVE-2026-40113",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "GitHub_M",
@@ -9221,7 +9221,7 @@
           },
           {
             "cve": "CVE-2026-40159",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "GitHub_M",
@@ -9240,7 +9240,7 @@
           },
           {
             "cve": "CVE-2026-56676",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "GitHub_M",
@@ -9259,7 +9259,7 @@
           },
           {
             "cve": "CVE-2026-43576",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "VulnCheck",
@@ -9279,7 +9279,7 @@
           },
           {
             "cve": "CVE-2026-43582",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "VulnCheck",
@@ -9298,7 +9298,7 @@
           },
           {
             "cve": "CVE-2026-40583",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "GitHub_M",
@@ -9317,7 +9317,7 @@
           },
           {
             "cve": "CVE-2026-35570",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "GitHub_M",
@@ -9336,7 +9336,7 @@
           },
           {
             "cve": "CVE-2026-6830",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "VulnCheck",
@@ -9356,7 +9356,7 @@
           },
           {
             "cve": "CVE-2026-40599",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "GitHub_M",
@@ -9374,7 +9374,7 @@
           },
           {
             "cve": "CVE-2026-32885",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "GitHub_M",
@@ -9392,7 +9392,7 @@
           },
           {
             "cve": "CVE-2026-41495",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "GitHub_M",
@@ -9410,7 +9410,7 @@
           },
           {
             "cve": "CVE-2026-42282",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "GitHub_M",
@@ -9428,7 +9428,7 @@
           },
           {
             "cve": "CVE-2026-7147",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "VulDB",
@@ -9447,7 +9447,7 @@
           },
           {
             "cve": "CVE-2026-7235",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "VulDB",
@@ -9466,7 +9466,7 @@
           },
           {
             "cve": "CVE-2026-7386",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "VulDB",
@@ -9485,7 +9485,7 @@
           },
           {
             "cve": "CVE-2026-7445",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "VulDB",
@@ -9504,7 +9504,7 @@
           },
           {
             "cve": "CVE-2026-7589",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "VulDB",
@@ -9523,7 +9523,7 @@
           },
           {
             "cve": "CVE-2026-7590",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "VulDB",
@@ -9543,7 +9543,7 @@
           },
           {
             "cve": "CVE-2026-7600",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "VulDB",
@@ -9563,7 +9563,7 @@
           },
           {
             "cve": "CVE-2026-42333",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "GitHub_M",
@@ -9581,7 +9581,7 @@
           },
           {
             "cve": "CVE-2026-42860",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "GitHub_M",
@@ -9599,7 +9599,7 @@
           },
           {
             "cve": "CVE-2026-44220",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "GitHub_M",
@@ -9617,7 +9617,7 @@
           },
           {
             "cve": "CVE-2026-44335",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "GitHub_M",
@@ -9635,7 +9635,7 @@
           },
           {
             "cve": "CVE-2026-42278",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "GitHub_M",
@@ -9654,7 +9654,7 @@
           },
           {
             "cve": "CVE-2026-44427",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "GitHub_M",
@@ -9672,7 +9672,7 @@
           },
           {
             "cve": "CVE-2026-44788",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "GitHub_M",
@@ -9690,7 +9690,7 @@
           },
           {
             "cve": "CVE-2026-44430",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "GitHub_M",
@@ -9708,7 +9708,7 @@
           },
           {
             "cve": "CVE-2026-2393",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "@huntr_ai",
@@ -9726,7 +9726,7 @@
           },
           {
             "cve": "CVE-2026-45001",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "VulnCheck",
@@ -9745,7 +9745,7 @@
           },
           {
             "cve": "CVE-2026-30635",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "mitre",
@@ -9758,7 +9758,7 @@
           },
           {
             "cve": "CVE-2026-44219",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "GitHub_M",
@@ -9776,7 +9776,7 @@
           },
           {
             "cve": "CVE-2026-45136",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "GitHub_M",
@@ -9795,7 +9795,7 @@
           },
           {
             "cve": "CVE-2026-45288",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "GitHub_M",
@@ -9813,7 +9813,7 @@
           },
           {
             "cve": "CVE-2026-44791",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "GitHub_M",
@@ -9831,7 +9831,7 @@
           },
           {
             "cve": "CVE-2026-46383",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "GitHub_M",
@@ -9850,7 +9850,7 @@
           },
           {
             "cve": "CVE-2026-45582",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "GitHub_M",
@@ -9868,7 +9868,7 @@
           },
           {
             "cve": "CVE-2026-45707",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "GitHub_M",
@@ -9886,7 +9886,7 @@
           },
           {
             "cve": "CVE-2026-47091",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "VulnCheck",
@@ -9905,7 +9905,7 @@
           },
           {
             "cve": "CVE-2026-33637",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "GitHub_M",
@@ -9923,7 +9923,7 @@
           },
           {
             "cve": "CVE-2026-45792",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "GitHub_M",
@@ -9942,7 +9942,7 @@
           },
           {
             "cve": "CVE-2026-48989",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "GitHub_M",
@@ -9960,7 +9960,7 @@
           },
           {
             "cve": "CVE-2026-9366",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "VulDB",
@@ -9980,7 +9980,7 @@
           },
           {
             "cve": "CVE-2026-9806",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "CIRCL",
@@ -9999,7 +9999,7 @@
           },
           {
             "cve": "CVE-2026-45555",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "GitHub_M",
@@ -10017,7 +10017,7 @@
           },
           {
             "cve": "CVE-2026-47390",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "GitHub_M",
@@ -10035,7 +10035,7 @@
           },
           {
             "cve": "CVE-2026-10108",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "VulnCheck",
@@ -10054,7 +10054,7 @@
           },
           {
             "cve": "CVE-2026-47396",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "GitHub_M",
@@ -10073,7 +10073,7 @@
           },
           {
             "cve": "CVE-2026-48527",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "GitHub_M",
@@ -10091,7 +10091,7 @@
           },
           {
             "cve": "CVE-2026-47137",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "GitHub_M",
@@ -10109,7 +10109,7 @@
           },
           {
             "cve": "CVE-2026-44653",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "GitHub_M",
@@ -10127,7 +10127,7 @@
           },
           {
             "cve": "CVE-2026-10291",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "VulDB",
@@ -10147,7 +10147,7 @@
           },
           {
             "cve": "CVE-2026-10855",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "CIRCL",
@@ -10166,7 +10166,7 @@
           },
           {
             "cve": "CVE-2026-11330",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "VulDB",
@@ -10186,7 +10186,7 @@
           },
           {
             "cve": "CVE-2026-54362",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "CIRCL",
@@ -10205,7 +10205,7 @@
           },
           {
             "cve": "CVE-2026-53633",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "GitHub_M",
@@ -10224,7 +10224,7 @@
           },
           {
             "cve": "CVE-2026-49401",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "GitHub_M",
@@ -10243,7 +10243,7 @@
           },
           {
             "cve": "CVE-2026-55197",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "VulnCheck",
@@ -10262,7 +10262,7 @@
           },
           {
             "cve": "CVE-2026-58195",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "GitHub_M",
@@ -10280,7 +10280,7 @@
           },
           {
             "cve": "CVE-2026-46672",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "GitHub_M",
@@ -10298,7 +10298,7 @@
           },
           {
             "cve": "CVE-2026-55448",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "GitHub_M",
@@ -10316,7 +10316,7 @@
           },
           {
             "cve": "CVE-2026-52812",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "GitHub_M",
@@ -10336,7 +10336,7 @@
           },
           {
             "cve": "CVE-2026-49291",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "GitHub_M",
@@ -10354,7 +10354,7 @@
           },
           {
             "cve": "CVE-2026-48797",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "GitHub_M",
@@ -10374,7 +10374,7 @@
           },
           {
             "cve": "CVE-2026-13591",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "VulDB",
@@ -10394,7 +10394,7 @@
           },
           {
             "cve": "CVE-2026-58138",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "VulnCheck",
@@ -10413,7 +10413,7 @@
           },
           {
             "cve": "CVE-2026-59726",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "GitHub_M",
@@ -10433,7 +10433,7 @@
           },
           {
             "cve": "CVE-2026-8147",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "@huntr_ai",
@@ -10451,7 +10451,7 @@
           },
           {
             "cve": "CVE-2026-53812",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "VulnCheck",
@@ -10470,7 +10470,7 @@
           },
           {
             "cve": "CVE-2026-59101",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "VulnCheck",
@@ -10489,7 +10489,7 @@
           },
           {
             "cve": "CVE-2026-50180",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "GitHub_M",
@@ -10508,7 +10508,7 @@
           },
           {
             "cve": "CVE-2026-14611",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "VulDB",
@@ -10528,7 +10528,7 @@
           },
           {
             "cve": "CVE-2026-32718",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "GitHub_M",
@@ -10546,7 +10546,7 @@
           },
           {
             "cve": "CVE-2026-34050",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "GitHub_M",
@@ -10564,7 +10564,7 @@
           },
           {
             "cve": "CVE-2026-34599",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "GitHub_M",
@@ -10582,7 +10582,7 @@
           },
           {
             "cve": "CVE-2026-54769",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "GitHub_M",
@@ -10600,7 +10600,7 @@
           },
           {
             "cve": "CVE-2026-42148",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "GitHub_M",
@@ -10618,7 +10618,7 @@
           },
           {
             "cve": "CVE-2026-56678",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "GitHub_M",
@@ -10637,7 +10637,7 @@
           },
           {
             "cve": "CVE-2026-61462",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "VulnCheck",
@@ -10656,7 +10656,7 @@
           },
           {
             "cve": "CVE-2026-54052",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "GitHub_M",
@@ -10675,7 +10675,7 @@
           },
           {
             "cve": "CVE-2026-56679",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "GitHub_M",
@@ -10693,7 +10693,7 @@
           },
           {
             "cve": "CVE-2026-53598",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "GitHub_M",
@@ -10712,7 +10712,7 @@
           },
           {
             "cve": "CVE-2026-55668",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "GitHub_M",
@@ -10731,7 +10731,7 @@
           },
           {
             "cve": "CVE-2026-47133",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "GitHub_M",
@@ -10749,7 +10749,7 @@
           },
           {
             "cve": "CVE-2026-63102",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "VulnCheck",
@@ -10768,7 +10768,7 @@
           },
           {
             "cve": "CVE-2026-56443",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "Gitea",
@@ -10785,7 +10785,7 @@
           },
           {
             "cve": "CVE-2026-58432",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "Gitea",
@@ -10805,7 +10805,7 @@
           },
           {
             "cve": "CVE-2026-72774",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "VulnCheck",
@@ -10824,7 +10824,7 @@
           },
           {
             "cve": "CVE-2026-65598",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "VulnCheck",
@@ -10842,7 +10842,7 @@
           },
           {
             "cve": "CVE-2026-72770",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "VulnCheck",
@@ -10860,7 +10860,7 @@
           },
           {
             "cve": "CVE-2026-59259",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "VulnCheck",
@@ -10879,7 +10879,7 @@
           },
           {
             "cve": "CVE-2026-59221",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "GitHub_M",
@@ -10898,7 +10898,7 @@
           },
           {
             "cve": "CVE-2026-73308",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "GitHub_M",
@@ -10916,7 +10916,7 @@
           },
           {
             "cve": "CVE-2026-73299",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "GitHub_M",
@@ -10935,7 +10935,7 @@
           },
           {
             "cve": "CVE-2026-50569",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "GitHub_M",
@@ -10953,7 +10953,7 @@
           },
           {
             "cve": "CVE-2026-55389",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "GitHub_M",
@@ -10973,7 +10973,7 @@
           },
           {
             "cve": "CVE-2026-50570",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "GitHub_M",
@@ -10992,7 +10992,7 @@
           },
           {
             "cve": "CVE-2026-50568",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "GitHub_M",
@@ -11010,7 +11010,7 @@
           },
           {
             "cve": "CVE-2026-14869",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "HashiCorp",
@@ -11029,7 +11029,7 @@
           },
           {
             "cve": "CVE-2026-54249",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "GitHub_M",
@@ -11047,7 +11047,7 @@
           },
           {
             "cve": "CVE-2026-16326",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "HashiCorp",
@@ -11066,7 +11066,7 @@
           },
           {
             "cve": "CVE-2026-47211",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "GitHub_M",
@@ -11084,7 +11084,7 @@
           },
           {
             "cve": "CVE-2026-66065",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "GitHub_M",
@@ -11103,7 +11103,7 @@
           },
           {
             "cve": "CVE-2026-18446",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "openjs",
@@ -11122,7 +11122,7 @@
           },
           {
             "cve": "CVE-2026-70485",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "GitHub_M",
@@ -11140,7 +11140,7 @@
           },
           {
             "cve": "CVE-2026-18980",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "VulDB",
@@ -11160,7 +11160,7 @@
           },
           {
             "cve": "CVE-2026-71556",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "GitHub_M",
@@ -11178,7 +11178,7 @@
           },
           {
             "cve": "CVE-2026-19282",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "VulDB",
@@ -11198,7 +11198,7 @@
           },
           {
             "cve": "CVE-2026-59233",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "Secur0",
@@ -11640,7 +11640,7 @@
         "cves": [
           {
             "cve": "CVE-2026-7482",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": true,
             "state": "PUBLISHED",
             "cna": "Echo",
@@ -11970,7 +11970,7 @@
         "cves": [
           {
             "cve": "CVE-2026-25253",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": true,
             "state": "PUBLISHED",
             "cna": "mitre",
@@ -14678,7 +14678,7 @@
         "cves": [
           {
             "cve": "CVE-2026-12537",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": true,
             "state": "PUBLISHED",
             "cna": "GoogleCloud",
@@ -14697,7 +14697,7 @@
           },
           {
             "cve": "CVE-2026-54316",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": true,
             "state": "PUBLISHED",
             "cna": "GitHub_M",
@@ -14873,7 +14873,7 @@
         "cves": [
           {
             "cve": "CVE-2026-59726",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": true,
             "state": "PUBLISHED",
             "cna": "GitHub_M",
@@ -15588,7 +15588,7 @@
         "cves": [
           {
             "cve": "CVE-2025-65720",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "mitre",
@@ -15601,7 +15601,7 @@
           },
           {
             "cve": "CVE-2026-30623",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "mitre",
@@ -15614,7 +15614,7 @@
           },
           {
             "cve": "CVE-2026-30624",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "mitre",
@@ -15627,7 +15627,7 @@
           },
           {
             "cve": "CVE-2026-30618",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "mitre",
@@ -15640,7 +15640,7 @@
           },
           {
             "cve": "CVE-2026-30617",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "mitre",
@@ -15653,7 +15653,7 @@
           },
           {
             "cve": "CVE-2026-30616",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "mitre",
@@ -15666,7 +15666,7 @@
           },
           {
             "cve": "CVE-2026-30625",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "mitre",
@@ -15679,7 +15679,7 @@
           },
           {
             "cve": "CVE-2026-30615",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "mitre",
@@ -15692,7 +15692,7 @@
           },
           {
             "cve": "CVE-2026-26015",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "GitHub_M",
@@ -15710,7 +15710,7 @@
           },
           {
             "cve": "CVE-2026-40933",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "GitHub_M",
@@ -15728,7 +15728,7 @@
           },
           {
             "cve": "CVE-2026-54449",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "GitHub_M",
@@ -16009,7 +16009,7 @@
         "cves": [
           {
             "cve": "CVE-2026-50548",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": true,
             "state": "PUBLISHED",
             "cna": "GitHub_M",
@@ -16027,7 +16027,7 @@
           },
           {
             "cve": "CVE-2026-50549",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": true,
             "state": "PUBLISHED",
             "cna": "GitHub_M",
@@ -16405,7 +16405,7 @@
         "cves": [
           {
             "cve": "CVE-2025-59536",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": true,
             "state": "PUBLISHED",
             "cna": "GitHub_M",
@@ -16423,7 +16423,7 @@
           },
           {
             "cve": "CVE-2026-21852",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": true,
             "state": "PUBLISHED",
             "cna": "GitHub_M",
@@ -16441,7 +16441,7 @@
           },
           {
             "cve": "CVE-2026-24887",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": true,
             "state": "PUBLISHED",
             "cna": "GitHub_M",
@@ -16460,7 +16460,7 @@
           },
           {
             "cve": "CVE-2026-39861",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": true,
             "state": "PUBLISHED",
             "cna": "GitHub_M",
@@ -16479,7 +16479,7 @@
           },
           {
             "cve": "CVE-2026-54316",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": true,
             "state": "PUBLISHED",
             "cna": "GitHub_M",
@@ -16706,7 +16706,7 @@
             "record_url": "https://www.cve.org/CVERecord?id=CVE-2026-55607"
           }
         ],
-        "note": "The summary's companion IDs CVE-2026-35021 and CVE-2026-35022 (Phoenix Security chain) were likewise REJECTED by VulnCheck on 2026-05-29 and are excluded. 15 Claude Code CVEs were published in 2026 (GitHub Advisory DB); the five the record names are kept as primary and the remaining eleven are listed as related cluster members."
+        "note": "The summary's companion IDs CVE-2026-35021 and CVE-2026-35022 (Phoenix Security chain) were likewise REJECTED by VulnCheck on 2026-05-29 and are excluded. 15 Claude Code CVEs were published in 2026 (GitHub Advisory DB); the five the record names are kept as self (vulnerability) and the remaining eleven are listed as related cluster members."
       }
     },
     {
@@ -19311,7 +19311,7 @@
         "cves": [
           {
             "cve": "CVE-2026-25592",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": true,
             "state": "PUBLISHED",
             "cna": "GitHub_M",
@@ -19329,7 +19329,7 @@
           },
           {
             "cve": "CVE-2026-26030",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": true,
             "state": "PUBLISHED",
             "cna": "GitHub_M",
@@ -19513,7 +19513,7 @@
         "cves": [
           {
             "cve": "CVE-2026-42824",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": true,
             "state": "PUBLISHED",
             "cna": "microsoft",
@@ -19825,7 +19825,7 @@
         "cves": [
           {
             "cve": "CVE-2026-24301",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": true,
             "state": "PUBLISHED",
             "cna": "microsoft",
@@ -20486,7 +20486,7 @@
         "cves": [
           {
             "cve": "CVE-2025-32711",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": true,
             "state": "PUBLISHED",
             "cna": "microsoft",
@@ -20504,7 +20504,7 @@
           },
           {
             "cve": "CVE-2026-26144",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": true,
             "state": "PUBLISHED",
             "cna": "microsoft",
@@ -21218,7 +21218,7 @@
         "cves": [
           {
             "cve": "CVE-2026-48124",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": true,
             "state": "PUBLISHED",
             "cna": "GitHub_M",
@@ -21237,7 +21237,7 @@
           },
           {
             "cve": "CVE-2026-73218",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "GitHub_M",
@@ -21255,7 +21255,7 @@
           },
           {
             "cve": "CVE-2026-73217",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "GitHub_M",
@@ -22576,7 +22576,7 @@
         "cves": [
           {
             "cve": "CVE-2026-6784",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "mozilla",
@@ -22590,7 +22590,7 @@
           },
           {
             "cve": "CVE-2026-6785",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "mozilla",
@@ -22604,7 +22604,7 @@
           },
           {
             "cve": "CVE-2026-6786",
-            "relation": "primary",
+            "relation": "self-vulnerability",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "mozilla",
@@ -23100,7 +23100,7 @@
   ],
   "cve_validation": {
     "validated_on": "2026-08-26",
-    "method": "Every CVE ID mentioned anywhere in the original record (title, summary, reference, veris.action.*.cve, report.vulnerabilities) was resolved against the CVE.org record (cveawg.mitre.org API) and NVD on 2026-08-26 and compared with the incident description; CISA KEV, the GitHub Advisory Database and the incident's primary sources were searched for CVEs the record omitted. Non-existent or REJECTED IDs and IDs belonging to a different incident were removed; missed IDs were added with an explicit relation (exploited | exploited-unconfirmed | attempted | toolkit | primary | discovered | related).",
+    "method": "Every CVE ID mentioned anywhere in the original record (title, summary, reference, veris.action.*.cve, report.vulnerabilities) was resolved against the CVE.org record (cveawg.mitre.org API) and NVD on 2026-08-26 and compared with the incident description; CISA KEV, the GitHub Advisory Database and the incident's primary sources were searched for CVEs the record omitted. Non-existent or REJECTED IDs and IDs belonging to a different incident were removed; missed IDs were added with an explicit relation (exploited | self-malicious-release | exploited-unconfirmed | attempted | toolkit | self-vulnerability | discovered | related).",
     "incidents_with_validated_cve": 32,
     "distinct_validated_cves": 322,
     "cves_removed": [
@@ -23461,6 +23461,35 @@
           "after": null
         }
       ]
+    },
+    "relation_revision": {
+      "revised_on": "2026-08-29",
+      "change": "relation value 'primary' split into 'self-vulnerability' (the incident is the disclosure of a flaw in legitimate software) and 'self-malicious-release' (the incident is the publication/execution of a package or extension version that is malware by design). 'self' = the incident is about this identifier itself; no exploitation of a flaw by an attacker in this incident is asserted. Neither value is written to VERIS action.*.cve.",
+      "criterion": "self-malicious-release where the CNA-assigned CWE is CWE-506 (Embedded Malicious Code) or the advisory type is malware; all other former 'primary' links are self-vulnerability.",
+      "counts": {
+        "self-malicious-release": 4,
+        "self-vulnerability": 196
+      },
+      "self_malicious_release_links": [
+        {
+          "incident": "DB-2026-001",
+          "cve": "CVE-2026-33634"
+        },
+        {
+          "incident": "DR-2026-010",
+          "cve": "CVE-2026-28353"
+        },
+        {
+          "incident": "DR-2026-010",
+          "cve": "CVE-2026-33634"
+        },
+        {
+          "incident": "DR-2026-022",
+          "cve": "CVE-2026-45321"
+        }
+      ],
+      "relevance_order": "exploited > self-malicious-release > exploited-unconfirmed > attempted > toolkit > self-vulnerability > discovered > related",
+      "reason": "'primary' collided with NVD's Primary/Secondary (NVD- vs CNA-assessed metrics) and read as 'the main CVE'; it also conflated disclosures with realized supply-chain compromises whose countermeasure is removal, not patching."
     }
   }
 }

@@ -1,0 +1,86 @@
+{
+ "credits": [
+  {
+   "type": "reporter",
+   "user": {
+    "avatar_url": "https://avatars.githubusercontent.com/u/834641?v=4",
+    "events_url": "https://api.github.com/users/zpbrent/events{/privacy}",
+    "followers_url": "https://api.github.com/users/zpbrent/followers",
+    "following_url": "https://api.github.com/users/zpbrent/following{/other_user}",
+    "gists_url": "https://api.github.com/users/zpbrent/gists{/gist_id}",
+    "gravatar_id": "",
+    "html_url": "https://github.com/zpbrent",
+    "id": 834641,
+    "login": "zpbrent",
+    "node_id": "MDQ6VXNlcjgzNDY0MQ==",
+    "organizations_url": "https://api.github.com/users/zpbrent/orgs",
+    "received_events_url": "https://api.github.com/users/zpbrent/received_events",
+    "repos_url": "https://api.github.com/users/zpbrent/repos",
+    "site_admin": false,
+    "starred_url": "https://api.github.com/users/zpbrent/starred{/owner}{/repo}",
+    "subscriptions_url": "https://api.github.com/users/zpbrent/subscriptions",
+    "type": "User",
+    "url": "https://api.github.com/users/zpbrent",
+    "user_view_type": "public"
+   }
+  }
+ ],
+ "cve_id": null,
+ "cvss": {
+  "score": 10.0,
+  "vector_string": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H"
+ },
+ "cvss_severities": {
+  "cvss_v3": {
+   "score": 10.0,
+   "vector_string": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H"
+  },
+  "cvss_v4": {
+   "score": 0.0,
+   "vector_string": null
+  }
+ },
+ "cwes": [
+  {
+   "cwe_id": "CWE-77",
+   "name": "Improper Neutralization of Special Elements used in a Command ('Command Injection')"
+  }
+ ],
+ "description": "### Summary\n[zeptoclaw](https://github.com/qhkm/zeptoclaw) implements a allowlist combined with a blocklist to prevent malicious shell commands in [src/security/shell.rs](https://github.com/qhkm/zeptoclaw/blob/v0.5.8/src/security/shell.rs). However, even in the `Strict` mode, attackers can completely bypass all the guards from allowlist and blocklist:\n\n- to bypass the `allowlist`, command injection is enough, such as `;`, `$()` etc.\n- to bypass the `REGEX_BLOCKED_PATTERNS`, argument injection is enough, such as the `python3 -P -c \"...\"`\n- to bypass the `LITERAL_BLOCKED_PATTERNS`, file name wildcards can do the work, such as `cat /etc/pass[w]d`\n\n### Details\nIn code [src/security/shell.rs#L218-L243](https://github.com/qhkm/zeptoclaw/blob/fe2ef07cfec5bb46b42cdd65f52b9230c03e9270/src/security/shell.rs#L218-L243), one can see the allowlist only checks the first token and thus makes command injection possible. \n```rust\n        // Allowlist check (runs after blocklist)\n        if self.allowlist_mode != ShellAllowlistMode::Off && !self.allowlist.is_empty() {\n            let first_token = command\n                .split_whitespace()\n                .next()\n                .unwrap_or(\"\")\n                .to_lowercase();\n            // Strip path prefix (e.g. /usr/bin/git -> git)\n            let executable = first_token.rsplit('/').next().unwrap_or(&first_token);\n            if !self.allowlist.iter().any(|a| a == executable) {\n                match self.allowlist_mode {\n                    ShellAllowlistMode::Strict => {\n                        return Err(ZeptoError::SecurityViolation(format!(\n                            \"Command '{}' not in allowlist\",\n                            executable\n                        )));\n                    }\n                    ShellAllowlistMode::Warn => {\n                        tracing::warn!(\n                            command = %command,\n                            executable = %executable,\n                            \"Command not in allowlist\"\n                        );\n                    }\n                    ShellAllowlistMode::Off => {} // unreachable\n                }\n```\n `!self.allowlist.is_empty()` makes the empty allowlist overlook the allowlist check, if it is in `ShellAllowlistMode::Strict` mode, empty allowlist should direct reject all the commands.\n\nAs the code in [src/security/shell.rs#L18-L70](https://github.com/qhkm/zeptoclaw/blob/fe2ef07cfec5bb46b42cdd65f52b9230c03e9270/src/security/shell.rs#L18-L70), we can find the `REGEX_BLOCKED_PATTERNS` only apply `\\s+` in between the command and arguments, making argument injection possible, and the `LITERAL_BLOCKED_PATTERNS` just uses specific file name, totally overlooking the file name wildcards:\n```rust\nconst REGEX_BLOCKED_PATTERNS: &[&str] = &[\n    // Piped shell execution (curl/wget to sh/bash)\n    r\"curl\\s+.*\\|\\s*(sh|bash|zsh)\",\n    r\"wget\\s+.*\\|\\s*(sh|bash|zsh)\",\n    r\"\\|\\s*(sh|bash|zsh)\\s*$\",\n    // Reverse shells\n    r\"bash\\s+-i\\s+>&\\s*/dev/tcp\",\n    r\"nc\\s+.*-e\\s+(sh|bash|/bin)\",\n    r\"/dev/tcp/\",\n    r\"/dev/udp/\",\n    // Destructive root operations (various flag orderings)\n    r\"rm\\s+(-[rf]{1,2}\\s+)*(-[rf]{1,2}\\s+)*/\\s*($|;|\\||&)\",\n    r\"rm\\s+(-[rf]{1,2}\\s+)*(-[rf]{1,2}\\s+)*/\\*\\s*($|;|\\||&)\",\n    // Format/overwrite disk\n    r\"mkfs(\\.[a-z0-9]+)?\\s\",\n    r\"dd\\s+.*if=/dev/(zero|random|urandom).*of=/dev/[sh]d\",\n    r\">\\s*/dev/[sh]d[a-z]\",\n    // System-wide permission changes\n    r\"chmod\\s+(-R\\s+)?777\\s+/\\s*$\",\n    r\"chmod\\s+(-R\\s+)?777\\s+/[a-z]\",\n    // Fork bombs\n    r\":\\(\\)\\s*\\{\\s*:\\|:&\\s*\\}\\s*;:\",\n    r\"fork\\s*\\(\\s*\\)\",\n    // Encoded/indirect execution (common blocklist bypasses)\n    r\"base64\\s+(-d|--decode)\",\n    r\"python[23]?\\s+-c\\s+\",\n    r\"perl\\s+-e\\s+\",\n    r\"ruby\\s+-e\\s+\",\n    r\"node\\s+-e\\s+\",\n    r\"\\beval\\s+\",\n    r\"xargs\\s+.*sh\\b\",\n    r\"xargs\\s+.*bash\\b\",\n    // Environment variable exfiltration\n    r\"\\benv\\b.*>\\s*/\",\n    r\"\\bprintenv\\b.*>\\s*/\",\n];\n\n/// Literal substring patterns (credentials, sensitive paths)\nconst LITERAL_BLOCKED_PATTERNS: &[&str] = &[\n    \"/etc/shadow\",\n    \"/etc/passwd\",\n    \"~/.ssh/\",\n    \".ssh/id_rsa\",\n    \".ssh/id_ed25519\",\n    \".ssh/id_ecdsa\",\n    \".ssh/id_dsa\",\n    \".ssh/authorized_keys\",\n    \".aws/credentials\",\n    \".kube/config\",\n    // ZeptoClaw's own config (contains API keys and channel tokens)\n    \".zeptoclaw/config.json\",\n    \".zeptoclaw/config.yaml\",\n];\n```\n\n### PoC\n```rust\n    #[test]\n    fn test_allowlist_bypass() {\n        let config =\n            ShellSecurityConfig::new().with_allowlist(vec![\"git\"], ShellAllowlistMode::Strict);\n        assert!(config.validate_command(\"/usr/bin/git status; python -P -c 'import os; os.system(\\\"rm -rf /\\\")'; cat /etc/pass[w]d\").is_ok());\n    }\n```\n\n### Impact\nUnauthorized command execution.\n\n### Credit\n[@zpbrent](https://github.com/zpbrent)",
+ "ghsa_id": "GHSA-5wp8-q9mx-8jx8",
+ "github_reviewed_at": "2026-03-05T00:38:14Z",
+ "html_url": "https://github.com/advisories/GHSA-5wp8-q9mx-8jx8",
+ "identifiers": [
+  {
+   "type": "GHSA",
+   "value": "GHSA-5wp8-q9mx-8jx8"
+  }
+ ],
+ "nvd_published_at": null,
+ "published_at": "2026-03-05T00:38:14Z",
+ "references": [
+  "https://github.com/qhkm/zeptoclaw/security/advisories/GHSA-5wp8-q9mx-8jx8",
+  "https://github.com/qhkm/zeptoclaw/commit/68916c3e4f3af107f11940b27854fc7ef517058b",
+  "https://github.com/qhkm/zeptoclaw/blob/fe2ef07cfec5bb46b42cdd65f52b9230c03e9270/src/security/shell.rs#L218-L243",
+  "https://github.com/advisories/GHSA-5wp8-q9mx-8jx8"
+ ],
+ "repository_advisory_url": "https://api.github.com/repos/qhkm/zeptoclaw/security-advisories/GHSA-5wp8-q9mx-8jx8",
+ "severity": "critical",
+ "source_code_location": "https://github.com/qhkm/zeptoclaw",
+ "summary": "zeptoclaw has Shell allowlist-blocklist bypass via command/argument injection and file name wildcards",
+ "type": "reviewed",
+ "updated_at": "2026-03-05T00:38:17Z",
+ "url": "https://api.github.com/advisories/GHSA-5wp8-q9mx-8jx8",
+ "vulnerabilities": [
+  {
+   "first_patched_version": "0.6.2",
+   "package": {
+    "ecosystem": "rust",
+    "name": "zeptoclaw"
+   },
+   "vulnerable_functions": [],
+   "vulnerable_version_range": "<= 0.6.1"
+  }
+ ],
+ "withdrawn_at": null
+}

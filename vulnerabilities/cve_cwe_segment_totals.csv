@@ -1,0 +1,7 @@
+segment,cve_links,distinct_cves,incidents,ibss_observed,ibss_potential,links_with_cna_cwe,distinct_cwes
+ai-exploited,20,19,6,48,72,14,10
+ai-written,161,161,1,4,8,158,76
+ai-stack-vulnerability,35,34,13,24,132,24,20
+malicious-release,4,3,3,32,40,4,1
+ai-discovered,52,51,8,9,64,28,20
+related,61,61,15,49,160,44,33

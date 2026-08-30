@@ -1,0 +1,6 @@
+ibss_potential,tiers,9.0-10.0,7.0-8.9,4.0-6.9,0.1-3.9,no CVSS,total_cves
+32,Critical + Critical,1,0,0,0,0,1
+24,Critical + High,1,0,1,0,0,2
+16,Critical / High + High,12,4,3,0,8,27
+8,High,23,78,62,9,4,176
+4,Medium,0,0,0,0,3,3

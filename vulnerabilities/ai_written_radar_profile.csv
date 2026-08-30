@@ -1,0 +1,13 @@
+dimension,value,cve_count
+contribution,AI_DIRECT_ROOT,93
+contribution,AI_NEW_SURFACE_CONTRIBUTOR,30
+contribution,AI_CODE_FLAWED,21
+contribution,AI_INCOMPLETE_REMEDIATION,15
+contribution,AI_CAUSAL_CONTRIBUTOR,2
+cause,injection,46
+cause,auth_access,37
+cause,ssrf_network,22
+cause,other_ambiguous,18
+cause,validation_fail_open,17
+cause,path_link,15
+cause,resource_abuse,6
