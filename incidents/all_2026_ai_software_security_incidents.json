@@ -2,7 +2,7 @@
   "title": "All 2026 AI-related software-security incidents (VERIS-coded), consolidated with corrected original sources",
   "generated": "2026-08-26",
   "author": "dave.farago@mediform.io",
-  "description": "Union of ai_software_security_incidents_2026.json (35 incidents) and merged_incidents_2026_VERIS_described.json (64 incidents). Incident contents are identical to the source files; only each incident's `sources` field is rewritten to cite the corrected ORIGINAL sources. CVE validation (2026-08-26): every incident additionally carries `validated_cve` (corrected list of CVE IDs) and `validated_cve_details` (per-CVE relation, CVE.org metadata, KEV status, removed IDs with reasons); see `cve_validation`. VERIS action.*.cve fields were aligned on 2026-08-27 to hold only validated `exploited` CVEs (previous values in `validated_cve_details.veris_cve_before`; see `cve_validation.veris_action_cve_alignment`). Incident IDs (see `id_scheme`): prefix DB = found through an incident database (AIID/VCDB), DR = found only through a deep-research report; the number is the position in the 2026-08-27 priority ranking and is frozen.",
+  "description": "Union of ai_software_security_incidents_2026.json (35 incidents) and merged_incidents_2026_VERIS_described.json (64 incidents). Incident contents are identical to the source files; only each incident's `sources` field is rewritten to cite the corrected ORIGINAL sources. CVE validation (2026-08-26): every incident additionally carries `validated_cve` (corrected list of CVE IDs) and `validated_cve_details` (per-CVE relation, CVE.org metadata, KEV status, removed IDs with reasons); see `cve_validation`. VERIS action.*.cve fields were aligned on 2026-08-27 to hold only validated `exploited` CVEs (previous values in `validated_cve_details.veris_cve_before`; see `cve_validation.veris_action_cve_alignment`). Incident IDs (see `id_scheme`): prefix DB (database) = at least one register source (AIID/VCDB), DR (direct report) = no register source, found through a deep-research or primary report; the number is the position in the 2026-08-27 priority ranking and is frozen.",
   "methodology_ref": "VERIS_Methodology_for_AI_Security_Incidents_concise.md",
   "source_corrections": {
     "ChatGPT_deep-research-report": "ChatGPT_DeepResearch_ai_incidents_2026.md",
@@ -65,7 +65,7 @@
   },
   "id_scheme": {
     "assigned_on": "2026-08-27",
-    "prefix_rule": "DB = at least one source is an incident register (AI Incident Database export or vz-risk/VCDB); DR = sources are deep-research reports only (ChatGPT / Claude Code / Grok). No incident had both kinds of source.",
+    "prefix_rule": "DB (database) = at least one source is an incident register (AI Incident Database export or vz-risk/VCDB); DR (direct report) = no source is a register: the incident was found through a report, deep-research (ChatGPT / Claude Code / Grok) or primary. The prefix records the discovery channel only, not source quality. No incident had both kinds of source.",
     "number_rule": "Position (001-099) in the priority ranking of 2026-08-27 (observed severity desc, potential severity as tiebreaker, order within ties as in ranking_table). The number is unique across both prefixes and matches the '#' used in the Markdown report.",
     "stability": "Frozen: IDs are never renumbered. Later re-ranking is reflected in ranking_table only; new incidents continue from 100.",
     "counts": {

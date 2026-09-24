@@ -35,7 +35,7 @@ The per-CVE validated layer (each CVE's relation to the incident, CVSS, KEV flag
 
 - **2 Critical · 22 High · 31 Medium · 21 Low · 23 Negligible**
 - Status: 93 Confirmed · 1 Near miss · 5 False positive
-- IDs: `DB-2026-nnn` (50 incidents with at least one register source — AIID or VCDB) and `DR-2026-nnn` (49 incidents sourced from the three deep-research reports only); `nnn` is the position in the priority ranking of 2026-08-27 and is never renumbered (new incidents continue from 100).
+- IDs: `DB-2026-nnn` (*database*: at least one register source — AIID or VCDB; 50 incidents) and `DR-2026-nnn` (*direct report*: no register source, found through a deep-research or primary report; 49 incidents, all of them so far from the three deep-research reports); `nnn` is the position in the priority ranking of 2026-08-27 and is never renumbered (new incidents continue from 100).
 
 ### How each incident is coded
 

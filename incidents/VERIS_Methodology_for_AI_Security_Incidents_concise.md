@@ -144,7 +144,7 @@ Capture at least:
 
 VERIS has a native `confidence` field. Use it rather than inventing a separate generic evidence-confidence field.
 
-**Incident ID scheme (2026 corpus).** `incident_id` is `DB-2026-nnn` when the incident was found through an incident database (AI Incident Database, VERIS Community Database) and `DR-2026-nnn` when it was found only through a deep-research report. `nnn` is the incident's position in the priority ranking at the time IDs were assigned (2026-08-27) and is unique across both prefixes; it is frozen — later re-ranking changes the ranking table, not the ID, and new incidents continue the sequence. Register record locators (e.g. VCDB UUIDs) belong in `sources`, not in `incident_id`.
+**Incident ID scheme (2026 corpus).** `incident_id` is `DB-2026-nnn` (*database*) when at least one source is an incident register (AI Incident Database, VERIS Community Database) and `DR-2026-nnn` (*direct report*) when no source is a register: the incident was found by reading a report directly, a deep-research report or a primary report. The prefix records the discovery channel only, not the quality of the sources. `nnn` is the incident's position in the priority ranking at the time IDs were assigned (2026-08-27) and is unique across both prefixes; it is frozen — later re-ranking changes the ranking table, not the ID, and new incidents continue the sequence. Register record locators (e.g. VCDB UUIDs) belong in `sources`, not in `incident_id`.
 
 ### 4.2 Actor
 
@@ -232,6 +232,7 @@ Recommended fields:
 - `ai_role`
 - `ai_component`
 - `ai_security_mechanism`
+- `ai_involvement_note` (optional; explains borderline or absent AI involvement)
 - `observed_severity`
 - `observed_severity_rationale`
 - `potential_severity`
@@ -687,6 +688,8 @@ report:
   ai_security_mechanism:
     - "prompt injection"
 
+  ai_involvement_note: "..."                 # optional; explains borderline or absent AI involvement
+
   observed_severity: "High"
   observed_severity_rationale: "..."
 
@@ -700,46 +703,53 @@ report:
       cvss_version: "4.0"
       cvss_score: 9.3
 
-  # validated layer (canonical; see 6.4, 6.6). VERIS action.*.cve is derived from it (relation exploited only)
-  validated_cve:
-    - "CVE-2026-..."
-  validated_cve_details:
-    validated_on: "2026-08-26"
-    original_cve_mentions: ["CVE-2026-..."]   # every ID cited anywhere in the original record
-    added: ["CVE-2026-..."]
-    removed:
-      - cve: "CVE-2026-..."
-        state: "REJECTED"
-        reason: "..."
-    cves:
-      - cve: "CVE-2026-..."
-        relation: "exploited"                  # vocabulary of 6.4
-        in_original: true
-        state: "PUBLISHED"
-        cna: "GitHub_M"
-        published: "2026-04-09"
-        product: "vendor/product"
-        cvss_version: "4.0"
-        cvss_score: 9.3
-        cwe: ["CWE-306"]
-        cisa_kev: true
-        kev_date_added: "2026-04-23"
-        credits: "..."
-        note: "..."
-    non_cve_identifiers:
-      - id: "GHSA-xxxx-xxxx-xxxx"
-        kind: "GHSA (malware)"
-        note: "..."
-    veris_cve_field: "action.hacking.cve"     # present only where the VERIS field was changed by alignment
-    veris_cve_before: "CVE-2026-...; CVE-2026-..."
-    veris_cve_after: null
-    note: "..."
-
   weaknesses:
     - cwe: "CWE-..."
       mapping_basis: "CVE/CNA"
       confidence: "High"
+
+# validated layer (canonical; see 6.4, 6.6): a sibling of `veris` and `report` at the incident's top level.
+# VERIS action.*.cve is derived from it (relation exploited only)
+validated_cve:
+  - "CVE-2026-..."
+validated_cve_details:
+  validated_on: "2026-08-26"
+  method_ref: "see top-level cve_validation.method"
+  original_cve_mentions: ["CVE-2026-..."]   # every ID cited anywhere in the original record
+  added: ["CVE-2026-..."]
+  removed:
+    - cve: "CVE-2026-..."
+      state: "REJECTED"
+      reason: "..."
+  cves:
+    - cve: "CVE-2026-..."
+      relation: "exploited"                  # vocabulary of 6.4
+      in_original: true
+      state: "PUBLISHED"
+      cna: "GitHub_M"
+      published: "2026-04-09"
+      title: "..."                           # from the CVE record
+      product: "vendor/product"
+      cvss_version: "4.0"
+      cvss_score: 9.3
+      cwe: ["CWE-306"]
+      cisa_kev: true
+      kev_date_added: "2026-04-23"
+      credits: "..."
+      record_url: "https://www.cve.org/CVERecord?id=CVE-2026-..."
+      note: "..."
+  non_cve_identifiers:
+    - id: "GHSA-xxxx-xxxx-xxxx"
+      kind: "GHSA (malware)"
+      note: "..."
+  veris_cve_field: "action.hacking.cve"     # present only where the VERIS field was changed by alignment
+  veris_cve_before: "CVE-2026-...; CVE-2026-..."
+  veris_cve_after: null
+  note: "..."
 ```
+
+`validated_cve` and `validated_cve_details` are siblings of `veris` and `report` at the incident's top level, not
+children of `report`. The table gives their paths.
 
 Where the CVE information lives in the 2026 corpus files:
 
