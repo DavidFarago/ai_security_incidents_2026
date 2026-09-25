@@ -3590,5 +3590,374 @@
   "source": "osv",
   "updated": "2026-06-28T22:30:06.341345236Z",
   "url": "https://api.osv.dev/v1/vulns/PYSEC-2026-207"
+ },
+ "cisa-kev": {
+  "fetched_on": "2026-09-25",
+  "file": "vulnerabilities/upstream/cisa-kev/known_exploited_vulnerabilities.json",
+  "http_status": 200,
+  "source": "cisa-kev",
+  "updated": "2026.09.24",
+  "url": "https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json"
+ },
+ "ghsa-by-cve:CVE-2017-7269": {
+  "fetched_on": "2026-09-25",
+  "file": "vulnerabilities/upstream/ghsa-by-cve/CVE-2017-7269.json",
+  "http_status": 200,
+  "source": "ghsa-by-cve",
+  "updated": null,
+  "url": "https://api.github.com/advisories?cve_id=CVE-2017-7269"
+ },
+ "ghsa-by-cve:CVE-2021-3156": {
+  "fetched_on": "2026-09-25",
+  "file": "vulnerabilities/upstream/ghsa-by-cve/CVE-2021-3156.json",
+  "http_status": 200,
+  "source": "ghsa-by-cve",
+  "updated": null,
+  "url": "https://api.github.com/advisories?cve_id=CVE-2021-3156"
+ },
+ "ghsa-by-cve:CVE-2021-4034": {
+  "fetched_on": "2026-09-25",
+  "file": "vulnerabilities/upstream/ghsa-by-cve/CVE-2021-4034.json",
+  "http_status": 200,
+  "source": "ghsa-by-cve",
+  "updated": null,
+  "url": "https://api.github.com/advisories?cve_id=CVE-2021-4034"
+ },
+ "ghsa-by-cve:CVE-2025-65720": {
+  "fetched_on": "2026-09-25",
+  "file": "vulnerabilities/upstream/ghsa-by-cve/CVE-2025-65720.json",
+  "http_status": 200,
+  "source": "ghsa-by-cve",
+  "updated": null,
+  "url": "https://api.github.com/advisories?cve_id=CVE-2025-65720"
+ },
+ "ghsa-by-cve:CVE-2025-70040": {
+  "fetched_on": "2026-09-25",
+  "file": "vulnerabilities/upstream/ghsa-by-cve/CVE-2025-70040.json",
+  "http_status": 200,
+  "source": "ghsa-by-cve",
+  "updated": null,
+  "url": "https://api.github.com/advisories?cve_id=CVE-2025-70040"
+ },
+ "ghsa-by-cve:CVE-2026-14431": {
+  "fetched_on": "2026-09-25",
+  "file": "vulnerabilities/upstream/ghsa-by-cve/CVE-2026-14431.json",
+  "http_status": 200,
+  "source": "ghsa-by-cve",
+  "updated": null,
+  "url": "https://api.github.com/advisories?cve_id=CVE-2026-14431"
+ },
+ "ghsa-by-cve:CVE-2026-15903": {
+  "fetched_on": "2026-09-25",
+  "file": "vulnerabilities/upstream/ghsa-by-cve/CVE-2026-15903.json",
+  "http_status": 200,
+  "source": "ghsa-by-cve",
+  "updated": null,
+  "url": "https://api.github.com/advisories?cve_id=CVE-2026-15903"
+ },
+ "ghsa-by-cve:CVE-2026-17658": {
+  "fetched_on": "2026-09-25",
+  "file": "vulnerabilities/upstream/ghsa-by-cve/CVE-2026-17658.json",
+  "http_status": 200,
+  "source": "ghsa-by-cve",
+  "updated": null,
+  "url": "https://api.github.com/advisories?cve_id=CVE-2026-17658"
+ },
+ "ghsa-by-cve:CVE-2026-19162": {
+  "fetched_on": "2026-09-25",
+  "file": "vulnerabilities/upstream/ghsa-by-cve/CVE-2026-19162.json",
+  "http_status": 200,
+  "source": "ghsa-by-cve",
+  "updated": null,
+  "url": "https://api.github.com/advisories?cve_id=CVE-2026-19162"
+ },
+ "ghsa-by-cve:CVE-2026-24881": {
+  "fetched_on": "2026-09-25",
+  "file": "vulnerabilities/upstream/ghsa-by-cve/CVE-2026-24881.json",
+  "http_status": 200,
+  "source": "ghsa-by-cve",
+  "updated": null,
+  "url": "https://api.github.com/advisories?cve_id=CVE-2026-24881"
+ },
+ "ghsa-by-cve:CVE-2026-24882": {
+  "fetched_on": "2026-09-25",
+  "file": "vulnerabilities/upstream/ghsa-by-cve/CVE-2026-24882.json",
+  "http_status": 200,
+  "source": "ghsa-by-cve",
+  "updated": null,
+  "url": "https://api.github.com/advisories?cve_id=CVE-2026-24882"
+ },
+ "ghsa-by-cve:CVE-2026-25253": {
+  "fetched_on": "2026-09-25",
+  "file": "vulnerabilities/upstream/ghsa-by-cve/CVE-2026-25253.json",
+  "http_status": 200,
+  "source": "ghsa-by-cve",
+  "updated": null,
+  "url": "https://api.github.com/advisories?cve_id=CVE-2026-25253"
+ },
+ "ghsa-by-cve:CVE-2026-30615": {
+  "fetched_on": "2026-09-25",
+  "file": "vulnerabilities/upstream/ghsa-by-cve/CVE-2026-30615.json",
+  "http_status": 200,
+  "source": "ghsa-by-cve",
+  "updated": null,
+  "url": "https://api.github.com/advisories?cve_id=CVE-2026-30615"
+ },
+ "ghsa-by-cve:CVE-2026-30616": {
+  "fetched_on": "2026-09-25",
+  "file": "vulnerabilities/upstream/ghsa-by-cve/CVE-2026-30616.json",
+  "http_status": 200,
+  "source": "ghsa-by-cve",
+  "updated": null,
+  "url": "https://api.github.com/advisories?cve_id=CVE-2026-30616"
+ },
+ "ghsa-by-cve:CVE-2026-30617": {
+  "fetched_on": "2026-09-25",
+  "file": "vulnerabilities/upstream/ghsa-by-cve/CVE-2026-30617.json",
+  "http_status": 200,
+  "source": "ghsa-by-cve",
+  "updated": null,
+  "url": "https://api.github.com/advisories?cve_id=CVE-2026-30617"
+ },
+ "ghsa-by-cve:CVE-2026-30618": {
+  "fetched_on": "2026-09-25",
+  "file": "vulnerabilities/upstream/ghsa-by-cve/CVE-2026-30618.json",
+  "http_status": 200,
+  "source": "ghsa-by-cve",
+  "updated": null,
+  "url": "https://api.github.com/advisories?cve_id=CVE-2026-30618"
+ },
+ "ghsa-by-cve:CVE-2026-30623": {
+  "fetched_on": "2026-09-25",
+  "file": "vulnerabilities/upstream/ghsa-by-cve/CVE-2026-30623.json",
+  "http_status": 200,
+  "source": "ghsa-by-cve",
+  "updated": null,
+  "url": "https://api.github.com/advisories?cve_id=CVE-2026-30623"
+ },
+ "ghsa-by-cve:CVE-2026-30624": {
+  "fetched_on": "2026-09-25",
+  "file": "vulnerabilities/upstream/ghsa-by-cve/CVE-2026-30624.json",
+  "http_status": 200,
+  "source": "ghsa-by-cve",
+  "updated": null,
+  "url": "https://api.github.com/advisories?cve_id=CVE-2026-30624"
+ },
+ "ghsa-by-cve:CVE-2026-30625": {
+  "fetched_on": "2026-09-25",
+  "file": "vulnerabilities/upstream/ghsa-by-cve/CVE-2026-30625.json",
+  "http_status": 200,
+  "source": "ghsa-by-cve",
+  "updated": null,
+  "url": "https://api.github.com/advisories?cve_id=CVE-2026-30625"
+ },
+ "ghsa-by-cve:CVE-2026-30635": {
+  "fetched_on": "2026-09-25",
+  "file": "vulnerabilities/upstream/ghsa-by-cve/CVE-2026-30635.json",
+  "http_status": 200,
+  "source": "ghsa-by-cve",
+  "updated": null,
+  "url": "https://api.github.com/advisories?cve_id=CVE-2026-30635"
+ },
+ "ghsa-by-cve:CVE-2026-45185": {
+  "fetched_on": "2026-09-25",
+  "file": "vulnerabilities/upstream/ghsa-by-cve/CVE-2026-45185.json",
+  "http_status": 200,
+  "source": "ghsa-by-cve",
+  "updated": null,
+  "url": "https://api.github.com/advisories?cve_id=CVE-2026-45185"
+ },
+ "ghsa-by-cve:CVE-2026-76021": {
+  "fetched_on": "2026-09-25",
+  "file": "vulnerabilities/upstream/ghsa-by-cve/CVE-2026-76021.json",
+  "http_status": 200,
+  "source": "ghsa-by-cve",
+  "updated": null,
+  "url": "https://api.github.com/advisories?cve_id=CVE-2026-76021"
+ },
+ "ghsa-by-cve:CVE-2026-76045": {
+  "fetched_on": "2026-09-25",
+  "file": "vulnerabilities/upstream/ghsa-by-cve/CVE-2026-76045.json",
+  "http_status": 200,
+  "source": "ghsa-by-cve",
+  "updated": null,
+  "url": "https://api.github.com/advisories?cve_id=CVE-2026-76045"
+ },
+ "osv-by-cve:CVE-2017-7269": {
+  "fetched_on": "2026-09-25",
+  "file": null,
+  "http_status": 404,
+  "source": "osv-by-cve",
+  "url": "https://api.osv.dev/v1/vulns/CVE-2017-7269"
+ },
+ "osv-by-cve:CVE-2021-3156": {
+  "fetched_on": "2026-09-25",
+  "file": "vulnerabilities/upstream/osv-by-cve/CVE-2021-3156.json",
+  "http_status": 200,
+  "source": "osv-by-cve",
+  "updated": "2026-07-08T05:59:12.314299609Z",
+  "url": "https://api.osv.dev/v1/vulns/CVE-2021-3156"
+ },
+ "osv-by-cve:CVE-2021-4034": {
+  "fetched_on": "2026-09-25",
+  "file": "vulnerabilities/upstream/osv-by-cve/CVE-2021-4034.json",
+  "http_status": 200,
+  "source": "osv-by-cve",
+  "updated": "2026-08-17T04:19:19.040734Z",
+  "url": "https://api.osv.dev/v1/vulns/CVE-2021-4034"
+ },
+ "osv-by-cve:CVE-2025-65720": {
+  "fetched_on": "2026-09-25",
+  "file": null,
+  "http_status": 404,
+  "source": "osv-by-cve",
+  "url": "https://api.osv.dev/v1/vulns/CVE-2025-65720"
+ },
+ "osv-by-cve:CVE-2025-70040": {
+  "fetched_on": "2026-09-25",
+  "file": "vulnerabilities/upstream/osv-by-cve/CVE-2025-70040.json",
+  "http_status": 200,
+  "source": "osv-by-cve",
+  "updated": "2026-08-12T03:51:35.380099945Z",
+  "url": "https://api.osv.dev/v1/vulns/CVE-2025-70040"
+ },
+ "osv-by-cve:CVE-2026-14431": {
+  "fetched_on": "2026-09-25",
+  "file": null,
+  "http_status": 404,
+  "source": "osv-by-cve",
+  "url": "https://api.osv.dev/v1/vulns/CVE-2026-14431"
+ },
+ "osv-by-cve:CVE-2026-15903": {
+  "fetched_on": "2026-09-25",
+  "file": null,
+  "http_status": 404,
+  "source": "osv-by-cve",
+  "url": "https://api.osv.dev/v1/vulns/CVE-2026-15903"
+ },
+ "osv-by-cve:CVE-2026-17658": {
+  "fetched_on": "2026-09-25",
+  "file": null,
+  "http_status": 404,
+  "source": "osv-by-cve",
+  "url": "https://api.osv.dev/v1/vulns/CVE-2026-17658"
+ },
+ "osv-by-cve:CVE-2026-19162": {
+  "fetched_on": "2026-09-25",
+  "file": null,
+  "http_status": 404,
+  "source": "osv-by-cve",
+  "url": "https://api.osv.dev/v1/vulns/CVE-2026-19162"
+ },
+ "osv-by-cve:CVE-2026-24881": {
+  "fetched_on": "2026-09-25",
+  "file": "vulnerabilities/upstream/osv-by-cve/CVE-2026-24881.json",
+  "http_status": 200,
+  "source": "osv-by-cve",
+  "updated": "2026-08-12T03:51:19.748811704Z",
+  "url": "https://api.osv.dev/v1/vulns/CVE-2026-24881"
+ },
+ "osv-by-cve:CVE-2026-24882": {
+  "fetched_on": "2026-09-25",
+  "file": "vulnerabilities/upstream/osv-by-cve/CVE-2026-24882.json",
+  "http_status": 200,
+  "source": "osv-by-cve",
+  "updated": "2026-08-14T21:42:01.103773898Z",
+  "url": "https://api.osv.dev/v1/vulns/CVE-2026-24882"
+ },
+ "osv-by-cve:CVE-2026-25253": {
+  "fetched_on": "2026-09-25",
+  "file": "vulnerabilities/upstream/osv-by-cve/CVE-2026-25253.json",
+  "http_status": 200,
+  "source": "osv-by-cve",
+  "updated": "2026-08-12T03:51:18.777085993Z",
+  "url": "https://api.osv.dev/v1/vulns/CVE-2026-25253"
+ },
+ "osv-by-cve:CVE-2026-30615": {
+  "fetched_on": "2026-09-25",
+  "file": null,
+  "http_status": 404,
+  "source": "osv-by-cve",
+  "url": "https://api.osv.dev/v1/vulns/CVE-2026-30615"
+ },
+ "osv-by-cve:CVE-2026-30616": {
+  "fetched_on": "2026-09-25",
+  "file": null,
+  "http_status": 404,
+  "source": "osv-by-cve",
+  "url": "https://api.osv.dev/v1/vulns/CVE-2026-30616"
+ },
+ "osv-by-cve:CVE-2026-30617": {
+  "fetched_on": "2026-09-25",
+  "file": null,
+  "http_status": 404,
+  "source": "osv-by-cve",
+  "url": "https://api.osv.dev/v1/vulns/CVE-2026-30617"
+ },
+ "osv-by-cve:CVE-2026-30618": {
+  "fetched_on": "2026-09-25",
+  "file": null,
+  "http_status": 404,
+  "source": "osv-by-cve",
+  "url": "https://api.osv.dev/v1/vulns/CVE-2026-30618"
+ },
+ "osv-by-cve:CVE-2026-30623": {
+  "fetched_on": "2026-09-25",
+  "file": null,
+  "http_status": 404,
+  "source": "osv-by-cve",
+  "url": "https://api.osv.dev/v1/vulns/CVE-2026-30623"
+ },
+ "osv-by-cve:CVE-2026-30624": {
+  "fetched_on": "2026-09-25",
+  "file": "vulnerabilities/upstream/osv-by-cve/CVE-2026-30624.json",
+  "http_status": 200,
+  "source": "osv-by-cve",
+  "updated": "2026-08-12T03:51:43.417319363Z",
+  "url": "https://api.osv.dev/v1/vulns/CVE-2026-30624"
+ },
+ "osv-by-cve:CVE-2026-30625": {
+  "fetched_on": "2026-09-25",
+  "file": "vulnerabilities/upstream/osv-by-cve/CVE-2026-30625.json",
+  "http_status": 200,
+  "source": "osv-by-cve",
+  "updated": "2026-08-12T03:51:16.246070510Z",
+  "url": "https://api.osv.dev/v1/vulns/CVE-2026-30625"
+ },
+ "osv-by-cve:CVE-2026-30635": {
+  "fetched_on": "2026-09-25",
+  "file": null,
+  "http_status": 404,
+  "source": "osv-by-cve",
+  "url": "https://api.osv.dev/v1/vulns/CVE-2026-30635"
+ },
+ "osv-by-cve:CVE-2026-45185": {
+  "fetched_on": "2026-09-25",
+  "file": null,
+  "http_status": 404,
+  "source": "osv-by-cve",
+  "url": "https://api.osv.dev/v1/vulns/CVE-2026-45185"
+ },
+ "osv-by-cve:CVE-2026-76021": {
+  "fetched_on": "2026-09-25",
+  "file": null,
+  "http_status": 404,
+  "source": "osv-by-cve",
+  "url": "https://api.osv.dev/v1/vulns/CVE-2026-76021"
+ },
+ "osv-by-cve:CVE-2026-76045": {
+  "fetched_on": "2026-09-25",
+  "file": null,
+  "http_status": 404,
+  "source": "osv-by-cve",
+  "url": "https://api.osv.dev/v1/vulns/CVE-2026-76045"
+ },
+ "veris:vcdb-merged": {
+  "fetched_on": "2026-09-25",
+  "file": "vulnerabilities/upstream/veris/vcdb-merged.json",
+  "http_status": 200,
+  "source": "veris",
+  "updated": null,
+  "url": "https://raw.githubusercontent.com/vz-risk/VCDB/master/vcdb-merged.json"
  }
 }

@@ -52,10 +52,24 @@ Non-software-security items carried by the registers (e.g. facial-recognition id
 
 `python3 scripts/build_vulnerabilities.py` derives CSV tables and a report from the validated CVE layer of the JSON: which CVEs each incident involves and vice versa, the CVEs actually exploited / attempted / carried by AI-enabled attackers (with KEV and CVSS), the CVEs credited to AI discovery, the CNA-assigned CWE profile of the CVEs per segment (AI-exploited · AI-written · AI-stack vulnerabilities · malicious releases · AI-discovered · related), CVSS-vs-observed-harm, a first IBSS-vs-CVSS comparison (IBSS = incident-based severity score, the doubling-weight sum over linked incidents), an **action list** (patch / remove / watch, with affected and fixed versions taken from the CVE.org, GitHub Advisory and OSV records that `scripts/fetch_upstream.py` caches under `vulnerabilities/upstream/`), every KEV-listed CVE, non-CVE identifiers, and — as input for the forthcoming CWE validation — the CNA CWEs of each incident's in-play CVEs. The unit of those tables is the CVE link, not the incident; the incident-level CWE ranking is a separate, later step.
 
+### Verifying and rebuilding
+
+```
+python3 scripts/fetch_upstream.py            # network: cache upstream records (CVE.org, GHSA, OSV, CISA KEV, VERIS schema)
+python3 scripts/validate_incidents.py        # offline gate: exit 1 on any error
+python3 scripts/build_vulnerabilities.py     # JSON + cache -> vulnerabilities/
+python3 scripts/build_incidents_report.py    # JSON -> incidents/*.csv, incidents/*.md
+python3 -m unittest discover tests           # verifier mutation tests; derived reports up to date
+```
+
+`validate_incidents.py` re-derives every copied CVE field (state, CNA, dates, product, title, CVSS, CWE, credits, KEV) from the cached records (Class A) and checks the bookkeeping of the JSON: validated-layer set algebra, the VERIS `action.*.cve` alignment, vocabularies, the ID scheme, the ranking table, recomputable counts, and every `veris` block against the VERIS JSON schema (Class B; needs the `jsonschema` package). It cannot check judgment: a CVE's `relation`, notes, severities, `ai_role`, or the inclusion decision. The rules are in the methodology, §10.2. The builders stop only on the core checks their tables rely on (ID format and numbering, validated-CVE sets, relation vocabulary, per-CVE agreement across incidents), not on the full gate.
+
 ## Repository layout
 
 ```
 README.md
+LICENSE                                            # licence split + MIT text (code)
+LICENSE-CC-BY-SA-4.0.txt · LICENSE-CC-BY-4.0.txt   # data · methodology
 incidents/
 ├─ all_2026_ai_software_security_incidents.json   # 99 incidents — source of truth
 ├─ all_2026_ai_software_security_incidents.csv    # flattened, one row per incident
@@ -67,8 +81,12 @@ incidents/
    ├─ Grok_DeepResearch_ai_incidents_2026.md
    └─ incidentdatabase.ai_20260824_ai_incidents_2026.xlsx
 scripts/
-├─ fetch_upstream.py                              # CVE.org / GitHub Advisory / OSV records for the cited ids → vulnerabilities/upstream/ (network)
-└─ build_vulnerabilities.py                       # incidents JSON + upstream cache → vulnerabilities/ (offline, stdlib, deterministic)
+├─ fetch_upstream.py                              # CVE.org / GitHub Advisory / OSV records for the cited ids, CISA KEV, VERIS schema → vulnerabilities/upstream/ (network)
+├─ lib_corpus.py                                  # shared loaders and vocabularies
+├─ validate_incidents.py                          # the gate: Class A (upstream copies) + Class B (bookkeeping) checks (offline)
+├─ build_vulnerabilities.py                       # incidents JSON + upstream cache → vulnerabilities/ (offline, stdlib, deterministic)
+└─ build_incidents_report.py                      # incidents JSON → incidents/*.csv, *.md (offline, stdlib, deterministic)
+tests/                                             # python3 -m unittest discover tests
 vulnerabilities/                                   # derived CVE-side tables — see vulnerabilities/README.md
 ├─ README.md                                       # report: coverage, conventions, summary, all tables
 ├─ action_list.csv · kev_cves.csv                  # patch / remove / watch with affected + fixed versions · every KEV CVE in the corpus
@@ -81,7 +99,7 @@ vulnerabilities/                                   # derived CVE-side tables —
 └─ upstream/                                       # raw upstream records, verbatim (manifest.json, LICENSES.md); never edited
 ```
 
-Terminology: **sources** (`incidents/sources/`) are the incident sources — the registers and reports the incidents were collected from; **upstream** (`vulnerabilities/upstream/`) are the upstream records — vulnerability-database entries (CVE.org, GitHub Advisory Database, OSV) fetched by `scripts/fetch_upstream.py` for the identifiers those incidents cite. Both are kept verbatim and never edited.
+Terminology: **sources** (`incidents/sources/`) are the incident sources — the registers and reports the incidents were collected from; **upstream** (`vulnerabilities/upstream/`) are the upstream records — vulnerability-database entries (CVE.org, GitHub Advisory Database, OSV) fetched by `scripts/fetch_upstream.py` for the identifiers those incidents cite, plus the CISA KEV catalog and the VERIS JSON schema. Both are kept verbatim and never edited.
 
 ## Sources & provenance
 
@@ -104,3 +122,25 @@ An event is included when **AI was materially involved** *and* there was an actu
 - Several incidents rest on vendor self-disclosure or researcher/attacker claims; per-incident `confidence` reflects this, and "first-of-kind" claims are researcher/vendor assessments. Verify any single figure against the linked primary source.
 - Severity ranking is a documented judgement, not a formal aggregate; items near tier boundaries could reasonably be reordered.
 - The `.csv` and `.md` are **derived** from the `.json`; treat the JSON as authoritative.
+
+## License
+
+| what | licence |
+|---|---|
+| Data: `incidents/all_2026_ai_software_security_incidents.{json,csv,md}`, `vulnerabilities/*.csv`, `vulnerabilities/README.md` | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/) (`LICENSE-CC-BY-SA-4.0.txt`) |
+| Methodology: `incidents/VERIS_Methodology_for_AI_Security_Incidents_concise.md` | [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) (`LICENSE-CC-BY-4.0.txt`) |
+| Code: `scripts/`, `tests/` | MIT (`LICENSE`) |
+| Deep-research reports in `incidents/sources/` | CC BY-SA 4.0, as far as the author holds rights in them; material they quote keeps its owners' rights |
+| AIID export in `incidents/sources/` | CC BY-SA 4.0, see attribution below |
+| Upstream records in `vulnerabilities/upstream/` | each source's own licence, see `vulnerabilities/upstream/LICENSES.md` |
+
+Copyright © 2026 Dave Farago.
+
+**Why the data is share-alike.** The dataset adapts material from two registers that are licensed CC BY-SA 4.0: for some incidents, the summary paraphrases the register's summary, and one VERIS coding follows its VCDB record. CC BY-SA 4.0 requires adapted material to carry the same licence. The VERIS vocabulary itself does not impose a licence on the data: the incidents use its field names and values, and copy no VERIS text.
+
+**Attribution of adapted material.**
+
+- **VERIS Community Database (VCDB)**, the vz-risk VCDB project and its contributors, https://github.com/vz-risk/VCDB, licensed [CC BY-SA 4.0](https://github.com/vz-risk/VCDB/blob/master/LICENSE.txt). Used: encoded incident records and 2026 issue intake, cited per incident in `sources[]`. Changes: summaries paraphrased and combined with other sources; VERIS codings adopted or revised, and extended with a report layer.
+- **AI Incident Database (AIID)**, Responsible AI Collaborative, https://incidentdatabase.ai/, database collections licensed [CC BY-SA 4.0](https://incidentdatabase.ai/terms-of-use/) (report texts are excluded from that licence and are not included here). Used: `incidents/sources/incidentdatabase.ai_20260824_ai_incidents_2026.xlsx`, an export of 73 incidents of 2026 (of 1,641) with their MIT, GMF and CSETv1 classifications and derived coverage columns; cited per incident in `sources[]`. Changes: selected 2026 incidents re-coded in VERIS.
+
+Nothing here implies endorsement by Verizon, the Responsible AI Collaborative, MITRE, CISA or any other source.

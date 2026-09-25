@@ -20,17 +20,15 @@ import sys
 from collections import Counter, defaultdict
 from pathlib import Path
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import lib_corpus as lc  # noqa: E402
+from validate_incidents import core_checks  # noqa: E402
+
 CVE_URL = "https://www.cve.org/CVERecord?id={}"
 SEP = "; "  # list separator inside CSV cells (matches veris.action.hacking.cve convention)
 
 # Relation vocabulary in the order the methodology (§6.4) lists it; used as relevance weight.
-RELATION_ORDER = ["exploited", "self-malicious-release", "exploited-unconfirmed", "attempted", "toolkit", "self-vulnerability", "discovered", "related"]
-RELATION_LABEL = {"self-vulnerability": "self (vulnerability)", "self-malicious-release": "self (malicious release)"}
-
-
-def lab(rel):
-    """Display label of a relation token (CSV keeps the token)."""
-    return RELATION_LABEL.get(rel, rel)
+RELATION_ORDER, RELATION_LABEL, lab = lc.RELATION_ORDER, lc.RELATION_LABEL, lc.lab
 
 
 def lab_pairs(s):
@@ -41,7 +39,7 @@ RELATION_WEIGHT = {r: len(RELATION_ORDER) - i for i, r in enumerate(RELATION_ORD
 EXPLOITED_FAMILY = ["exploited", "exploited-unconfirmed", "attempted", "toolkit"]
 IN_PLAY = {"exploited", "exploited-unconfirmed", "attempted", "self-vulnerability", "self-malicious-release"}  # the CVE was the weakness in play
 
-SEVERITIES = ["Critical", "High", "Medium", "Low", "Negligible"]
+SEVERITIES = lc.SEVERITIES
 # IBSS (incident-based severity score): each incident counted once, weight doubles per tier (decided 2026-08-28).
 SEV_WEIGHT = {"Negligible": 1, "Low": 2, "Medium": 4, "High": 8, "Critical": 16}
 CVSS_BANDS = ["9.0-10.0", "7.0-8.9", "4.0-6.9", "0.1-3.9", "no CVSS"]
@@ -111,26 +109,15 @@ def write_csv(path: Path, headers, rows):
 
 # ----------------------------------------------------------------------------- load & check
 def load(path: Path) -> dict:
-    d = json.loads(path.read_text(encoding="utf-8"))
-    incidents = d["incidents"]
-    nums = [int(i["id"].rsplit("-", 1)[1]) for i in incidents]
-    if nums != list(range(1, len(incidents) + 1)):
-        sys.exit("incidents are not in 001..n order")
-    for i in incidents:
-        det = i.get("validated_cve_details") or {}
-        a = sorted(i.get("validated_cve") or [])
-        b = sorted(c["cve"] for c in det.get("cves") or [])
-        if a != b:
-            sys.exit(f"{i['id']}: validated_cve != validated_cve_details.cves")
-        for c in det.get("cves") or []:
-            if c["relation"] not in RELATION_WEIGHT:
-                sys.exit(f"{i['id']}: unknown relation {c['relation']!r} on {c['cve']}")
-    seen = {}
-    for i in incidents:
-        for c in (i.get("validated_cve_details") or {}).get("cves") or []:
-            key = tuple(json.dumps(c.get(k), sort_keys=True) for k in ("state", "cna", "published", "product", "cvss_version", "cvss_score", "cwe", "cisa_kev", "title"))
-            if seen.setdefault(c["cve"], key) != key:
-                sys.exit(f"{c['cve']}: intrinsic fields differ between incidents — Table 2 assumes they agree")
+    """Load the JSON and fail fast on the checks the tables rely on (scripts/validate_incidents.py core_checks).
+
+    The full gate is scripts/validate_incidents.py; it is not run here, so the builder keeps working while
+    judgment-level findings (e.g. VERIS schema errors) are open.
+    """
+    d = lc.load_corpus(path)
+    problems = core_checks(d)
+    if problems:
+        sys.exit(str(problems[0]))
     return d
 
 
@@ -323,9 +310,22 @@ def table_exploited(links):
     return headers, rows
 
 
+DISCOVERY_CREDIT_TYPES = {"finder", "reporter", "analyst", "tool", None}   # None = role not stated in the record
+
+
+def credits_all(credits):
+    """Every credit with its role, for the CSV: 'value (type)'; an untyped credit without parentheses."""
+    return SEP.join(f"{c['value']} ({c['type']})" if c.get("type") else c["value"] for c in credits or [])
+
+
+def credits_discovery(credits):
+    """Discovery credits only (methodology §6.7), duplicate values removed, for the README table."""
+    return ", ".join(dict.fromkeys(c["value"] for c in credits or [] if c.get("type") in DISCOVERY_CREDIT_TYPES))
+
+
 def table_discovered(links):
     headers = ["cve", "incident_id", "credits", "cna", "product", "published", "cvss_score", "cvss_version", "cna_cwe", "title"]
-    rows = [[l["cve"], l["incident_id"], l["credits"], l["cna"], l["product"], l["published"], l["cvss_score"], l["cvss_version"],
+    rows = [[l["cve"], l["incident_id"], credits_all(l["credits"]), l["cna"], l["product"], l["published"], l["cvss_score"], l["cvss_version"],
              l["cwe"], l["title"]] for l in links if l["relation"] == "discovered"]
     rows.sort(key=lambda r: (r[1], cve_key(r[0])))
     return headers, rows
@@ -450,16 +450,9 @@ def table_cvss_vs_observed(d, links):
 
 
 def load_upstream(up: Path):
-    """Raw upstream records cached by scripts/fetch_upstream.py (never edited here). Missing dir -> empty."""
-    recs = {"cve.org": {}, "ghsa": {}, "osv": {}}
-    for src in recs:
-        pdir = up / src
-        if pdir.exists():
-            for f in sorted(pdir.glob("*.json")):
-                recs[src][f.stem] = json.loads(f.read_text(encoding="utf-8"))
-    mpath = up / "manifest.json"
-    manifest = json.loads(mpath.read_text(encoding="utf-8")) if mpath.exists() else {}
-    return recs, manifest
+    """Raw upstream records cached by scripts/fetch_upstream.py (read via lib_corpus; never edited here)."""
+    u = lc.load_upstream(up)
+    return {k: u[k] for k in ("cve.org", "ghsa", "osv")}, u["manifest"]
 
 
 def ecosystem_from(url):
@@ -1032,9 +1025,12 @@ def build_report(d, links, T) -> str:
     A(f"## CVEs discovered by AI systems (register — {n_d_links} links, {n_d_cves} distinct CVEs)")
     A("")
     A("Relation `discovered`: the CVE is credited to the AI system or AI-assisted team the incident is about. "
-      "`Credits` is the CVE record's own credit line where the CNA publishes one (methodology §6.7).")
+      "`Credits` lists the discovery credits of the CVE record where the CNA publishes any (methodology §6.7): roles "
+      "finder, reporter, analyst and tool, plus credits whose role the record does not state. "
+      "`cves_ai_discovered.csv` has every credit with its role, including coordinators and remediation developers.")
     A("")
-    rows = [[link(r[0]), r[1], r[2], r[3], r[4], r[5], f"{fmt(r[6])} (v{r[7]})" if r[6] is not None else "", fmt(r[8]).replace(SEP, ", "), r[9]]
+    cred = {(l["cve"], l["incident_id"]): l["credits"] for l in links}
+    rows = [[link(r[0]), r[1], credits_discovery(cred[(r[0], r[1])]), r[3], r[4], r[5], f"{fmt(r[6])} (v{r[7]})" if r[6] is not None else "", fmt(r[8]).replace(SEP, ", "), r[9]]
             for r in T["discovered"][1]]
     A(md_table(["CVE", "Incident", "Credits", "CNA", "Product", "Published", "CVSS", "CNA CWE", "Title"], rows))
     A("")
@@ -1121,6 +1117,9 @@ def build_report(d, links, T) -> str:
     A("- Product strings are as recorded by the CNA (e.g. `BerriAI/litellm` vs `BerriAI/LiteLLM`, `n/a/n/a`); they are not normalised here.")
     A("- CVSS scores come from one source per CVE (usually the CNA); NVD may score differently. No EPSS / SSVC enrichment in this build.")
     A("- The as-cited CWE column is unvalidated and known to be inconsistent in places; see `CWE_validation_handover.md`.")
+    A("")
+    A("*These tables and this report are licensed under [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/), as the incident dataset they derive from; "
+      "the upstream records they quote keep their own licences (`upstream/LICENSES.md`). Attribution: `README.md` of the repository, section License.*")
     return "\n".join(out) + "\n"
 
 

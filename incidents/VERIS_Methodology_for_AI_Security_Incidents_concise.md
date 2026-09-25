@@ -1,5 +1,7 @@
 # VERIS Methodology for AI-Related Software Security Incidents
 
+*© 2026 Dave Farago. Licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). VERIS is the Vocabulary for Event Recording and Incident Sharing of the vz-risk project (https://github.com/vz-risk/veris); this document uses its vocabulary and quotes none of its text.*
+
 ## 1. Purpose and methodological decision
 
 This document defines a methodology for describing, evaluating, and ranking **AI-related software security incidents** using **VERIS (Vocabulary for Event Recording and Incident Sharing)** as the primary external framework.
@@ -124,6 +126,32 @@ Important values include:
 This distinction should be preserved exactly.
 
 For example, a publicly reachable database containing private data may be `Potentially` disclosed if no evidence shows that unauthorized parties accessed it. If logs or attacker behavior demonstrate access, use `Yes`.
+
+### 3.3 Vulnerability disclosures: own record or aggregate
+
+A vulnerability disclosure meets the inclusion criterion as a near miss or a demonstrated flaw, but disclosures of AI-related vulnerabilities are far more numerous than incidents with harm (an NVD keyword probe found about 600 AI-related CVEs published in the first eight months of 2026). Without a rule, the disclosure class would dominate every count and every ranking.
+
+A vulnerability disclosure gets **its own incident record** only if at least one of these conditions holds:
+
+- **(a) KEV:** at least one validated CVE of the disclosure is listed in the CISA KEV catalog;
+- **(b) exploitation:** a primary source reports that the vulnerability was exploited;
+- **(c) realized harm:** the incident has status `Confirmed` and observed severity Low or higher.
+
+Otherwise the disclosure goes into **one aggregate incident per class**. The aggregate's validated CVE layer holds the CVEs of its class, enumerated under §6.7. A ranking or score counts the aggregate once, so a flood of disclosures weighs as one incident, and the aggregate's potential severity still records what the class could cause.
+
+The classes are derived mechanically from the CVE's `relation` (§6.4) and the incident's `ai_role` (§5.1):
+
+| class | derivation | example |
+|---|---|---|
+| AI-written vulnerabilities | `self-vulnerability`, `ai_role` contains *AI-generated weakness* | flaws in code written by AI coding tools |
+| AI-stack vulnerabilities | `self-vulnerability`, any other `ai_role` | flaws in agents, agent harnesses, MCP servers, LLM gateways and other AI products |
+| AI-discovered vulnerabilities | `discovered` | flaws found by an AI system or an AI-assisted team |
+
+Finer distinctions, such as the product type or the AI vendor and tool, are recorded as per-CVE attributes, not as further classes. Each class adds one incident's weight to a ranking, so finer classes would make the ranking depend on how finely the classes are cut. A split by vendor would also measure disclosure practice (credit lines, commit markers) rather than risk.
+
+**Realized harm.** Condition (c) also defines the ranking variant **IBSS-observed with realized harm**: the observed incident-based severity score over `Confirmed` incidents with observed severity Low or higher only. It is reported beside IBSS-observed and IBSS-potential.
+
+**Scope.** The rule applies to every incident, including those recorded before the rule was written (2026-09-24). Folding an existing incident into an aggregate removes its record, so §4.1 must first state what happens to the ID of a removed incident.
 
 ---
 
@@ -331,7 +359,7 @@ Two rules therefore apply.
 
 **Rule 1 — validate every CVE ID before citing it.** Resolve the ID against the CVE.org record (`https://cveawg.mitre.org/api/cve/<ID>`; NVD as a secondary source). Only IDs in state `PUBLISHED` are cited. IDs that do not exist, are `REJECTED` by their CNA, or are still `RESERVED` are not used (a RESERVED ID may be noted as pending). Check that the record's product and description match the incident: an ID copied from a secondary source may belong to a different incident. In the 2026 corpus, 4 of the 46 originally cited IDs failed this check (one non-existent, two rejected, one belonging to another incident).
 
-*Scope of Rule 1 — two layers, kept for every incident.* CVE information is recorded in two layers. The **as-cited layer** (`report.vulnerabilities`, prose in `title` / `summary` / `reference`) holds the IDs exactly as the sources give them and is never edited, so source errors stay visible. The **validated layer** (`validated_cve`, `validated_cve_details`) is produced by applying Rules 1 and 2 to the as-cited IDs plus a search for omitted ones, and is the canonical list. The VERIS fields `action.hacking.cve` / `action.malware.cve` are **derived** from the validated layer and hold only CVEs with relation `exploited` (Rule 2); the value they held before alignment is kept in `validated_cve_details.veris_cve_before`. Each block lists the CVEs exploited through that action: `action.hacking.cve` for CVEs exploited by the operator or agent (the usual case, including the entry vector of a later ransomware deployment), `action.malware.cve` only for CVEs the malware itself exploited (e.g. a worm's propagation exploit). A CVE appears in both blocks only when it was exploited by both actions.
+*Scope of Rule 1 — two layers, kept for every incident.* CVE information is recorded in two layers. The **as-cited layer** (`report.vulnerabilities`, prose in `title` / `summary` / `reference`) holds the IDs exactly as the sources give them and is never edited, so source errors stay visible. The **validated layer** (`validated_cve`, `validated_cve_details`) is produced by applying Rules 1 and 2 to the as-cited IDs plus a search for omitted ones, and is the canonical list. The VERIS fields `action.hacking.cve` / `action.malware.cve` are **derived** from the validated layer: together they hold exactly the incident's CVEs with relation `exploited` (Rule 2), no more and no fewer; the value they held before alignment is kept in `validated_cve_details.veris_cve_before`. Each block lists the CVEs exploited through that action: `action.hacking.cve` for CVEs exploited by the operator or agent (the usual case, including the entry vector of a later ransomware deployment), `action.malware.cve` only for CVEs the malware itself exploited (e.g. a worm's propagation exploit). A CVE appears in both blocks only when it was exploited by both actions.
 
 **Rule 2 — record how each CVE relates to the incident.** Every validated CVE carries one `relation` value:
 
@@ -346,7 +374,7 @@ Two rules therefore apply.
 | `discovered` | the CVE is credited to the AI system or AI-assisted team the incident is about | no |
 | `related` | same product cluster, disclosure batch or campaign, explicitly linked by the sources | no |
 
-Only `exploited` CVEs belong in `action.hacking.cve` / `action.malware.cve`; all other relations live in the report layer (§10.2). Where a single ordering of relations is needed (sorting, tie-breaking), use: exploited > self-malicious-release > exploited-unconfirmed > attempted > toolkit > self-vulnerability > discovered > related.
+`action.hacking.cve` and `action.malware.cve` together hold exactly the `exploited` CVEs. This restricts only these two fields: CVEs with every other relation are recorded in the validated layer (`validated_cve`, `validated_cve_details`; §10.2), and the as-cited layer keeps whatever the sources cite. Where a single ordering of relations is needed (sorting, tie-breaking), use: exploited > self-malicious-release > exploited-unconfirmed > attempted > toolkit > self-vulnerability > discovered > related.
 
 **Evidence signals.** A CISA KEV listing is recorded as a per-CVE flag: it is evidence that the CVE is exploited *somewhere*, not that it was exploited in *this* incident. CVSS is recorded together with its version, because CNA scores (often v4.0) and NVD scores (often v3.1) differ.
 
@@ -401,9 +429,9 @@ Record these in `non_cve_identifiers` (id, kind, note). Never place them in a CV
 
 ### 6.7 AI-discovered vulnerabilities and aggregate incidents
 
-For incidents whose AI role is *AI-discovered vulnerability*, the CVE list is the set of CVEs credited to the AI system or AI-assisted team. Evidence, in order of strength: the `credits` field of the CVE record; the vendor advisory's reporter line (Mozilla MFSA, MSRC CVRF acknowledgements, FreeBSD-SA); the discoverer's own publication. Some CNAs (Linux kernel, Chrome) carry no credit field, so attribution there rests on release notes or commit trailers and must be marked as such. A vendor claim of "N vulnerabilities found" rarely maps to N CVEs: fixes may be bundled into rollup CVEs or receive none.
+For incidents whose AI role is *AI-discovered vulnerability*, the CVE list is the set of CVEs credited to the AI system or AI-assisted team. Evidence, in order of strength: the `credits` field of the CVE record, where the discovery roles are `finder`, `reporter`, `analyst` and `tool` (other roles, such as `coordinator` or `remediation developer`, are not evidence of discovery); the vendor advisory's reporter line (Mozilla MFSA, MSRC CVRF acknowledgements, FreeBSD-SA); the discoverer's own publication. Some CNAs (Linux kernel, Chrome) carry no credit field, so attribution there rests on release notes or commit trailers and must be marked as such. A vendor claim of "N vulnerabilities found" rarely maps to N CVEs: fixes may be bundled into rollup CVEs or receive none.
 
-For aggregate incidents (a wave of vulnerabilities rather than one event), enumerate constituent CVEs only from a named curated corpus, scope them to the report year, exclude RESERVED IDs, and record the corpus and its cut-off date in the note.
+For aggregate incidents (a wave of vulnerabilities rather than one event; §3.3 says when a disclosure becomes part of one), enumerate constituent CVEs only from a named curated corpus, scope them to the report year, exclude RESERVED IDs, and record the corpus and its cut-off date in the note. A curated corpus is either an external list maintained with its own inclusion checks (e.g. Vibe Security Radar) or a frozen sweep output of this project: a file under `incidents/sources/` that records the script, the query, the run date, and the screening of every hit against the §3 criterion. A sweep output is frozen once cited; a later run produces a new file.
 
 ---
 
@@ -735,7 +763,9 @@ validated_cve_details:
       cwe: ["CWE-306"]
       cisa_kev: true
       kev_date_added: "2026-04-23"
-      credits: "..."
+      credits:                               # every CNA credit, with its role
+        - value: "..."
+          type: "finder"                     # finder | reporter | analyst | coordinator | remediation developer | ... | null
       record_url: "https://www.cve.org/CVERecord?id=CVE-2026-..."
       note: "..."
   non_cve_identifiers:
@@ -761,6 +791,31 @@ Where the CVE information lives in the 2026 corpus files:
 
 The as-cited fields are retained unchanged for provenance; the validated fields are canonical; the VERIS action fields are derived from them. Only CVEs were validated: the CWE fields (`report.weaknesses`, `cwe`, the CWE part of `cve_cwe`) are as cited.
 
+**Copied CVE metadata.** The following fields of `validated_cve_details.cves[]` are copies of upstream records. `scripts/validate_incidents.py` re-derives each one from the records cached under `vulnerabilities/upstream/` and fails on any difference:
+
+| field | rule |
+|---|---|
+| `state`, `cna`, `published` | `cveMetadata.state`, `.assignerShortName`, date part of `.datePublished`; `state` must be `PUBLISHED` |
+| `product` | the distinct `vendor/product` pairs of `containers.cna.affected[]`, sorted, joined with `; ` (a missing part is `?`) |
+| `title` | the first that exists: `containers.cna.title`; the CISA KEV `vulnerabilityName`; the `summary` of a reviewed GitHub advisory for the CVE; the `summary` of an OSV record aliasing the CVE; the first sentence of the CNA's English description. ADP `title` values name the container (e.g. "CISA ADP Vulnrichment"), not the vulnerability, and are never used |
+| `cvss_version`, `cvss_score` | one (version, base score) pair from any metrics entry of the CNA or an ADP container; empty only if no container has one |
+| `cwe` | a subset of the CWE IDs of one container (CNA or ADP) |
+| `credits` | a list with one object per entry of `containers.cna.credits[]`, in record order, duplicates kept: `value`, `type` (the role; `null` where the record gives none — the CVE schema defines no default), and `user` (CVE User Registry UUID) where present; `lang` is not kept. Values are verbatim, including encoding errors of the CNA. Where the CNA has no credits the field is absent, and attribution evidence per §6.7 goes into the `note` |
+| `cisa_kev`, `kev_date_added` | listed in the cached CISA KEV catalog; its `dateAdded` |
+| `record_url` | `https://www.cve.org/CVERecord?id=<CVE>` |
+
+A difference that is correct on purpose is recorded on the `cves[]` entry as `overrides: {"<field>": "<reason>"}`; the verifier prints every override on every run. When copied metadata is corrected, the change is logged in the top-level `cve_validation.metadata_corrections` list, one entry per correction run:
+
+```yaml
+metadata_corrections:
+  - corrected_on: "2026-09-25"
+    method: "re-derived from vulnerabilities/upstream/ by scripts/validate_incidents.py rules"
+    changes:
+      - cve: "CVE-2026-..."
+        field: "credits"
+        reason: "restored; the transcription had cut the value at 300 characters"
+```
+
 This keeps:
 
 - canonical VERIS data standard-compliant;
@@ -782,7 +837,7 @@ This keeps:
 - **Do not invent pseudo-precise 0–100 scores from incomplete public data.**
 - **Do not silently infer CWE.**
 - **Do not cite a CVE ID without resolving it.** Non-existent, REJECTED and RESERVED IDs are not cited; an ID taken from a secondary source may belong to another incident (§6.4).
-- **Do not put a discovered, related or toolkit CVE into a VERIS action field.** Only `exploited` CVEs belong there (§6.4).
+- **Do not put a discovered, related or toolkit CVE into a VERIS action field.** Those fields hold exactly the `exploited` CVEs (§6.4).
 - **Do not treat GHSA / OSV / vendor advisory IDs as CVEs,** and do not conclude "no identifier" without checking those databases (§6.6).
 - **Do not modify VERIS semantics to fit AI.** Keep custom AI/report fields separate.
 
@@ -891,3 +946,6 @@ This preserves standardization where a mature framework exists and makes the gen
 - **2026-08-27 (b)** — Made the two-layer structure (as-cited / validated) the standing rule for all incidents, with the VERIS `action.*.cve` fields derived from the validated layer (§6.4, §10.2). The 2026 corpus's VERIS action fields were aligned accordingly (10 fields; previous values kept in `validated_cve_details.veris_cve_before`).
 - **2026-08-27 (c)** — Documented the incident ID scheme (§4.1): `DB-`/`DR-` prefix by provenance, frozen rank number.
 - **2026-08-29** — §6.4 Rule 2: relation `primary` split into `self-vulnerability` / `self-malicious-release`; relevance order stated. Applied to the 2026 corpus (196 / 4 links); recorded in `cve_validation.relation_revision`.
+- **2026-09-24** — §4.1: `DR` redefined as *direct report* (no register source; found through a deep-research or a primary report); the prefix records the discovery channel, not source quality. §5 and §10.2 aligned with the JSON data model.
+- **2026-09-25** — §3.3: rule for vulnerability disclosures (own record only with a KEV listing, a primary exploitation report or realized harm; otherwise one aggregate per class: AI-written, AI-stack, AI-discovered), the definition of IBSS-observed with realized harm, and its scope (all incidents). §6.7: a frozen sweep output counts as a curated corpus. §10.2: transcription rules for copied CVE metadata, per-field `overrides`, and the `cve_validation.metadata_corrections` log.
+- **2026-09-25 (b)** — §10.2: `credits` is a list of typed credits (`value`, `type`, `user` where present) instead of one joined string, so the credit role is kept; §6.7 names the discovery roles. Applied to the 2026 corpus (127 links); recorded in `cve_validation.credits_revision`.
