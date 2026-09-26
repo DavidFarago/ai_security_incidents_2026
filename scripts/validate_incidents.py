@@ -66,6 +66,13 @@ class Result:
         self.errors.append(Finding(*a, **k))
 
 
+def has_effect(attribute: dict) -> bool:
+    """Methodology §3.1: the VERIS attribute section records an effect on the asset (an unknown effect counts)."""
+    return ((attribute.get("confidentiality") or {}).get("data_disclosure") in ("Yes", "Potentially", "Unknown")
+            or bool((attribute.get("integrity") or {}).get("variety"))
+            or bool((attribute.get("availability") or {}).get("variety")))
+
+
 # ----------------------------------------------------------------------------- derivation rules (methodology §10.2)
 def cna_of(rec):
     return (rec.get("containers") or {}).get("cna") or {}
@@ -273,6 +280,9 @@ def check_class_b(d, up, r: Result):
                 r.add("B", "source-catalog", f"source {s.get('source')!r} is not in sources_catalog", iid)
         if v.get("security_incident") not in lc.STATUSES:
             r.add("B", "vocabulary", f"security_incident {v.get('security_incident')!r}", iid)
+        elif v["security_incident"] in ("Confirmed", "Suspected") and not has_effect(v.get("attribute") or {}):
+            r.add("B", "status-effect", f"{v['security_incident']} without an effect in veris.attribute "
+                  "(methodology §3.1): use Near miss or record the effect", iid)
         for k in ("observed_severity", "potential_severity"):
             if rep.get(k) not in lc.SEVERITIES:
                 r.add("B", "vocabulary", f"report.{k} {rep.get(k)!r}", iid)

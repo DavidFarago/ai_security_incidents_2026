@@ -11,12 +11,12 @@ Everything below is built from the incidents that have a validated CVE. This tab
 | Critical | 2 | 1 | 1 | 0 |
 | High | 22 | 8 | 13 | 1 |
 | Medium | 31 | 4 | 20 | 7 |
-| Low | 21 | 6 | 12 | 3 |
-| Negligible | 23 | 13 | 6 | 4 |
+| Low | 17 | 3 | 11 | 3 |
+| Negligible | 27 | 16 | 7 | 4 |
 | total | 99 | 32 | 52 | 15 |
 
 - **14 of the 23 in-scope High/Critical incidents have no CVE.** What identifies them instead: stolen credentials, misconfiguration, malicious package releases (GHSA/MAL/PYSEC advisories — see the non-CVE identifiers table), prompt injection, agent misuse.
-- The CVE-bearing set is disclosure-heavy: 13 of 32 incidents with a CVE are observed *Negligible* — the incident is the disclosure of a vulnerability, nothing has happened yet. Low observed harm in the CVE-side statistics is therefore partly by construction.
+- The CVE-bearing set is disclosure-heavy: 16 of 32 incidents with a CVE are observed *Negligible* — the incident is the disclosure of a vulnerability, nothing has happened yet. Low observed harm in the CVE-side statistics is therefore partly by construction.
 - 6 incidents are identified only by non-CVE identifiers: DB-2026-005, DR-2026-012, DR-2026-035, DR-2026-045, DR-2026-046, DR-2026-063.
 
 ## Conventions
@@ -59,13 +59,13 @@ Everything below is built from the incidents that have a validated CVE. This tab
 
 ## Findings
 
-1. **CVE covers the disclosures, not the breaches.** 14 of the 23 in-scope High/Critical incidents have no CVE; 13 of the 32 CVE-bearing incidents are observed Negligible (see *Coverage*). The CVE-side tables describe the third of the corpus that is easiest to identify, not the third that hurt most.
+1. **CVE covers the disclosures, not the breaches.** 14 of the 23 in-scope High/Critical incidents have no CVE; 16 of the 32 CVE-bearing incidents are observed Negligible (see *Coverage*). The CVE-side tables describe the third of the corpus that is easiest to identify, not the third that hurt most.
 2. **The CVE side is deep-research-sourced.** 29 of the 32 incidents with a validated CVE come from the deep-research reports (DR ids), 3 from the registers — registers record breaches, not vulnerability disclosures. The CVEs are validated at CVE.org; the *sample* of CVE-bearing incidents is not representative of AI-related incidents.
 3. **Exploitation evidence tracked harm; the base score did not.** Every confirmed-`exploited` CVE is on CISA KEV, and the exploited family spans CVSS 6.5–10 — the same range as unexploited disclosures.
 4. **Medium CVSS ≠ safe.** 4 CVEs rated CVSS < 7.0 sit in potential-Critical incidents (Artifactory chained by evaluation agents into a sandbox escape; Gemini CLI). Per CVSS band, the share of CVEs in a potential-Critical incident is 35% for 9.0–10.0 against 5% / 6% for 7.0–8.9 / 4.0–6.9 — CVSS separates the top band, not the middle. Two incidents; a case, not a statistic.
 5. **Three populations, three countermeasure programmes.** Top CNA CWEs — AI-written code: CWE-918 (21), CWE-22 (19), CWE-78 (11); AI-exploited: CWE-306 (4), CWE-918 (3), CWE-94 (2); AI-discovered: CWE-416 (4), CWE-121 (3), CWE-295 (3); AI-stack products: CWE-77 (4), CWE-94 (4), CWE-22 (3) (CVE links). The AI-written profile is one external corpus (Radar) and needs a baseline before any "AI writes X" claim.
 6. **The CVE ecosystem is not yet fit for AI-stack components.** 18 in-play CVEs carry no CNA CVSS — the score used here comes from CISA-ADP; the MCP STDIO cluster (DR-2026-059) has no CNA CVSS, no CWE and product `n/a` in its records.
-7. **Prompt injection: highest potential, least realized harm so far.** 17 incidents carry VERIS `hacking.variety = Prompt injection`; observed H2 M1 L5 N9, potential C4 H12 M1. Most are disclosed PoCs from the deep-research sources.
+7. **Prompt injection: highest potential, least realized harm so far.** 17 incidents carry VERIS `hacking.variety = Prompt injection`; observed H2 M1 L1 N13, potential C4 H12 M1. Most are disclosed PoCs from the deep-research sources.
 8. **Malicious releases need removal, not patching.** 5 CVEs and 48 package releases are malware by design (CNA CWE-506 / malware advisories); they are separated from the weakness profiles and listed under *remove* in the action list.
 
 Who should read what: vulnerability management → *Action list* and *KEV CVEs*; developers of AI systems → *CNA-assigned CWE profile* (`ai-stack-vulnerability`, `ai-exploited`) and the incident-level CWE ranking of the CWE thread; researchers → *Coverage*, *CVSS vs observed*, *IBSS vs CVSS*; the CWE validation → *Per-incident CNA CWEs*.
@@ -151,16 +151,16 @@ Rank order (= ID number). Incidents with more than 10 CVEs are listed in full in
 | DB-2026-053 | Elmwood Home Care — LockBit 5.0 ransomware (VCDB; no AI component) | Medium | Medium | 0 | — |
 | DB-2026-054 | Lifepoint Health - use of stolen credentials (VCDB; no AI component) | Medium | Medium | 0 | — |
 | DB-2026-055 | Southern California University of Health Sciences - hacking / exfiltration of 2,206 records (VCDB; no AI component) | Medium | Medium | 0 | — |
-| DR-2026-056 | 'Comment & Control' (Black Hat USA 2026) — GitHub-issue prompt injection drives RCE/credential theft in Claude Code, Gemini CLI, Codex, Copilot | Low | Critical | 2 | *self (vulnerability):* [CVE-2026-12537](https://www.cve.org/CVERecord?id=CVE-2026-12537), [CVE-2026-54316](https://www.cve.org/CVERecord?id=CVE-2026-54316) |
+| DR-2026-056 | 'Comment & Control' (Black Hat USA 2026) — GitHub-issue prompt injection drives RCE/credential theft in Claude Code, Gemini CLI, Codex, Copilot | Negligible | Critical | 2 | *self (vulnerability):* [CVE-2026-12537](https://www.cve.org/CVERecord?id=CVE-2026-12537), [CVE-2026-54316](https://www.cve.org/CVERecord?id=CVE-2026-54316) |
 | DR-2026-057 | RufRoot (CVE-2026-59726, CVSS 10.0) in Ruflo/Claude Flow + max-severity agent-harness CVEs (Langroid, LiteLLM) | Low | Critical | 6 | *self (vulnerability):* [CVE-2026-59726](https://www.cve.org/CVERecord?id=CVE-2026-59726); *related:* [CVE-2026-42208](https://www.cve.org/CVERecord?id=CVE-2026-42208), [CVE-2026-49468](https://www.cve.org/CVERecord?id=CVE-2026-49468), [CVE-2026-54760](https://www.cve.org/CVERecord?id=CVE-2026-54760), [CVE-2026-54769](https://www.cve.org/CVERecord?id=CVE-2026-54769), [CVE-2026-55615](https://www.cve.org/CVERecord?id=CVE-2026-55615) |
 | DR-2026-058 | Project Glasswing / Claude Mythos Preview mass zero-day discovery (WolfSSL CVE-2026-5194, FreeBSD CVE-2026-4747; early Mythos sandbox escape) | Low | Critical | 14 | **14 CVEs** — see [full list](#dr-2026-058) below |
 | DR-2026-059 | Anthropic MCP STDIO transport design RCE in official SDKs (~200k deployments, 14 CVEs) | Low | Critical | 17 | **17 CVEs** — see [full list](#dr-2026-059) below |
-| DR-2026-060 | Cursor 'DuneSlide' zero-click prompt-injection RCE (CVE-2026-50548 / CVE-2026-50549) | Low | Critical | 2 | *self (vulnerability):* [CVE-2026-50548](https://www.cve.org/CVERecord?id=CVE-2026-50548), [CVE-2026-50549](https://www.cve.org/CVERecord?id=CVE-2026-50549) |
+| DR-2026-060 | Cursor 'DuneSlide' zero-click prompt-injection RCE (CVE-2026-50548 / CVE-2026-50549) | Negligible | Critical | 2 | *self (vulnerability):* [CVE-2026-50548](https://www.cve.org/CVERecord?id=CVE-2026-50548), [CVE-2026-50549](https://www.cve.org/CVERecord?id=CVE-2026-50549) |
 | DB-2026-061 | DJI Romo robot-vacuum cloud authorization flaw exposed ~7,000 homes' camera/mic/maps | Low | High | 0 | — |
-| DR-2026-062 | Claude Code project-file RCE & vulnerability cluster (Check Point + others) | Low | High | 16 | **16 CVEs** — see [full list](#dr-2026-062) below |
+| DR-2026-062 | Claude Code project-file RCE & vulnerability cluster (Check Point + others) | Negligible | High | 16 | **16 CVEs** — see [full list](#dr-2026-062) below |
 | DR-2026-063 | Snowflake GitHub Actions shell injection found & exploited by Wiz Red Agent (internal Jira token) | Low | High | 0 | — (1 non-CVE ids) |
 | DR-2026-064 | 'Emerging techniques & AI-slop reckoning' — Ghostcommit image prompt injection, fake Claude Code lures, mouse5212 stealer, Mozilla 0DIN, curl bug-bounty pause | Low | High | 0 | — |
-| DR-2026-065 | claude-code-action permission bypass - one malicious GitHub issue hijacks any public repo running the Claude Code GitHub Action | Low | High | 0 | — |
+| DR-2026-065 | claude-code-action permission bypass - one malicious GitHub issue hijacks any public repo running the Claude Code GitHub Action | Negligible | High | 0 | — |
 | DB-2026-066 | Claude Cowork agent deleted ~15 years of family photos via terminal (bypassed Trash) | Low | Medium | 0 | — |
 | DB-2026-067 | Anthropic accidentally published Claude Code's source map to npm (v2.1.88), exposing internals | Low | Medium | 0 | — |
 | DB-2026-068 | Meta's AI training program (MCI) exposed monitored-employee data to the whole workforce | Low | Medium | 0 | — |
@@ -216,7 +216,7 @@ Rank order (= ID number). Incidents with more than 10 CVEs are listed in full in
 - *related* (6): [CVE-2025-49596](https://www.cve.org/CVERecord?id=CVE-2025-49596), [CVE-2025-54136](https://www.cve.org/CVERecord?id=CVE-2025-54136), [CVE-2025-54994](https://www.cve.org/CVERecord?id=CVE-2025-54994), [CVE-2026-22252](https://www.cve.org/CVERecord?id=CVE-2026-22252), [CVE-2026-22688](https://www.cve.org/CVERecord?id=CVE-2026-22688), [CVE-2026-42271](https://www.cve.org/CVERecord?id=CVE-2026-42271)
 
 <a id="dr-2026-062"></a>
-**DR-2026-062 — Claude Code project-file RCE & vulnerability cluster (Check Point + others)** (16 CVEs; observed Low, potential High)
+**DR-2026-062 — Claude Code project-file RCE & vulnerability cluster (Check Point + others)** (16 CVEs; observed Negligible, potential High)
 
 - *self (vulnerability)* (5): [CVE-2025-59536](https://www.cve.org/CVERecord?id=CVE-2025-59536), [CVE-2026-21852](https://www.cve.org/CVERecord?id=CVE-2026-21852), [CVE-2026-24887](https://www.cve.org/CVERecord?id=CVE-2026-24887), [CVE-2026-39861](https://www.cve.org/CVERecord?id=CVE-2026-39861), [CVE-2026-54316](https://www.cve.org/CVERecord?id=CVE-2026-54316)
 - *related* (11): [CVE-2026-24052](https://www.cve.org/CVERecord?id=CVE-2026-24052), [CVE-2026-24053](https://www.cve.org/CVERecord?id=CVE-2026-24053), [CVE-2026-25722](https://www.cve.org/CVERecord?id=CVE-2026-25722), [CVE-2026-25723](https://www.cve.org/CVERecord?id=CVE-2026-25723), [CVE-2026-25724](https://www.cve.org/CVERecord?id=CVE-2026-25724), [CVE-2026-25725](https://www.cve.org/CVERecord?id=CVE-2026-25725), [CVE-2026-33068](https://www.cve.org/CVERecord?id=CVE-2026-33068), [CVE-2026-35603](https://www.cve.org/CVERecord?id=CVE-2026-35603), [CVE-2026-40068](https://www.cve.org/CVERecord?id=CVE-2026-40068), [CVE-2026-46406](https://www.cve.org/CVERecord?id=CVE-2026-46406), [CVE-2026-55607](https://www.cve.org/CVERecord?id=CVE-2026-55607)
@@ -242,7 +242,7 @@ Only 11 CVEs recur, all of them twice: [CVE-2025-3248](https://www.cve.org/CVERe
 | [CVE-2025-68613](https://www.cve.org/CVERecord?id=CVE-2025-68613) | 1 | DR-2026-008:attempted | **KEV** | 10 (v3.1) | 8 | 16 | GitHub_M | 2025-12-19 | n8n-io/n8n | CWE-913 | n8n Vulnerable to Remote Code Execution via Expression Injection |
 | [CVE-2026-28353](https://www.cve.org/CVERecord?id=CVE-2026-28353) | 1 | DR-2026-010:self (malicious release) |  | 10 (v4.0) | 8 | 16 | GitHub_M | 2026-03-05 | aquasecurity/trivy-vscode-extension | CWE-506 | Trivy Vulnerability Scanner: Unauthorized AI Agent Execution Code Included in OpenVSX Extension Release |
 | [CVE-2026-21858](https://www.cve.org/CVERecord?id=CVE-2026-21858) | 1 | DR-2026-008:attempted |  | 10 (v3.1) | 8 | 16 | GitHub_M | 2026-01-07 | n8n-io/n8n | CWE-20 | n8n Vulnerable to Unauthenticated File Access via Improper Webhook Request Handling |
-| [CVE-2026-12537](https://www.cve.org/CVERecord?id=CVE-2026-12537) | 1 | DR-2026-056:self (vulnerability) |  | 10 (v4.0) | 2 | 16 | GoogleCloud | 2026-06-24 | Google Cloud/Gemini CLI; Google Cloud/run-gemini-cli GitHub Action | CWE-20 | Unauthenticated Remote Code Execution in Gemini CLI CI/CD Workflows |
+| [CVE-2026-12537](https://www.cve.org/CVERecord?id=CVE-2026-12537) | 1 | DR-2026-056:self (vulnerability) |  | 10 (v4.0) | 1 | 16 | GoogleCloud | 2026-06-24 | Google Cloud/Gemini CLI; Google Cloud/run-gemini-cli GitHub Action | CWE-20 | Unauthenticated Remote Code Execution in Gemini CLI CI/CD Workflows |
 | [CVE-2026-16326](https://www.cve.org/CVERecord?id=CVE-2026-16326) | 1 | DR-2026-036:self (vulnerability) |  | 10 (v3.1) | 4 | 8 | HashiCorp | 2026-07-29 | HashiCorp/Tooling | CWE-488 | consul-mcp-server vulnerable to cross-tenant credential reuse in streamable-HTTP stateless mode |
 | [CVE-2026-25592](https://www.cve.org/CVERecord?id=CVE-2026-25592) | 1 | DR-2026-080:self (vulnerability) |  | 10 (v3.1) | 1 | 8 | GitHub_M | 2026-02-06 | microsoft/semantic-kernel | CWE-22 | Semantic Kernel has an Arbitrary File Write via AI Agent Function Calling in .NET SDK |
 | [CVE-2026-26015](https://www.cve.org/CVERecord?id=CVE-2026-26015) | 1 | DR-2026-059:self (vulnerability) |  | 10 (v4.0) | 2 | 16 | GitHub_M | 2026-04-29 | arc53/DocsGPT | CWE-77 | Unauthenticated RCE in DocsGPT MCP STDIO Configuration |
@@ -287,8 +287,8 @@ Only 11 CVEs recur, all of them twice: [CVE-2025-3248](https://www.cve.org/CVERe
 | [CVE-2025-32711](https://www.cve.org/CVERecord?id=CVE-2025-32711) | 1 | DR-2026-087:self (vulnerability) |  | 9.3 (v3.1) | 1 | 8 | microsoft | 2025-06-11 | Microsoft/Microsoft 365 Copilot | CWE-74 | M365 Copilot Information Disclosure Vulnerability |
 | [CVE-2025-62615](https://www.cve.org/CVERecord?id=CVE-2025-62615) | 1 | DR-2026-036:self (vulnerability) |  | 9.3 (v4.0) | 4 | 8 | GitHub_M | 2026-02-04 | Significant-Gravitas/AutoGPT | CWE-918 | AutoGPT has SSRF vulnerability in ReadRSSFeedBlock |
 | [CVE-2026-48797](https://www.cve.org/CVERecord?id=CVE-2026-48797) | 1 | DR-2026-036:self (vulnerability) |  | 9.3 (v4.0) | 4 | 8 | GitHub_M | 2026-06-16 | mcp-tool-shop-org/@mcptoolshop/backpropagate; mcp-tool-shop-org/backpropagate | CWE-358, CWE-862, CWE-1295 | Backpropagate: backprop ui --auth and backprop ui --share do not enforce authentication |
-| [CVE-2026-50548](https://www.cve.org/CVERecord?id=CVE-2026-50548) | 1 | DR-2026-060:self (vulnerability) |  | 9.3 (v4.0) | 2 | 16 | GitHub_M | 2026-06-25 | cursor/cursor | CWE-22 | Cursor Desktop sandbox escape via agent-controlled working directory |
-| [CVE-2026-50549](https://www.cve.org/CVERecord?id=CVE-2026-50549) | 1 | DR-2026-060:self (vulnerability) |  | 9.3 (v4.0) | 2 | 16 | GitHub_M | 2026-06-25 | cursor/cursor | CWE-59 | Cursor Desktop sandbox escape via symlink and failed path canonicalization |
+| [CVE-2026-50548](https://www.cve.org/CVERecord?id=CVE-2026-50548) | 1 | DR-2026-060:self (vulnerability) |  | 9.3 (v4.0) | 1 | 16 | GitHub_M | 2026-06-25 | cursor/cursor | CWE-22 | Cursor Desktop sandbox escape via agent-controlled working directory |
+| [CVE-2026-50549](https://www.cve.org/CVERecord?id=CVE-2026-50549) | 1 | DR-2026-060:self (vulnerability) |  | 9.3 (v4.0) | 1 | 16 | GitHub_M | 2026-06-25 | cursor/cursor | CWE-59 | Cursor Desktop sandbox escape via symlink and failed path canonicalization |
 | [CVE-2026-5194](https://www.cve.org/CVERecord?id=CVE-2026-5194) | 1 | DR-2026-058:discovered |  | 9.3 (v4.0) |  |  | wolfSSL | 2026-04-09 | wolfSSL/wolfSSL | CWE-295 | wolfSSL ECDSA Certificate Verification |
 | [CVE-2025-54994](https://www.cve.org/CVERecord?id=CVE-2025-54994) | 1 | DR-2026-059:related |  | 9.3 (v4.0) |  |  | GitHub_M | 2025-09-08 | akoskm/create-mcp-server-stdio | CWE-78 | @akoskm/create-mcp-server-stdio has Command Injection in MCP Server due to unsafe `exec` API |
 | [CVE-2026-54760](https://www.cve.org/CVERecord?id=CVE-2026-54760) | 1 | DR-2026-057:related |  | 9.3 (v4.0) |  |  | GitHub_M | 2026-07-09 | langroid/langroid | CWE-22, CWE-89 | Langroid: SQLChatAgent dangerous-function blocklist can be bypassed with quoted or schema-qualified pg_read_file calls |
@@ -315,7 +315,7 @@ Only 11 CVEs recur, all of them twice: [CVE-2025-3248](https://www.cve.org/CVERe
 | [CVE-2026-24763](https://www.cve.org/CVERecord?id=CVE-2026-24763) | 1 | DR-2026-039:related |  | 8.8 (v3.1) |  |  | GitHub_M | 2026-02-02 | clawdbot/clawdbot | CWE-78 | Authenticated Command Injection in OpenClaw Docker Execution via PATH Environment Variable |
 | [CVE-2026-65921](https://www.cve.org/CVERecord?id=CVE-2026-65921) | 1 | DB-2026-006:related |  | 8.8 (v3.1) |  |  | JFROG | 2026-07-27 | jfrog/artifactory | CWE-22 | Potential path traversal leading to unauthorized file writes |
 | [CVE-2026-42271](https://www.cve.org/CVERecord?id=CVE-2026-42271) | 1 | DR-2026-059:related | **KEV** | 8.7 (v4.0) |  |  | GitHub_M | 2026-05-08 | BerriAI/litellm | CWE-77, CWE-78 | LiteLLM: Authenticated command execution via MCP stdio test endpoints |
-| [CVE-2025-59536](https://www.cve.org/CVERecord?id=CVE-2025-59536) | 1 | DR-2026-062:self (vulnerability) |  | 8.7 (v4.0) | 2 | 8 | GitHub_M | 2025-10-03 | anthropics/claude-code | CWE-94 | Claude Code's startup trust dialog could lead to  Command Execution attack |
+| [CVE-2025-59536](https://www.cve.org/CVERecord?id=CVE-2025-59536) | 1 | DR-2026-062:self (vulnerability) |  | 8.7 (v4.0) | 1 | 8 | GitHub_M | 2025-10-03 | anthropics/claude-code | CWE-94 | Claude Code's startup trust dialog could lead to  Command Execution attack |
 | [CVE-2026-10108](https://www.cve.org/CVERecord?id=CVE-2026-10108) | 1 | DR-2026-036:self (vulnerability) |  | 8.7 (v4.0) | 4 | 8 | VulnCheck | 2026-05-29 | hanxi/xiaomusic | CWE-22 | xiaomusic 0.5.7 Path Traversal via GET /music endpoint |
 | [CVE-2026-48527](https://www.cve.org/CVERecord?id=CVE-2026-48527) | 1 | DR-2026-036:self (vulnerability) |  | 8.7 (v3.1) | 4 | 8 | GitHub_M | 2026-05-29 | haxtheweb/haxcms-nodejs; haxtheweb/haxcms-php | CWE-79 | HaxCMS has a stored Cross-Site Scripting (XSS) bypass in saveNode endpoint |
 | [CVE-2026-50180](https://www.cve.org/CVERecord?id=CVE-2026-50180) | 1 | DR-2026-036:self (vulnerability) |  | 8.7 (v4.0) | 4 | 8 | GitHub_M | 2026-07-09 | langroid/langroid | CWE-22, CWE-89 | Langroid: SQLChatAgent _validate_query blocklist misses pg_read_file family enabling arbitrary file read |
@@ -361,8 +361,8 @@ Only 11 CVEs recur, all of them twice: [CVE-2025-3248](https://www.cve.org/CVERe
 | [CVE-2026-25157](https://www.cve.org/CVERecord?id=CVE-2026-25157) | 1 | DR-2026-039:related |  | 7.8 (v3.1) |  |  | GitHub_M | 2026-02-04 | openclaw/openclaw | CWE-78 | OpenClaw/Clawdbot has OS Command Injection via Project Root Path in sshNodeCommand |
 | [CVE-2026-31554](https://www.cve.org/CVERecord?id=CVE-2026-31554) | 1 | DR-2026-058:related |  | 7.8 (v3.1) |  |  | Linux | 2026-04-24 | Linux/Linux |  | futex: Require sys_futex_requeue() to have identical flags |
 | [CVE-2026-64015](https://www.cve.org/CVERecord?id=CVE-2026-64015) | 1 | DR-2026-058:related |  | 7.8 (v3.1) |  |  | Linux | 2026-07-19 | Linux/Linux |  | security/keys: fix missed RCU read section on lookup |
-| [CVE-2026-24887](https://www.cve.org/CVERecord?id=CVE-2026-24887) | 1 | DR-2026-062:self (vulnerability) |  | 7.7 (v4.0) | 2 | 8 | GitHub_M | 2026-02-03 | anthropics/claude-code | CWE-78, CWE-94 | Claude Code has a Command Injection in find Command Bypasses User Approval Prompt |
-| [CVE-2026-39861](https://www.cve.org/CVERecord?id=CVE-2026-39861) | 1 | DR-2026-062:self (vulnerability) |  | 7.7 (v4.0) | 2 | 8 | GitHub_M | 2026-04-21 | anthropics/claude-code | CWE-22, CWE-61 | Claude Code: Sandbox Escape via Symlink Following Allows Arbitrary File Write Outside Workspace |
+| [CVE-2026-24887](https://www.cve.org/CVERecord?id=CVE-2026-24887) | 1 | DR-2026-062:self (vulnerability) |  | 7.7 (v4.0) | 1 | 8 | GitHub_M | 2026-02-03 | anthropics/claude-code | CWE-78, CWE-94 | Claude Code has a Command Injection in find Command Bypasses User Approval Prompt |
+| [CVE-2026-39861](https://www.cve.org/CVERecord?id=CVE-2026-39861) | 1 | DR-2026-062:self (vulnerability) |  | 7.7 (v4.0) | 1 | 8 | GitHub_M | 2026-04-21 | anthropics/claude-code | CWE-22, CWE-61 | Claude Code: Sandbox Escape via Symlink Following Allows Arbitrary File Write Outside Workspace |
 | [CVE-2026-43576](https://www.cve.org/CVERecord?id=CVE-2026-43576) | 1 | DR-2026-036:self (vulnerability) |  | 7.7 (v3.1) | 4 | 8 | VulnCheck | 2026-05-06 | OpenClaw/OpenClaw | CWE-601, CWE-918 | OpenClaw < 2026.4.5 - Second-hop SSRF via CDP /json/version WebSocket URL |
 | [CVE-2026-44335](https://www.cve.org/CVERecord?id=CVE-2026-44335) | 1 | DR-2026-036:self (vulnerability) |  | 7.7 (v4.0) | 4 | 8 | GitHub_M | 2026-05-08 | MervinPraison/PraisonAI | CWE-918 | SSRF bypass in PraisonAI |
 | [CVE-2026-53812](https://www.cve.org/CVERecord?id=CVE-2026-53812) | 1 | DR-2026-036:self (vulnerability) |  | 7.7 (v3.1) | 4 | 8 | VulnCheck | 2026-06-11 | OpenClaw/OpenClaw | CWE-918 | OpenClaw < 2026.5.18 - Private-Network Navigation Bypass via Browser Act Interactions |
@@ -443,7 +443,7 @@ Only 11 CVEs recur, all of them twice: [CVE-2025-3248](https://www.cve.org/CVERe
 | [CVE-2026-55448](https://www.cve.org/CVERecord?id=CVE-2026-55448) | 1 | DR-2026-036:self (vulnerability) |  | 6.3 (v3.1) | 4 | 8 | GitHub_M | 2026-06-26 | jdx/mise | CWE-78 | mise: Local credential_command executes untrusted config |
 | [CVE-2026-55668](https://www.cve.org/CVERecord?id=CVE-2026-55668) | 1 | DR-2026-036:self (vulnerability) |  | 6.3 (v3.1) | 4 | 8 | GitHub_M | 2026-07-08 | filebrowser/filebrowser | CWE-22, CWE-59 | File Browser: ScopedFs follows a dangling symlink on write, letting a scoped user create files outside their scope |
 | [CVE-2026-5588](https://www.cve.org/CVERecord?id=CVE-2026-5588) | 1 | DR-2026-058:related |  | 6.3 (v4.0) |  |  | bcorg | 2026-04-15 | Legion of the Bouncy Castle Inc./BC-JAVA; Legion of the Bouncy Castle Inc./BCPIX-LTS; Legion of the Bouncy Castle Inc./BCPKIX-FIPS | CWE-327 | PKIX draft CompositeVerifier accepts empty signature sequence as valid. |
-| [CVE-2026-54316](https://www.cve.org/CVERecord?id=CVE-2026-54316) | **2** | DR-2026-056:self (vulnerability)<br>DR-2026-062:self (vulnerability) |  | 6 (v4.0) | 4 | 24 | GitHub_M | 2026-06-23 | anthropics/claude-code | CWE-183, CWE-200, CWE-515 | Claude Code: Out-of-Band Data Exfiltration via Pre-Approved HuggingFace Domain in WebFetch |
+| [CVE-2026-54316](https://www.cve.org/CVERecord?id=CVE-2026-54316) | **2** | DR-2026-056:self (vulnerability)<br>DR-2026-062:self (vulnerability) |  | 6 (v4.0) | 2 | 24 | GitHub_M | 2026-06-23 | anthropics/claude-code | CWE-183, CWE-200, CWE-515 | Claude Code: Out-of-Band Data Exfiltration via Pre-Approved HuggingFace Domain in WebFetch |
 | [CVE-2026-59259](https://www.cve.org/CVERecord?id=CVE-2026-59259) | 1 | DR-2026-036:self (vulnerability) |  | 6 (v4.0) | 4 | 8 | VulnCheck | 2026-07-15 | n8n/n8n | CWE-639 | n8n - Permission Bypass via Expression Parser Mismatch in External Secrets |
 | [CVE-2026-32045](https://www.cve.org/CVERecord?id=CVE-2026-32045) | 1 | DR-2026-036:self (vulnerability) |  | 5.9 (v3.1) | 4 | 8 | VulnCheck | 2026-03-21 | OpenClaw/OpenClaw | CWE-290 | OpenClaw < 2026.2.21 - Authentication Bypass in HTTP Gateway Routes via Tokenless Tailscale Auth |
 | [CVE-2026-35670](https://www.cve.org/CVERecord?id=CVE-2026-35670) | 1 | DR-2026-036:self (vulnerability) |  | 5.9 (v3.1) | 4 | 8 | VulnCheck | 2026-04-10 | OpenClaw/OpenClaw | CWE-807 | OpenClaw < 2026.3.22 - Webhook Reply Rebinding via Username Resolution in Synology Chat |
@@ -459,7 +459,7 @@ Only 11 CVEs recur, all of them twice: [CVE-2025-3248](https://www.cve.org/CVERe
 | [CVE-2026-41406](https://www.cve.org/CVERecord?id=CVE-2026-41406) | 1 | DR-2026-036:self (vulnerability) |  | 5.4 (v3.1) | 4 | 8 | VulnCheck | 2026-04-28 | OpenClaw/OpenClaw | CWE-639 | OpenClaw < 2026.3.31 - Sender Allowlist Bypass via Thread History and Quoted Messages |
 | [CVE-2026-63102](https://www.cve.org/CVERecord?id=CVE-2026-63102) | 1 | DR-2026-036:self (vulnerability) |  | 5.4 (v3.1) | 4 | 8 | VulnCheck | 2026-07-20 | rConfig/rConfig v8 Core | CWE-915 | rConfig Core < 8.2.8 Privilege Escalation via Users API role field |
 | [CVE-2026-35603](https://www.cve.org/CVERecord?id=CVE-2026-35603) | 1 | DR-2026-062:related |  | 5.4 (v4.0) |  |  | GitHub_M | 2026-04-17 | anthropics/claude-code | CWE-426 | Claude Code: Insecure System-Wide Configuration Loading Enables Local Privilege Escalation on Windows |
-| [CVE-2026-21852](https://www.cve.org/CVERecord?id=CVE-2026-21852) | 1 | DR-2026-062:self (vulnerability) |  | 5.3 (v4.0) | 2 | 8 | GitHub_M | 2026-01-21 | anthropics/claude-code | CWE-522 | Claude Code Leaks Data via Malicious Environment Configuration Before Trust Confirmation |
+| [CVE-2026-21852](https://www.cve.org/CVERecord?id=CVE-2026-21852) | 1 | DR-2026-062:self (vulnerability) |  | 5.3 (v4.0) | 1 | 8 | GitHub_M | 2026-01-21 | anthropics/claude-code | CWE-522 | Claude Code Leaks Data via Malicious Environment Configuration Before Trust Confirmation |
 | [CVE-2026-32002](https://www.cve.org/CVERecord?id=CVE-2026-32002) | 1 | DR-2026-036:self (vulnerability) |  | 5.3 (v3.1) | 4 | 8 | VulnCheck | 2026-03-19 | OpenClaw/OpenClaw | CWE-200 | OpenClaw < 2026.2.23 - Sandbox Boundary Bypass via Image Tool workspaceOnly Bypass |
 | [CVE-2026-32111](https://www.cve.org/CVERecord?id=CVE-2026-32111) | 1 | DR-2026-036:self (vulnerability) |  | 5.3 (v3.1) | 4 | 8 | GitHub_M | 2026-03-11 | homeassistant-ai/ha-mcp | CWE-918 | ha-mcp OAuth 2.1 DCR mode enables network reconnaissance via an error oracle |
 | [CVE-2026-41345](https://www.cve.org/CVERecord?id=CVE-2026-41345) | 1 | DR-2026-036:self (vulnerability) |  | 5.3 (v3.1) | 4 | 8 | VulnCheck | 2026-04-23 | OpenClaw/OpenClaw | CWE-522 | OpenClaw < 2026.3.31 - Authorization Header Leak via Cross-Origin Redirect in Media Download |
@@ -568,10 +568,10 @@ Each cell counts incident–CVE links. The vulnerability's CVSS and the incident
 
 | CVSS band of CVE | Critical | High | Medium | Low | Negligible | Total |
 |---|---|---|---|---|---|---|
-| Critical 9.0-10.0 | 1 | 14 | 21 | 18 | 7 | 61 |
-| High 7.0-8.9 | 0 | 10 | 74 | 19 | 9 | 112 |
-| Medium 4.0-6.9 | 0 | 4 | 60 | 7 | 10 | 81 |
-| Low 0.1-3.9 | 0 | 0 | 9 | 2 | 2 | 13 |
+| Critical 9.0-10.0 | 1 | 14 | 21 | 15 | 10 | 61 |
+| High 7.0-8.9 | 0 | 10 | 74 | 8 | 20 | 112 |
+| Medium 4.0-6.9 | 0 | 4 | 60 | 2 | 15 | 81 |
+| Low 0.1-3.9 | 0 | 0 | 9 | 1 | 3 | 13 |
 | no CVSS | 0 | 3 | 5 | 11 | 47 | 66 |
 
 Read together with the *Coverage* table at the top: the CVE-bearing incidents are disclosure-heavy, so the Negligible/Low columns are populated partly by construction.
@@ -601,9 +601,9 @@ Share of in-play CVEs with at least one **potential-Critical** incident, per CVS
 |---|---|---|---|---|---|
 | [CVE-2026-33634](https://www.cve.org/CVERecord?id=CVE-2026-33634) | 9.4 (v4.0) | **KEV** | 24 | 32 | DB-2026-001:self (malicious release); DR-2026-010:self (malicious release) |
 | [CVE-2026-59726](https://www.cve.org/CVERecord?id=CVE-2026-59726) | 10 (v3.1) |  | 6 | 24 | DR-2026-036:self (vulnerability); DR-2026-057:self (vulnerability) |
-| [CVE-2026-54316](https://www.cve.org/CVERecord?id=CVE-2026-54316) | 6 (v4.0) |  | 4 | 24 | DR-2026-056:self (vulnerability); DR-2026-062:self (vulnerability) |
+| [CVE-2026-54316](https://www.cve.org/CVERecord?id=CVE-2026-54316) | 6 (v4.0) |  | 2 | 24 | DR-2026-056:self (vulnerability); DR-2026-062:self (vulnerability) |
 | [CVE-2025-68613](https://www.cve.org/CVERecord?id=CVE-2025-68613) | 10 (v3.1) | **KEV** | 8 | 16 | DR-2026-008:attempted |
-| [CVE-2026-12537](https://www.cve.org/CVERecord?id=CVE-2026-12537) | 10 (v4.0) |  | 2 | 16 | DR-2026-056:self (vulnerability) |
+| [CVE-2026-12537](https://www.cve.org/CVERecord?id=CVE-2026-12537) | 10 (v4.0) |  | 1 | 16 | DR-2026-056:self (vulnerability) |
 | [CVE-2026-21858](https://www.cve.org/CVERecord?id=CVE-2026-21858) | 10 (v3.1) |  | 8 | 16 | DR-2026-008:attempted |
 | [CVE-2026-26015](https://www.cve.org/CVERecord?id=CVE-2026-26015) | 10 (v4.0) |  | 2 | 16 | DR-2026-059:self (vulnerability) |
 | [CVE-2026-28353](https://www.cve.org/CVERecord?id=CVE-2026-28353) | 10 (v4.0) |  | 8 | 16 | DR-2026-010:self (malicious release) |
@@ -612,8 +612,8 @@ Share of in-play CVEs with at least one **potential-Critical** incident, per CVS
 | [CVE-2026-9198](https://www.cve.org/CVERecord?id=CVE-2026-9198) | 9.8 (v3.1) | **KEV** | 8 | 16 | DR-2026-008:exploited |
 | [CVE-2026-33017](https://www.cve.org/CVERecord?id=CVE-2026-33017) | 9.3 (v4.0) | **KEV** | 8 | 16 | DR-2026-008:exploited |
 | [CVE-2026-39987](https://www.cve.org/CVERecord?id=CVE-2026-39987) | 9.3 (v4.0) | **KEV** | 16 | 16 | DR-2026-020:exploited; DR-2026-023:exploited |
-| [CVE-2026-50548](https://www.cve.org/CVERecord?id=CVE-2026-50548) | 9.3 (v4.0) |  | 2 | 16 | DR-2026-060:self (vulnerability) |
-| [CVE-2026-50549](https://www.cve.org/CVERecord?id=CVE-2026-50549) | 9.3 (v4.0) |  | 2 | 16 | DR-2026-060:self (vulnerability) |
+| [CVE-2026-50548](https://www.cve.org/CVERecord?id=CVE-2026-50548) | 9.3 (v4.0) |  | 1 | 16 | DR-2026-060:self (vulnerability) |
+| [CVE-2026-50549](https://www.cve.org/CVERecord?id=CVE-2026-50549) | 9.3 (v4.0) |  | 1 | 16 | DR-2026-060:self (vulnerability) |
 | [CVE-2026-54449](https://www.cve.org/CVERecord?id=CVE-2026-54449) | 8.8 (v3.1) |  | 2 | 16 | DR-2026-059:self (vulnerability) |
 | [CVE-2026-65617](https://www.cve.org/CVERecord?id=CVE-2026-65617) | 8.8 (v3.1) |  | 8 | 16 | DB-2026-006:exploited-unconfirmed |
 | [CVE-2026-66014](https://www.cve.org/CVERecord?id=CVE-2026-66014) | 8.8 (v3.1) |  | 8 | 16 | DB-2026-006:exploited-unconfirmed |
@@ -636,7 +636,7 @@ Context outweighs the component score: chained or privileged use turned medium-r
 
 | CVE | CVSS | KEV | IBSS obs | IBSS pot | Incident : relation |
 |---|---|---|---|---|---|
-| [CVE-2026-54316](https://www.cve.org/CVERecord?id=CVE-2026-54316) | 6 (v4.0) |  | 4 | 24 | DR-2026-056:self (vulnerability); DR-2026-062:self (vulnerability) |
+| [CVE-2026-54316](https://www.cve.org/CVERecord?id=CVE-2026-54316) | 6 (v4.0) |  | 2 | 24 | DR-2026-056:self (vulnerability); DR-2026-062:self (vulnerability) |
 | [CVE-2026-65923](https://www.cve.org/CVERecord?id=CVE-2026-65923) | 6.8 (v3.1) |  | 8 | 16 | DB-2026-006:exploited-unconfirmed |
 | [CVE-2026-65924](https://www.cve.org/CVERecord?id=CVE-2026-65924) | 6.5 (v3.1) |  | 8 | 16 | DB-2026-006:exploited-unconfirmed |
 | [CVE-2026-65925](https://www.cve.org/CVERecord?id=CVE-2026-65925) | 6.5 (v3.1) |  | 8 | 16 | DB-2026-006:exploited-unconfirmed |
@@ -651,11 +651,11 @@ These are mostly `self (vulnerability)` disclosures of AI-product vulnerabilitie
 
 | CVE | CVSS | KEV | IBSS obs | IBSS pot | Incident : relation |
 |---|---|---|---|---|---|
-| [CVE-2026-12537](https://www.cve.org/CVERecord?id=CVE-2026-12537) | 10 (v4.0) |  | 2 | 16 | DR-2026-056:self (vulnerability) |
+| [CVE-2026-12537](https://www.cve.org/CVERecord?id=CVE-2026-12537) | 10 (v4.0) |  | 1 | 16 | DR-2026-056:self (vulnerability) |
 | [CVE-2026-26015](https://www.cve.org/CVERecord?id=CVE-2026-26015) | 10 (v4.0) |  | 2 | 16 | DR-2026-059:self (vulnerability) |
 | [CVE-2026-40933](https://www.cve.org/CVERecord?id=CVE-2026-40933) | 10 (v3.1) |  | 2 | 16 | DR-2026-059:self (vulnerability) |
-| [CVE-2026-50548](https://www.cve.org/CVERecord?id=CVE-2026-50548) | 9.3 (v4.0) |  | 2 | 16 | DR-2026-060:self (vulnerability) |
-| [CVE-2026-50549](https://www.cve.org/CVERecord?id=CVE-2026-50549) | 9.3 (v4.0) |  | 2 | 16 | DR-2026-060:self (vulnerability) |
+| [CVE-2026-50548](https://www.cve.org/CVERecord?id=CVE-2026-50548) | 9.3 (v4.0) |  | 1 | 16 | DR-2026-060:self (vulnerability) |
+| [CVE-2026-50549](https://www.cve.org/CVERecord?id=CVE-2026-50549) | 9.3 (v4.0) |  | 1 | 16 | DR-2026-060:self (vulnerability) |
 | [CVE-2026-25592](https://www.cve.org/CVERecord?id=CVE-2026-25592) | 10 (v3.1) |  | 1 | 8 | DR-2026-080:self (vulnerability) |
 | [CVE-2026-26030](https://www.cve.org/CVERecord?id=CVE-2026-26030) | 10 (v3.1) |  | 1 | 8 | DR-2026-080:self (vulnerability) |
 | [CVE-2025-32711](https://www.cve.org/CVERecord?id=CVE-2025-32711) | 9.3 (v3.1) |  | 1 | 8 | DR-2026-087:self (vulnerability) |
@@ -687,7 +687,7 @@ One row per identifier, derived from the relation vocabulary and the CNA CWE. **
 | [CVE-2026-43284](https://www.cve.org/CVERecord?id=CVE-2026-43284) | toolkit | DB-2026-018 | High |  | 8.8 (v3.1) | Linux/Linux |  | Linux/Linux: >= cac2661c53f35cbe651bef9b07026a5a05ab8ce0, < a6cb440f274a22456ef3e86b457344f1678f38f9; >= cac2661c53f35cbe651bef9b07026a5a05ab8ce0, < ab8b995323e5237041472d07e5055f5f7dcdf15b; >= cac2661c53f35cbe651bef9b07026a5a05ab8ce0, < fe785bb3a8096dffcc4048a85cd0c83337eeecad; >= cac2661c53f35cbe651bef9b07026a5a05ab8ce0, < 5d55c7336f8032d434adcc5fab987ccc93a44aec; >= cac2661c53f35cbe651bef9b07026a5a05ab8ce0, < 8253aab4659ca16116b522203c2a6b18dccacea7; >= cac2661c53f35cbe651bef9b07026a5a05ab8ce0, < 50ed1e7873100f77abad20fd31c51029bc49cd03; >= cac2661c53f35cbe651bef9b07026a5a05ab8ce0, < b54edf1e9a3fd3491bdcb82a21f8d21315271e0d; >= cac2661c53f35cbe651bef9b07026a5a05ab8ce0, < 71a1d9d985d26716f74d21f18ee8cac821b06e97; >= cac2661c53f35cbe651bef9b07026a5a05ab8ce0, < 52646cbd00e765a6db9c3afe9535f26218276034; >= cac2661c53f35cbe651bef9b07026a5a05ab8ce0, < f4c50a4034e62ab75f1d5cdd191dd5f9c77fdff4 \| Linux/Linux: 4.11 | Linux/Linux a6cb440f274a22456ef3e86b457344f1678f38f9; Linux/Linux ab8b995323e5237041472d07e5055f5f7dcdf15b; Linux/Linux fe785bb3a8096dffcc4048a85cd0c83337eeecad; Linux/Linux 5d55c7336f8032d434adcc5fab987ccc93a44aec; Linux/Linux 8253aab4659ca16116b522203c2a6b18dccacea7; Linux/Linux 50ed1e7873100f77abad20fd31c51029bc49cd03; Linux/Linux b54edf1e9a3fd3491bdcb82a21f8d21315271e0d; Linux/Linux 71a1d9d985d26716f74d21f18ee8cac821b06e97; Linux/Linux 52646cbd00e765a6db9c3afe9535f26218276034; Linux/Linux f4c50a4034e62ab75f1d5cdd191dd5f9c77fdff4; Linux/Linux 0; Linux/Linux 5.10.255; Linux/Linux 5.15.205; Linux/Linux 5.15.206; Linux/Linux 6.1.171; Linux/Linux 6.1.172; Linux/Linux 6.6.138; Linux/Linux 6.12.87; Linux/Linux 6.18.28; Linux/Linux 7.0.5; Linux/Linux 7.1 |
 | [CVE-2026-43503](https://www.cve.org/CVERecord?id=CVE-2026-43503) | toolkit | DB-2026-018 | High |  | 8.8 (v3.1) | Linux/Linux |  | Linux/Linux: >= cef401de7be8c4e155c6746bfccf721a4fa5fab9, < fbeab9555564a1b98e8582cd106dfe46c4606991; >= cef401de7be8c4e155c6746bfccf721a4fa5fab9, < 179f1852bdedc300e373e807cc102cd81feff196; >= cef401de7be8c4e155c6746bfccf721a4fa5fab9, < 12401fcfb01f53ccc63ab0a3246570fe8f3105ee; >= cef401de7be8c4e155c6746bfccf721a4fa5fab9, < 989214c66884d70716d83dc1d0bf5e16287bf349; >= cef401de7be8c4e155c6746bfccf721a4fa5fab9, < fc6eb39c55e97df2f94ad974b8a5bbcd019da2c8; >= cef401de7be8c4e155c6746bfccf721a4fa5fab9, < ff375cc75f9167168db38e0464a482d5fbc8d81d; >= cef401de7be8c4e155c6746bfccf721a4fa5fab9, < 9bc9d6d6967a2239aa57af2aa53554eddd640d20; >= cef401de7be8c4e155c6746bfccf721a4fa5fab9, < 48f6a5356a33dd78e7144ae1faef95ffc990aae0 \| Linux/Linux: 3.9 | Linux/Linux fbeab9555564a1b98e8582cd106dfe46c4606991; Linux/Linux 179f1852bdedc300e373e807cc102cd81feff196; Linux/Linux 12401fcfb01f53ccc63ab0a3246570fe8f3105ee; Linux/Linux 989214c66884d70716d83dc1d0bf5e16287bf349; Linux/Linux fc6eb39c55e97df2f94ad974b8a5bbcd019da2c8; Linux/Linux ff375cc75f9167168db38e0464a482d5fbc8d81d; Linux/Linux 9bc9d6d6967a2239aa57af2aa53554eddd640d20; Linux/Linux 48f6a5356a33dd78e7144ae1faef95ffc990aae0; Linux/Linux 0; Linux/Linux 5.10.257; Linux/Linux 5.15.208; Linux/Linux 6.1.174; Linux/Linux 6.6.141; Linux/Linux 6.12.91; Linux/Linux 6.18.33; Linux/Linux 7.0.10; Linux/Linux 7.1 |
 | [CVE-2026-43500](https://www.cve.org/CVERecord?id=CVE-2026-43500) | toolkit | DB-2026-018 | High |  | 7.8 (v3.1) | Linux/Linux |  | Linux/Linux: >= d0d5c0cd1e711c98703f3544c1e6fc1372898de5, < 7c504ffab3efce8f7e4f463b314ae31030bdf18b; >= d0d5c0cd1e711c98703f3544c1e6fc1372898de5, < 3711382a77342a9a1c3d2e7330dcfc7ea927f568; >= d0d5c0cd1e711c98703f3544c1e6fc1372898de5, < 3eae0f4f9f7206a4801efa5e0235c25bbd5a412c; >= d0d5c0cd1e711c98703f3544c1e6fc1372898de5, < d45179f8795222ce858770dc619abe51f9d24411; >= d0d5c0cd1e711c98703f3544c1e6fc1372898de5, < aa54b1d27fe0c2b78e664a34fd0fdf7cd1960d71 \| Linux/Linux: 5.3 | Linux/Linux 7c504ffab3efce8f7e4f463b314ae31030bdf18b; Linux/Linux 3711382a77342a9a1c3d2e7330dcfc7ea927f568; Linux/Linux 3eae0f4f9f7206a4801efa5e0235c25bbd5a412c; Linux/Linux d45179f8795222ce858770dc619abe51f9d24411; Linux/Linux aa54b1d27fe0c2b78e664a34fd0fdf7cd1960d71; Linux/Linux 0; Linux/Linux 6.6.140; Linux/Linux 6.12.88; Linux/Linux 6.18.29; Linux/Linux 7.0.6; Linux/Linux 7.1 |
-| [CVE-2026-12537](https://www.cve.org/CVERecord?id=CVE-2026-12537) | self (vulnerability) | DR-2026-056 | Low |  | 10 (v4.0) | Google Cloud/Gemini CLI; Google Cloud/run-gemini-cli GitHub Action |  | Google Cloud/Gemini CLI: < 0.39.1 \| Google Cloud/run-gemini-cli GitHub Action: < 0.1.22 | Google Cloud/Gemini CLI 0.39.1; Google Cloud/run-gemini-cli GitHub Action 0.1.22 |
+| [CVE-2026-12537](https://www.cve.org/CVERecord?id=CVE-2026-12537) | self (vulnerability) | DR-2026-056 | Negligible |  | 10 (v4.0) | Google Cloud/Gemini CLI; Google Cloud/run-gemini-cli GitHub Action |  | Google Cloud/Gemini CLI: < 0.39.1 \| Google Cloud/run-gemini-cli GitHub Action: < 0.1.22 | Google Cloud/Gemini CLI 0.39.1; Google Cloud/run-gemini-cli GitHub Action 0.1.22 |
 | [CVE-2026-25592](https://www.cve.org/CVERecord?id=CVE-2026-25592) | self (vulnerability) | DR-2026-080 | Negligible |  | 10 (v3.1) | microsoft/semantic-kernel |  | microsoft/semantic-kernel: < 1.71.0 | microsoft/semantic-kernel 1.71.0 |
 | [CVE-2026-26015](https://www.cve.org/CVERecord?id=CVE-2026-26015) | self (vulnerability) | DR-2026-059 | Low |  | 10 (v4.0) | arc53/DocsGPT |  | arc53/DocsGPT: >= 0.15.0, < 0.16.0 |  |
 | [CVE-2026-26030](https://www.cve.org/CVERecord?id=CVE-2026-26030) | self (vulnerability) | DR-2026-080 | Negligible |  | 10 (v3.1) | microsoft/semantic-kernel |  | microsoft/semantic-kernel: < 1.39.4 | microsoft/semantic-kernel 1.39.4 |
@@ -699,20 +699,20 @@ One row per identifier, derived from the relation vocabulary and the CNA CWE. **
 | [CVE-2026-30623](https://www.cve.org/CVERecord?id=CVE-2026-30623) | self (vulnerability) | DR-2026-059<br>DR-2026-080 | Low |  | 9.8 (v3.1) (CISA-ADP) | n/a/n/a |  | not structured in the CVE record |  |
 | [CVE-2026-30625](https://www.cve.org/CVERecord?id=CVE-2026-30625) | self (vulnerability) | DR-2026-059 | Low |  | 9.8 (v3.1) (CISA-ADP) | n/a/n/a |  | not structured in the CVE record |  |
 | [CVE-2025-32711](https://www.cve.org/CVERecord?id=CVE-2025-32711) | self (vulnerability) | DR-2026-087 | Negligible |  | 9.3 (v3.1) | Microsoft/Microsoft 365 Copilot |  | Microsoft/Microsoft 365 Copilot: - |  |
-| [CVE-2026-50548](https://www.cve.org/CVERecord?id=CVE-2026-50548) | self (vulnerability) | DR-2026-060 | Low |  | 9.3 (v4.0) | cursor/cursor |  | cursor/cursor: < 3.0 | cursor/cursor 3.0 |
-| [CVE-2026-50549](https://www.cve.org/CVERecord?id=CVE-2026-50549) | self (vulnerability) | DR-2026-060 | Low |  | 9.3 (v4.0) | cursor/cursor |  | cursor/cursor: < 3.0 | cursor/cursor 3.0 |
+| [CVE-2026-50548](https://www.cve.org/CVERecord?id=CVE-2026-50548) | self (vulnerability) | DR-2026-060 | Negligible |  | 9.3 (v4.0) | cursor/cursor |  | cursor/cursor: < 3.0 | cursor/cursor 3.0 |
+| [CVE-2026-50549](https://www.cve.org/CVERecord?id=CVE-2026-50549) | self (vulnerability) | DR-2026-060 | Negligible |  | 9.3 (v4.0) | cursor/cursor |  | cursor/cursor: < 3.0 | cursor/cursor 3.0 |
 | [CVE-2026-24301](https://www.cve.org/CVERecord?id=CVE-2026-24301) | self (vulnerability) | DR-2026-083 | Negligible |  | 8.8 (v3.1) | Microsoft/Copilot Web |  | Microsoft/Copilot Web: - |  |
 | [CVE-2026-25253](https://www.cve.org/CVERecord?id=CVE-2026-25253) | self (vulnerability) | DR-2026-039 | Medium |  | 8.8 (v3.1) | OpenClaw/OpenClaw |  | OpenClaw/OpenClaw: < 2026.1.29 | OpenClaw/OpenClaw 2026.1.29 |
 | [CVE-2026-54449](https://www.cve.org/CVERecord?id=CVE-2026-54449) | self (vulnerability) | DR-2026-059 | Low |  | 8.8 (v3.1) | langbot-app/LangBot |  | langbot-app/LangBot: <= 4.10.7 |  |
 | [CVE-2026-7482](https://www.cve.org/CVERecord?id=CVE-2026-7482) | self (vulnerability) | DR-2026-037 | Medium |  | 8.8 (v4.0) | ollama/ollama | GitHub | ollama/ollama: < 0.17.1 | ollama/ollama 0.17.1 |
-| [CVE-2025-59536](https://www.cve.org/CVERecord?id=CVE-2025-59536) | self (vulnerability) | DR-2026-062 | Low |  | 8.7 (v4.0) | anthropics/claude-code |  | anthropics/claude-code: < 1.0.111 | anthropics/claude-code 1.0.111 |
+| [CVE-2025-59536](https://www.cve.org/CVERecord?id=CVE-2025-59536) | self (vulnerability) | DR-2026-062 | Negligible |  | 8.7 (v4.0) | anthropics/claude-code |  | anthropics/claude-code: < 1.0.111 | anthropics/claude-code 1.0.111 |
 | [CVE-2026-30617](https://www.cve.org/CVERecord?id=CVE-2026-30617) | self (vulnerability) | DR-2026-059 | Low |  | 8.6 (v3.1) (CISA-ADP) | n/a/n/a |  | not structured in the CVE record |  |
 | [CVE-2026-30624](https://www.cve.org/CVERecord?id=CVE-2026-30624) | self (vulnerability) | DR-2026-059 | Low |  | 8.6 (v3.1) (CISA-ADP) | n/a/n/a |  | not structured in the CVE record |  |
 | [CVE-2026-48124](https://www.cve.org/CVERecord?id=CVE-2026-48124) | self (vulnerability) | DR-2026-089 | Negligible |  | 8.5 (v4.0) | cursor/cursor |  | cursor/cursor: < 3.0.0 | cursor/cursor 3.0.0 |
 | [CVE-2026-28472](https://www.cve.org/CVERecord?id=CVE-2026-28472) | self (vulnerability) | DR-2026-036<br>DR-2026-039 | Medium |  | 8.1 (v3.1) | OpenClaw/OpenClaw |  | OpenClaw/OpenClaw: < 2026.2.2 | OpenClaw/OpenClaw 2026.2.2 |
 | [CVE-2026-30615](https://www.cve.org/CVERecord?id=CVE-2026-30615) | self (vulnerability) | DR-2026-059 | Low |  | 8 (v3.1) (CISA-ADP) | n/a/n/a |  | not structured in the CVE record |  |
-| [CVE-2026-24887](https://www.cve.org/CVERecord?id=CVE-2026-24887) | self (vulnerability) | DR-2026-062 | Low |  | 7.7 (v4.0) | anthropics/claude-code |  | anthropics/claude-code: < 2.0.72 | anthropics/claude-code 2.0.72 |
-| [CVE-2026-39861](https://www.cve.org/CVERecord?id=CVE-2026-39861) | self (vulnerability) | DR-2026-062 | Low |  | 7.7 (v4.0) | anthropics/claude-code |  | anthropics/claude-code: < 2.1.64 | anthropics/claude-code 2.1.64 |
+| [CVE-2026-24887](https://www.cve.org/CVERecord?id=CVE-2026-24887) | self (vulnerability) | DR-2026-062 | Negligible |  | 7.7 (v4.0) | anthropics/claude-code |  | anthropics/claude-code: < 2.0.72 | anthropics/claude-code 2.0.72 |
+| [CVE-2026-39861](https://www.cve.org/CVERecord?id=CVE-2026-39861) | self (vulnerability) | DR-2026-062 | Negligible |  | 7.7 (v4.0) | anthropics/claude-code |  | anthropics/claude-code: < 2.1.64 | anthropics/claude-code 2.1.64 |
 | [CVE-2026-73217](https://www.cve.org/CVERecord?id=CVE-2026-73217) | self (vulnerability) | DR-2026-089 | Negligible |  | 7.7 (v4.0) | cursor/cursor |  | cursor/cursor: < 3.1.2 | cursor/cursor 3.1.2 |
 | [CVE-2026-73218](https://www.cve.org/CVERecord?id=CVE-2026-73218) | self (vulnerability) | DR-2026-089 | Negligible |  | 7.7 (v4.0) | cursor/cursor |  | cursor/cursor: < 3.0.0 | cursor/cursor 3.0.0 |
 | [CVE-2026-26144](https://www.cve.org/CVERecord?id=CVE-2026-26144) | self (vulnerability) | DR-2026-087 | Negligible |  | 7.5 (v3.1) | Microsoft/Microsoft 365 Apps for Enterprise |  | Microsoft/Microsoft 365 Apps for Enterprise: >= 16.0.1, < https://aka.ms/OfficeSecurityReleases | Microsoft/Microsoft 365 Apps for Enterprise https://aka.ms/OfficeSecurityReleases |
@@ -721,8 +721,8 @@ One row per identifier, derived from the relation vocabulary and the CNA CWE. **
 | [CVE-2026-6786](https://www.cve.org/CVERecord?id=CVE-2026-6786) | self (vulnerability) | DR-2026-095 | Negligible |  | 7.5 (v3.1) (CISA-ADP) | Mozilla/Firefox; Mozilla/Thunderbird |  | Mozilla/Firefox: versions not specified \| Mozilla/Thunderbird: versions not specified | Mozilla/Firefox 140.10; Mozilla/Firefox 150; Mozilla/Thunderbird 140.10; Mozilla/Thunderbird 150 |
 | [CVE-2026-30616](https://www.cve.org/CVERecord?id=CVE-2026-30616) | self (vulnerability) | DR-2026-059 | Low |  | 7.3 (v3.1) (CISA-ADP) | n/a/n/a |  | not structured in the CVE record |  |
 | [CVE-2026-42824](https://www.cve.org/CVERecord?id=CVE-2026-42824) | self (vulnerability) | DR-2026-081 | Negligible |  | 6.5 (v3.1) | Microsoft/Microsoft 365 Copilot |  | Microsoft/Microsoft 365 Copilot: - |  |
-| [CVE-2026-54316](https://www.cve.org/CVERecord?id=CVE-2026-54316) | self (vulnerability) | DR-2026-056<br>DR-2026-062 | Low |  | 6 (v4.0) | anthropics/claude-code |  | anthropics/claude-code: >= 0.2.54, < 2.1.163 |  |
-| [CVE-2026-21852](https://www.cve.org/CVERecord?id=CVE-2026-21852) | self (vulnerability) | DR-2026-062 | Low |  | 5.3 (v4.0) | anthropics/claude-code |  | anthropics/claude-code: < 2.0.65 | anthropics/claude-code 2.0.65 |
+| [CVE-2026-54316](https://www.cve.org/CVERecord?id=CVE-2026-54316) | self (vulnerability) | DR-2026-056<br>DR-2026-062 | Negligible |  | 6 (v4.0) | anthropics/claude-code |  | anthropics/claude-code: >= 0.2.54, < 2.1.163 |  |
+| [CVE-2026-21852](https://www.cve.org/CVERecord?id=CVE-2026-21852) | self (vulnerability) | DR-2026-062 | Negligible |  | 5.3 (v4.0) | anthropics/claude-code |  | anthropics/claude-code: < 2.0.65 | anthropics/claude-code 2.0.65 |
 
 ### remove — 5 CVEs and 48 malicious package releases (63 GHSA / MAL / PYSEC advisories, grouped by package; one row per advisory in the CSV)
 
@@ -1102,10 +1102,10 @@ Descriptive CVE statistics: the unit is the **CVE link**, not the incident, and 
 |---|---|---|---|---|---|---|---|
 | ai-exploited | 20 | 19 | 6 | 48 | 72 | 14 | 10 |
 | ai-written | 161 | 161 | 1 | 4 | 8 | 158 | 76 |
-| ai-stack-vulnerability | 35 | 34 | 13 | 24 | 132 | 24 | 20 |
+| ai-stack-vulnerability | 35 | 34 | 13 | 21 | 132 | 24 | 20 |
 | malicious-release | 4 | 3 | 3 | 32 | 40 | 4 | 1 |
 | ai-discovered | 52 | 51 | 8 | 9 | 64 | 28 | 20 |
-| related | 61 | 61 | 15 | 49 | 160 | 44 | 33 |
+| related | 61 | 61 | 15 | 48 | 160 | 44 | 33 |
 
 How to read the per-segment rows: **CVE links** = number of incident–CVE pairs in the segment whose CVE record carries this CWE (a CVE that occurs in two incidents counts twice); **Distinct CVEs** = the same without double-counting recurring CVEs; **Incidents** = distinct incidents among those links; **Share** = CVE links with this CWE ÷ links in the segment that carry any CNA CWE (the *Links with CNA CWE* column above); **IBSS obs / pot** = incident-based severity score over those incidents, each counted once (Negligible 1 · Low 2 · Medium 4 · High 8 · Critical 16, observed and potential separately) — for `related` and `ai-discovered` this attributes an incident's harm to the CWE of a *sibling* or *found* CVE, shown as context weight for comparison with the CWE thread (whose Rule 1 excludes those relations), not as the weakness's risk. Shares within a segment add up to more than 100 % because one CVE record can carry several CWEs. Example: `ai-exploited` / CWE-306 = 4 links (Langflow CVE-2026-33017 and CVE-2025-3248, marimo CVE-2026-39987 in two incidents), 3 distinct CVEs, 4 incidents, 4 ÷ 14 = 29 %. CWEs that the incident record assigns directly (`report.weaknesses`) are **not** counted here; they appear beside the CNA CWEs in the preceding per-incident table and feed the incident-level CWE ranking of the CWE thread.
 
@@ -1167,15 +1167,15 @@ Radar's `contribution` type says how the AI tool was involved in the flawed code
 | CWE | CVE links | Distinct CVEs | Incidents | IBSS obs | IBSS pot | Share |
 |---|---|---|---|---|---|---|
 | CWE-77 | 4 | 4 | 3 | 4 | 32 | 17% |
-| CWE-94 | 4 | 4 | 3 | 4 | 24 | 17% |
-| CWE-22 | 3 | 3 | 3 | 5 | 32 | 12% |
-| CWE-78 | 3 | 3 | 3 | 6 | 40 | 12% |
-| CWE-183 | 2 | 1 | 2 | 4 | 24 | 8% |
-| CWE-200 | 2 | 1 | 2 | 4 | 24 | 8% |
-| CWE-515 | 2 | 1 | 2 | 4 | 24 | 8% |
-| CWE-20 | 1 | 1 | 1 | 2 | 16 | 4% |
-| CWE-59 | 1 | 1 | 1 | 2 | 16 | 4% |
-| CWE-61 | 1 | 1 | 1 | 2 | 8 | 4% |
+| CWE-94 | 4 | 4 | 3 | 3 | 24 | 17% |
+| CWE-22 | 3 | 3 | 3 | 3 | 32 | 12% |
+| CWE-78 | 3 | 3 | 3 | 5 | 40 | 12% |
+| CWE-183 | 2 | 1 | 2 | 2 | 24 | 8% |
+| CWE-200 | 2 | 1 | 2 | 2 | 24 | 8% |
+| CWE-515 | 2 | 1 | 2 | 2 | 24 | 8% |
+| CWE-20 | 1 | 1 | 1 | 1 | 16 | 4% |
+| CWE-59 | 1 | 1 | 1 | 1 | 16 | 4% |
+| CWE-61 | 1 | 1 | 1 | 1 | 8 | 4% |
 | CWE-74 | 1 | 1 | 1 | 1 | 8 | 4% |
 | CWE-79 | 1 | 1 | 1 | 1 | 8 | 4% |
 
@@ -1206,17 +1206,17 @@ Radar's `contribution` type says how the AI tool was involved in the flawed code
 
 | CWE | CVE links | Distinct CVEs | Incidents | IBSS obs | IBSS pot | Share |
 |---|---|---|---|---|---|---|
-| CWE-78 | 9 | 9 | 3 | 8 | 32 | 20% |
-| CWE-22 | 4 | 4 | 3 | 12 | 40 | 9% |
+| CWE-78 | 9 | 9 | 3 | 7 | 32 | 20% |
+| CWE-22 | 4 | 4 | 3 | 11 | 40 | 9% |
 | CWE-306 | 4 | 4 | 3 | 14 | 40 | 9% |
-| CWE-20 | 3 | 3 | 1 | 2 | 8 | 7% |
-| CWE-77 | 3 | 3 | 2 | 4 | 24 | 7% |
-| CWE-59 | 2 | 2 | 1 | 2 | 8 | 4% |
+| CWE-20 | 3 | 3 | 1 | 1 | 8 | 7% |
+| CWE-77 | 3 | 3 | 2 | 3 | 24 | 7% |
+| CWE-59 | 2 | 2 | 1 | 1 | 8 | 4% |
 | CWE-89 | 2 | 2 | 1 | 2 | 16 | 4% |
 | CWE-122 | 2 | 2 | 2 | 3 | 24 | 4% |
-| CWE-200 | 2 | 2 | 2 | 10 | 24 | 4% |
+| CWE-200 | 2 | 2 | 2 | 9 | 24 | 4% |
 | CWE-269 | 2 | 2 | 2 | 10 | 32 | 4% |
-| CWE-285 | 2 | 2 | 2 | 4 | 24 | 4% |
+| CWE-285 | 2 | 2 | 2 | 3 | 24 | 4% |
 | CWE-416 | 2 | 2 | 2 | 3 | 24 | 4% |
 
 ## CNA-CWE IBSS via in-play CVEs — the CVE-path baseline for the CWE ranking
@@ -1227,27 +1227,25 @@ For every CNA-assigned CWE of an in-play CVE: the incidents it reaches through t
 |---|---|---|---|---|---|---|---|
 | CWE-306 | 6 | 9 | 38 | 72 | 1 | DR-2026-008, DR-2026-011, DR-2026-020, DR-2026-023, DR-2026-036, DR-2026-057 | ai-exploited, ai-written, ai-stack-vulnerability |
 | CWE-506 | 3 | 3 | 32 | 40 | 4 | DB-2026-001, DR-2026-010, DR-2026-022 | malicious-release |
-| CWE-94 | 5 | 14 | 16 | 48 | 2 | DR-2026-008, DR-2026-036, DR-2026-062, DR-2026-080, DR-2026-089 | ai-exploited, ai-written, ai-stack-vulnerability |
-| CWE-20 | 3 | 5 | 14 | 40 | 5 | DR-2026-008, DR-2026-036, DR-2026-056 | ai-exploited, ai-written, ai-stack-vulnerability |
+| CWE-94 | 5 | 14 | 15 | 48 | 2 | DR-2026-008, DR-2026-036, DR-2026-062, DR-2026-080, DR-2026-089 | ai-exploited, ai-written, ai-stack-vulnerability |
+| CWE-20 | 3 | 5 | 13 | 40 | 5 | DR-2026-008, DR-2026-036, DR-2026-056 | ai-exploited, ai-written, ai-stack-vulnerability |
 | CWE-290 | 2 | 2 | 12 | 24 | 9 | DR-2026-011, DR-2026-036 | ai-exploited, ai-written |
 | CWE-913 | 2 | 2 | 12 | 24 | 10 | DR-2026-008, DR-2026-036 | ai-exploited, ai-written |
 | CWE-918 | 2 | 24 | 12 | 24 | 11 | DB-2026-006, DR-2026-036 | ai-exploited, ai-written |
-| CWE-78 | 4 | 13 | 10 | 48 | 3 | DR-2026-036, DR-2026-057, DR-2026-059, DR-2026-062 | ai-written, ai-stack-vulnerability |
-| CWE-22 | 4 | 22 | 9 | 40 | 6 | DR-2026-036, DR-2026-060, DR-2026-062, DR-2026-080 | ai-written, ai-stack-vulnerability |
-| CWE-77 | 4 | 9 | 8 | 40 | 7 | DR-2026-036, DR-2026-059, DR-2026-081, DR-2026-083 | ai-written, ai-stack-vulnerability |
-| CWE-200 | 3 | 10 | 8 | 32 | 8 | DR-2026-036, DR-2026-056, DR-2026-062 | ai-written, ai-stack-vulnerability |
+| CWE-78 | 4 | 13 | 9 | 48 | 3 | DR-2026-036, DR-2026-057, DR-2026-059, DR-2026-062 | ai-written, ai-stack-vulnerability |
+| CWE-77 | 4 | 9 | 8 | 40 | 6 | DR-2026-036, DR-2026-059, DR-2026-081, DR-2026-083 | ai-written, ai-stack-vulnerability |
 | CWE-95 | 1 | 1 | 8 | 16 | 16 | DR-2026-008 | ai-exploited |
 | CWE-287 | 1 | 1 | 8 | 16 | 17 | DB-2026-006 | ai-exploited |
 | CWE-502 | 1 | 1 | 8 | 16 | 18 | DB-2026-006 | ai-exploited |
-| CWE-59 | 2 | 4 | 6 | 24 | 12 | DR-2026-036, DR-2026-060 | ai-written, ai-stack-vulnerability |
-| CWE-942 | 2 | 2 | 6 | 24 | 13 | DR-2026-036, DR-2026-057 | ai-written, ai-stack-vulnerability |
-| CWE-522 | 2 | 2 | 6 | 16 | 19 | DR-2026-036, DR-2026-062 | ai-written, ai-stack-vulnerability |
-| CWE-74 | 2 | 5 | 5 | 16 | 20 | DR-2026-036, DR-2026-087 | ai-written, ai-stack-vulnerability |
-| CWE-79 | 2 | 5 | 5 | 16 | 21 | DR-2026-036, DR-2026-087 | ai-written, ai-stack-vulnerability |
-| CWE-269 | 2 | 3 | 5 | 16 | 22 | DR-2026-036, DR-2026-089 | ai-written, ai-stack-vulnerability |
+| CWE-22 | 4 | 22 | 7 | 40 | 7 | DR-2026-036, DR-2026-060, DR-2026-062, DR-2026-080 | ai-written, ai-stack-vulnerability |
+| CWE-200 | 3 | 10 | 6 | 32 | 8 | DR-2026-036, DR-2026-056, DR-2026-062 | ai-written, ai-stack-vulnerability |
+| CWE-942 | 2 | 2 | 6 | 24 | 12 | DR-2026-036, DR-2026-057 | ai-written, ai-stack-vulnerability |
+| CWE-59 | 2 | 4 | 5 | 24 | 13 | DR-2026-036, DR-2026-060 | ai-written, ai-stack-vulnerability |
+| CWE-74 | 2 | 5 | 5 | 16 | 19 | DR-2026-036, DR-2026-087 | ai-written, ai-stack-vulnerability |
+| CWE-79 | 2 | 5 | 5 | 16 | 20 | DR-2026-036, DR-2026-087 | ai-written, ai-stack-vulnerability |
+| CWE-269 | 2 | 3 | 5 | 16 | 21 | DR-2026-036, DR-2026-089 | ai-written, ai-stack-vulnerability |
+| CWE-522 | 2 | 2 | 5 | 16 | 22 | DR-2026-036, DR-2026-062 | ai-written, ai-stack-vulnerability |
 | CWE-693 | 2 | 2 | 5 | 16 | 23 | DR-2026-036, DR-2026-089 | ai-written, ai-stack-vulnerability |
-| CWE-183 | 2 | 1 | 4 | 24 | 14 | DR-2026-056, DR-2026-062 | ai-stack-vulnerability |
-| CWE-515 | 2 | 1 | 4 | 24 | 15 | DR-2026-056, DR-2026-062 | ai-stack-vulnerability |
 | CWE-15 | 1 | 2 | 4 | 8 | 24 | DR-2026-036 | ai-written |
 | CWE-41 | 1 | 2 | 4 | 8 | 25 | DR-2026-036 | ai-written |
 | CWE-62 | 1 | 1 | 4 | 8 | 26 | DR-2026-036 | ai-written |
@@ -1309,7 +1307,9 @@ For every CNA-assigned CWE of an in-play CVE: the incidents it reaches through t
 | CWE-1321 | 1 | 2 | 4 | 8 | 82 | DR-2026-036 | ai-written |
 | CWE-1333 | 1 | 1 | 4 | 8 | 83 | DR-2026-036 | ai-written |
 | CWE-1336 | 1 | 1 | 4 | 8 | 84 | DR-2026-036 | ai-written |
-| CWE-61 | 1 | 1 | 2 | 8 | 85 | DR-2026-062 | ai-stack-vulnerability |
+| CWE-183 | 2 | 1 | 2 | 24 | 14 | DR-2026-056, DR-2026-062 | ai-stack-vulnerability |
+| CWE-515 | 2 | 1 | 2 | 24 | 15 | DR-2026-056, DR-2026-062 | ai-stack-vulnerability |
+| CWE-61 | 1 | 1 | 1 | 8 | 85 | DR-2026-062 | ai-stack-vulnerability |
 | CWE-829 | 1 | 1 | 1 | 8 | 86 | DR-2026-089 | ai-stack-vulnerability |
 
 ## Caveats

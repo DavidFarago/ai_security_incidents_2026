@@ -111,6 +111,14 @@ VERIS supports:
 
 Near-misses are particularly important in this report. A blocked prompt injection or a demonstrated authorization flaw may have negligible realized harm while still being highly security-relevant.
 
+**`Confirmed` requires an affected asset.** Use `Confirmed` or `Suspected` only when the `attribute` section records an effect on the victim's asset: `data_disclosure` Yes, Potentially or Unknown, or an integrity or availability variety. Everything else that meets the inclusion criterion is a `Near miss`, however high its potential severity:
+
+- a flaw demonstrated on the finder's own setup (own installation, test tenant or account);
+- a vulnerability disclosure without evidence of exploitation;
+- an attack stopped before it affected an asset.
+
+`scripts/validate_incidents.py` fails on a `Confirmed` or `Suspected` record without such an effect.
+
 ### 3.2 Confidentiality: compromise vs. exposure
 
 VERIS explicitly distinguishes actual disclosure from possible exposure with:
@@ -135,7 +143,7 @@ A vulnerability disclosure gets **its own incident record** only if at least one
 
 - **(a) KEV:** at least one validated CVE of the disclosure is listed in the CISA KEV catalog;
 - **(b) exploitation:** a primary source reports that the vulnerability was exploited;
-- **(c) realized harm:** the incident has status `Confirmed` and observed severity Low or higher.
+- **(c) realized harm:** the incident has status `Confirmed` (which requires an affected asset, §3.1) and observed severity Low or higher.
 
 Otherwise the disclosure goes into **one aggregate incident per class**. The aggregate's validated CVE layer holds the CVEs of its class, enumerated under §6.7. A ranking or score counts the aggregate once, so a flood of disclosures weighs as one incident, and the aggregate's potential severity still records what the class could cause.
 
@@ -558,13 +566,20 @@ Limited realized impact, such as small-scope low-sensitivity disclosure, quickly
 **Negligible**  
 Little or no realized security harm.
 
-Near-misses often have **Negligible Observed Severity** but **High or Critical Potential Severity**.
+Near-misses often have **Negligible Observed Severity** but **High or Critical Potential Severity**. A near miss compromised no asset of its victim, so rate it Negligible unless the rationale names another realized effect (for example, an AI agent escaping its test sandbox).
 
 ### 8.3 Examples
 
 **Blocked prompt injection**
 
 - VERIS status: Near miss
+- Observed Severity: Negligible
+- Potential Severity: High
+
+**Vulnerability demonstrated on the finder's own setup, disclosed and fixed**
+
+- VERIS status: Near miss
+- disclosure: No
 - Observed Severity: Negligible
 - Potential Severity: High
 
@@ -634,7 +649,7 @@ For each candidate event:
 
 1. **Establish inclusion.**
 2. **Collect primary evidence and references.**
-3. **Set event status:** Confirmed / Suspected / Near miss / False positive.
+3. **Set event status:** Confirmed / Suspected / Near miss / False positive; `Confirmed` and `Suspected` require an effect recorded in step 4 (§3.1).
 4. **Encode Actor, Action, Asset, Attribute.**
 5. **Encode realized consequences:** disclosure, record counts, credentials, integrity changes, downtime, affected assets, losses.
 6. **Identify candidate CVEs and CWE where supported.**
@@ -838,6 +853,7 @@ This keeps:
 
 - **Do not use CVSS as incident severity.**
 - **Do not treat exposure as confirmed disclosure.** Use VERIS `Potentially` where appropriate.
+- **Do not code a demonstrated flaw as `Confirmed`.** Without an affected asset it is a `Near miss` (§3.1).
 - **Do not rank by article count or media attention.**
 - **Do not present potential harm as realized harm.**
 - **Do not use unconstrained worst-case scenarios.**
@@ -958,3 +974,4 @@ This preserves standardization where a mature framework exists and makes the gen
 - **2026-09-25** — §3.3: rule for vulnerability disclosures (own record only with a KEV listing, a primary exploitation report or realized harm; otherwise one aggregate per class: AI-written, AI-stack, AI-discovered), the definition of IBSS-observed with realized harm, and its scope (all incidents). §6.7: a frozen sweep output counts as a curated corpus. §10.2: transcription rules for copied CVE metadata, per-field `overrides`, and the `cve_validation.metadata_corrections` log.
 - **2026-09-25 (b)** — §10.2: `credits` is a list of typed credits (`value`, `type`, `user` where present) instead of one joined string, so the credit role is kept; §6.7 names the discovery roles. Applied to the 2026 corpus (127 links); recorded in `cve_validation.credits_revision`.
 - **2026-09-26** — §4.2: finder vs. actor (the finder goes into `discovery_method`; the actor of an error is the party that made it; a deliberate demonstration has motive `Other`, not `NA`). §4.3: a `False positive` is coded `action.unknown`. Applied to the 2026 corpus, which fixes its 36 errors against the VCDB schema (29 actor codings, 5 missing actions, 1 misplaced `confidentiality.amount`, 1 invalid NAICS code); the verifier now passes.
+- **2026-09-26 (b)** — §3.1: `Confirmed` and `Suspected` require an effect in the VERIS `attribute` section; a demonstrated flaw, an unexploited disclosure or a stopped attack is a `Near miss`. The verifier checks it. §3.3 (c), §8.2, §8.3 (new example), §9.2 step 3 and §11 point to the rule. Applied to the 2026 corpus: 22 records `Confirmed` → `Near miss` (21 vulnerability disclosures and one stopped attack); 4 of them observed Low → Negligible under §8.2. The verifier's disclosure measurement, which sees only disclosures with a CVE, rises from 13 to 17; counting the disclosures without a CVE (DR-2026-065, 086, 090, 092), 21 fail §3.3 (a) and (c), up from 16.

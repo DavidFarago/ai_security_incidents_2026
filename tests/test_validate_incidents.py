@@ -49,7 +49,7 @@ class RealCorpus(unittest.TestCase):
     def test_disclosure_rule_measurement(self):
         self.assertEqual(
             sorted(self.r.measurements["disclosure_rule_fails"]),
-            ["DR-2026-%03d" % n for n in (79, 80, 81, 83, 84, 85, 87, 88, 89, 91, 93, 94, 95)],
+            ["DR-2026-%03d" % n for n in (56, 58, 60, 62, 79, 80, 81, 83, 84, 85, 87, 88, 89, 91, 93, 94, 95)],
         )
 
     def test_core_checks_pass(self):
@@ -209,6 +209,17 @@ class Mutations(unittest.TestCase):
         i = incident(self.d, "DB-2026-001")
         i["veris"]["actor"]["external"]["variety"] = ["Martian"]
         self.assertTrue(has(self.run_v(), "veris-schema", incident="DB-2026-001"))
+
+    def test_confirmed_without_effect(self):
+        # Methodology §3.1: Confirmed needs an affected asset; DB-2026-016 has only data_disclosure "Yes".
+        conf = incident(self.d, "DB-2026-016")["veris"]["attribute"]["confidentiality"]
+        self.assertEqual(conf["data_disclosure"], "Yes")
+        conf["data_disclosure"] = "No"
+        self.assertTrue(has(self.run_v(), "status-effect", incident="DB-2026-016"))
+
+    def test_unknown_disclosure_counts_as_effect(self):
+        incident(self.d, "DB-2026-016")["veris"]["attribute"]["confidentiality"]["data_disclosure"] = "Unknown"
+        self.assertFalse(has(self.run_v(), "status-effect", incident="DB-2026-016"))
 
     def test_core_checks_numbering_gap(self):
         self.d["incidents"].pop(5)
