@@ -34,5 +34,12 @@ class ReportsUpToDate(unittest.TestCase):
         self.assertEqual(self.md_text, BASE.with_suffix(".md").read_text(encoding="utf-8"))
 
 
+class VerisCategories(unittest.TestCase):
+    def test_block_without_variety_has_no_colon(self):
+        # VERIS actor.partner and action.unknown have no variety.
+        blocks = {"partner": {"motive": ["NA"]}, "internal": {"variety": ["Developer", "Other"]}}
+        self.assertEqual(bir.veris_categories(blocks), "partner; internal:Developer; Other")
+
+
 if __name__ == "__main__":
     unittest.main()

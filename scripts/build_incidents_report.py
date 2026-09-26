@@ -66,6 +66,11 @@ def joinlist(x):
     return "; ".join(x) if isinstance(x, list) else (x or "")
 
 
+def veris_categories(blocks):
+    # "category:variety; ..."; a block without variety (actor.partner, action.unknown) renders as its name alone
+    return "; ".join(f"{k}:{joinlist(val['variety'])}" if val.get("variety") else k for k, val in blocks.items())
+
+
 def shortdate(e):
     t = e["veris"]["timeline"]["incident"]
     y, m = t.get("year"), t.get("month")
@@ -175,8 +180,8 @@ def render_csv(d):
     w.writerow(CSV_COLS)
     for e in d["incidents"]:
         v, rep = e["veris"], e["report"]
-        actor = "; ".join(f"{k}:{joinlist(val.get('variety', []))}" for k, val in v.get("actor", {}).items())
-        action = "; ".join(f"{k}:{joinlist(val.get('variety', []))}" for k, val in v.get("action", {}).items())
+        actor = veris_categories(v.get("actor", {}))
+        action = veris_categories(v.get("action", {}))
         assets = "; ".join(a.get("variety", "") for a in v.get("asset", {}).get("assets", []))
         dd = v.get("attribute", {}).get("confidentiality", {}).get("data_disclosure", "")
         cve = "; ".join(x.get("cve", "") for x in rep.get("vulnerabilities", []) if x.get("cve"))

@@ -185,6 +185,12 @@ Identify who or what caused the event where possible:
 
 For accidental AI-agent behavior, the conventional actor taxonomy may not perfectly describe the proximate cause. Do not force an automated system into an inappropriate human-attacker category; use the closest valid VERIS representation and explain the AI-specific role separately.
 
+**Finder vs. actor.** The actor is whoever performed the action, not whoever found it. `Security researcher` is a value of `discovery_method`, not of `actor`.
+
+- A researcher, red team or AI system that **demonstrates** a flaw (a hacking action) is the actor: `external` `Unaffiliated` when outside the victim organization, `internal` `Other` when inside it (a vendor auditing its own product). Name the finder in the actor's `notes`.
+- For an **error**, the actor is the party that made the error: the victim's own administrator or developer (`internal`), or the vendor that ran the system (`partner`). The finder appears only in `discovery_method`.
+- Motive `NA` means an unintentional action. It fits errors; a deliberate demonstration gets `Other` unless a source states the motive.
+
 ### 4.3 Action
 
 Relevant VERIS action varieties include security concepts such as:
@@ -202,6 +208,8 @@ Relevant VERIS action varieties include security concepts such as:
 - misuse
 
 For accidental AI behavior, `action.error` may be more appropriate than forcing the incident into hacking.
+
+**False positives.** The VERIS schema requires an action, but a `False positive` (§3.1) has no security action. Code it as `action.unknown` with result `NA` and a note that says why.
 
 ### 4.4 Asset
 
@@ -949,3 +957,4 @@ This preserves standardization where a mature framework exists and makes the gen
 - **2026-09-24** — §4.1: `DR` redefined as *direct report* (no register source; found through a deep-research or a primary report); the prefix records the discovery channel, not source quality. §5 and §10.2 aligned with the JSON data model.
 - **2026-09-25** — §3.3: rule for vulnerability disclosures (own record only with a KEV listing, a primary exploitation report or realized harm; otherwise one aggregate per class: AI-written, AI-stack, AI-discovered), the definition of IBSS-observed with realized harm, and its scope (all incidents). §6.7: a frozen sweep output counts as a curated corpus. §10.2: transcription rules for copied CVE metadata, per-field `overrides`, and the `cve_validation.metadata_corrections` log.
 - **2026-09-25 (b)** — §10.2: `credits` is a list of typed credits (`value`, `type`, `user` where present) instead of one joined string, so the credit role is kept; §6.7 names the discovery roles. Applied to the 2026 corpus (127 links); recorded in `cve_validation.credits_revision`.
+- **2026-09-26** — §4.2: finder vs. actor (the finder goes into `discovery_method`; the actor of an error is the party that made it; a deliberate demonstration has motive `Other`, not `NA`). §4.3: a `False positive` is coded `action.unknown`. Applied to the 2026 corpus, which fixes its 36 errors against the VCDB schema (29 actor codings, 5 missing actions, 1 misplaced `confidentiality.amount`, 1 invalid NAICS code); the verifier now passes.

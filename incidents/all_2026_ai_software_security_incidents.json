@@ -7,7 +7,7 @@
     "url": "https://creativecommons.org/licenses/by-sa/4.0/",
     "note": "Adapts material from the VERIS Community Database (vz-risk/VCDB) and the AI Incident Database, both CC BY-SA 4.0; attribution and changes are listed in README.md, section License. The methodology is CC BY 4.0, the code MIT."
   },
-  "description": "Union of ai_software_security_incidents_2026.json (35 incidents) and merged_incidents_2026_VERIS_described.json (64 incidents). Incident contents are identical to the source files; only each incident's `sources` field is rewritten to cite the corrected ORIGINAL sources. CVE validation (2026-08-26): every incident additionally carries `validated_cve` (corrected list of CVE IDs) and `validated_cve_details` (per-CVE relation, CVE.org metadata, KEV status, removed IDs with reasons); see `cve_validation`. VERIS action.*.cve fields were aligned on 2026-08-27 to hold only validated `exploited` CVEs (previous values in `validated_cve_details.veris_cve_before`; see `cve_validation.veris_action_cve_alignment`). Incident IDs (see `id_scheme`): prefix DB (database) = at least one register source (AIID/VCDB), DR (direct report) = no register source, found through a deep-research or primary report; the number is the position in the 2026-08-27 priority ranking and is frozen.",
+  "description": "Consolidated on 2026-08-26 via LLM inference from `incidents/sources`, with each incident's `sources` field rewritten to cite the corrected ORIGINAL sources. Since then this JSON is the maintained, authoritative record: it is corrected in place, and git history records every change. CVE validation (2026-08-26): every incident additionally carries `validated_cve` (corrected list of CVE IDs) and `validated_cve_details` (per-CVE relation, CVE.org metadata, KEV status, removed IDs with reasons); see `cve_validation`. VERIS action.*.cve fields were aligned on 2026-08-27 to hold only validated `exploited` CVEs (previous values in `validated_cve_details.veris_cve_before`; see `cve_validation.veris_action_cve_alignment`). Incident IDs (see `id_scheme`): prefix DB (database) = at least one register source (AIID/VCDB), DR (direct report) = no register source, found through a deep-research or primary report; the number is the position in the 2026-08-27 priority ranking and is frozen.",
   "methodology_ref": "VERIS_Methodology_for_AI_Security_Incidents_concise.md",
   "source_corrections": {
     "ChatGPT_deep-research-report": "ChatGPT_DeepResearch_ai_incidents_2026.md",
@@ -1582,10 +1582,10 @@
         "actor": {
           "external": {
             "variety": [
-              "Security researcher"
+              "Unaffiliated"
             ],
             "motive": [
-              "NA"
+              "Other"
             ],
             "country": [
               "Unknown"
@@ -1596,7 +1596,7 @@
             "name": [
               "CodeWall"
             ],
-            "notes": "Autonomous AI agent selected and attacked the target citing McKinsey's public responsible-disclosure policy; authorisation status not stated in reporting."
+            "notes": "Security firm CodeWall demonstrating its autonomous offensive agent (research preview). The agent selected and attacked the target citing McKinsey's public responsible-disclosure policy; authorisation status not stated in reporting."
           }
         },
         "action": {
@@ -4242,19 +4242,21 @@
         "reference": "https://www.thehindu.com/news/national/cbse-says-onmark-portal-vulnerabilities-contained-amid-security-concerns/article71044420.ece; https://incidentdatabase.ai/cite/1507",
         "summary": "Ethical hacker Nisarga Adhikary reported that India's CBSE On-Screen Marking platform 'OnMark' (vendor COEMPT Eduteck) had multiple vulnerabilities: after a first report on 25 Feb 2026, 6-7 flaws stayed live, and on 30 May he reached the Principals' dashboard exposing 9.3 million rows of sensitive student data and answer-sheet images, with 2026 answer sheets/question papers in unauthenticated AWS buckets. He also alleged COEMPT quality-assurance scripts sent students' personal data to Google Gemini for processing without consent. CBSE said the vulnerabilities were contained. A data-exposure incident with an AI data-processing/data-sovereignty dimension.",
         "actor": {
-          "external": {
-            "variety": [
-              "Security researcher"
-            ],
-            "motive": [
-              "NA"
+          "partner": {
+            "name": [
+              "COEMPT Eduteck"
             ],
             "country": [
               "IN"
             ],
             "region": [
               "142034"
-            ]
+            ],
+            "motive": [
+              "NA",
+              "Unknown"
+            ],
+            "notes": "COEMPT Eduteck, CBSE's vendor, developed the OnMark platform. Motive NA for the misconfiguration (error); Unknown for sending student data to Google Gemini (misuse), since no source states why. Sources disagree on who configured the AWS buckets: The Hindu names the vendor, the researcher's blog says 'CBSE people'. The researcher (Nisarga Adhikary) is recorded in discovery_method."
           }
         },
         "action": {
@@ -4402,19 +4404,14 @@
         "reference": "https://www.malwarebytes.com/blog/news/2026/02/ai-chat-app-leak-exposes-300-million-messages-tied-to-25-million-users; https://github.com/vz-risk/VCDB/issues/23041",
         "summary": "A researcher ('Harry') found that Chat & Ask AI — a popular AI-chat wrapper app by Codeway that fronts ChatGPT, Claude and Gemini (50M+ installs) — had a Firebase misconfiguration (Security Rules left public) exposing ~300 million messages from 25M+ users, including entire chat histories, model used, settings, and data from other Codeway apps. Some messages discussed illegal activity or requested suicide assistance. Codeway fixed it within hours of disclosure; no evidence of malicious third-party access reported.",
         "actor": {
-          "external": {
+          "internal": {
             "variety": [
-              "Security researcher"
+              "System admin"
             ],
             "motive": [
               "NA"
             ],
-            "country": [
-              "Unknown"
-            ],
-            "region": [
-              "000000"
-            ]
+            "notes": "Codeway misconfigured its own Firebase backend and fixed it within hours of disclosure (Malwarebytes). The researcher who found it is recorded in discovery_method."
           }
         },
         "action": {
@@ -7531,19 +7528,14 @@
         "reference": "https://www.techradar.com/pro/security/over-9-million-facial-recognition-images-leaked-in-major-breach-at-reverse-image-search-and-identity-verification-service; https://github.com/vz-risk/VCDB/issues/24221",
         "summary": "ClarityCheck, a reverse phone/email/image lookup and identity-verification service, left a 450GB database of 9,042,977 facial-recognition images, profile pictures and photos (of adults, teenagers and children) publicly accessible due to misconfiguration. Researcher Jeremiah Fowler found and reported it; the company secured it. No evidence of unauthorized access or dark-web distribution reported. A facial-recognition/biometric AI service data exposure.",
         "actor": {
-          "external": {
+          "internal": {
             "variety": [
-              "Security researcher"
+              "System admin"
             ],
             "motive": [
               "NA"
             ],
-            "country": [
-              "US"
-            ],
-            "region": [
-              "019021"
-            ]
+            "notes": "ClarityCheck left its own image store unprotected and restricted it after the disclosure notice. The researcher (Jeremiah Fowler) is recorded in discovery_method."
           }
         },
         "action": {
@@ -7850,19 +7842,14 @@
         "reference": "https://vibesecradar.com/cves; https://www.securityweek.com/vibe-coded-apps-riddled-with-exploitable-security-flaws/",
         "summary": "An aggregate wave rather than one breach: mass scans of vibe-coded apps found thousands of exploitable flaws (Escape: 2,000+ high-impact vulns, 400+ exposed secrets across 5,600 apps; a wider scan of ~380,000 apps found ~5,000 leaking sensitive data), with named cases like Lovable (BOLA exposing source, Supabase creds, AI chat histories) and Base44. Georgia Tech's Vibe Security Radar catalogues only vulnerabilities explicitly attributed to a named AI coding tool (Claude, Copilot, Cursor, ChatGPT, Devin) — ~189 visible 2026 monthly entries by August — a deliberate lower bound. Recurring causes: missing/disabled RLS, hardcoded creds, broken auth.",
         "actor": {
-          "external": {
+          "internal": {
             "variety": [
-              "Security researcher"
+              "Developer"
             ],
             "motive": [
               "NA"
             ],
-            "country": [
-              "Unknown"
-            ],
-            "region": [
-              "000000"
-            ]
+            "notes": "Developers of the many affected projects, who shipped AI-written code with the flaws. The researchers who scanned the apps are recorded in discovery_method."
           }
         },
         "action": {
@@ -12183,19 +12170,14 @@
         "reference": "https://www.securitymagazine.com/articles/102188-37m-records-exposed-many-belonging-to-sears-home-services; https://cybernews.com/ai-news/ai-chatbot-data-leak-sears/",
         "summary": "Jeremiah Fowler found three unsecured databases behind Sears Home Services' AI support systems (the 'Samantha' chatbot and 'KAIros' scheduling), exposing ~3.7M records (2024–2026): 2.1M+ scheduling text files, 1.4M call-audio recordings, 54,000+ chat logs, plus customer PII. Disclosed to Transformco; access restricted the next day.",
         "actor": {
-          "external": {
+          "internal": {
             "variety": [
-              "Security researcher"
+              "System admin"
             ],
             "motive": [
               "NA"
             ],
-            "country": [
-              "Unknown"
-            ],
-            "region": [
-              "000000"
-            ]
+            "notes": "Databases behind Sears Home Services' AI support systems; Transformco, the owner, secured them after the disclosure notice, and the reporting names no vendor. The researcher (Jeremiah Fowler) is recorded in discovery_method."
           }
         },
         "action": {
@@ -15041,17 +15023,18 @@
         "actor": {
           "external": {
             "variety": [
-              "Security researcher"
+              "Unaffiliated"
             ],
             "motive": [
-              "NA"
+              "Other"
             ],
             "country": [
               "Unknown"
             ],
             "region": [
               "000000"
-            ]
+            ],
+            "notes": "Security researchers (Aonan Guan with Johns Hopkins University; Novee Security at Black Hat USA 2026) demonstrating the flaws; coordinated disclosure, vendors patched."
           }
         },
         "action": {
@@ -15509,17 +15492,18 @@
         "actor": {
           "external": {
             "variety": [
-              "Security researcher"
+              "Unaffiliated"
             ],
             "motive": [
-              "NA"
+              "Other"
             ],
             "country": [
               "Unknown"
             ],
             "region": [
               "000000"
-            ]
+            ],
+            "notes": "Anthropic, whose Claude Mythos Preview model found the vulnerabilities in Project Glasswing (~50 partners); findings reported to maintainers."
           }
         },
         "action": {
@@ -15959,17 +15943,18 @@
         "actor": {
           "external": {
             "variety": [
-              "Security researcher"
+              "Unaffiliated"
             ],
             "motive": [
-              "NA"
+              "Other"
             ],
             "country": [
               "Unknown"
             ],
             "region": [
               "000000"
-            ]
+            ],
+            "notes": "Security firm OX Security demonstrating the flaw; disclosed to Anthropic, which called the behaviour expected."
           }
         },
         "action": {
@@ -16409,17 +16394,18 @@
         "actor": {
           "external": {
             "variety": [
-              "Security researcher"
+              "Unaffiliated"
             ],
             "motive": [
-              "NA"
+              "Other"
             ],
             "country": [
               "Unknown"
             ],
             "region": [
               "000000"
-            ]
+            ],
+            "notes": "Security researchers of Cato AI Labs demonstrating the flaws; coordinated disclosure, fixed in Cursor 3.0."
           }
         },
         "action": {
@@ -16631,6 +16617,7 @@
               "variety": "U - Other"
             }
           ],
+          "total_amount": 7000,
           "cloud": [
             "External Cloud Asset(s)"
           ],
@@ -16657,7 +16644,6 @@
             "data_victim": [
               "Customer"
             ],
-            "amount": 7000,
             "notes": "data_disclosure=Potentially: ~7,000 units were reachable (camera/mic/maps) but only the researcher accessed them; no evidence of malicious viewing."
           }
         },
@@ -16749,17 +16735,18 @@
         "actor": {
           "external": {
             "variety": [
-              "Security researcher"
+              "Unaffiliated"
             ],
             "motive": [
-              "NA"
+              "Other"
             ],
             "country": [
               "Unknown"
             ],
             "region": [
               "000000"
-            ]
+            ],
+            "notes": "Security researchers (Check Point and others) demonstrating the flaws; coordinated disclosure, all patched."
           }
         },
         "action": {
@@ -17256,17 +17243,18 @@
         "actor": {
           "external": {
             "variety": [
-              "Security researcher"
+              "Unaffiliated"
             ],
             "motive": [
-              "NA"
+              "Other"
             ],
             "country": [
               "Unknown"
             ],
             "region": [
               "000000"
-            ]
+            ],
+            "notes": "Wiz's autonomous Red Agent in an authorized bug-bounty test; Snowflake patched the same day."
           }
         },
         "action": {
@@ -17560,17 +17548,18 @@
         "actor": {
           "external": {
             "variety": [
-              "Security researcher"
+              "Unaffiliated"
             ],
             "motive": [
-              "NA"
+              "Other"
             ],
             "country": [
               "Unknown"
             ],
             "region": [
               "000000"
-            ]
+            ],
+            "notes": "Security researcher RyotaK (GMO Flatt Security) demonstrating the flaw; coordinated disclosure, fixed in v1.0.94."
           }
         },
         "action": {
@@ -17760,7 +17749,7 @@
             "US"
           ],
           "employee_count": "Unknown",
-          "industry": "999999",
+          "industry": "000",
           "government": [
             "NA"
           ]
@@ -18838,6 +18827,14 @@
             ]
           }
         },
+        "action": {
+          "unknown": {
+            "notes": "False positive: no security action (outside the methodology §3 criterion)",
+            "result": [
+              "NA"
+            ]
+          }
+        },
         "asset": {
           "assets": [
             {
@@ -19485,17 +19482,18 @@
         "actor": {
           "external": {
             "variety": [
-              "Security researcher"
+              "Unaffiliated"
             ],
             "motive": [
-              "NA"
+              "Other"
             ],
             "country": [
               "Unknown"
             ],
             "region": [
               "000000"
-            ]
+            ],
+            "notes": "XBOW's autonomous offensive-security agent; flaws reported to Microsoft and fixed."
           }
         },
         "action": {
@@ -19686,17 +19684,18 @@
         "actor": {
           "external": {
             "variety": [
-              "Security researcher"
+              "Unaffiliated"
             ],
             "motive": [
-              "NA"
+              "Other"
             ],
             "country": [
               "Unknown"
             ],
             "region": [
               "000000"
-            ]
+            ],
+            "notes": "Microsoft security researchers and others mapping prompt-to-shell paths across agent frameworks; coordinated disclosure, vendors issued fixes."
           }
         },
         "action": {
@@ -19922,17 +19921,18 @@
         "actor": {
           "external": {
             "variety": [
-              "Security researcher"
+              "Unaffiliated"
             ],
             "motive": [
-              "NA"
+              "Other"
             ],
             "country": [
               "Unknown"
             ],
             "region": [
               "000000"
-            ]
+            ],
+            "notes": "Security firm Varonis demonstrating the flaw; coordinated disclosure, Microsoft patched."
           }
         },
         "action": {
@@ -20239,17 +20239,18 @@
         "actor": {
           "external": {
             "variety": [
-              "Security researcher"
+              "Unaffiliated"
             ],
             "motive": [
-              "NA"
+              "Other"
             ],
             "country": [
               "Unknown"
             ],
             "region": [
               "000000"
-            ]
+            ],
+            "notes": "Security firm Varonis demonstrating the flaw; coordinated disclosure, Microsoft patched."
           }
         },
         "action": {
@@ -20389,17 +20390,18 @@
         "actor": {
           "external": {
             "variety": [
-              "Security researcher"
+              "Unaffiliated"
             ],
             "motive": [
-              "NA"
+              "Other"
             ],
             "country": [
               "Unknown"
             ],
             "region": [
               "000000"
-            ]
+            ],
+            "notes": "XBOW's autonomous vulnerability research; coordinated remediation."
           }
         },
         "action": {
@@ -20551,17 +20553,18 @@
         "actor": {
           "external": {
             "variety": [
-              "Security researcher"
+              "Unaffiliated"
             ],
             "motive": [
-              "NA"
+              "Other"
             ],
             "country": [
               "Unknown"
             ],
             "region": [
               "000000"
-            ]
+            ],
+            "notes": "Google Mandiant's Agentic Vulnerability Discovery Harness (defensive research, including a live incident-response case); CVEs assigned."
           }
         },
         "action": {
@@ -20926,17 +20929,18 @@
         "actor": {
           "external": {
             "variety": [
-              "Security researcher"
+              "Unaffiliated"
             ],
             "motive": [
-              "NA"
+              "Other"
             ],
             "country": [
               "Unknown"
             ],
             "region": [
               "000000"
-            ]
+            ],
+            "notes": "Security researchers (Miggo, Check Point and others) demonstrating the flaws; coordinated disclosures, vendors fixed."
           }
         },
         "action": {
@@ -21054,17 +21058,18 @@
         "actor": {
           "external": {
             "variety": [
-              "Security researcher"
+              "Unaffiliated"
             ],
             "motive": [
-              "NA"
+              "Other"
             ],
             "country": [
               "Unknown"
             ],
             "region": [
               "000000"
-            ]
+            ],
+            "notes": "Security researchers demonstrating the flaws; Microsoft fixed them server-side."
           }
         },
         "action": {
@@ -21231,17 +21236,18 @@
         "actor": {
           "external": {
             "variety": [
-              "Security researcher"
+              "Unaffiliated"
             ],
             "motive": [
-              "NA"
+              "Other"
             ],
             "country": [
               "Unknown"
             ],
             "region": [
               "000000"
-            ]
+            ],
+            "notes": "Defensive AI discoverers (OpenAI Aardvark/Codex Security, Wiz, Google Big Sleep/CodeMender); findings disclosed and fixed."
           }
         },
         "action": {
@@ -21823,17 +21829,18 @@
         "actor": {
           "external": {
             "variety": [
-              "Security researcher"
+              "Unaffiliated"
             ],
             "motive": [
-              "NA"
+              "Other"
             ],
             "country": [
               "Unknown"
             ],
             "region": [
               "000000"
-            ]
+            ],
+            "notes": "Security firm Pillar Security demonstrating the flaws; vendors fixed or rated them."
           }
         },
         "action": {
@@ -22025,17 +22032,18 @@
         "actor": {
           "external": {
             "variety": [
-              "Security researcher"
+              "Unaffiliated"
             ],
             "motive": [
-              "NA"
+              "Other"
             ],
             "country": [
               "Unknown"
             ],
             "region": [
               "000000"
-            ]
+            ],
+            "notes": "Security firm Varonis demonstrating the flaw; coordinated disclosure to Atlassian."
           }
         },
         "action": {
@@ -22147,17 +22155,18 @@
         "actor": {
           "external": {
             "variety": [
-              "Security researcher"
+              "Unaffiliated"
             ],
             "motive": [
-              "NA"
+              "Other"
             ],
             "country": [
               "Unknown"
             ],
             "region": [
               "000000"
-            ]
+            ],
+            "notes": "OpenAI, whose GPT-5.6-Cyber model found the flaws; disclosed to Google, which patched."
           }
         },
         "action": {
@@ -22311,17 +22320,18 @@
         "actor": {
           "external": {
             "variety": [
-              "Security researcher"
+              "Unaffiliated"
             ],
             "motive": [
-              "NA"
+              "Other"
             ],
             "country": [
               "Unknown"
             ],
             "region": [
               "000000"
-            ]
+            ],
+            "notes": "Security firm Varonis demonstrating the flaw; Microsoft shipped a server-side fix."
           }
         },
         "action": {
@@ -22435,19 +22445,14 @@
         "reference": "https://cloud.google.com/blog/topics/threat-intelligence/",
         "summary": "Google reported that AI-assisted Chrome bug hunting found more security issues in a short window than many prior update cycles combined, including long-standing defects (in line with Big Sleep/CodeMender-style efforts). Defensive AI-driven discovery in a mature, hardened codebase; findings were fixed, no attacker compromise reported.",
         "actor": {
-          "external": {
+          "internal": {
             "variety": [
-              "Security researcher"
+              "Other"
             ],
             "motive": [
-              "NA"
+              "Other"
             ],
-            "country": [
-              "Unknown"
-            ],
-            "region": [
-              "000000"
-            ]
+            "notes": "Google's own AI-assisted Chrome bug hunting; the actor is the victim organization itself; findings fixed."
           }
         },
         "action": {
@@ -22591,17 +22596,18 @@
         "actor": {
           "external": {
             "variety": [
-              "Security researcher"
+              "Unaffiliated"
             ],
             "motive": [
-              "NA"
+              "Other"
             ],
             "country": [
               "Unknown"
             ],
             "region": [
               "000000"
-            ]
+            ],
+            "notes": "Anthropic, in collaboration with Mozilla, using Claude Opus 4.6; fixes shipped in Firefox 148."
           }
         },
         "action": {
@@ -23320,19 +23326,14 @@
         "reference": "https://blog.mozilla.org/en/firefox/privacy-security/ai-security-zero-day-vulnerabilities/",
         "summary": "Mozilla reported that Firefox 150 included fixes for 271 vulnerabilities found during an initial Claude Mythos Preview evaluation (271 is the announced Mythos-attributed subset, not all fixes that month; individual severities varied and no campaign-wide exploitation was reported). Defensive AI discovery at large scale.",
         "actor": {
-          "external": {
+          "internal": {
             "variety": [
-              "Security researcher"
+              "Other"
             ],
             "motive": [
-              "NA"
+              "Other"
             ],
-            "country": [
-              "Unknown"
-            ],
-            "region": [
-              "000000"
-            ]
+            "notes": "Mozilla's own team applying an early Claude Mythos Preview to Firefox, in collaboration with Anthropic ('we had the opportunity to apply an early version of Claude Mythos Preview to Firefox', Mozilla blog); fixes shipped in Firefox 150."
           }
         },
         "action": {
@@ -23369,9 +23370,9 @@
           }
         },
         "discovery_method": {
-          "external": {
+          "internal": {
             "variety": [
-              "Security researcher"
+              "It review"
             ]
           }
         },
@@ -23595,6 +23596,14 @@
             ]
           }
         },
+        "action": {
+          "unknown": {
+            "notes": "False positive: no security action (outside the methodology §3 criterion)",
+            "result": [
+              "NA"
+            ]
+          }
+        },
         "asset": {
           "assets": [
             {
@@ -23698,6 +23707,14 @@
               "Other"
             ],
             "motive": [
+              "NA"
+            ]
+          }
+        },
+        "action": {
+          "unknown": {
+            "notes": "False positive: no security action (outside the methodology §3 criterion)",
+            "result": [
               "NA"
             ]
           }
@@ -23809,6 +23826,14 @@
             ]
           }
         },
+        "action": {
+          "unknown": {
+            "notes": "False positive: no security action (outside the methodology §3 criterion)",
+            "result": [
+              "NA"
+            ]
+          }
+        },
         "asset": {
           "assets": [
             {
@@ -23912,6 +23937,14 @@
               "Other"
             ],
             "motive": [
+              "NA"
+            ]
+          }
+        },
+        "action": {
+          "unknown": {
+            "notes": "False positive: no security action (outside the methodology §3 criterion)",
+            "result": [
               "NA"
             ]
           }

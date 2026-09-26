@@ -42,10 +42,9 @@ class RealCorpus(unittest.TestCase):
         a = [f for f in self.r.errors if f.cls == "A"]
         self.assertEqual(a, [], "\n".join(map(str, a[:20])))
 
-    def test_class_b_errors_are_only_veris_schema(self):
-        # The 36 VERIS schema errors are known (judgment, fixed separately); every other Class B check passes.
-        other = [f for f in self.r.errors if f.cls == "B" and f.check != "veris-schema"]
-        self.assertEqual(other, [], "\n".join(map(str, other[:20])))
+    def test_no_errors(self):
+        # The gate is green: no error of either class, including veris-schema.
+        self.assertEqual(self.r.errors, [], "\n".join(map(str, self.r.errors[:20])))
 
     def test_disclosure_rule_measurement(self):
         self.assertEqual(
