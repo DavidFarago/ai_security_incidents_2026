@@ -360,13 +360,6 @@ def check_counts(d, r):
     eq("cve_validation.cves_removed", sorted(cv.get("cves_removed") or []), sorted({x["cve"] for det in dets for x in det.get("removed") or []}))
     eq("cve_validation.incidents_with_non_cve_identifiers_only", cv.get("incidents_with_non_cve_identifiers_only"),
        sum(1 for i, det in zip(inc, dets) if not i.get("validated_cve") and det.get("non_cve_identifiers")))
-    rel = Counter(c["relation"] for _, c in lc.cve_links(d))
-    got = (cv.get("relation_revision") or {}).get("counts") or {}
-    eq("cve_validation.relation_revision.counts", got, {k: rel[k] for k in got})
-    changes = {(x["id"], x["field"]): (x.get("before"), x.get("after")) for x in (cv.get("veris_action_cve_alignment") or {}).get("changes") or []}
-    marked = {(i["id"], det["veris_cve_field"]): (det.get("veris_cve_before"), det.get("veris_cve_after"))
-              for i, det in zip(inc, dets) if det.get("veris_cve_field")}
-    eq("cve_validation.veris_action_cve_alignment.changes", changes, marked)
 
 
 def check_veris_schema(d, up, r):

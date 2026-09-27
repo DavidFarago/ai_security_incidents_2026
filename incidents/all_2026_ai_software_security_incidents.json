@@ -7,16 +7,8 @@
     "url": "https://creativecommons.org/licenses/by-sa/4.0/",
     "note": "Adapts material from the VERIS Community Database (vz-risk/VCDB) and the AI Incident Database, both CC BY-SA 4.0; attribution and changes are listed in README.md, section License. The methodology is CC BY 4.0, the code MIT."
   },
-  "description": "Consolidated on 2026-08-26 via LLM inference from `incidents/sources`, with each incident's `sources` field rewritten to cite the corrected ORIGINAL sources. Since then this JSON is the maintained, authoritative record: it is corrected in place, and git history records every change. CVE validation (2026-08-26): every incident additionally carries `validated_cve` (corrected list of CVE IDs) and `validated_cve_details` (per-CVE relation, CVE.org metadata, KEV status, removed IDs with reasons); see `cve_validation`. VERIS action.*.cve fields were aligned on 2026-08-27 to hold only validated `exploited` CVEs (previous values in `validated_cve_details.veris_cve_before`; see `cve_validation.veris_action_cve_alignment`). Incident IDs (see `id_scheme`): prefix DB (database) = at least one register source (AIID/VCDB), DR (direct report) = no register source, found through a deep-research or primary report; the number is the position in the 2026-08-27 priority ranking and is frozen.",
+  "description": "Consolidated on 2026-08-26 via LLM inference from `incidents/sources`, with each incident's `sources` field rewritten to cite the corrected ORIGINAL sources. Since then this JSON is the maintained, authoritative record: it is corrected in place, and git history records every change. CVE validation (2026-08-26): every incident additionally carries `validated_cve` (corrected list of CVE IDs) and `validated_cve_details` (per-CVE relation, CVE.org metadata, KEV status, removed IDs with reasons); see `cve_validation`. VERIS action.*.cve fields hold exactly the validated `exploited` CVEs. Incident IDs (see `id_scheme`): prefix DB (database) = at least one register source (AIID/VCDB), DR (direct report) = no register source, found through a deep-research or primary report; the number is the position in the 2026-08-27 priority ranking and is frozen.",
   "methodology_ref": "VERIS_Methodology_for_AI_Security_Incidents_concise.md",
-  "source_corrections": {
-    "ChatGPT_deep-research-report": "ChatGPT_DeepResearch_ai_incidents_2026.md",
-    "CC_ai-incidents-2026": "ClaudeCode_DeepResearch_ai_incidents_2026.md",
-    "grok-ai-software-security-incidents-2026": "Grok_DeepResearch_ai_incidents_2026.md",
-    "AIID (cite pages / MIT side of CC_MIT_VCDB)": "incidentdatabase.ai_20260824_ai_incidents_2026.xlsx",
-    "VCDB (issues + records / VCDB side of CC_MIT_VCDB)": "vz-risk/VCDB",
-    "note": "CC_MIT_VCDB_2026_security_incidents was a derived register comparison, not an original source: its 5 MIT incidents are cited to the AIID export and its 10 VCDB incidents to their exact vz-risk/VCDB encoded records under data/json/validated|submitted."
-  },
   "sources_catalog": {
     "ChatGPT_DeepResearch_ai_incidents_2026.md": {
       "kind": "ChatGPT deep-research report",
@@ -2566,10 +2558,7 @@
             "record_url": "https://www.cve.org/CVERecord?id=CVE-2026-66018"
           }
         ],
-        "note": "All eight IDs exist (JFrog CNA, published 2026-07-27, fixed 7.161.15) and are the exact OpenAI-credited set; a ninth batch CVE, CVE-2026-65922 (Oligo Security), is not OpenAI's and is excluded. OpenAI, Hugging Face and JFrog have declined to say which CVEs the agents exploited (BleepingComputer/THN), so no ID is marked 'exploited'. The HDF5-loader / Jinja2 template-injection vectors at Hugging Face received no CVE. Data-quality note: the original veris.action.hacking.cve field held three IDs in one string.",
-        "veris_cve_field": "action.hacking.cve",
-        "veris_cve_before": "CVE-2026-65921; CVE-2026-66014; CVE-2026-65617",
-        "veris_cve_after": null
+        "note": "All eight IDs exist (JFrog CNA, published 2026-07-27, fixed 7.161.15) and are the exact OpenAI-credited set; a ninth batch CVE, CVE-2026-65922 (Oligo Security), is not OpenAI's and is excluded. OpenAI, Hugging Face and JFrog have declined to say which CVEs the agents exploited (BleepingComputer/THN), so no ID is marked 'exploited'. The HDF5-loader / Jinja2 template-injection vectors at Hugging Face received no CVE."
       }
     },
     {
@@ -3062,10 +3051,7 @@
             "record_url": "https://www.cve.org/CVERecord?id=CVE-2025-68613"
           }
         ],
-        "note": "The THN article the record cites names only CVE-2026-9198 and CVE-2026-33017 (no n8n CVE); the n8n IDs come from the underlying Unit 42 report. Six Langflow CVEs are on CISA KEV as of 2026-08-26.",
-        "veris_cve_field": "action.hacking.cve",
-        "veris_cve_before": "CVE-2026-33017",
-        "veris_cve_after": "CVE-2026-33017; CVE-2026-9198"
+        "note": "The THN article the record cites names only CVE-2026-9198 and CVE-2026-33017 (no n8n CVE); the n8n IDs come from the underlying Unit 42 report. Six Langflow CVEs are on CISA KEV as of 2026-08-26."
       }
     },
     {
@@ -3890,10 +3876,7 @@
             "note": "cache-manager 7.2.10"
           }
         ],
-        "note": "No CVE assigned to CHAINDROP as of 2026-08-26. Tracked only as GitHub malware advisories without CVE: GHSA-3p9h-f68w-m6fx (keyv 6.0.0), GHSA-jpjx-r3gh-v5pf (cacheable 2.5.1) and per-package @keyv/*, cacheable-request, flat-cache, file-entry-cache, cache-manager advisories (all 2026-08-04). Note: the cited safedep.io/malicious-npm-packages-claude-code-hooks/ page describes a different (13 May 2026 typosquat) campaign; SafeDep's CHAINDROP write-up is safedep.io/keyv-npm-supply-chain-compromise/.",
-        "veris_cve_field": "action.malware.cve",
-        "veris_cve_before": "CVE-2026-45321",
-        "veris_cve_after": null
+        "note": "No CVE assigned to CHAINDROP as of 2026-08-26. Tracked only as GitHub malware advisories without CVE: GHSA-3p9h-f68w-m6fx (keyv 6.0.0), GHSA-jpjx-r3gh-v5pf (cacheable 2.5.1) and per-package @keyv/*, cacheable-request, flat-cache, file-entry-cache, cache-manager advisories (all 2026-08-04). Note: the cited safedep.io/malicious-npm-packages-claude-code-hooks/ page describes a different (13 May 2026 typosquat) campaign; SafeDep's CHAINDROP write-up is safedep.io/keyv-npm-supply-chain-compromise/."
       }
     },
     {
@@ -12145,10 +12128,7 @@
             "note": "= CVE-2026-5757"
           }
         ],
-        "note": "The 175k/300k exposed-server counts are misconfiguration (no auth), not a CVE. Other 2026 Ollama CVEs (CVE-2026-42248/42249 Windows updater, CVE-2026-7020 path traversal) are unrelated to this incident.",
-        "veris_cve_field": "action.hacking.cve",
-        "veris_cve_before": "CVE-2026-7482",
-        "veris_cve_after": null
+        "note": "The 175k/300k exposed-server counts are misconfiguration (no auth), not a CVE. Other 2026 Ollama CVEs (CVE-2026-42248/42249 Windows updater, CVE-2026-7020 path traversal) are unrelated to this incident."
       }
     },
     {
@@ -12532,10 +12512,7 @@
             "record_url": "https://www.cve.org/CVERecord?id=CVE-2026-28472"
           }
         ],
-        "note": "The 40,000+/42,665 exposed instances are a misconfiguration finding without CVE. OpenClaw accrued 264 CVE-bearing advisories Feb-Mar 2026 alone; only those tied to the same release/disclosure wave are listed. ClawJacked (Oasis, Feb 25) has no confirmed CVE.",
-        "veris_cve_field": "action.hacking.cve",
-        "veris_cve_before": "CVE-2026-25253",
-        "veris_cve_after": null
+        "note": "The 40,000+/42,665 exposed instances are a misconfiguration finding without CVE. OpenClaw accrued 264 CVE-bearing advisories Feb-Mar 2026 alone; only those tied to the same release/disclosure wave are listed. ClawJacked (Oasis, Feb 25) has no confirmed CVE."
       }
     },
     {
@@ -12828,7 +12805,7 @@
         "incident_id": "DR-2026-042",
         "security_incident": "Confirmed",
         "confidence": "Medium",
-        "reference": "grok-ai-software-security-incidents-2026.md; related: https://www.anthropic.com/news/investigating-incidents-cybersecurity-evals",
+        "reference": "Grok_DeepResearch_ai_incidents_2026.md; related: https://www.anthropic.com/news/investigating-incidents-cybersecurity-evals",
         "summary": "Per the grok report, a Meta model reached and compromised an external firm through the same third-party evaluator (Irregular) misconfiguration that left evaluation environments internet-connected (the issue that also affected Anthropic's models). A non-human proximate actor (an eval model) acting against a real organisation due to a partner sandbox failure; details are thinner than the Anthropic disclosure.",
         "actor": {
           "external": {
@@ -15465,10 +15442,7 @@
             "record_url": "https://www.cve.org/CVERecord?id=CVE-2026-49468"
           }
         ],
-        "note": "The Grok source names no Langroid/LiteLLM IDs; the related entries are the analyst's identification of the highest-severity 2026 CVEs in those products. No LiteLLM CVE in 2026 is rated 10.0, so 'maximum-severity' is not literally supported for LiteLLM. No article pairs RufRoot with Langroid/LiteLLM; the link is thematic/temporal.",
-        "veris_cve_field": "action.hacking.cve",
-        "veris_cve_before": "CVE-2026-59726",
-        "veris_cve_after": null
+        "note": "The Grok source names no Langroid/LiteLLM IDs; the related entries are the analyst's identification of the highest-severity 2026 CVEs in those products. No LiteLLM CVE in 2026 is rated 10.0, so 'maximum-severity' is not literally supported for LiteLLM. No article pairs RufRoot with Langroid/LiteLLM; the link is thematic/temporal."
       }
     },
     {
@@ -20526,10 +20500,7 @@
             "note": "= CVE-2026-45185"
           }
         ],
-        "note": "Confirmed via the Exim advisory (reporter federic.kirschbaum@xbow.com; reported 2026-05-01, public 2026-05-12) and XBOW's blog; no companion CVE. The record's URL exim.org/static/doc/security/CVE-2026-45185.txt returns 404 - the advisory is at exim.org/static/doc/security/EXIM-Security-2026-05-01.1/EXIM-Security-2026-05-01.1.txt.",
-        "veris_cve_field": "action.hacking.cve",
-        "veris_cve_before": "CVE-2026-45185",
-        "veris_cve_after": null
+        "note": "Confirmed via the Exim advisory (reporter federic.kirschbaum@xbow.com; reported 2026-05-01, public 2026-05-12) and XBOW's blog; no companion CVE. The record's URL exim.org/static/doc/security/CVE-2026-45185.txt returns 404 - the advisory is at exim.org/static/doc/security/EXIM-Security-2026-05-01.1/EXIM-Security-2026-05-01.1.txt."
       }
     },
     {
@@ -21802,10 +21773,7 @@
             "record_url": "https://www.cve.org/CVERecord?id=CVE-2026-76021"
           }
         ],
-        "note": "The record's 'OpenSSH, GnuTLS, libssh, PHP, Chromium' list conflates reported findings with assigned CVEs: no OpenSSH, libssh or PHP CVE is credited to OpenAI; the March list is GnuPG/GnuTLS/Gogs/Thorium (14, two dual-reported), and the Chromium credits began in June 2026. Google Big Sleep/CodeMender fixes are otherwise credited only as 'Reported by Google'.",
-        "veris_cve_field": "action.hacking.cve",
-        "veris_cve_before": "CVE-2026-3854",
-        "veris_cve_after": null
+        "note": "The record's 'OpenSSH, GnuTLS, libssh, PHP, Chromium' list conflates reported findings with assigned CVEs: no OpenSSH, libssh or PHP CVE is credited to OpenAI; the March list is GnuPG/GnuTLS/Gogs/Thorium (14, two dual-reported), and the Chromium credits began in June 2026. Google Big Sleep/CodeMender fixes are otherwise credited only as 'Reported by Google'."
       }
     },
     {
@@ -22005,10 +21973,7 @@
             "record_url": "https://www.cve.org/CVERecord?id=CVE-2026-73217"
           }
         ],
-        "note": "Codex CLI 'GitPwned' (fixed v0.95.0; OpenAI-confirmed CVSS 8.6) has no CVE/GHSA; both Antigravity bypasses have no CVE (Google: 'other valid security vulnerabilities'); Cursor's git-dir/fsmonitor finding (patched 3.0.0) had a CVE pending as of 2026-08-26.",
-        "veris_cve_field": "action.hacking.cve",
-        "veris_cve_before": "CVE-2026-48124",
-        "veris_cve_after": null
+        "note": "Codex CLI 'GitPwned' (fixed v0.95.0; OpenAI-confirmed CVSS 8.6) has no CVE/GHSA; both Antigravity bypasses have no CVE (Google: 'other valid security vulnerabilities'); Cursor's git-dir/fsmonitor finding (patched 3.0.0) had a CVE pending as of 2026-08-26."
       }
     },
     {
@@ -22290,10 +22255,7 @@
             "note": "= CVE-2026-15903"
           }
         ],
-        "note": "Other 2026 Chrome V8 CVEs credited to OpenAI Codex Security exist (e.g. CVE-2026-9973, CVE-2026-14431, CVE-2026-19162) but no source ties any of them to this chain, so they are not added.",
-        "veris_cve_field": "action.hacking.cve",
-        "veris_cve_before": "CVE-2026-15903",
-        "veris_cve_after": null
+        "note": "Other 2026 Chrome V8 CVEs credited to OpenAI Codex Security exist (e.g. CVE-2026-9973, CVE-2026-14431, CVE-2026-19162) but no source ties any of them to this chain, so they are not added."
       }
     },
     {
@@ -24324,364 +24286,6 @@
       "CVE-2026-9366",
       "CVE-2026-9806"
     ],
-    "incidents_with_non_cve_identifiers_only": 6,
-    "veris_action_cve_alignment": {
-      "aligned_on": "2026-08-27",
-      "rule": "veris.action.hacking.cve / action.malware.cve hold only validated CVEs with relation 'exploited' (VERIS: 'CVE(s) exploited through hacking / by this malware'). Each block lists the CVEs exploited through that action: hacking.cve for CVEs exploited by the operator or agent, malware.cve only for CVEs the malware itself exploited; a CVE appears in both only when exploited by both actions. Previous values kept in validated_cve_details.veris_cve_before",
-      "changes": [
-        {
-          "id": "DB-2026-006",
-          "field": "action.hacking.cve",
-          "before": "CVE-2026-65921; CVE-2026-66014; CVE-2026-65617",
-          "after": null
-        },
-        {
-          "id": "DR-2026-008",
-          "field": "action.hacking.cve",
-          "before": "CVE-2026-33017",
-          "after": "CVE-2026-33017; CVE-2026-9198"
-        },
-        {
-          "id": "DR-2026-012",
-          "field": "action.malware.cve",
-          "before": "CVE-2026-45321",
-          "after": null
-        },
-        {
-          "id": "DR-2026-037",
-          "field": "action.hacking.cve",
-          "before": "CVE-2026-7482",
-          "after": null
-        },
-        {
-          "id": "DR-2026-039",
-          "field": "action.hacking.cve",
-          "before": "CVE-2026-25253",
-          "after": null
-        },
-        {
-          "id": "DR-2026-057",
-          "field": "action.hacking.cve",
-          "before": "CVE-2026-59726",
-          "after": null
-        },
-        {
-          "id": "DR-2026-084",
-          "field": "action.hacking.cve",
-          "before": "CVE-2026-45185",
-          "after": null
-        },
-        {
-          "id": "DR-2026-088",
-          "field": "action.hacking.cve",
-          "before": "CVE-2026-3854",
-          "after": null
-        },
-        {
-          "id": "DR-2026-089",
-          "field": "action.hacking.cve",
-          "before": "CVE-2026-48124",
-          "after": null
-        },
-        {
-          "id": "DR-2026-091",
-          "field": "action.hacking.cve",
-          "before": "CVE-2026-15903",
-          "after": null
-        }
-      ]
-    },
-    "relation_revision": {
-      "revised_on": "2026-08-29",
-      "change": "relation value 'primary' split into 'self-vulnerability' (the incident is the disclosure of a flaw in legitimate software) and 'self-malicious-release' (the incident is the publication/execution of a package or extension version that is malware by design). 'self' = the incident is about this identifier itself; no exploitation of a flaw by an attacker in this incident is asserted. Neither value is written to VERIS action.*.cve.",
-      "criterion": "self-malicious-release where the CNA-assigned CWE is CWE-506 (Embedded Malicious Code) or the advisory type is malware; all other former 'primary' links are self-vulnerability.",
-      "counts": {
-        "self-malicious-release": 4,
-        "self-vulnerability": 196
-      },
-      "self_malicious_release_links": [
-        {
-          "incident": "DB-2026-001",
-          "cve": "CVE-2026-33634"
-        },
-        {
-          "incident": "DR-2026-010",
-          "cve": "CVE-2026-28353"
-        },
-        {
-          "incident": "DR-2026-010",
-          "cve": "CVE-2026-33634"
-        },
-        {
-          "incident": "DR-2026-022",
-          "cve": "CVE-2026-45321"
-        }
-      ],
-      "relevance_order": "exploited > self-malicious-release > exploited-unconfirmed > attempted > toolkit > self-vulnerability > discovered > related",
-      "reason": "'primary' collided with NVD's Primary/Secondary (NVD- vs CNA-assessed metrics) and read as 'the main CVE'; it also conflated disclosures with realized supply-chain compromises whose countermeasure is removal, not patching."
-    },
-    "metadata_corrections": [
-      {
-        "corrected_on": "2026-09-25",
-        "method": "Re-derived from the records cached under vulnerabilities/upstream/ with the rules of methodology §10.2 ('Copied CVE metadata'), as implemented in scripts/validate_incidents.py; applied by script, not by hand.",
-        "changes": [
-          {
-            "cve": "CVE-2026-55803",
-            "field": "credits",
-            "incidents": [
-              "DR-2026-085"
-            ],
-            "reason": "restored the full value; the transcription had cut it at 300 characters"
-          },
-          {
-            "cve": "CVE-2026-55804",
-            "field": "credits",
-            "incidents": [
-              "DR-2026-085"
-            ],
-            "reason": "restored the full value; the transcription had cut it at 300 characters"
-          },
-          {
-            "cve": "CVE-2025-32988",
-            "field": "product",
-            "incidents": [
-              "DR-2026-088"
-            ],
-            "reason": "restored the full value; the transcription had cut it at 200 characters"
-          },
-          {
-            "cve": "CVE-2025-32989",
-            "field": "product",
-            "incidents": [
-              "DR-2026-088"
-            ],
-            "reason": "restored the full value; the transcription had cut it at 200 characters"
-          },
-          {
-            "cve": "CVE-2025-32990",
-            "field": "product",
-            "incidents": [
-              "DR-2026-088"
-            ],
-            "reason": "restored the full value; the transcription had cut it at 200 characters"
-          },
-          {
-            "cve": "CVE-2026-45321",
-            "field": "product",
-            "incidents": [
-              "DR-2026-022"
-            ],
-            "reason": "restored the full value; the transcription had cut it at 200 characters"
-          },
-          {
-            "cve": "CVE-2017-7269",
-            "field": "title",
-            "incidents": [
-              "DB-2026-018"
-            ],
-            "reason": "was empty (no CNA title); filled from: KEV vulnerabilityName"
-          },
-          {
-            "cve": "CVE-2021-3156",
-            "field": "title",
-            "incidents": [
-              "DB-2026-018"
-            ],
-            "reason": "was empty (no CNA title); filled from: KEV vulnerabilityName"
-          },
-          {
-            "cve": "CVE-2021-4034",
-            "field": "title",
-            "incidents": [
-              "DB-2026-018"
-            ],
-            "reason": "was empty (no CNA title); filled from: KEV vulnerabilityName"
-          },
-          {
-            "cve": "CVE-2025-65720",
-            "field": "title",
-            "incidents": [
-              "DR-2026-059",
-              "DR-2026-080"
-            ],
-            "reason": "was empty (no CNA title); filled from: CNA description, first sentence"
-          },
-          {
-            "cve": "CVE-2025-70040",
-            "field": "title",
-            "incidents": [
-              "DR-2026-036"
-            ],
-            "reason": "was empty (no CNA title); filled from: CNA description, first sentence"
-          },
-          {
-            "cve": "CVE-2026-14431",
-            "field": "title",
-            "incidents": [
-              "DR-2026-088"
-            ],
-            "reason": "was empty (no CNA title); filled from: CNA description, first sentence"
-          },
-          {
-            "cve": "CVE-2026-15903",
-            "field": "title",
-            "incidents": [
-              "DR-2026-088",
-              "DR-2026-091"
-            ],
-            "reason": "was empty (no CNA title); filled from: CNA description, first sentence"
-          },
-          {
-            "cve": "CVE-2026-17658",
-            "field": "title",
-            "incidents": [
-              "DR-2026-088"
-            ],
-            "reason": "was empty (no CNA title); filled from: CNA description, first sentence"
-          },
-          {
-            "cve": "CVE-2026-19162",
-            "field": "title",
-            "incidents": [
-              "DR-2026-088"
-            ],
-            "reason": "was empty (no CNA title); filled from: CNA description, first sentence"
-          },
-          {
-            "cve": "CVE-2026-24881",
-            "field": "title",
-            "incidents": [
-              "DR-2026-088"
-            ],
-            "reason": "was empty (no CNA title); filled from: CNA description, first sentence"
-          },
-          {
-            "cve": "CVE-2026-24882",
-            "field": "title",
-            "incidents": [
-              "DR-2026-088"
-            ],
-            "reason": "was empty (no CNA title); filled from: CNA description, first sentence"
-          },
-          {
-            "cve": "CVE-2026-25253",
-            "field": "title",
-            "incidents": [
-              "DR-2026-039"
-            ],
-            "reason": "was empty (no CNA title); filled from: GitHub reviewed advisory summary"
-          },
-          {
-            "cve": "CVE-2026-30615",
-            "field": "title",
-            "incidents": [
-              "DR-2026-059"
-            ],
-            "reason": "was empty (no CNA title); filled from: CNA description, first sentence"
-          },
-          {
-            "cve": "CVE-2026-30616",
-            "field": "title",
-            "incidents": [
-              "DR-2026-059"
-            ],
-            "reason": "was empty (no CNA title); filled from: CNA description, first sentence"
-          },
-          {
-            "cve": "CVE-2026-30617",
-            "field": "title",
-            "incidents": [
-              "DR-2026-059"
-            ],
-            "reason": "was empty (no CNA title); filled from: CNA description, first sentence"
-          },
-          {
-            "cve": "CVE-2026-30618",
-            "field": "title",
-            "incidents": [
-              "DR-2026-059"
-            ],
-            "reason": "was empty (no CNA title); filled from: CNA description, first sentence"
-          },
-          {
-            "cve": "CVE-2026-30623",
-            "field": "title",
-            "incidents": [
-              "DR-2026-059",
-              "DR-2026-080"
-            ],
-            "reason": "was empty (no CNA title); filled from: CNA description, first sentence"
-          },
-          {
-            "cve": "CVE-2026-30624",
-            "field": "title",
-            "incidents": [
-              "DR-2026-059"
-            ],
-            "reason": "was empty (no CNA title); filled from: CNA description, first sentence"
-          },
-          {
-            "cve": "CVE-2026-30625",
-            "field": "title",
-            "incidents": [
-              "DR-2026-059"
-            ],
-            "reason": "was empty (no CNA title); filled from: GitHub reviewed advisory summary"
-          },
-          {
-            "cve": "CVE-2026-30635",
-            "field": "title",
-            "incidents": [
-              "DR-2026-036"
-            ],
-            "reason": "was empty (no CNA title); filled from: GitHub reviewed advisory summary"
-          },
-          {
-            "cve": "CVE-2026-45185",
-            "field": "title",
-            "incidents": [
-              "DR-2026-084"
-            ],
-            "reason": "was empty (no CNA title); filled from: CNA description, first sentence"
-          },
-          {
-            "cve": "CVE-2026-76021",
-            "field": "title",
-            "incidents": [
-              "DR-2026-088",
-              "DR-2026-093"
-            ],
-            "reason": "was empty (no CNA title); filled from: CNA description, first sentence"
-          },
-          {
-            "cve": "CVE-2026-76045",
-            "field": "title",
-            "incidents": [
-              "DR-2026-088"
-            ],
-            "reason": "was empty (no CNA title); filled from: CNA description, first sentence"
-          }
-        ]
-      }
-    ],
-    "credits_revision": {
-      "revised_on": "2026-09-25",
-      "change": "validated_cve_details.cves[].credits changed from one string (all CNA credit values joined with '; ') to a list of {value, type} objects, so the credit role is kept. Derived reports filter by role; the data keeps every credit.",
-      "rule": "Every entry of containers.cna.credits[] of the cached CVE record, in record order, duplicates kept (one person in two roles = two entries); value and type are kept, and user (the CVE User Registry UUID) wherever the record has one (none does as of 2026-09-25); lang is dropped (all 'en'); type is null where the record gives none (the CVE schema defines no default). Values are verbatim, including encoding errors of the CNA. See methodology §10.2.",
-      "counts": {
-        "links": 127,
-        "distinct_cves": 125,
-        "credits_by_type": {
-          "reporter": 51,
-          "(none)": 43,
-          "coordinator": 39,
-          "finder": 35,
-          "remediation developer": 15,
-          "analyst": 3,
-          "tool": 1,
-          "remediation reviewer": 1
-        }
-      }
-    }
+    "incidents_with_non_cve_identifiers_only": 6
   }
 }

@@ -375,7 +375,7 @@ Two rules therefore apply.
 
 **Rule 1 — validate every CVE ID before citing it.** Resolve the ID against the CVE.org record (`https://cveawg.mitre.org/api/cve/<ID>`; NVD as a secondary source). Only IDs in state `PUBLISHED` are cited. IDs that do not exist, are `REJECTED` by their CNA, or are still `RESERVED` are not used (a RESERVED ID may be noted as pending). Check that the record's product and description match the incident: an ID copied from a secondary source may belong to a different incident. In the 2026 corpus, 4 of the 46 originally cited IDs failed this check (one non-existent, two rejected, one belonging to another incident).
 
-*Scope of Rule 1 — two layers, kept for every incident.* CVE information is recorded in two layers. The **as-cited layer** (`report.vulnerabilities`, prose in `title` / `summary` / `reference`) holds the IDs exactly as the sources give them and is never edited, so source errors stay visible. The **validated layer** (`validated_cve`, `validated_cve_details`) is produced by applying Rules 1 and 2 to the as-cited IDs plus a search for omitted ones, and is the canonical list. The VERIS fields `action.hacking.cve` / `action.malware.cve` are **derived** from the validated layer: together they hold exactly the incident's CVEs with relation `exploited` (Rule 2), no more and no fewer; the value they held before alignment is kept in `validated_cve_details.veris_cve_before`. Each block lists the CVEs exploited through that action: `action.hacking.cve` for CVEs exploited by the operator or agent (the usual case, including the entry vector of a later ransomware deployment), `action.malware.cve` only for CVEs the malware itself exploited (e.g. a worm's propagation exploit). A CVE appears in both blocks only when it was exploited by both actions.
+*Scope of Rule 1 — two layers, kept for every incident.* CVE information is recorded in two layers. The **as-cited layer** (`report.vulnerabilities`, prose in `title` / `summary` / `reference`) holds the IDs exactly as the sources give them and is never edited, so source errors stay visible. The **validated layer** (`validated_cve`, `validated_cve_details`) is produced by applying Rules 1 and 2 to the as-cited IDs plus a search for omitted ones, and is the canonical list. The VERIS fields `action.hacking.cve` / `action.malware.cve` are **derived** from the validated layer: together they hold exactly the incident's CVEs with relation `exploited` (Rule 2), no more and no fewer. Each block lists the CVEs exploited through that action: `action.hacking.cve` for CVEs exploited by the operator or agent (the usual case, including the entry vector of a later ransomware deployment), `action.malware.cve` only for CVEs the malware itself exploited (e.g. a worm's propagation exploit). A CVE appears in both blocks only when it was exploited by both actions.
 
 **Rule 2 — record how each CVE relates to the incident.** Every validated CVE carries one `relation` value:
 
@@ -795,9 +795,6 @@ validated_cve_details:
     - id: "GHSA-xxxx-xxxx-xxxx"
       kind: "GHSA (malware)"
       note: "..."
-  veris_cve_field: "action.hacking.cve"     # present only where the VERIS field was changed by alignment
-  veris_cve_before: "CVE-2026-...; CVE-2026-..."
-  veris_cve_after: null
   note: "..."
 ```
 
@@ -810,7 +807,7 @@ Where the CVE information lives in the 2026 corpus files:
 |---|---|---|---|
 | as cited (never edited) | `report.vulnerabilities[].cve`; free text in `title`, `veris.summary`, `veris.reference`; `ranking_table[].cve_cwe` | `cve` column | title text; `· CVE:` on the VERIS line |
 | validated (canonical) | `validated_cve`; `validated_cve_details`; `ranking_table[].validated_cve`; top-level `cve_validation` | `validated_cve` column | `**Validated CVEs:**` line per entry |
-| VERIS (derived) | `veris.action.hacking.cve` / `veris.action.malware.cve` = validated CVEs with relation `exploited` only; prior value in `validated_cve_details.veris_cve_before` | — | — |
+| VERIS (derived) | `veris.action.hacking.cve` / `veris.action.malware.cve` = validated CVEs with relation `exploited` only | — | — |
 
 The as-cited fields are retained unchanged for provenance; the validated fields are canonical; the VERIS action fields are derived from them. Only CVEs were validated: the CWE fields (`report.weaknesses`, `cwe`, the CWE part of `cve_cwe`) are as cited.
 
@@ -827,17 +824,9 @@ The as-cited fields are retained unchanged for provenance; the validated fields 
 | `cisa_kev`, `kev_date_added` | listed in the cached CISA KEV catalog; its `dateAdded` |
 | `record_url` | `https://www.cve.org/CVERecord?id=<CVE>` |
 
-A difference that is correct on purpose is recorded on the `cves[]` entry as `overrides: {"<field>": "<reason>"}`; the verifier prints every override on every run. When copied metadata is corrected, the change is logged in the top-level `cve_validation.metadata_corrections` list, one entry per correction run:
+A difference that is correct on purpose is recorded on the `cves[]` entry as `overrides: {"<field>": "<reason>"}`; the verifier prints every override on every run.
 
-```yaml
-metadata_corrections:
-  - corrected_on: "2026-09-25"
-    method: "re-derived from vulnerabilities/upstream/ by scripts/validate_incidents.py rules"
-    changes:
-      - cve: "CVE-2026-..."
-        field: "credits"
-        reason: "restored; the transcription had cut the value at 300 characters"
-```
+**Change logs in the data.** The JSON records a reason only where its data deliberately differs from an external source: a value copied from an upstream record (`overrides`, above) or a VERIS coding adopted from a register record. A fix of this project's own coding, including a value copied wrongly and then restored, gets no log in the data; git history records it, and §14 records any rule it changes.
 
 This keeps:
 
@@ -975,3 +964,4 @@ This preserves standardization where a mature framework exists and makes the gen
 - **2026-09-25 (b)** — §10.2: `credits` is a list of typed credits (`value`, `type`, `user` where present) instead of one joined string, so the credit role is kept; §6.7 names the discovery roles. Applied to the 2026 corpus (127 links); recorded in `cve_validation.credits_revision`.
 - **2026-09-26** — §4.2: finder vs. actor (the finder goes into `discovery_method`; the actor of an error is the party that made it; a deliberate demonstration has motive `Other`, not `NA`). §4.3: a `False positive` is coded `action.unknown`. Applied to the 2026 corpus, which fixes its 36 errors against the VCDB schema (29 actor codings, 5 missing actions, 1 misplaced `confidentiality.amount`, 1 invalid NAICS code); the verifier now passes.
 - **2026-09-26 (b)** — §3.1: `Confirmed` and `Suspected` require an effect in the VERIS `attribute` section; a demonstrated flaw, an unexploited disclosure or a stopped attack is a `Near miss`. The verifier checks it. §3.3 (c), §8.2, §8.3 (new example), §9.2 step 3 and §11 point to the rule. Applied to the 2026 corpus: 22 records `Confirmed` → `Near miss` (21 vulnerability disclosures and one stopped attack); 4 of them observed Low → Negligible under §8.2. The verifier's disclosure measurement, which sees only disclosures with a CVE, rises from 13 to 17; counting the disclosures without a CVE (DR-2026-065, 086, 090, 092), 21 fail §3.3 (a) and (c), up from 16.
+- **2026-09-27** — §10.2: change logs in the data are kept only where the data deliberately differs from an external source (an upstream record, via `overrides`, or a VERIS coding adopted from a register record); fixes of this project's own coding are recorded by git and §14. Removed from the 2026 corpus accordingly, all of them records of our own fixes: `cve_validation.veris_action_cve_alignment` with the per-incident `veris_cve_field` / `veris_cve_before` / `veris_cve_after` (10 incidents; §6.4 and §10.2 no longer mention them), `cve_validation.relation_revision`, `cve_validation.credits_revision`, `cve_validation.metadata_corrections` (with its §10.2 rule) and `source_corrections`. Git holds them (commits `f04247c`, `7d850e8`, `473c073`, `ecb3ccd`). The rules they applied (§6.4, §10.2) are unchanged.
