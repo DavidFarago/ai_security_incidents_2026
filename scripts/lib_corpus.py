@@ -18,6 +18,20 @@ RELATION_ORDER = ["exploited", "self-malicious-release", "exploited-unconfirmed"
 RELATION_LABEL = {"self-vulnerability": "self (vulnerability)", "self-malicious-release": "self (malicious release)"}
 SEVERITIES = ["Critical", "High", "Medium", "Low", "Negligible"]
 STATUSES = ["Confirmed", "Suspected", "Near miss", "False positive"]
+LOW_OR_HIGHER = {"Critical", "High", "Medium", "Low"}
+
+# Methodology §3.3: a record with validated CVEs is a vulnerability disclosure when it has a disclosure relation and
+# otherwise only `related` (neutral); every other relation makes it an attack or a malicious release.
+DISCLOSURE_RELATIONS = {"self-vulnerability", "discovered"}
+DISCLOSURE_ALLOWED = DISCLOSURE_RELATIONS | {"related"}
+# The three disclosure classes of methodology §3.3. Derived (disclosure_classes), never stored in the JSON.
+DISCLOSURE_CLASSES = ["AI-written", "AI-stack", "AI-discovered"]
+
+# Record arrays (methodology §4.1, §10.2). The live records are complete and verified; a retired record is frozen in
+# a wrapper and only its number counts. Numbers run over all three arrays.
+LIVE_ARRAYS = ("incidents", "sub_threshold_incidents")
+RETIRED_ARRAY = "retired_incidents"
+RETIREMENT_REASONS = ["duplicate", "merged"]
 
 # Incident registers (methodology §4.1: prefix DB when at least one source is one). Replaced by
 # sources_catalog[...].source_class once that field exists (automate_sourcing_handover.md §10, decision 2).
@@ -69,8 +83,61 @@ def incident_number(iid: str) -> int | None:
     return int(m.group(2)) if m else None
 
 
+def records(d: dict) -> list:
+    """Every live record: the counted `incidents`, then `sub_threshold_incidents` (methodology §3.3, §10.2).
+    Retired records are history and are never read as records."""
+    return [i for name in LIVE_ARRAYS for i in d.get(name) or []]
+
+
+def numbered_ids(d: dict) -> list:
+    """(array, id) for every number ever assigned: the live records and the wrappers of retired records (§4.1)."""
+    return [(name, i.get("id")) for name in LIVE_ARRAYS + (RETIRED_ARRAY,) for i in d.get(name) or []]
+
+
 def cve_links(d: dict):
-    """Yield (incident, cves[] entry) for every validated incident-CVE link."""
-    for inc in d["incidents"]:
+    """Yield (record, cves[] entry) for every validated incident-CVE link of the live records.
+
+    For the verifier; the builders count `incidents` only and iterate it themselves.
+    """
+    for inc in records(d):
         for c in (inc.get("validated_cve_details") or {}).get("cves") or []:
             yield inc, c
+
+
+def relations(rec: dict) -> set:
+    return {c["relation"] for c in (rec.get("validated_cve_details") or {}).get("cves") or []}
+
+
+def realized_harm(rec: dict) -> bool:
+    """Methodology §3.3 (c): status Confirmed and observed severity Low or higher."""
+    return rec["veris"].get("security_incident") == "Confirmed" and rec["report"].get("observed_severity") in LOW_OR_HIGHER
+
+
+def is_cve_disclosure(rec: dict) -> bool:
+    """Methodology §3.3: the record has validated CVEs, at least one with a disclosure relation and none with an attack
+    relation. False for a record without a validated CVE: whether that is a disclosure is judgment."""
+    rels = relations(rec)
+    return bool(rels & DISCLOSURE_RELATIONS) and rels <= DISCLOSURE_ALLOWED
+
+
+def link_class(relation: str, ai_role) -> str | None:
+    """The §3.3 class of one CVE link: self-vulnerability gives AI-written when ai_role contains 'AI-generated
+    weakness', else AI-stack; discovered gives AI-discovered; any other relation gives none."""
+    if relation == "self-vulnerability":
+        return "AI-written" if "AI-generated weakness" in (ai_role or []) else "AI-stack"
+    if relation == "discovered":
+        return "AI-discovered"
+    return None
+
+
+def disclosure_classes(rec: dict) -> set:
+    """The §3.3 classes of a record (decision 14): one per CVE link (link_class). A record without a validated CVE
+    takes them from ai_role: 'AI-generated weakness' gives AI-written, 'AI-discovered vulnerability' AI-discovered,
+    and a record with neither gets AI-stack."""
+    roles = rec["report"].get("ai_role") or []
+    cves = (rec.get("validated_cve_details") or {}).get("cves") or []
+    if cves:
+        return {k for c in cves if (k := link_class(c["relation"], roles))}
+    out = {k for role, k in (("AI-generated weakness", "AI-written"), ("AI-discovered vulnerability", "AI-discovered"))
+           if role in roles}
+    return out or {"AI-stack"}

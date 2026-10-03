@@ -4,6 +4,7 @@ Run: python3 -m unittest discover tests
 """
 from __future__ import annotations
 
+import json
 import sys
 import tempfile
 import unittest
@@ -33,6 +34,14 @@ class Credits(unittest.TestCase):
 
 
 class Fetch(unittest.TestCase):
+    def test_ids_include_sub_threshold_records(self):
+        # Class A checks sub-threshold records too, so the fetcher must cache their CVEs (methodology §10.2).
+        d = json.loads(fu.JSON_PATH.read_text(encoding="utf-8"))
+        rec = next(i for i in d["incidents"] if i["id"] == "DR-2026-081")
+        d["incidents"].remove(rec)
+        d["sub_threshold_incidents"] = [rec]
+        self.assertIn("CVE-2026-42824", fu.ids_from_json(d)[0])
+
     def test_titleless_cves_from_cache(self):
         self.assertEqual(fu.titleless_cves(["CVE-2021-3156", "CVE-2026-33017", "CVE-0000-0000"]), ["CVE-2021-3156"])
 

@@ -22,6 +22,9 @@ from __future__ import annotations
 import argparse, datetime as dt, json, os, re, subprocess, sys, time, urllib.error, urllib.request
 from pathlib import Path
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import lib_corpus as lc  # noqa: E402
+
 ROOT = Path(__file__).resolve().parents[1]
 JSON_PATH = ROOT / "incidents" / "all_2026_ai_software_security_incidents.json"
 UP = ROOT / "vulnerabilities" / "upstream"
@@ -52,10 +55,13 @@ def get(url, headers=None, timeout=60):
         return -1, {"_error": str(e)[:200]}, {}
 
 
-def ids_from_json():
-    d = json.loads(JSON_PATH.read_text(encoding="utf-8"))
+def ids_from_json(d=None):
+    """Every CVE, GHSA and OSV identifier of the live records of the JSON (read from JSON_PATH when d is None),
+    sub-threshold records included, because the verifier checks them too."""
+    if d is None:
+        d = json.loads(JSON_PATH.read_text(encoding="utf-8"))
     cves, ghsa, osv = set(), set(), set()
-    for i in d["incidents"]:
+    for i in lc.records(d):
         det = i.get("validated_cve_details") or {}
         for c in det.get("cves") or []:
             cves.add(c["cve"])

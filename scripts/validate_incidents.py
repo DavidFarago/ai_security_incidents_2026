@@ -5,12 +5,17 @@ Class A (lookup): each copied field of validated_cve_details.cves[] is re-derive
   vulnerabilities/upstream/ by scripts/fetch_upstream.py, with the rules of methodology §10.2 ("Copied CVE
   metadata"). A mismatch is an error unless the cves[] entry names the field in `overrides`; every override is printed.
 Class B (bookkeeping): set algebra of the validated layer, the VERIS action.*.cve alignment, vocabularies, the ID
-  scheme, ranking_table vs incidents, recomputable counts, and the VERIS block against the VERIS JSON schema.
-  No overrides.
+  scheme with its numbering over all record arrays up to id_scheme.highest_assigned, the sub-threshold rule
+  (a disclosure that meets methodology §3.3 (a) or (c) must be promoted), the wrappers of retired records,
+  ranking_table vs incidents, recomputable counts, and the VERIS block against the VERIS JSON schema. No overrides.
+
+Every check of a record runs over the live records, `incidents` and `sub_threshold_incidents` alike (methodology
+§10.2); counts and the ranking table cover `incidents` only. A retired record is frozen: only its wrapper is checked.
 
 The verifier does NOT and CANNOT check judgment (Class C): whether a CVE belongs to the incident, its `relation`,
-the notes, severities and their rationales, ai_role, or the inclusion decision. Each of those needs a cited source
-sentence from the analyst; a clean run says nothing about them.
+the notes, severities and their rationales, ai_role, the inclusion decision, §3.3 condition (b), or whether a
+record without a CVE is a vulnerability disclosure. Each of those needs a cited source sentence from the analyst; a
+clean run says nothing about them.
 
 Offline, deterministic. Needs the `jsonschema` package for the VERIS schema check (missing -> error, never a pass).
 Usage: python3 scripts/validate_incidents.py [--json PATH] [--upstream DIR] [--verbose]
@@ -19,6 +24,7 @@ Exit status: 0 when no error, 1 otherwise.
 from __future__ import annotations
 
 import argparse
+import datetime as dt
 import json
 import re
 import sys
@@ -33,9 +39,6 @@ CVE_URL = "https://www.cve.org/CVERecord?id={}"
 CVSS_KEYS = ["cvssV4_0", "cvssV3_1", "cvssV3_0", "cvssV2_0"]
 CLASS_A_FIELDS = ["state", "cna", "published", "product", "title", "cvss", "cwe", "credits", "cisa_kev",
                   "kev_date_added", "record_url"]
-LOW_OR_HIGHER = {"Critical", "High", "Medium", "Low"}
-DISCLOSURE_RELATIONS = {"self-vulnerability", "discovered"}    # methodology §3.3: the relations that define a class
-DISCLOSURE_ALLOWED = DISCLOSURE_RELATIONS | {"related"}        # may accompany them; related alone is no disclosure
 INTRINSIC = ("state", "cna", "published", "product", "cvss_version", "cvss_score", "cwe", "cisa_kev", "title", "credits")
 FROZEN_COUNTS = ["counts.from_ai_software_security_incidents_2026", "counts.from_merged_incidents_2026_VERIS_described"]
 
@@ -149,19 +152,41 @@ def split_ids(s):
 
 # ----------------------------------------------------------------------------- core checks (used by the builders)
 def core_checks(d: dict) -> list[Finding]:
-    """The checks the builders rely on, as Class B findings; empty = pass.
+    """The checks the builders rely on, as Class B findings; empty = pass. They cover the live records, and the
+    numbering also the retired ones.
 
-    The ID format is checked first. While an ID is malformed its number is unknown, so the 001..n numbering check
-    is skipped instead of reported (validate() names the skip).
+    The ID format is checked first. While an ID is malformed its number is unknown, so the numbering check is skipped
+    instead of reported (validate() names the skip). Numbering (methodology §4.1): each array is in ascending order,
+    and the numbers of incidents, sub_threshold_incidents and retired_incidents together are exactly
+    001..id_scheme.highest_assigned, with no gap and no double. A moved or retired record keeps its number, no number
+    is reused, and deleting the highest-numbered record is detected.
     """
     out = []
-    incidents = d["incidents"]
-    malformed = [i["id"] for i in incidents if lc.incident_number(i["id"]) is None]
+    recs = lc.records(d)
+    ids = lc.numbered_ids(d)
+    malformed = [x for _, x in ids if lc.incident_number(x) is None]
     for x in malformed:
         out.append(Finding("B", "id-format", "ID is not DB-/DR-2026-nnn (§4.1)", x))
-    if not malformed and [lc.incident_number(i["id"]) for i in incidents] != list(range(1, len(incidents) + 1)):
-        out.append(Finding("B", "numbering", "incidents are not in 001..n order"))
-    for i in incidents:
+    if not malformed:
+        arrays = lc.LIVE_ARRAYS + (lc.RETIRED_ARRAY,)
+        for name in arrays:
+            nums = [lc.incident_number(x) for a, x in ids if a == name]
+            if nums != sorted(nums):
+                out.append(Finding("B", "numbering", f"{name} is not in ascending number order (§4.1)"))
+        count = Counter(lc.incident_number(x) for _, x in ids)
+        top = (d.get("id_scheme") or {}).get("highest_assigned")
+        if not isinstance(top, int) or isinstance(top, bool):
+            out.append(Finding("B", "numbering", f"id_scheme.highest_assigned {top!r} is not an integer; it must hold "
+                               "the highest number ever assigned (§4.1)"))
+            top = max(count, default=0)
+        missing = sorted(set(range(1, top + 1)) - set(count))
+        doubled = sorted(n for n, k in count.items() if k > 1)
+        above = sorted(n for n in count if n > top)
+        if missing or doubled or above:
+            out.append(Finding("B", "numbering", f"numbers over {', '.join(arrays)} are not 001..highest_assigned ({top:03d}): "
+                               + "; ".join(f"{what} {', '.join(f'{n:03d}' for n in ns)}" for what, ns in
+                                           (("missing", missing), ("doubled", doubled), ("above highest_assigned", above)) if ns)))
+    for i in recs:
         det = i.get("validated_cve_details") or {}
         if sorted(i.get("validated_cve") or []) != sorted(c["cve"] for c in det.get("cves") or []):
             out.append(Finding("B", "validated-cve-set", "validated_cve != validated_cve_details.cves", i["id"]))
@@ -257,9 +282,9 @@ def check_class_b(d, up, r: Result):
     if n_bad:
         r.skipped.append(f"numbering and number uniqueness ({n_bad} malformed IDs)")
 
-    incidents = d["incidents"]
+    recs = lc.records(d)
     catalog = d.get("sources_catalog") or {}
-    ids = [i["id"] for i in incidents]
+    ids = [x for _, x in lc.numbered_ids(d)]
     for x, n in Counter(ids).items():
         if n > 1:
             r.add("B", "id-unique", f"{x} occurs {n} times", x)
@@ -267,7 +292,7 @@ def check_class_b(d, up, r: Result):
         if n > 1:
             r.add("B", "id-unique", f"number {x:03d} is used {n} times (numbers are unique across prefixes)")
 
-    for i in incidents:
+    for i in recs:
         iid, det, v, rep = i["id"], i.get("validated_cve_details") or {}, i["veris"], i["report"]
         srcs = [s.get("source") for s in i.get("sources") or []]
         want = "DB" if any(s in lc.REGISTER_SOURCES for s in srcs) else "DR"
@@ -312,9 +337,63 @@ def check_class_b(d, up, r: Result):
         for x in sorted(exploited - in_veris):
             r.add("B", "veris-action-cve", f"exploited CVE {x} is in neither action.hacking.cve nor action.malware.cve", iid, x)
 
+    check_sub_threshold(d, r)
+    check_retired(d, r)
     check_ranking_table(d, r)
     check_counts(d, r)
     check_veris_schema(d, up, r)
+
+
+def check_sub_threshold(d, r):
+    """Methodology §3.3: sub_threshold_incidents holds vulnerability disclosures that fail conditions (a)-(c). A
+    record with validated CVEs must be a disclosure by its relations; for a record without one that is judgment.
+    (a) and (c) are mechanical, so a record that meets either is an error until it is promoted to incidents; (b) is
+    judgment."""
+    for i in d.get("sub_threshold_incidents") or []:
+        iid, rels = i["id"], lc.relations(i)
+        if rels and not lc.is_cve_disclosure(i):
+            r.add("B", "sub-threshold", f"not a vulnerability disclosure (relations: {', '.join(sorted(rels))}); an attack, "
+                  "a malicious release or a context-only record keeps a counted record (§3.3)", iid)
+        kev = sorted(c["cve"] for c in (i.get("validated_cve_details") or {}).get("cves") or [] if c.get("cisa_kev"))
+        if kev:
+            r.add("B", "sub-threshold", f"meets §3.3 (a), KEV-listed {', '.join(kev)}: promote to incidents", iid)
+        if lc.realized_harm(i):
+            r.add("B", "sub-threshold", f"meets §3.3 (c), Confirmed with observed {i['report']['observed_severity']}: "
+                  "promote to incidents", iid)
+
+
+def check_retired(d, r):
+    """Methodology §10.2: a retired record is frozen in a wrapper {id, retired_on, reason, into, note, record}. The
+    wrapper is checked; the record is history, so nothing else of it is (an upstream refresh must not touch it)."""
+    live = {i["id"] for i in lc.records(d)}
+    for w in d.get(lc.RETIRED_ARRAY) or []:
+        iid, rec = w.get("id"), w.get("record") or {}
+        if rec.get("id") != iid:
+            r.add("B", "retired", f"record.id {rec.get('id')!r} != wrapper id", iid)
+        if not is_date(w.get("retired_on")):
+            r.add("B", "retired", f"retired_on {w.get('retired_on')!r} is not a YYYY-MM-DD date", iid)
+        if w.get("reason") not in lc.RETIREMENT_REASONS:
+            r.add("B", "retired", f"reason {w.get('reason')!r} is not one of {lc.RETIREMENT_REASONS}", iid)
+        into = w.get("into")
+        if not isinstance(into, list) or not into:
+            r.add("B", "retired", "into must list the live records that took over the record's content", iid)
+        else:
+            for t in into:
+                if not isinstance(t, str) or t not in live:
+                    r.add("B", "retired", f"into names {t!r}, which is not a live record", iid)
+        extra = sorted(set(w) - {"id", "retired_on", "reason", "into", "note", "record"})
+        if extra:
+            r.add("B", "retired", f"unknown wrapper fields {extra}", iid)
+
+
+def is_date(s) -> bool:
+    if not isinstance(s, str) or not re.fullmatch(r"\d{4}-\d{2}-\d{2}", s):
+        return False
+    try:
+        dt.date.fromisoformat(s)
+    except ValueError:
+        return False
+    return True
 
 
 def check_ranking_table(d, r):
@@ -336,7 +415,10 @@ def check_ranking_table(d, r):
 
 
 def check_counts(d, r):
+    """counts.* and id_scheme.counts cover the counted incidents; cve_validation describes the validation of every
+    live record, sub-threshold ones included, because the move undoes none of it (methodology §10.2)."""
     inc = d["incidents"]
+    recs = lc.records(d)
     cnt = d.get("counts") or {}
 
     def eq(path, got, want):
@@ -353,13 +435,13 @@ def check_counts(d, r):
     eq("id_scheme.counts", (d.get("id_scheme") or {}).get("counts"),
        {p: sum(1 for i in inc if i["id"].startswith(p + "-")) for p in ("DB", "DR")})
     cv = d.get("cve_validation") or {}
-    dets = [i.get("validated_cve_details") or {} for i in inc]
-    eq("cve_validation.incidents_with_validated_cve", cv.get("incidents_with_validated_cve"), sum(1 for i in inc if i.get("validated_cve")))
-    eq("cve_validation.distinct_validated_cves", cv.get("distinct_validated_cves"), len({x for i in inc for x in i.get("validated_cve") or []}))
+    dets = [i.get("validated_cve_details") or {} for i in recs]
+    eq("cve_validation.incidents_with_validated_cve", cv.get("incidents_with_validated_cve"), sum(1 for i in recs if i.get("validated_cve")))
+    eq("cve_validation.distinct_validated_cves", cv.get("distinct_validated_cves"), len({x for i in recs for x in i.get("validated_cve") or []}))
     eq("cve_validation.cves_added", cv.get("cves_added"), sorted({x for det in dets for x in det.get("added") or []}))
     eq("cve_validation.cves_removed", sorted(cv.get("cves_removed") or []), sorted({x["cve"] for det in dets for x in det.get("removed") or []}))
     eq("cve_validation.incidents_with_non_cve_identifiers_only", cv.get("incidents_with_non_cve_identifiers_only"),
-       sum(1 for i, det in zip(inc, dets) if not i.get("validated_cve") and det.get("non_cve_identifiers")))
+       sum(1 for i, det in zip(recs, dets) if not i.get("validated_cve") and det.get("non_cve_identifiers")))
 
 
 def check_veris_schema(d, up, r):
@@ -372,7 +454,7 @@ def check_veris_schema(d, up, r):
         r.add("B", "veris-schema", "package 'jsonschema' is not installed; the VERIS schema check cannot run")
         return
     val = jsonschema.Draft4Validator(up["veris_schema"])
-    for i in d["incidents"]:
+    for i in lc.records(d):
         for e in sorted(val.iter_errors(i["veris"]), key=lambda e: list(map(str, e.absolute_path))):
             path = ".".join(map(str, e.absolute_path)) or "(top level)"
             r.add("B", "veris-schema", f"{path}: {e.message[:160]}", i["id"])
@@ -383,20 +465,22 @@ def measure(d, r):
     fails, review = [], []
     for i in d["incidents"]:
         cves = (i.get("validated_cve_details") or {}).get("cves") or []
-        rels = {c["relation"] for c in cves}
+        rels = lc.relations(i)
         n = lc.incident_number(i["id"])
         kev = any(c.get("cisa_kev") for c in cves)
         # handover §4 / §10 decision 1: from incident 100 on, every incident whose validated CVEs are all
         # self-vulnerability, with no KEV-listed CVE and observed Negligible, is listed for review of condition (b).
         if n is not None and n >= 100 and rels == {"self-vulnerability"} and not kev and i["report"]["observed_severity"] == "Negligible":
             review.append(i["id"])
-        if not rels or not rels <= DISCLOSURE_ALLOWED or not rels & DISCLOSURE_RELATIONS:
-            continue
-        harm = i["veris"]["security_incident"] == "Confirmed" and i["report"]["observed_severity"] in LOW_OR_HIGHER
-        if not (kev or harm):
+        if lc.is_cve_disclosure(i) and not (kev or lc.realized_harm(i)):
             fails.append(i["id"])
     r.measurements["disclosure_rule_fails"] = fails
     r.measurements["decision1_review"] = review
+    # The sub-threshold population, reported beside the counts (decision 14 item 5). A record can have several classes.
+    sub = d.get("sub_threshold_incidents") or []
+    r.measurements["sub_threshold_records"] = len(sub)
+    r.measurements["sub_threshold_classes"] = dict(sorted(Counter(k for i in sub for k in lc.disclosure_classes(i)).items()))
+    r.measurements["retired_records"] = len(d.get(lc.RETIRED_ARRAY) or [])
 
 
 def validate(d: dict, up: dict) -> Result:
@@ -434,7 +518,11 @@ def report(r: Result, verbose: bool) -> str:
     f = r.measurements.get("decision1_review") or []
     L.append(f"measurement — incidents >= 100 with only self-vulnerability CVEs, no KEV, observed Negligible (review §3.3 condition (b)): {len(f)}"
              + (f" ({', '.join(f)})" if f else ""))
-    L.append("Class C (judgment) is not checked: relation, CVE membership, notes, severities, ai_role, inclusion.")
+    L.append(f"measurement — sub_threshold_incidents (disclosures failing §3.3; not counted): {r.measurements.get('sub_threshold_records', 0)} records"
+             + (f", by class {r.measurements['sub_threshold_classes']}" if r.measurements.get("sub_threshold_classes") else "")
+             + f"; retired_incidents: {r.measurements.get('retired_records', 0)}")
+    L.append("Class C (judgment) is not checked: relation, CVE membership, notes, severities, ai_role, inclusion, "
+             "§3.3 (b), and whether a record without a CVE is a disclosure.")
     return "\n".join(L)
 
 

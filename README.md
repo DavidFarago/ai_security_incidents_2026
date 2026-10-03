@@ -35,7 +35,15 @@ The per-CVE validated layer (each CVE's relation to the incident, CVSS, KEV flag
 
 - **2 Critical · 22 High · 31 Medium · 17 Low · 27 Negligible**
 - Status: 71 Confirmed · 23 Near miss · 5 False positive
-- IDs: `DB-2026-nnn` (*database*: at least one register source — AIID or VCDB; 50 incidents) and `DR-2026-nnn` (*direct report*: no register source, found through a deep-research or primary report; 49 incidents, all of them so far from the three deep-research reports); `nnn` is the position in the priority ranking of 2026-08-27 and is never renumbered (new incidents continue from 100).
+- IDs: `DB-2026-nnn` (*database*: at least one register source — AIID or VCDB; 50 incidents) and `DR-2026-nnn` (*direct report*: no register source, found through a deep-research or primary report; 49 incidents, all of them so far from the three deep-research reports); `nnn` is the position in the priority ranking of 2026-08-27 and is never renumbered. New records continue from 100; `id_scheme.highest_assigned` holds the highest number assigned, and no number is deleted or reused.
+
+### Counted incidents and sub-threshold disclosures
+
+A vulnerability disclosure is a flaw that someone found and reported, but that nobody used against a victim. Disclosures of AI-related vulnerabilities far outnumber incidents with harm: a keyword search of the NVD for AI terms found 593 CVEs published in the first eight months of 2026, only 41 of them in this corpus. Counted as incidents, they would dominate every count and ranking; left out, the corpus would lose security-relevant near misses whose CVEs feed the CVE-side tables and that can still be exploited later.
+
+So a disclosure is a counted incident (array `incidents`) only with known exploitation (a CISA KEV listing or a reported exploitation) or realized harm (status `Confirmed`, observed severity Low or higher). Every other disclosure keeps a complete record, verified like an incident, in the array `sub_threshold_incidents`. It enters no incident count, and scores such as IBSS see it only through its class (AI-written, AI-stack or AI-discovered), with at most one weight per class and entity: in each entity's score, a flood of similar disclosures weighs no more than one incident per class. Definitions and rules: methodology §3.3.
+
+All 99 records are still in `incidents`. The disclosures among them that fail the threshold (17 with a CVE, which `scripts/validate_incidents.py` lists, and 4 without) move to `sub_threshold_incidents` in a coming update, which changes the counts above.
 
 ### How each incident is coded
 
@@ -62,7 +70,7 @@ python3 scripts/build_incidents_report.py    # JSON -> incidents/*.csv, incident
 python3 -m unittest discover tests           # verifier mutation tests; derived reports up to date
 ```
 
-`validate_incidents.py` re-derives every copied CVE field (state, CNA, dates, product, title, CVSS, CWE, credits, KEV) from the cached records (Class A) and checks the bookkeeping of the JSON: validated-layer set algebra, the VERIS `action.*.cve` alignment, vocabularies, the ID scheme, the ranking table, recomputable counts, and every `veris` block against the VERIS JSON schema (Class B; needs the `jsonschema` package). It cannot check judgment: a CVE's `relation`, notes, severities, `ai_role`, or the inclusion decision. The rules are in the methodology, §10.2. The builders stop only on the core checks their tables rely on (ID format and numbering, validated-CVE sets, relation vocabulary, per-CVE agreement across incidents), not on the full gate.
+`validate_incidents.py` re-derives every copied CVE field (state, CNA, dates, product, title, CVSS, CWE, credits, KEV) from the cached records (Class A) and checks the bookkeeping of the JSON: validated-layer set algebra, the VERIS `action.*.cve` alignment, vocabularies, the ID scheme (the numbers over `incidents`, `sub_threshold_incidents` and `retired_incidents` run exactly from 001 to `id_scheme.highest_assigned`, each array in ascending order), the sub-threshold rule (a record there must be a vulnerability disclosure, and one that meets methodology §3.3 (a) KEV or (c) realized harm must be promoted to `incidents`), the wrappers of retired records, the ranking table, recomputable counts, and every `veris` block against the VERIS JSON schema (Class B; needs the `jsonschema` package). Every check of a record covers `incidents` and `sub_threshold_incidents` alike; counts cover `incidents` only. It cannot check judgment: a CVE's `relation`, notes, severities, `ai_role`, the inclusion decision, §3.3 condition (b), or whether a record without a CVE is a disclosure. The rules are in the methodology, §3.3, §4.1 and §10.2. The builders stop only on the core checks their tables rely on (ID format and numbering, validated-CVE sets, relation vocabulary, per-CVE agreement across incidents), not on the full gate.
 
 ## Repository layout
 

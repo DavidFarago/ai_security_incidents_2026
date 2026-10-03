@@ -135,31 +135,55 @@ This distinction should be preserved exactly.
 
 For example, a publicly reachable database containing private data may be `Potentially` disclosed if no evidence shows that unauthorized parties accessed it. If logs or attacker behavior demonstrate access, use `Yes`.
 
-### 3.3 Vulnerability disclosures: own record or aggregate
+### 3.3 Vulnerability disclosures: counted or sub-threshold record
 
-A vulnerability disclosure meets the inclusion criterion as a near miss or a demonstrated flaw, but disclosures of AI-related vulnerabilities are far more numerous than incidents with harm (an NVD keyword probe found about 600 AI-related CVEs published in the first eight months of 2026). Without a rule, the disclosure class would dominate every count and every ranking.
+**In brief.** Disclosures of AI-related vulnerabilities with no known exploitation and no realized harm far outnumber incidents with harm. Counted as incidents, they would dominate every count and ranking; left out, the corpus would lose security-relevant near misses whose CVEs feed the CVE-side tables and that can still be exploited later. A disclosure is therefore counted only with known exploitation (a KEV listing or a reported exploitation) or realized harm: conditions (a)–(c) below. Every other disclosure keeps a complete record, with its own sources and ID prefix, in the array `sub_threshold_incidents`, and is verified like a counted incident. It enters no incident count, and a score such as IBSS sees it only through its classes (AI-written, AI-stack, AI-discovered): at most one weight per class and entity. The classes are derived from the data, never stored.
 
-A vulnerability disclosure gets **its own incident record** only if at least one of these conditions holds:
+A **vulnerability disclosure** is an event in which a vulnerability becomes known: someone (a researcher, a vendor or an AI system) finds a flaw and reports or publishes it, and nobody uses the flaw against a victim in that event. It differs from an **attack**, in which an actor uses or tries to use a flaw or malware against a victim, and from a **malicious release**, in which the "flaw" is malware shipped on purpose. For a record with validated CVEs the test is mechanical, by the relations of §6.4:
+
+| kind | relations |
+|---|---|
+| disclosure | `self-vulnerability`, `discovered` |
+| neutral | `related` |
+| attack or malicious release | `exploited`, `exploited-unconfirmed`, `attempted`, `toolkit`, `self-malicious-release` |
+
+A record is a disclosure when it has at least one disclosure relation and no attack relation. For a record without a validated CVE the analyst decides; the verifier cannot check it.
+
+A vulnerability disclosure meets the inclusion criterion as a near miss or a demonstrated flaw, but such disclosures far outnumber incidents with harm. On 2026-08-29, a keyword search of NIST's National Vulnerability Database (NVD) for "prompt injection", "language model", "Model Context Protocol", "AI agent" and "LLM" over CVEs published 2026-01-01 to 2026-08-28 found 593 distinct CVEs, 41 of them in this corpus; keyword matches include false positives and miss AI-related CVEs that do not use these words. Without a rule, disclosures would dominate every count and every ranking.
+
+A vulnerability disclosure is a **counted incident** (array `incidents`) only if at least one of these conditions holds:
 
 - **(a) KEV:** at least one validated CVE of the disclosure is listed in the CISA KEV catalog;
 - **(b) exploitation:** a primary source reports that the vulnerability was exploited;
 - **(c) realized harm:** the incident has status `Confirmed` (which requires an affected asset, §3.1) and observed severity Low or higher.
 
-Otherwise the disclosure goes into **one aggregate incident per class**. The aggregate's validated CVE layer holds the CVEs of its class, enumerated under §6.7. A ranking or score counts the aggregate once, so a flood of disclosures weighs as one incident, and the aggregate's potential severity still records what the class could cause.
+**Sub-threshold records.** A disclosure that fails (a)–(c) still gets a complete record of its own, with its sources, ID prefix, VERIS coding and validated CVE layer, in the array `sub_threshold_incidents` (§10.2). It is verified like a counted record but is not counted. No record stands in for others: there is no aggregate record per class. Every disclosure that fails (a)–(c) gets such a record, whether a sweep found it or a news article.
 
-The classes are derived mechanically from the CVE's `relation` (§6.4) and the incident's `ai_role` (§5.1):
+**Classes.** The classes are derived, never stored, from the `relation` of each CVE link (§6.4) and the record's `ai_role` (§5.1):
 
-| class | derivation | example |
+| class | derivation per CVE link | example |
 |---|---|---|
 | AI-written vulnerabilities | `self-vulnerability`, `ai_role` contains *AI-generated weakness* | flaws in code written by AI coding tools |
 | AI-stack vulnerabilities | `self-vulnerability`, any other `ai_role` | flaws in agents, agent harnesses, MCP servers, LLM gateways and other AI products |
 | AI-discovered vulnerabilities | `discovered` | flaws found by an AI system or an AI-assisted team |
 
-Finer distinctions, such as the product type or the AI vendor and tool, are recorded as per-CVE attributes, not as further classes. Each class adds one incident's weight to a ranking, so finer classes would make the ranking depend on how finely the classes are cut. A split by vendor would also measure disclosure practice (credit lines, commit markers) rather than risk.
+A record without a validated CVE takes its classes from `ai_role`: *AI-generated weakness* gives AI-written, *AI-discovered vulnerability* gives AI-discovered, and a record with neither gets AI-stack. A record can have several classes.
+
+Finer distinctions, such as the product type or the AI vendor and tool, are recorded as per-CVE attributes, not as further classes. Each class adds at most one weight per entity to a score (below), so finer classes would make the ranking depend on how finely the classes are cut. A split by vendor would also measure disclosure practice (credit lines, commit markers) rather than risk.
+
+**Counts and shares.** Every incident count and share (`counts`, the ranking table, per-incident statistics) covers `incidents` only. The sub-threshold population is reported beside them, per class.
+
+**Scores.** A score that sums incidents per entity (a CVE, a CWE, a product or a vendor), such as the incident-based severity score (IBSS), counts each counted incident once. The sub-threshold records add, per entity, at most one weight per class: the highest severity among that class's sub-threshold records that link the entity, observed and potential separately (§8.1, dominant consequence). A flood of disclosures of one class therefore weighs as one incident per entity. Analyst CWEs (`report.weaknesses`) count under all classes of their record. IBSS is a sum over events: a disclosure and a later, separate exploitation both count. The score measures an entity's recorded incident history, not its intrinsic danger: a zero-day exploited in a single event scores lower, but is not less dangerous.
+
+**CVE-side tables.** The tables in `vulnerabilities/` include the CVEs of sub-threshold records, flagged where that helps the reader, so that every CVE of the JSON appears there.
+
+**Promotion.** A record moves between `incidents` and `sub_threshold_incidents` with its ID (§4.1); the move changes nothing else in it. Conditions (a) and (c) are mechanical: `scripts/validate_incidents.py` fails while a sub-threshold record meets either, for example after a KEV refresh, until the record is moved to `incidents`. Condition (b) is judgment.
+
+**Later exploitation.** An exploitation that a source describes is a new event, so it becomes a new incident with the next ID, the attacker as actor and the CVE's relation `exploited`; the disclosure record moves to `incidents` under (b). A wave (§6.7) that holds the CVE stays unchanged, apart from values copied from upstream such as the KEV flag (§10.2). A disclosure that is counted under (a) or (b) stands in for its exploitation as long as the exploitation cannot be described as an event of its own.
 
 **Realized harm.** Condition (c) also defines the ranking variant **IBSS-observed with realized harm**: the observed incident-based severity score over `Confirmed` incidents with observed severity Low or higher only. It is reported beside IBSS-observed and IBSS-potential.
 
-**Scope.** The rule applies to every incident, including those recorded before the rule was written (2026-09-24). Folding an existing incident into an aggregate removes its record, so §4.1 must first state what happens to the ID of a removed incident.
+**Scope.** The rule applies to every disclosure, including those recorded before the rule was written (2026-09-24); a record that fails it moves to `sub_threshold_incidents`, and its ID stays (§4.1). The rule applies to vulnerability disclosures only. A stopped attack is a `Near miss` that keeps its counted record (§3.1). A counted `Near miss` that fails (a) and (c) must therefore show why it stays: it is an attack rather than a disclosure, or its sources include the exploitation report of (b).
 
 ---
 
@@ -180,7 +204,7 @@ Capture at least:
 
 VERIS has a native `confidence` field. Use it rather than inventing a separate generic evidence-confidence field.
 
-**Incident ID scheme (2026 corpus).** `incident_id` is `DB-2026-nnn` (*database*) when at least one source is an incident register (AI Incident Database, VERIS Community Database) and `DR-2026-nnn` (*direct report*) when no source is a register: the incident was found by reading a report directly, a deep-research report or a primary report. The prefix records the discovery channel only, not the quality of the sources. `nnn` is the incident's position in the priority ranking at the time IDs were assigned (2026-08-27) and is unique across both prefixes; it is frozen — later re-ranking changes the ranking table, not the ID, and new incidents continue the sequence. Register record locators (e.g. VCDB UUIDs) belong in `sources`, not in `incident_id`.
+**Incident ID scheme (2026 corpus).** `incident_id` is `DB-2026-nnn` (*database*) when at least one source is an incident register (AI Incident Database, VERIS Community Database) and `DR-2026-nnn` (*direct report*) when no source is a register: the incident was found by reading a report directly, a deep-research report or a primary report. The prefix records the discovery channel only, not the quality of the sources. `nnn` is the incident's position in the priority ranking at the time IDs were assigned (2026-08-27) and is unique across both prefixes; it is frozen — later re-ranking changes the ranking table, not the ID. **An ID is never deleted or reused.** A record that moves between `incidents` and `sub_threshold_incidents` (§3.3) keeps its ID, and so does a retired record (§10.2). `id_scheme.highest_assigned` holds the highest number ever assigned; a new record gets that number plus one, in whichever array it enters. The numbers of `incidents`, `sub_threshold_incidents` and `retired_incidents` together run exactly from 001 to `highest_assigned`, without a gap or a double, and each array lists its records in ascending number order. `scripts/validate_incidents.py` fails on a missing, doubled or out-of-order number and on a number above `highest_assigned`, so it also detects the deletion of the highest-numbered record. Register record locators (e.g. VCDB UUIDs) belong in `sources`, not in `incident_id`.
 
 ### 4.2 Actor
 
@@ -443,11 +467,15 @@ CVE covers vulnerabilities in legitimate software. It does **not** cover malicio
 
 Record these in `non_cve_identifiers` (id, kind, note). Never place them in a CVE field, and never conclude "no identifier exists" without checking the GitHub Advisory Database and OSV.dev. GHSA and OSV are complementary to CVE, not competing schemes; genuinely separate numbering schemes (GCVE, EUVD) exist but are not used in this report.
 
-### 6.7 AI-discovered vulnerabilities and aggregate incidents
+### 6.7 AI-discovered vulnerabilities, waves and themed bundles
 
 For incidents whose AI role is *AI-discovered vulnerability*, the CVE list is the set of CVEs credited to the AI system or AI-assisted team. Evidence, in order of strength: the `credits` field of the CVE record, where the discovery roles are `finder`, `reporter`, `analyst` and `tool` (other roles, such as `coordinator` or `remediation developer`, are not evidence of discovery); the vendor advisory's reporter line (Mozilla MFSA, MSRC CVRF acknowledgements, FreeBSD-SA); the discoverer's own publication. Some CNAs (Linux kernel, Chrome) carry no credit field, so attribution there rests on release notes or commit trailers and must be marked as such. A vendor claim of "N vulnerabilities found" rarely maps to N CVEs: fixes may be bundled into rollup CVEs or receive none.
 
-For aggregate incidents (a wave of vulnerabilities rather than one event; §3.3 says when a disclosure becomes part of one), enumerate constituent CVEs only from a named curated corpus, scope them to the report year, exclude RESERVED IDs, and record the corpus and its cut-off date in the note. A curated corpus is either an external list maintained with its own inclusion checks (e.g. Vibe Security Radar) or a frozen sweep output of this project: a file under `incidents/sources/` that records the script, the query, the run date, and the screening of every hit against the §3 criterion. A sweep output is frozen once cited; a later run produces a new file.
+A **wave** is an incident that holds many CVEs: a phenomenon that sources report as such, for example a wave of flaws in AI-written code or an AI discovery campaign. Its members are the CVEs of its named curated corpus, with a cut-off date. Its status and severity come from the wave's own effects (§3.1, §8), and it carries no marker: the corpus named in its note identifies it. A wave is subject to §3.3 like any record; a wave that fails moves to `sub_threshold_incidents` as a whole.
+
+For a wave, enumerate constituent CVEs only from a named curated corpus, scope them to the report year, exclude RESERVED IDs, and record the corpus and its cut-off date in the note. A curated corpus is either an external list maintained with its own inclusion checks (e.g. Vibe Security Radar) or a frozen sweep output of this project: a file under `incidents/sources/` that records the script, the query, the run date, and the screening of every hit against the §3 criterion. A sweep output is frozen once cited; a later run produces a new file. A wave's membership is a fact of its corpus, not of timing: a sweep never drops a CVE because the CVE already has an incident of its own.
+
+A **themed bundle**, a set of unrelated disclosures that a source groups by theme (several flaws in one write-up, a series on AI as a defender), is not a wave. It is judged under §3.3 as one disclosure and, if it fails, moves to `sub_threshold_incidents` as a whole.
 
 ---
 
@@ -647,7 +675,7 @@ Potential severity may need a separate confidence value because the counterfactu
 
 For each candidate event:
 
-1. **Establish inclusion.**
+1. **Establish inclusion** (§3) and, for a vulnerability disclosure, whether it goes to `incidents` or `sub_threshold_incidents` (§3.3).
 2. **Collect primary evidence and references.**
 3. **Set event status:** Confirmed / Suspected / Near miss / False positive; `Confirmed` and `Suspected` require an effect recorded in step 4 (§3.1).
 4. **Encode Actor, Action, Asset, Attribute.**
@@ -811,6 +839,32 @@ Where the CVE information lives in the 2026 corpus files:
 
 The as-cited fields are retained unchanged for provenance; the validated fields are canonical; the VERIS action fields are derived from them. Only CVEs were validated: the CWE fields (`report.weaknesses`, `cwe`, the CWE part of `cve_cwe`) are as cited.
 
+**Live and retired records.** Every record keeps its ID for good (§4.1). Three arrays hold the records, each in ascending number order:
+
+```yaml
+id_scheme:
+  highest_assigned: 99                 # the highest number ever assigned; a new record gets highest_assigned + 1
+incidents:                             # the counted records (§3.3), waves included
+  - id: "DB-2026-001"
+    # ...
+sub_threshold_incidents:               # disclosures that fail §3.3 (a)-(c): complete, verified, not counted
+  - id: "DR-2026-081"
+    # ...
+retired_incidents:                     # frozen records that stopped being relevant; added with the first one
+  - id: "DR-2026-0nn"
+    retired_on: "2026-10-03"
+    reason: "duplicate"                # duplicate | merged
+    into: ["DR-2026-0mm"]              # the live records that took over its content
+    note: "..."                        # optional
+    record: {id: "DR-2026-0nn"}        # the complete record as it was when retired, unchanged
+```
+
+- `incidents` and `sub_threshold_incidents` hold the **live** records. Both are verified alike: copied CVE metadata, the VERIS schema, the §3.1 status rule, the validated layer. A move between them (§3.3) changes nothing else in the record.
+- Counts, `ranking_table` and the derived incident reports cover `incidents`. `cve_validation` covers both live arrays, because a move undoes no validation.
+- A record in `sub_threshold_incidents` that has validated CVEs must be a disclosure (§3.3), and the verifier fails while the record meets condition (a) or (c).
+- **Retirement.** A record that stops being relevant, for example a duplicate, is never deleted. Its relevant content is first written into the live records it points to; then it moves, unchanged, into a wrapper in `retired_incidents`. The reasons are `duplicate` (the record describes the same event as a live record) and `merged` (its content now belongs to one or more other live records); `into` lists those live records. The verifier checks the wrapper only: the frozen record is history, and no upstream refresh touches it. Builders and scores never read `retired_incidents`.
+- No field marks a record as a disclosure, with its class, or as affecting a victim: §3.3 derives the first two from the relations and `ai_role`, §3.1 the third from `security_incident` and `attribute`.
+
 **Copied CVE metadata.** The following fields of `validated_cve_details.cves[]` are copies of upstream records. `scripts/validate_incidents.py` re-derives each one from the records cached under `vulnerabilities/upstream/` and fails on any difference:
 
 | field | rule |
@@ -826,7 +880,7 @@ The as-cited fields are retained unchanged for provenance; the validated fields 
 
 A difference that is correct on purpose is recorded on the `cves[]` entry as `overrides: {"<field>": "<reason>"}`; the verifier prints every override on every run.
 
-**Change logs in the data.** The JSON records a reason only where its data deliberately differs from an external source: a value copied from an upstream record (`overrides`, above) or a VERIS coding adopted from a register record. A fix of this project's own coding, including a value copied wrongly and then restored, gets no log in the data; git history records it, and §14 records any rule it changes.
+**Change logs in the data.** The JSON records a reason only where its data deliberately differs from an external source: a value copied from an upstream record (`overrides`, above) or a VERIS coding adopted from a register record. A fix of this project's own coding, including a value copied wrongly and then restored, gets no log in the data; git history records it, and §14 records any rule it changes. A move between `incidents` and `sub_threshold_incidents` needs no log either; a retirement records its reason in its wrapper.
 
 This keeps:
 
@@ -852,6 +906,7 @@ This keeps:
 - **Do not cite a CVE ID without resolving it.** Non-existent, REJECTED and RESERVED IDs are not cited; an ID taken from a secondary source may belong to another incident (§6.4).
 - **Do not put a discovered, related or toolkit CVE into a VERIS action field.** Those fields hold exactly the `exploited` CVEs (§6.4).
 - **Do not treat GHSA / OSV / vendor advisory IDs as CVEs,** and do not conclude "no identifier" without checking those databases (§6.6).
+- **Do not delete an incident record.** Move it (§3.3) or retire it (§10.2); its ID stays (§4.1).
 - **Do not modify VERIS semantics to fit AI.** Keep custom AI/report fields separate.
 
 ---
@@ -880,7 +935,8 @@ Add a small report-specific layer for:
 - Potential Severity;
 - bounded potential-impact rationale;
 - CWE mapping and provenance;
-- validated CVEs with their relation to the incident, plus non-CVE identifiers.
+- validated CVEs with their relation to the incident, plus non-CVE identifiers;
+- the disclosure threshold: a vulnerability disclosure without known exploitation or realized harm is a sub-threshold record, not a counted incident (§3.3).
 
 Do not use:
 
@@ -897,6 +953,10 @@ Public evidence / AIID / vendor reports / advisories
                     |
                     v
              Inclusion decision
+                    |
+                    v
+   Disclosure threshold (§3.3): counted
+   incident or sub-threshold record
                     |
                     v
               VERIS incident
@@ -965,3 +1025,4 @@ This preserves standardization where a mature framework exists and makes the gen
 - **2026-09-26** — §4.2: finder vs. actor (the finder goes into `discovery_method`; the actor of an error is the party that made it; a deliberate demonstration has motive `Other`, not `NA`). §4.3: a `False positive` is coded `action.unknown`. Applied to the 2026 corpus, which fixes its 36 errors against the VCDB schema (29 actor codings, 5 missing actions, 1 misplaced `confidentiality.amount`, 1 invalid NAICS code); the verifier now passes.
 - **2026-09-26 (b)** — §3.1: `Confirmed` and `Suspected` require an effect in the VERIS `attribute` section; a demonstrated flaw, an unexploited disclosure or a stopped attack is a `Near miss`. The verifier checks it. §3.3 (c), §8.2, §8.3 (new example), §9.2 step 3 and §11 point to the rule. Applied to the 2026 corpus: 22 records `Confirmed` → `Near miss` (21 vulnerability disclosures and one stopped attack); 4 of them observed Low → Negligible under §8.2. The verifier's disclosure measurement, which sees only disclosures with a CVE, rises from 13 to 17; counting the disclosures without a CVE (DR-2026-065, 086, 090, 092), 21 fail §3.3 (a) and (c), up from 16.
 - **2026-09-27** — §10.2: change logs in the data are kept only where the data deliberately differs from an external source (an upstream record, via `overrides`, or a VERIS coding adopted from a register record); fixes of this project's own coding are recorded by git and §14. Removed from the 2026 corpus accordingly, all of them records of our own fixes: `cve_validation.veris_action_cve_alignment` with the per-incident `veris_cve_field` / `veris_cve_before` / `veris_cve_after` (10 incidents; §6.4 and §10.2 no longer mention them), `cve_validation.relation_revision`, `cve_validation.credits_revision`, `cve_validation.metadata_corrections` (with its §10.2 rule) and `source_corrections`. Git holds them (commits `f04247c`, `7d850e8`, `473c073`, `ecb3ccd`). The rules they applied (§6.4, §10.2) are unchanged.
+- **2026-10-03** — §3.3: "vulnerability disclosure" is defined, with a mechanical test by relation for records with validated CVEs. The one aggregate per class of 2026-09-25 is replaced: a disclosure that fails (a)–(c) keeps a complete record in `sub_threshold_incidents`, verified but not counted; classes are derived per CVE link, or from `ai_role` for a record without a CVE; a score adds at most one weight per class and entity from sub-threshold records and sums over events; counts cover `incidents`; the CVE-side tables include sub-threshold CVEs; the verifier forces promotion when (a) or (c) holds; a later exploitation is a new incident and promotes the disclosure. §4.1: no ID is deleted or reused; numbering runs over `incidents`, `sub_threshold_incidents` and `retired_incidents` up to `id_scheme.highest_assigned`, each array in ascending order. §6.7: waves and themed bundles; a failing wave or bundle moves to `sub_threshold_incidents` as a whole. §3.3 opens with a summary and states the NVD keyword search precisely; §12 adds the threshold to the summary. §9.2 step 1, §10.2 (live and retired records, the retirement wrapper), §11. No record of the 2026 corpus has moved yet.
