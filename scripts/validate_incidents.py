@@ -6,7 +6,8 @@ Class A (lookup): each copied field of validated_cve_details.cves[] is re-derive
   metadata"). A mismatch is an error unless the cves[] entry names the field in `overrides`; every override is printed.
 Class B (bookkeeping): set algebra of the validated layer, the VERIS action.*.cve alignment, vocabularies, the ID
   scheme with its numbering over all record arrays up to id_scheme.highest_assigned, the sub-threshold rule
-  (a disclosure that meets methodology §3.3 (a) or (c) must be promoted), the wrappers of retired records,
+  (a disclosure that meets methodology §3.3 (a) or (c) must be promoted), the wrappers of retired records, the
+  `sources` of every live record (at least one entry, each an object with a non-empty `source`; §10.2),
   ranking_table vs incidents, recomputable counts, and the VERIS block against the VERIS JSON schema. No overrides.
 
 Every check of a record runs over the live records, `incidents` and `sub_threshold_incidents` alike (methodology
@@ -151,9 +152,32 @@ def split_ids(s):
 
 
 # ----------------------------------------------------------------------------- core checks (used by the builders)
+def source_problems(rec) -> list[str]:
+    """What is wrong with a live record's `sources` (methodology §10.2); [] when nothing is."""
+    srcs = rec.get("sources")
+    if not isinstance(srcs, list):
+        return [f"sources is {'missing' if srcs is None else 'not a list'}; every live record needs at least one "
+                "source (§10.2)"]
+    if not srcs:
+        return ["sources is empty; every live record needs at least one source (§10.2)"]
+    out = []
+    for n, s in enumerate(srcs):
+        if not lc.is_source_entry(s):
+            out.append(f"sources[{n}] {str(s)[:60]!r} is not an object with a non-empty string `source` (§10.2)")
+            continue
+        for k in ("locator", "url"):
+            if k in s and not (isinstance(s[k], str) and s[k].strip()):
+                out.append(f"sources[{n}].{k} {s[k]!r} is not a non-empty string (§10.2)")
+    return out
+
+
 def core_checks(d: dict) -> list[Finding]:
     """The checks the builders rely on, as Class B findings; empty = pass. They cover the live records, and the
     numbering also the retired ones.
+
+    Every live record has at least one `sources` entry, an object with a non-empty string `source` and, where present,
+    a non-empty string `locator` and `url` (methodology §10.2). A malformed entry is reported here, so the builders
+    stop with a message instead of crashing on it; the other checks read sources through lc.source_names.
 
     The ID format is checked first. While an ID is malformed its number is unknown, so the numbering check is skipped
     instead of reported (validate() names the skip). Numbering (methodology §4.1): each array is in ascending order,
@@ -187,6 +211,7 @@ def core_checks(d: dict) -> list[Finding]:
                                + "; ".join(f"{what} {', '.join(f'{n:03d}' for n in ns)}" for what, ns in
                                            (("missing", missing), ("doubled", doubled), ("above highest_assigned", above)) if ns)))
     for i in recs:
+        out += [Finding("B", "sources", msg, i["id"]) for msg in source_problems(i)]
         det = i.get("validated_cve_details") or {}
         if sorted(i.get("validated_cve") or []) != sorted(c["cve"] for c in det.get("cves") or []):
             out.append(Finding("B", "validated-cve-set", "validated_cve != validated_cve_details.cves", i["id"]))
@@ -294,15 +319,15 @@ def check_class_b(d, up, r: Result):
 
     for i in recs:
         iid, det, v, rep = i["id"], i.get("validated_cve_details") or {}, i["veris"], i["report"]
-        srcs = [s.get("source") for s in i.get("sources") or []]
+        srcs = lc.source_names(i)
         want = "DB" if any(s in lc.REGISTER_SOURCES for s in srcs) else "DR"
         if not iid.startswith(want + "-"):
             r.add("B", "id-prefix", f"prefix must be {want} (register source: {want == 'DB'})", iid)
         if v.get("incident_id") != iid:
             r.add("B", "veris-incident-id", f"veris.incident_id {v.get('incident_id')!r} != id", iid)
-        for s in i.get("sources") or []:
-            if s.get("source") not in catalog:
-                r.add("B", "source-catalog", f"source {s.get('source')!r} is not in sources_catalog", iid)
+        for s in srcs:
+            if s not in catalog:
+                r.add("B", "source-catalog", f"source {s!r} is not in sources_catalog", iid)
         if v.get("security_incident") not in lc.STATUSES:
             r.add("B", "vocabulary", f"security_incident {v.get('security_incident')!r}", iid)
         elif v["security_incident"] in ("Confirmed", "Suspected") and not has_effect(v.get("attribute") or {}):
@@ -407,7 +432,7 @@ def check_ranking_table(d, r):
             continue
         want = {"incident": i["title"], "date": i["date"], "status": i["veris"]["security_incident"],
                 "observed": i["report"]["observed_severity"], "potential": i["report"]["potential_severity"],
-                "sources": "; ".join(dict.fromkeys(s["source"] for s in i["sources"])),
+                "sources": "; ".join(dict.fromkeys(lc.source_names(i))),
                 "validated_cve": "; ".join(i.get("validated_cve") or [])}
         for k, val in want.items():
             if row.get(k) != val:
@@ -430,7 +455,7 @@ def check_counts(d, r):
        {s: sum(1 for i in inc if i["report"]["observed_severity"] == s) for s in lc.SEVERITIES})
     eq("counts.by_status", cnt.get("by_status"), {s: sum(1 for i in inc if i["veris"]["security_incident"] == s) for s in lc.STATUSES})
     eq("counts.citations_by_source", dict(sorted((cnt.get("citations_by_source") or {}).items())),
-       dict(sorted(Counter(s["source"] for i in inc for s in i["sources"]).items())))
+       dict(sorted(Counter(s for i in inc for s in lc.source_names(i)).items())))
     r.skipped += FROZEN_COUNTS
     eq("id_scheme.counts", (d.get("id_scheme") or {}).get("counts"),
        {p: sum(1 for i in inc if i["id"].startswith(p + "-")) for p in ("DB", "DR")})

@@ -533,6 +533,91 @@ class Retirement(unittest.TestCase):
         self.assertTrue(has(self.run_v(), "id-format", incident="DR-2026-08x"))
 
 
+class Sources(unittest.TestCase):
+    """Methodology §10.2: every live record has at least one `sources` entry, an object with a non-empty `source`.
+    A malformed entry is a finding, never an exception. A retired record is frozen and not checked."""
+
+    def setUp(self):
+        self.d = copy.deepcopy(CORPUS)
+
+    def run_v(self):
+        return vi.validate(self.d, UPSTREAM)
+
+    def row(self, iid):
+        return next(x for x in self.d["ranking_table"] if x["id"] == iid)
+
+    def assert_only_sources_finding(self, iid):
+        r = self.run_v()
+        self.assertTrue(has(r, "sources", incident=iid), "\n".join(map(str, r.errors)))
+        self.assertEqual({f.check for f in r.errors}, {"sources"}, "\n".join(map(str, r.errors)))
+
+    # ---- at least one entry
+    def test_counted_record_without_sources(self):
+        # Counts and the ranking row are fixed by hand, so only the sources check can catch it.
+        incident(self.d, "DR-2026-081")["sources"] = []
+        recount(self.d)
+        self.row("DR-2026-081")["sources"] = ""
+        self.assert_only_sources_finding("DR-2026-081")
+
+    def test_counted_db_record_without_sources(self):
+        # The id-prefix error also fires (no register source is left), but the sources check names the cause.
+        incident(self.d, "DB-2026-016")["sources"] = []
+        recount(self.d)
+        self.row("DB-2026-016")["sources"] = ""
+        self.assertTrue(has(self.run_v(), "sources", incident="DB-2026-016"))
+
+    def test_sub_threshold_record_without_sources(self):
+        move(self.d, "DR-2026-081")
+        recount(self.d)
+        sub(self.d, "DR-2026-081")["sources"] = []
+        self.assert_only_sources_finding("DR-2026-081")
+
+    def test_sub_threshold_record_with_sources_missing(self):
+        move(self.d, "DR-2026-081")
+        recount(self.d)
+        del sub(self.d, "DR-2026-081")["sources"]
+        self.assert_only_sources_finding("DR-2026-081")
+
+    def test_retired_record_is_not_checked(self):
+        retire(self.d, "DR-2026-081", ["DR-2026-083"])["record"]["sources"] = []
+        self.assertFalse(has(self.run_v(), "sources"))
+
+    # ---- malformed entries: a finding from validate and core_checks, a message from the builder, never a crash
+    def check_malformed(self, entry=None):
+        """Append a malformed entry to DR-2026-081 (or, without `entry`, check the record as the test left it)."""
+        import build_incidents_report as bir
+        if entry is not None:
+            incident(self.d, "DR-2026-081")["sources"].append(entry)
+        self.assert_only_sources_finding("DR-2026-081")
+        self.assertTrue(any(f.check == "sources" and f.incident == "DR-2026-081" for f in vi.core_checks(self.d)))
+        with self.assertRaises(SystemExit) as cm:
+            bir.render(self.d)
+        self.assertIn("DR-2026-081", str(cm.exception.code))
+
+    def test_string_entry(self):
+        self.check_malformed("Grok_DeepResearch_ai_incidents_2026.md")
+
+    def test_entry_without_source(self):
+        self.check_malformed({"locator": "item 23"})
+
+    def test_entry_with_empty_source(self):
+        self.check_malformed({"source": " "})
+
+    def test_unhashable_source(self):
+        self.check_malformed({"source": ["Grok_DeepResearch_ai_incidents_2026.md"]})
+
+    def test_locator_not_a_string(self):
+        # The source itself is well-formed, so counts and the ranking row stay right; only the locator is reported.
+        incident(self.d, "DR-2026-081")["sources"][0]["locator"] = 3
+        self.check_malformed()
+
+    def test_sources_not_a_list(self):
+        incident(self.d, "DR-2026-081")["sources"] = "ClaudeCode_DeepResearch_ai_incidents_2026.md"
+        r = self.run_v()
+        self.assertEqual(len([f for f in r.errors if f.check == "sources"]), 1, "one finding, not one per character")
+        self.assertTrue(has(r, "sources", msg="not a list", incident="DR-2026-081"))
+
+
 class DisclosureClasses(unittest.TestCase):
     """Decision 14 item 3 (methodology §3.3): classes are derived per CVE link, and from ai_role for a record
     without a validated CVE."""

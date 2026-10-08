@@ -94,6 +94,18 @@ def numbered_ids(d: dict) -> list:
     return [(name, i.get("id")) for name in LIVE_ARRAYS + (RETIRED_ARRAY,) for i in d.get(name) or []]
 
 
+def is_source_entry(s) -> bool:
+    """A well-formed `sources` entry (methodology §10.2): an object whose `source` is a non-empty string."""
+    return isinstance(s, dict) and isinstance(s.get("source"), str) and bool(s["source"].strip())
+
+
+def source_names(rec: dict) -> list:
+    """The `source` of every well-formed `sources` entry of a record, in order; [] when `sources` is missing or not a
+    list. A malformed entry is skipped here; the verifier's `sources` check reports it."""
+    srcs = rec.get("sources")
+    return [s["source"] for s in srcs if is_source_entry(s)] if isinstance(srcs, list) else []
+
+
 def cve_links(d: dict):
     """Yield (record, cves[] entry) for every validated incident-CVE link of the live records.
 
