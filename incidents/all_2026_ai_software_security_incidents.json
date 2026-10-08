@@ -12,15 +12,21 @@
   "sources_catalog": {
     "ChatGPT_DeepResearch_ai_incidents_2026.md": {
       "kind": "ChatGPT deep-research report",
-      "path": "incidents/sources/ChatGPT_DeepResearch_ai_incidents_2026.md"
+      "path": "incidents/sources/ChatGPT_DeepResearch_ai_incidents_2026.md",
+      "permalink": "https://github.com/DavidFarago/ai_security_incidents_2026/blob/ecb3ccd52e17931f30fb6887020458a922a945d9/incidents/sources/ChatGPT_DeepResearch_ai_incidents_2026.md",
+      "sha256": "e475d8f5c0b47fa7590b31d850c0ba426873e4f94d0bc494f4fad6aeb376d945"
     },
     "ClaudeCode_DeepResearch_ai_incidents_2026.md": {
       "kind": "Claude Code deep-research report",
-      "path": "incidents/sources/ClaudeCode_DeepResearch_ai_incidents_2026.md"
+      "path": "incidents/sources/ClaudeCode_DeepResearch_ai_incidents_2026.md",
+      "permalink": "https://github.com/DavidFarago/ai_security_incidents_2026/blob/ecb3ccd52e17931f30fb6887020458a922a945d9/incidents/sources/ClaudeCode_DeepResearch_ai_incidents_2026.md",
+      "sha256": "67fbb04da7b4fe6f8d01a46bcc675c2a8d01fc22346c8987931a331dab8a81a2"
     },
     "Grok_DeepResearch_ai_incidents_2026.md": {
       "kind": "Grok deep-research report",
-      "path": "incidents/sources/Grok_DeepResearch_ai_incidents_2026.md"
+      "path": "incidents/sources/Grok_DeepResearch_ai_incidents_2026.md",
+      "permalink": "https://github.com/DavidFarago/ai_security_incidents_2026/blob/ecb3ccd52e17931f30fb6887020458a922a945d9/incidents/sources/Grok_DeepResearch_ai_incidents_2026.md",
+      "sha256": "bb87c76a1b8962aa219d8430fadcab8cdcd65a9ad0fdaf8161c1ade6ff723462"
     },
     "incidentdatabase.ai_20260824_ai_incidents_2026.xlsx": {
       "kind": "AI Incident Database (AIID) export, 2026-08-24",
@@ -1411,7 +1417,9 @@
       "date": "Dec 2025 – Feb 2026 (disclosed ~25 Feb)",
       "sources": [
         {
-          "source": "ClaudeCode_DeepResearch_ai_incidents_2026.md"
+          "source": "ClaudeCode_DeepResearch_ai_incidents_2026.md",
+          "locator": "item 2",
+          "url": "https://github.com/DavidFarago/ai_security_incidents_2026/blob/ecb3ccd52e17931f30fb6887020458a922a945d9/incidents/sources/ClaudeCode_DeepResearch_ai_incidents_2026.md?plain=1#L63-L64"
         }
       ],
       "veris": {
@@ -2568,10 +2576,14 @@
       "date": "1–4 Jul 2026",
       "sources": [
         {
-          "source": "ClaudeCode_DeepResearch_ai_incidents_2026.md"
+          "source": "ClaudeCode_DeepResearch_ai_incidents_2026.md",
+          "locator": "item 3",
+          "url": "https://github.com/DavidFarago/ai_security_incidents_2026/blob/ecb3ccd52e17931f30fb6887020458a922a945d9/incidents/sources/ClaudeCode_DeepResearch_ai_incidents_2026.md?plain=1#L66-L67"
         },
         {
-          "source": "Grok_DeepResearch_ai_incidents_2026.md"
+          "source": "Grok_DeepResearch_ai_incidents_2026.md",
+          "locator": "§3.2",
+          "url": "https://github.com/DavidFarago/ai_security_incidents_2026/blob/ecb3ccd52e17931f30fb6887020458a922a945d9/incidents/sources/Grok_DeepResearch_ai_incidents_2026.md?plain=1#L63-L79"
         }
       ],
       "veris": {
@@ -2721,7 +2733,9 @@
       "date": "2026",
       "sources": [
         {
-          "source": "ClaudeCode_DeepResearch_ai_incidents_2026.md"
+          "source": "ClaudeCode_DeepResearch_ai_incidents_2026.md",
+          "locator": "item 14",
+          "url": "https://github.com/DavidFarago/ai_security_incidents_2026/blob/ecb3ccd52e17931f30fb6887020458a922a945d9/incidents/sources/ClaudeCode_DeepResearch_ai_incidents_2026.md?plain=1#L101-L102"
         }
       ],
       "veris": {
@@ -3061,7 +3075,9 @@
       "date": "Jan 2026 compromise (disclosed 6 May 2026)",
       "sources": [
         {
-          "source": "ChatGPT_DeepResearch_ai_incidents_2026.md"
+          "source": "ChatGPT_DeepResearch_ai_incidents_2026.md",
+          "locator": "Operational compromises and agent-harness incidents › Mexican municipal water utility",
+          "url": "https://github.com/DavidFarago/ai_security_incidents_2026/blob/ecb3ccd52e17931f30fb6887020458a922a945d9/incidents/sources/ChatGPT_DeepResearch_ai_incidents_2026.md?plain=1#L71-L73"
         }
       ],
       "veris": {
@@ -3202,7 +3218,9 @@
       "date": "Feb - Mar 2026",
       "sources": [
         {
-          "source": "ClaudeCode_DeepResearch_ai_incidents_2026.md"
+          "source": "ClaudeCode_DeepResearch_ai_incidents_2026.md",
+          "locator": "item 17",
+          "url": "https://github.com/DavidFarago/ai_security_incidents_2026/blob/ecb3ccd52e17931f30fb6887020458a922a945d9/incidents/sources/ClaudeCode_DeepResearch_ai_incidents_2026.md?plain=1#L110-L111"
         }
       ],
       "veris": {
@@ -3420,7 +3438,9 @@
       "date": "Jun - Jul 2026 (published 1 Jul)",
       "sources": [
         {
-          "source": "ClaudeCode_DeepResearch_ai_incidents_2026.md"
+          "source": "ClaudeCode_DeepResearch_ai_incidents_2026.md",
+          "locator": "item 8",
+          "url": "https://github.com/DavidFarago/ai_security_incidents_2026/blob/ecb3ccd52e17931f30fb6887020458a922a945d9/incidents/sources/ClaudeCode_DeepResearch_ai_incidents_2026.md?plain=1#L81-L82"
         }
       ],
       "veris": {
@@ -3638,7 +3658,9 @@
       "date": "4 Aug 2026",
       "sources": [
         {
-          "source": "ClaudeCode_DeepResearch_ai_incidents_2026.md"
+          "source": "ClaudeCode_DeepResearch_ai_incidents_2026.md",
+          "locator": "item 6",
+          "url": "https://github.com/DavidFarago/ai_security_incidents_2026/blob/ecb3ccd52e17931f30fb6887020458a922a945d9/incidents/sources/ClaudeCode_DeepResearch_ai_incidents_2026.md?plain=1#L75-L76"
         }
       ],
       "veris": {
@@ -5171,10 +5193,14 @@
       "date": "10 May 2026",
       "sources": [
         {
-          "source": "ChatGPT_DeepResearch_ai_incidents_2026.md"
+          "source": "ChatGPT_DeepResearch_ai_incidents_2026.md",
+          "locator": "Operational compromises and agent-harness incidents › Sysdig May 10 database exfiltration",
+          "url": "https://github.com/DavidFarago/ai_security_incidents_2026/blob/ecb3ccd52e17931f30fb6887020458a922a945d9/incidents/sources/ChatGPT_DeepResearch_ai_incidents_2026.md?plain=1#L67-L69"
         },
         {
-          "source": "ClaudeCode_DeepResearch_ai_incidents_2026.md"
+          "source": "ClaudeCode_DeepResearch_ai_incidents_2026.md",
+          "locator": "item 19",
+          "url": "https://github.com/DavidFarago/ai_security_incidents_2026/blob/ecb3ccd52e17931f30fb6887020458a922a945d9/incidents/sources/ClaudeCode_DeepResearch_ai_incidents_2026.md?plain=1#L116-L117"
         }
       ],
       "veris": {
@@ -5355,7 +5381,9 @@
       "date": "Dec 2025 – Jun 2026",
       "sources": [
         {
-          "source": "ClaudeCode_DeepResearch_ai_incidents_2026.md"
+          "source": "ClaudeCode_DeepResearch_ai_incidents_2026.md",
+          "locator": "item 22",
+          "url": "https://github.com/DavidFarago/ai_security_incidents_2026/blob/ecb3ccd52e17931f30fb6887020458a922a945d9/incidents/sources/ClaudeCode_DeepResearch_ai_incidents_2026.md?plain=1#L125-L126"
         }
       ],
       "veris": {
@@ -5497,7 +5525,9 @@
       "date": "May 2026",
       "sources": [
         {
-          "source": "ClaudeCode_DeepResearch_ai_incidents_2026.md"
+          "source": "ClaudeCode_DeepResearch_ai_incidents_2026.md",
+          "locator": "item 18",
+          "url": "https://github.com/DavidFarago/ai_security_incidents_2026/blob/ecb3ccd52e17931f30fb6887020458a922a945d9/incidents/sources/ClaudeCode_DeepResearch_ai_incidents_2026.md?plain=1#L113-L114"
         }
       ],
       "veris": {
@@ -5752,7 +5782,9 @@
       "date": "29 May 2026",
       "sources": [
         {
-          "source": "ChatGPT_DeepResearch_ai_incidents_2026.md"
+          "source": "ChatGPT_DeepResearch_ai_incidents_2026.md",
+          "locator": "Operational compromises and agent-harness incidents › Sysdig May 29 container and Kubernetes escape",
+          "url": "https://github.com/DavidFarago/ai_security_incidents_2026/blob/ecb3ccd52e17931f30fb6887020458a922a945d9/incidents/sources/ChatGPT_DeepResearch_ai_incidents_2026.md?plain=1#L63-L65"
         }
       ],
       "veris": {
@@ -6065,7 +6097,9 @@
       "date": "31 Mar 2026",
       "sources": [
         {
-          "source": "ClaudeCode_DeepResearch_ai_incidents_2026.md"
+          "source": "ClaudeCode_DeepResearch_ai_incidents_2026.md",
+          "locator": "item 24",
+          "url": "https://github.com/DavidFarago/ai_security_incidents_2026/blob/ecb3ccd52e17931f30fb6887020458a922a945d9/incidents/sources/ClaudeCode_DeepResearch_ai_incidents_2026.md?plain=1#L131-L132"
         }
       ],
       "veris": {
@@ -7632,10 +7666,14 @@
       "date": "17 Feb 2026 (reported 1 Jan, disclosed 9 Feb)",
       "sources": [
         {
-          "source": "ChatGPT_DeepResearch_ai_incidents_2026.md"
+          "source": "ChatGPT_DeepResearch_ai_incidents_2026.md",
+          "locator": "Operational compromises and agent-harness incidents › Cline npm supply-chain compromise",
+          "url": "https://github.com/DavidFarago/ai_security_incidents_2026/blob/ecb3ccd52e17931f30fb6887020458a922a945d9/incidents/sources/ChatGPT_DeepResearch_ai_incidents_2026.md?plain=1#L79-L83"
         },
         {
-          "source": "ClaudeCode_DeepResearch_ai_incidents_2026.md"
+          "source": "ClaudeCode_DeepResearch_ai_incidents_2026.md",
+          "locator": "item 20",
+          "url": "https://github.com/DavidFarago/ai_security_incidents_2026/blob/ecb3ccd52e17931f30fb6887020458a922a945d9/incidents/sources/ClaudeCode_DeepResearch_ai_incidents_2026.md?plain=1#L119-L120"
         }
       ],
       "veris": {
@@ -7810,10 +7848,14 @@
       "date": "Jan – Aug 2026 (Radar snapshot 16 Aug)",
       "sources": [
         {
-          "source": "ChatGPT_DeepResearch_ai_incidents_2026.md"
+          "source": "ChatGPT_DeepResearch_ai_incidents_2026.md",
+          "locator": "AI-led vulnerability discovery and AI-authored code › Vibe Security Radar and explicitly AI-authored vulnerable code",
+          "url": "https://github.com/DavidFarago/ai_security_incidents_2026/blob/ecb3ccd52e17931f30fb6887020458a922a945d9/incidents/sources/ChatGPT_DeepResearch_ai_incidents_2026.md?plain=1#L163-L169"
         },
         {
-          "source": "ClaudeCode_DeepResearch_ai_incidents_2026.md"
+          "source": "ClaudeCode_DeepResearch_ai_incidents_2026.md",
+          "locator": "item 33",
+          "url": "https://github.com/DavidFarago/ai_security_incidents_2026/blob/ecb3ccd52e17931f30fb6887020458a922a945d9/incidents/sources/ClaudeCode_DeepResearch_ai_incidents_2026.md?plain=1#L160-L161"
         }
       ],
       "veris": {
@@ -11943,7 +11985,9 @@
       "date": "2026 (175k exposed reported Jan, fixed 0.17.1)",
       "sources": [
         {
-          "source": "ClaudeCode_DeepResearch_ai_incidents_2026.md"
+          "source": "ClaudeCode_DeepResearch_ai_incidents_2026.md",
+          "locator": "item 25",
+          "url": "https://github.com/DavidFarago/ai_security_incidents_2026/blob/ecb3ccd52e17931f30fb6887020458a922a945d9/incidents/sources/ClaudeCode_DeepResearch_ai_incidents_2026.md?plain=1#L134-L135"
         }
       ],
       "veris": {
@@ -12138,7 +12182,9 @@
       "date": "2026",
       "sources": [
         {
-          "source": "ClaudeCode_DeepResearch_ai_incidents_2026.md"
+          "source": "ClaudeCode_DeepResearch_ai_incidents_2026.md",
+          "locator": "item 35",
+          "url": "https://github.com/DavidFarago/ai_security_incidents_2026/blob/ecb3ccd52e17931f30fb6887020458a922a945d9/incidents/sources/ClaudeCode_DeepResearch_ai_incidents_2026.md?plain=1#L166-L167"
         }
       ],
       "veris": {
@@ -12264,7 +12310,9 @@
       "date": "Feb 2026 (disclosed 3 Feb)",
       "sources": [
         {
-          "source": "ClaudeCode_DeepResearch_ai_incidents_2026.md"
+          "source": "ClaudeCode_DeepResearch_ai_incidents_2026.md",
+          "locator": "item 10",
+          "url": "https://github.com/DavidFarago/ai_security_incidents_2026/blob/ecb3ccd52e17931f30fb6887020458a922a945d9/incidents/sources/ClaudeCode_DeepResearch_ai_incidents_2026.md?plain=1#L87-L88"
         }
       ],
       "veris": {
@@ -12522,7 +12570,9 @@
       "date": "Feb - Jun 2026 (12 Feb, 3 Jun)",
       "sources": [
         {
-          "source": "ClaudeCode_DeepResearch_ai_incidents_2026.md"
+          "source": "ClaudeCode_DeepResearch_ai_incidents_2026.md",
+          "locator": "item 34",
+          "url": "https://github.com/DavidFarago/ai_security_incidents_2026/blob/ecb3ccd52e17931f30fb6887020458a922a945d9/incidents/sources/ClaudeCode_DeepResearch_ai_incidents_2026.md?plain=1#L163-L164"
         }
       ],
       "veris": {
@@ -12796,7 +12846,9 @@
       "date": "disclosed Jul 2026",
       "sources": [
         {
-          "source": "Grok_DeepResearch_ai_incidents_2026.md"
+          "source": "Grok_DeepResearch_ai_incidents_2026.md",
+          "locator": "§3.3",
+          "url": "https://github.com/DavidFarago/ai_security_incidents_2026/blob/ecb3ccd52e17931f30fb6887020458a922a945d9/incidents/sources/Grok_DeepResearch_ai_incidents_2026.md?plain=1#L96"
         }
       ],
       "veris": {
@@ -13087,7 +13139,9 @@
       "date": "Apr 2026",
       "sources": [
         {
-          "source": "ClaudeCode_DeepResearch_ai_incidents_2026.md"
+          "source": "ClaudeCode_DeepResearch_ai_incidents_2026.md",
+          "locator": "item 26",
+          "url": "https://github.com/DavidFarago/ai_security_incidents_2026/blob/ecb3ccd52e17931f30fb6887020458a922a945d9/incidents/sources/ClaudeCode_DeepResearch_ai_incidents_2026.md?plain=1#L137-L138"
         }
       ],
       "veris": {
@@ -13231,7 +13285,9 @@
       "date": "14 May 2026",
       "sources": [
         {
-          "source": "ClaudeCode_DeepResearch_ai_incidents_2026.md"
+          "source": "ClaudeCode_DeepResearch_ai_incidents_2026.md",
+          "locator": "item 32",
+          "url": "https://github.com/DavidFarago/ai_security_incidents_2026/blob/ecb3ccd52e17931f30fb6887020458a922a945d9/incidents/sources/ClaudeCode_DeepResearch_ai_incidents_2026.md?plain=1#L157-L158"
         }
       ],
       "veris": {
@@ -13390,7 +13446,9 @@
       "date": "May - Jun 2026",
       "sources": [
         {
-          "source": "ClaudeCode_DeepResearch_ai_incidents_2026.md"
+          "source": "ClaudeCode_DeepResearch_ai_incidents_2026.md",
+          "locator": "item 36",
+          "url": "https://github.com/DavidFarago/ai_security_incidents_2026/blob/ecb3ccd52e17931f30fb6887020458a922a945d9/incidents/sources/ClaudeCode_DeepResearch_ai_incidents_2026.md?plain=1#L169-L170"
         }
       ],
       "veris": {
@@ -14983,10 +15041,14 @@
       "date": "Apr 2026 & 5 Aug 2026",
       "sources": [
         {
-          "source": "ClaudeCode_DeepResearch_ai_incidents_2026.md"
+          "source": "ClaudeCode_DeepResearch_ai_incidents_2026.md",
+          "locator": "item 16",
+          "url": "https://github.com/DavidFarago/ai_security_incidents_2026/blob/ecb3ccd52e17931f30fb6887020458a922a945d9/incidents/sources/ClaudeCode_DeepResearch_ai_incidents_2026.md?plain=1#L107-L108"
         },
         {
-          "source": "Grok_DeepResearch_ai_incidents_2026.md"
+          "source": "Grok_DeepResearch_ai_incidents_2026.md",
+          "locator": "§3.5",
+          "url": "https://github.com/DavidFarago/ai_security_incidents_2026/blob/ecb3ccd52e17931f30fb6887020458a922a945d9/incidents/sources/Grok_DeepResearch_ai_incidents_2026.md?plain=1#L111-L124"
         }
       ],
       "veris": {
@@ -15184,7 +15246,9 @@
       "date": "2026",
       "sources": [
         {
-          "source": "Grok_DeepResearch_ai_incidents_2026.md"
+          "source": "Grok_DeepResearch_ai_incidents_2026.md",
+          "locator": "§3.7 › Agent-harness CVEs",
+          "url": "https://github.com/DavidFarago/ai_security_incidents_2026/blob/ecb3ccd52e17931f30fb6887020458a922a945d9/incidents/sources/Grok_DeepResearch_ai_incidents_2026.md?plain=1#L138"
         }
       ],
       "veris": {
@@ -15452,7 +15516,9 @@
       "date": "Apr - Jun 2026",
       "sources": [
         {
-          "source": "ClaudeCode_DeepResearch_ai_incidents_2026.md"
+          "source": "ClaudeCode_DeepResearch_ai_incidents_2026.md",
+          "locator": "item 5",
+          "url": "https://github.com/DavidFarago/ai_security_incidents_2026/blob/ecb3ccd52e17931f30fb6887020458a922a945d9/incidents/sources/ClaudeCode_DeepResearch_ai_incidents_2026.md?plain=1#L72-L73"
         }
       ],
       "veris": {
@@ -15903,7 +15969,9 @@
       "date": "15 Apr 2026",
       "sources": [
         {
-          "source": "ClaudeCode_DeepResearch_ai_incidents_2026.md"
+          "source": "ClaudeCode_DeepResearch_ai_incidents_2026.md",
+          "locator": "item 13",
+          "url": "https://github.com/DavidFarago/ai_security_incidents_2026/blob/ecb3ccd52e17931f30fb6887020458a922a945d9/incidents/sources/ClaudeCode_DeepResearch_ai_incidents_2026.md?plain=1#L98-L99"
         }
       ],
       "veris": {
@@ -16354,7 +16422,9 @@
       "date": "reported Feb 2026, fixed 2 Apr, disclosed Jul 2026",
       "sources": [
         {
-          "source": "ClaudeCode_DeepResearch_ai_incidents_2026.md"
+          "source": "ClaudeCode_DeepResearch_ai_incidents_2026.md",
+          "locator": "item 9",
+          "url": "https://github.com/DavidFarago/ai_security_incidents_2026/blob/ecb3ccd52e17931f30fb6887020458a922a945d9/incidents/sources/ClaudeCode_DeepResearch_ai_incidents_2026.md?plain=1#L84-L85"
         }
       ],
       "veris": {
@@ -16692,10 +16762,14 @@
       "date": "25 Feb 2026 disclosure, cluster Feb – Aug 2026",
       "sources": [
         {
-          "source": "ChatGPT_DeepResearch_ai_incidents_2026.md"
+          "source": "ChatGPT_DeepResearch_ai_incidents_2026.md",
+          "locator": "Model and pipeline exploitation disclosures › Claude Code project-file RCE",
+          "url": "https://github.com/DavidFarago/ai_security_incidents_2026/blob/ecb3ccd52e17931f30fb6887020458a922a945d9/incidents/sources/ChatGPT_DeepResearch_ai_incidents_2026.md?plain=1#L111-L113"
         },
         {
-          "source": "ClaudeCode_DeepResearch_ai_incidents_2026.md"
+          "source": "ClaudeCode_DeepResearch_ai_incidents_2026.md",
+          "locator": "item 15",
+          "url": "https://github.com/DavidFarago/ai_security_incidents_2026/blob/ecb3ccd52e17931f30fb6887020458a922a945d9/incidents/sources/ClaudeCode_DeepResearch_ai_incidents_2026.md?plain=1#L104-L105"
         }
       ],
       "veris": {
@@ -17200,10 +17274,14 @@
       "date": "23 Jun 2026 (vulnerable PR merged 18 Jun)",
       "sources": [
         {
-          "source": "ChatGPT_DeepResearch_ai_incidents_2026.md"
+          "source": "ChatGPT_DeepResearch_ai_incidents_2026.md",
+          "locator": "AI-led vulnerability discovery and AI-authored code › Snowflake GitHub Actions/Jira",
+          "url": "https://github.com/DavidFarago/ai_security_incidents_2026/blob/ecb3ccd52e17931f30fb6887020458a922a945d9/incidents/sources/ChatGPT_DeepResearch_ai_incidents_2026.md?plain=1#L141-L143"
         },
         {
-          "source": "Grok_DeepResearch_ai_incidents_2026.md"
+          "source": "Grok_DeepResearch_ai_incidents_2026.md",
+          "locator": "§3.6",
+          "url": "https://github.com/DavidFarago/ai_security_incidents_2026/blob/ecb3ccd52e17931f30fb6887020458a922a945d9/incidents/sources/Grok_DeepResearch_ai_incidents_2026.md?plain=1#L126-L134"
         }
       ],
       "veris": {
@@ -17357,7 +17435,9 @@
       "date": "Jan – Jul 2026",
       "sources": [
         {
-          "source": "ClaudeCode_DeepResearch_ai_incidents_2026.md"
+          "source": "ClaudeCode_DeepResearch_ai_incidents_2026.md",
+          "locator": "item 38",
+          "url": "https://github.com/DavidFarago/ai_security_incidents_2026/blob/ecb3ccd52e17931f30fb6887020458a922a945d9/incidents/sources/ClaudeCode_DeepResearch_ai_incidents_2026.md?plain=1#L175-L176"
         }
       ],
       "veris": {
@@ -17508,7 +17588,9 @@
       "date": "disclosed Jun 2026 (reported Jan)",
       "sources": [
         {
-          "source": "ClaudeCode_DeepResearch_ai_incidents_2026.md"
+          "source": "ClaudeCode_DeepResearch_ai_incidents_2026.md",
+          "locator": "item 21",
+          "url": "https://github.com/DavidFarago/ai_security_incidents_2026/blob/ecb3ccd52e17931f30fb6887020458a922a945d9/incidents/sources/ClaudeCode_DeepResearch_ai_incidents_2026.md?plain=1#L122-L123"
         }
       ],
       "veris": {
@@ -19307,13 +19389,19 @@
       "date": "11 May 2026 (disclosure)",
       "sources": [
         {
-          "source": "ChatGPT_DeepResearch_ai_incidents_2026.md"
+          "source": "ChatGPT_DeepResearch_ai_incidents_2026.md",
+          "locator": "AI-led vulnerability discovery and AI-authored code › Google GTIG's AI-developed zero-day",
+          "url": "https://github.com/DavidFarago/ai_security_incidents_2026/blob/ecb3ccd52e17931f30fb6887020458a922a945d9/incidents/sources/ChatGPT_DeepResearch_ai_incidents_2026.md?plain=1#L135-L139"
         },
         {
-          "source": "ClaudeCode_DeepResearch_ai_incidents_2026.md"
+          "source": "ClaudeCode_DeepResearch_ai_incidents_2026.md",
+          "locator": "item 11",
+          "url": "https://github.com/DavidFarago/ai_security_incidents_2026/blob/ecb3ccd52e17931f30fb6887020458a922a945d9/incidents/sources/ClaudeCode_DeepResearch_ai_incidents_2026.md?plain=1#L90-L91"
         },
         {
-          "source": "Grok_DeepResearch_ai_incidents_2026.md"
+          "source": "Grok_DeepResearch_ai_incidents_2026.md",
+          "locator": "§3.7 › AI-assisted offensive exploit development",
+          "url": "https://github.com/DavidFarago/ai_security_incidents_2026/blob/ecb3ccd52e17931f30fb6887020458a922a945d9/incidents/sources/Grok_DeepResearch_ai_incidents_2026.md?plain=1#L142"
         }
       ],
       "veris": {
@@ -19439,10 +19527,14 @@
       "date": "Mar – Jul 2026 (disclosures)",
       "sources": [
         {
-          "source": "ChatGPT_DeepResearch_ai_incidents_2026.md"
+          "source": "ChatGPT_DeepResearch_ai_incidents_2026.md",
+          "locator": "AI-led vulnerability discovery and AI-authored code › XBOW Microsoft critical-RCE family",
+          "url": "https://github.com/DavidFarago/ai_security_incidents_2026/blob/ecb3ccd52e17931f30fb6887020458a922a945d9/incidents/sources/ChatGPT_DeepResearch_ai_incidents_2026.md?plain=1#L145-L147"
         },
         {
-          "source": "ClaudeCode_DeepResearch_ai_incidents_2026.md"
+          "source": "ClaudeCode_DeepResearch_ai_incidents_2026.md",
+          "locator": "item 31",
+          "url": "https://github.com/DavidFarago/ai_security_incidents_2026/blob/ecb3ccd52e17931f30fb6887020458a922a945d9/incidents/sources/ClaudeCode_DeepResearch_ai_incidents_2026.md?plain=1#L154-L155"
         }
       ],
       "veris": {
@@ -19641,10 +19733,14 @@
       "date": "7 May 2026 (disclosure)",
       "sources": [
         {
-          "source": "ChatGPT_DeepResearch_ai_incidents_2026.md"
+          "source": "ChatGPT_DeepResearch_ai_incidents_2026.md",
+          "locator": "Model and pipeline exploitation disclosures › Microsoft Semantic Kernel MCP vulnerabilities",
+          "url": "https://github.com/DavidFarago/ai_security_incidents_2026/blob/ecb3ccd52e17931f30fb6887020458a922a945d9/incidents/sources/ChatGPT_DeepResearch_ai_incidents_2026.md?plain=1#L109"
         },
         {
-          "source": "ClaudeCode_DeepResearch_ai_incidents_2026.md"
+          "source": "ClaudeCode_DeepResearch_ai_incidents_2026.md",
+          "locator": "item 29",
+          "url": "https://github.com/DavidFarago/ai_security_incidents_2026/blob/ecb3ccd52e17931f30fb6887020458a922a945d9/incidents/sources/ClaudeCode_DeepResearch_ai_incidents_2026.md?plain=1#L148-L149"
         }
       ],
       "veris": {
@@ -19878,10 +19974,14 @@
       "date": "15 Jun 2026 (disclosure)",
       "sources": [
         {
-          "source": "ChatGPT_DeepResearch_ai_incidents_2026.md"
+          "source": "ChatGPT_DeepResearch_ai_incidents_2026.md",
+          "locator": "Model and pipeline exploitation disclosures › Microsoft 365 Copilot SearchLeak",
+          "url": "https://github.com/DavidFarago/ai_security_incidents_2026/blob/ecb3ccd52e17931f30fb6887020458a922a945d9/incidents/sources/ChatGPT_DeepResearch_ai_incidents_2026.md?plain=1#L105-L107"
         },
         {
-          "source": "ClaudeCode_DeepResearch_ai_incidents_2026.md"
+          "source": "ClaudeCode_DeepResearch_ai_incidents_2026.md",
+          "locator": "item 23",
+          "url": "https://github.com/DavidFarago/ai_security_incidents_2026/blob/ecb3ccd52e17931f30fb6887020458a922a945d9/incidents/sources/ClaudeCode_DeepResearch_ai_incidents_2026.md?plain=1#L128-L129"
         }
       ],
       "veris": {
@@ -20037,10 +20137,14 @@
       "date": "25–28 Jul 2026 (disclosed 4 Aug)",
       "sources": [
         {
-          "source": "ChatGPT_DeepResearch_ai_incidents_2026.md"
+          "source": "ChatGPT_DeepResearch_ai_incidents_2026.md",
+          "locator": "Operational compromises and agent-harness incidents › UK AISI unsanctioned behavior",
+          "url": "https://github.com/DavidFarago/ai_security_incidents_2026/blob/ecb3ccd52e17931f30fb6887020458a922a945d9/incidents/sources/ChatGPT_DeepResearch_ai_incidents_2026.md?plain=1#L89-L91"
         },
         {
-          "source": "Grok_DeepResearch_ai_incidents_2026.md"
+          "source": "Grok_DeepResearch_ai_incidents_2026.md",
+          "locator": "§3.4",
+          "url": "https://github.com/DavidFarago/ai_security_incidents_2026/blob/ecb3ccd52e17931f30fb6887020458a922a945d9/incidents/sources/Grok_DeepResearch_ai_incidents_2026.md?plain=1#L100-L109"
         }
       ],
       "veris": {
@@ -20196,10 +20300,14 @@
       "date": "18 Aug 2026 (disclosure)",
       "sources": [
         {
-          "source": "ChatGPT_DeepResearch_ai_incidents_2026.md"
+          "source": "ChatGPT_DeepResearch_ai_incidents_2026.md",
+          "locator": "Model and pipeline exploitation disclosures › CoSnitch",
+          "url": "https://github.com/DavidFarago/ai_security_incidents_2026/blob/ecb3ccd52e17931f30fb6887020458a922a945d9/incidents/sources/ChatGPT_DeepResearch_ai_incidents_2026.md?plain=1#L115"
         },
         {
-          "source": "ClaudeCode_DeepResearch_ai_incidents_2026.md"
+          "source": "ClaudeCode_DeepResearch_ai_incidents_2026.md",
+          "locator": "item 23",
+          "url": "https://github.com/DavidFarago/ai_security_incidents_2026/blob/ecb3ccd52e17931f30fb6887020458a922a945d9/incidents/sources/ClaudeCode_DeepResearch_ai_incidents_2026.md?plain=1#L128-L129"
         }
       ],
       "veris": {
@@ -20350,7 +20458,9 @@
       "date": "2026",
       "sources": [
         {
-          "source": "ChatGPT_DeepResearch_ai_incidents_2026.md"
+          "source": "ChatGPT_DeepResearch_ai_incidents_2026.md",
+          "locator": "AI-led vulnerability discovery and AI-authored code › Exim Dead.Letter",
+          "url": "https://github.com/DavidFarago/ai_security_incidents_2026/blob/ecb3ccd52e17931f30fb6887020458a922a945d9/incidents/sources/ChatGPT_DeepResearch_ai_incidents_2026.md?plain=1#L149"
         }
       ],
       "veris": {
@@ -20510,7 +20620,9 @@
       "date": "2026",
       "sources": [
         {
-          "source": "Grok_DeepResearch_ai_incidents_2026.md"
+          "source": "Grok_DeepResearch_ai_incidents_2026.md",
+          "locator": "§4",
+          "url": "https://github.com/DavidFarago/ai_security_incidents_2026/blob/ecb3ccd52e17931f30fb6887020458a922a945d9/incidents/sources/Grok_DeepResearch_ai_incidents_2026.md?plain=1#L152-L160"
         }
       ],
       "veris": {
@@ -20886,7 +20998,9 @@
       "date": "Jan – Mar 2026",
       "sources": [
         {
-          "source": "ClaudeCode_DeepResearch_ai_incidents_2026.md"
+          "source": "ClaudeCode_DeepResearch_ai_incidents_2026.md",
+          "locator": "item 37",
+          "url": "https://github.com/DavidFarago/ai_security_incidents_2026/blob/ecb3ccd52e17931f30fb6887020458a922a945d9/incidents/sources/ClaudeCode_DeepResearch_ai_incidents_2026.md?plain=1#L172-L173"
         }
       ],
       "veris": {
@@ -21015,7 +21129,9 @@
       "date": "Mar - May 2026",
       "sources": [
         {
-          "source": "ClaudeCode_DeepResearch_ai_incidents_2026.md"
+          "source": "ClaudeCode_DeepResearch_ai_incidents_2026.md",
+          "locator": "item 23",
+          "url": "https://github.com/DavidFarago/ai_security_incidents_2026/blob/ecb3ccd52e17931f30fb6887020458a922a945d9/incidents/sources/ClaudeCode_DeepResearch_ai_incidents_2026.md?plain=1#L128-L129"
         }
       ],
       "veris": {
@@ -21193,7 +21309,9 @@
       "date": "Mar 2026 onward",
       "sources": [
         {
-          "source": "ClaudeCode_DeepResearch_ai_incidents_2026.md"
+          "source": "ClaudeCode_DeepResearch_ai_incidents_2026.md",
+          "locator": "item 31",
+          "url": "https://github.com/DavidFarago/ai_security_incidents_2026/blob/ecb3ccd52e17931f30fb6887020458a922a945d9/incidents/sources/ClaudeCode_DeepResearch_ai_incidents_2026.md?plain=1#L154-L155"
         }
       ],
       "veris": {
@@ -21783,7 +21901,9 @@
       "date": "Jul 2026",
       "sources": [
         {
-          "source": "ClaudeCode_DeepResearch_ai_incidents_2026.md"
+          "source": "ClaudeCode_DeepResearch_ai_incidents_2026.md",
+          "locator": "item 28",
+          "url": "https://github.com/DavidFarago/ai_security_incidents_2026/blob/ecb3ccd52e17931f30fb6887020458a922a945d9/incidents/sources/ClaudeCode_DeepResearch_ai_incidents_2026.md?plain=1#L145-L146"
         }
       ],
       "veris": {
@@ -21983,7 +22103,9 @@
       "date": "7 Aug 2026 (disclosure)",
       "sources": [
         {
-          "source": "ChatGPT_DeepResearch_ai_incidents_2026.md"
+          "source": "ChatGPT_DeepResearch_ai_incidents_2026.md",
+          "locator": "Model and pipeline exploitation disclosures › RovoBlast",
+          "url": "https://github.com/DavidFarago/ai_security_incidents_2026/blob/ecb3ccd52e17931f30fb6887020458a922a945d9/incidents/sources/ChatGPT_DeepResearch_ai_incidents_2026.md?plain=1#L117-L119"
         }
       ],
       "veris": {
@@ -22106,7 +22228,9 @@
       "date": "10 Aug 2026 (disclosure)",
       "sources": [
         {
-          "source": "ChatGPT_DeepResearch_ai_incidents_2026.md"
+          "source": "ChatGPT_DeepResearch_ai_incidents_2026.md",
+          "locator": "AI-led vulnerability discovery and AI-authored code › GPT-5.6-Cyber and V8",
+          "url": "https://github.com/DavidFarago/ai_security_incidents_2026/blob/ecb3ccd52e17931f30fb6887020458a922a945d9/incidents/sources/ChatGPT_DeepResearch_ai_incidents_2026.md?plain=1#L159-L161"
         }
       ],
       "veris": {
@@ -22265,10 +22389,14 @@
       "date": "14 Jan 2026 (disclosure)",
       "sources": [
         {
-          "source": "ChatGPT_DeepResearch_ai_incidents_2026.md"
+          "source": "ChatGPT_DeepResearch_ai_incidents_2026.md",
+          "locator": "Model and pipeline exploitation disclosures › Reprompt",
+          "url": "https://github.com/DavidFarago/ai_security_incidents_2026/blob/ecb3ccd52e17931f30fb6887020458a922a945d9/incidents/sources/ChatGPT_DeepResearch_ai_incidents_2026.md?plain=1#L121"
         },
         {
-          "source": "ClaudeCode_DeepResearch_ai_incidents_2026.md"
+          "source": "ClaudeCode_DeepResearch_ai_incidents_2026.md",
+          "locator": "item 23",
+          "url": "https://github.com/DavidFarago/ai_security_incidents_2026/blob/ecb3ccd52e17931f30fb6887020458a922a945d9/incidents/sources/ClaudeCode_DeepResearch_ai_incidents_2026.md?plain=1#L128-L129"
         }
       ],
       "veris": {
@@ -22395,7 +22523,9 @@
       "date": "2026",
       "sources": [
         {
-          "source": "Grok_DeepResearch_ai_incidents_2026.md"
+          "source": "Grok_DeepResearch_ai_incidents_2026.md",
+          "locator": "§4",
+          "url": "https://github.com/DavidFarago/ai_security_incidents_2026/blob/ecb3ccd52e17931f30fb6887020458a922a945d9/incidents/sources/Grok_DeepResearch_ai_incidents_2026.md?plain=1#L162"
         }
       ],
       "veris": {
@@ -22544,7 +22674,9 @@
       "date": "6 Mar 2026 (disclosure)",
       "sources": [
         {
-          "source": "ChatGPT_DeepResearch_ai_incidents_2026.md"
+          "source": "ChatGPT_DeepResearch_ai_incidents_2026.md",
+          "locator": "AI-led vulnerability discovery and AI-authored code › Firefox with Claude Opus 4.6",
+          "url": "https://github.com/DavidFarago/ai_security_incidents_2026/blob/ecb3ccd52e17931f30fb6887020458a922a945d9/incidents/sources/ChatGPT_DeepResearch_ai_incidents_2026.md?plain=1#L151-L153"
         }
       ],
       "veris": {
@@ -23276,7 +23408,9 @@
       "date": "21 Apr 2026 (disclosure)",
       "sources": [
         {
-          "source": "ChatGPT_DeepResearch_ai_incidents_2026.md"
+          "source": "ChatGPT_DeepResearch_ai_incidents_2026.md",
+          "locator": "AI-led vulnerability discovery and AI-authored code › Firefox with Claude Mythos Preview",
+          "url": "https://github.com/DavidFarago/ai_security_incidents_2026/blob/ecb3ccd52e17931f30fb6887020458a922a945d9/incidents/sources/ChatGPT_DeepResearch_ai_incidents_2026.md?plain=1#L155-L157"
         }
       ],
       "veris": {

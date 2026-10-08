@@ -106,6 +106,52 @@ def source_names(rec: dict) -> list:
     return [s["source"] for s in srcs if is_source_entry(s)] if isinstance(srcs, list) else []
 
 
+LOCATOR_SEP = " › "
+
+
+def _heading_level(line: str) -> int:
+    m = re.match(r"(#+)\s", line)
+    return len(m.group(1)) if m else 0
+
+
+def locate(lines: list, locator) -> tuple | str:
+    """Resolve a locator path (methodology §10.2) in a Markdown file to the 1-based line span (start, end) of its
+    passage, or return why it fails.
+
+    The components are separated by LOCATOR_SEP; each is searched inside the span of the previous one:
+      '§3.6'     the numbered heading '#… 3.6 …' (also '3.6.');
+      'item 23'  the numbered bold item '**23. …';
+      any text   the heading '#… <text>' or the bold lead '**<text>**' / '**<text>.**'.
+    A heading spans up to the next heading of the same or a higher level; an item or a bold lead spans up to the next
+    heading or line that starts in bold. No match, or more than one match inside the span, fails.
+    """
+    if not isinstance(locator, str) or not locator.strip():
+        return "empty locator"
+    start, end = 1, len(lines)
+    for depth, comp in enumerate(c.strip() for c in locator.split(LOCATOR_SEP)):
+        if m := re.fullmatch(r"§(\d+(?:\.\d+)*)", comp):
+            pat = re.compile(r"#+\s+" + re.escape(m.group(1)) + r"\.?(\s|$)")
+        elif m := re.fullmatch(r"item (\d+)", comp):
+            pat = re.compile(r"\*\*" + m.group(1) + r"\.\s")
+        elif comp:
+            text = re.escape(comp)
+            pat = re.compile(rf"#+\s+{text}\s*$|\*\*{text}\.?\*\*")
+        else:
+            return f"empty component in {locator!r}"
+        lo = start if depth == 0 else start + 1
+        hits = [n for n in range(lo, end + 1) if pat.match(lines[n - 1])]
+        if len(hits) != 1:
+            return f"{comp!r} matches {len(hits) or 'no'} line{'' if len(hits) == 1 else 's'} in lines {lo}-{end}"
+        s = hits[0]
+        level = _heading_level(lines[s - 1])
+        if level:
+            def stops(line): return 0 < _heading_level(line) <= level
+        else:
+            def stops(line): return _heading_level(line) > 0 or line.startswith("**")
+        start, end = s, next((n - 1 for n in range(s + 1, end + 1) if stops(lines[n - 1])), end)
+    return start, end
+
+
 def cve_links(d: dict):
     """Yield (record, cves[] entry) for every validated incident-CVE link of the live records.
 

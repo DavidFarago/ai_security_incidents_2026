@@ -7,7 +7,9 @@ Class A (lookup): each copied field of validated_cve_details.cves[] is re-derive
 Class B (bookkeeping): set algebra of the validated layer, the VERIS action.*.cve alignment, vocabularies, the ID
   scheme with its numbering over all record arrays up to id_scheme.highest_assigned, the sub-threshold rule
   (a disclosure that meets methodology §3.3 (a) or (c) must be promoted), the wrappers of retired records, the
-  `sources` of every live record (at least one entry, each an object with a non-empty `source`; §10.2),
+  `sources` of every live record (at least one entry, each with `source`, `locator` and `url`; §10.2) and each
+  entry's position (a register url names the register item of the locator; a report held in this repo is cited by
+  its pinned permalink with a line range inside the passage that the locator names),
   ranking_table vs incidents, recomputable counts, and the VERIS block against the VERIS JSON schema. No overrides.
 
 Every check of a record runs over the live records, `incidents` and `sub_threshold_incidents` alike (methodology
@@ -26,6 +28,7 @@ from __future__ import annotations
 
 import argparse
 import datetime as dt
+import hashlib
 import json
 import re
 import sys
@@ -166,7 +169,9 @@ def source_problems(rec) -> list[str]:
             out.append(f"sources[{n}] {str(s)[:60]!r} is not an object with a non-empty string `source` (§10.2)")
             continue
         for k in ("locator", "url"):
-            if k in s and not (isinstance(s[k], str) and s[k].strip()):
+            if k not in s:
+                out.append(f"sources[{n}] has no `{k}` (§10.2)")
+            elif not (isinstance(s[k], str) and s[k].strip()):
                 out.append(f"sources[{n}].{k} {s[k]!r} is not a non-empty string (§10.2)")
     return out
 
@@ -175,8 +180,8 @@ def core_checks(d: dict) -> list[Finding]:
     """The checks the builders rely on, as Class B findings; empty = pass. They cover the live records, and the
     numbering also the retired ones.
 
-    Every live record has at least one `sources` entry, an object with a non-empty string `source` and, where present,
-    a non-empty string `locator` and `url` (methodology §10.2). A malformed entry is reported here, so the builders
+    Every live record has at least one `sources` entry, an object with non-empty strings `source`, `locator` and `url`
+    (methodology §10.2). A malformed entry is reported here, so the builders
     stop with a message instead of crashing on it; the other checks read sources through lc.source_names.
 
     The ID format is checked first. While an ID is malformed its number is unknown, so the numbering check is skipped
@@ -362,11 +367,55 @@ def check_class_b(d, up, r: Result):
         for x in sorted(exploited - in_veris):
             r.add("B", "veris-action-cve", f"exploited CVE {x} is in neither action.hacking.cve nor action.malware.cve", iid, x)
 
+    check_source_locators(d, r)
     check_sub_threshold(d, r)
     check_retired(d, r)
     check_ranking_table(d, r)
     check_counts(d, r)
     check_veris_schema(d, up, r)
+
+
+def check_source_locators(d, r, root: Path = lc.ROOT):
+    """Methodology §10.2: where a sources entry points. For a source with a `permalink` in sources_catalog (a report
+    held in this repo), the file at `path` still has the catalog `sha256`, `url` is the permalink with a line range
+    (?plain=1#L<a>[-L<b>]), the locator resolves to one passage (lc.locate) and the range lies inside it. For a register,
+    `url` ends with the register item of the locator (its last token). Malformed entries are left to `sources`."""
+    catalog = d.get("sources_catalog") or {}
+    files = {}
+    for name, cat in catalog.items():
+        if not cat.get("permalink"):
+            continue
+        path = root / cat.get("path", "")
+        if not path.is_file():
+            r.add("B", "source-locator", f"{cat.get('path')!r} of {name} is missing")
+        elif hashlib.sha256(path.read_bytes()).hexdigest() != cat.get("sha256"):
+            r.add("B", "source-locator", f"{cat['path']} does not match its sources_catalog sha256: the permalink and the "
+                  "line ranges were pinned to another version of the file")
+        else:
+            files[name] = path.read_text(encoding="utf-8").splitlines()
+    for i in lc.records(d):
+        srcs = i.get("sources") if isinstance(i.get("sources"), list) else []
+        for n, s in enumerate(srcs):
+            if not (lc.is_source_entry(s) and all(isinstance(s.get(k), str) and s[k].strip() for k in ("locator", "url"))):
+                continue
+            src, loc, url, cat = s["source"], s["locator"], s["url"], catalog.get(s["source"]) or {}
+            where = f"sources[{n}] ({src})"
+            if cat.get("permalink"):
+                if src not in files:
+                    continue
+                m = re.fullmatch(re.escape(cat["permalink"]) + r"\?plain=1#L(\d+)(?:-L(\d+))?", url)
+                if not m:
+                    r.add("B", "source-locator", f"{where}: url is not {cat['permalink']}?plain=1#L<a>[-L<b>]", i["id"])
+                span = lc.locate(files[src], loc)
+                if isinstance(span, str):
+                    r.add("B", "source-locator", f"{where}: locator {loc!r}: {span}", i["id"])
+                elif m:
+                    a, b = int(m.group(1)), int(m.group(2) or m.group(1))
+                    if not span[0] <= a <= b <= span[1]:
+                        r.add("B", "source-locator", f"{where}: lines {a}-{b} are not inside {loc!r} (lines "
+                              f"{span[0]}-{span[1]})", i["id"])
+            elif src in lc.REGISTER_SOURCES and not url.endswith("/" + loc.split()[-1]):
+                r.add("B", "source-locator", f"{where}: url {url!r} does not end with /{loc.split()[-1]}", i["id"])
 
 
 def check_sub_threshold(d, r):

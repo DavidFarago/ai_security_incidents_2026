@@ -618,6 +618,124 @@ class Sources(unittest.TestCase):
         self.assertTrue(has(r, "sources", msg="not a list", incident="DR-2026-081"))
 
 
+class Locate(unittest.TestCase):
+    """lib_corpus.locate: a locator path in a report's own terms -> the 1-based line span of the passage."""
+
+    LINES = [
+        "# Title",                          # 1
+        "## 1. Intro",                      # 2
+        "text",                             # 3
+        "## 3. Cases",                      # 4
+        "### 3.1 First",                    # 5
+        "**Alpha.** a",                     # 6
+        "more a",                           # 7
+        "**Beta (b).** b",                  # 8
+        "### 3.10 Tenth",                   # 9
+        "**Alpha.** again",                 # 10
+        "## 4. Finder",                     # 11
+        "**12. Item twelve — 2026.** x",    # 12
+        "Sources: y",                       # 13
+        "",                                 # 14
+        "**13. Item thirteen.** z",         # 15
+        "## Other heading",                 # 16
+    ]
+
+    def loc(self, locator):
+        return lib_corpus.locate(self.LINES, locator)
+
+    def test_section_spans_to_next_heading_of_same_or_higher_level(self):
+        self.assertEqual(self.loc("§3"), (4, 10))
+        self.assertEqual(self.loc("§3.1"), (5, 8))
+        self.assertEqual(self.loc("§3.10"), (9, 10))
+
+    def test_bold_lead_inside_section(self):
+        self.assertEqual(self.loc("§3.1 › Alpha"), (6, 7))
+        self.assertEqual(self.loc("§3 › Beta (b)"), (8, 8), "regex characters are literal; the span ends at a heading")
+
+    def test_item(self):
+        self.assertEqual(self.loc("§4 › item 12"), (12, 14))
+        self.assertEqual(self.loc("item 13"), (15, 15))
+
+    def test_heading_text(self):
+        self.assertEqual(self.loc("Other heading"), (16, 16))
+
+    def test_failures_are_reasons(self):
+        for bad in ("Alpha", "item 99", "§3.1 › Gamma", "§5", "", "§3 › "):
+            self.assertIsInstance(self.loc(bad), str, bad)
+        self.assertIn("2", self.loc("Alpha"), "ambiguous: two matches")
+
+
+class SourceLocators(unittest.TestCase):
+    """Methodology §10.2: every sources entry has a locator and a url. A report held in this repo is cited by a
+    permalink pinned to a commit, with a line range inside the passage that the locator names; a register url ends
+    with the register item of the locator."""
+
+    CLAUDE = "ClaudeCode_DeepResearch_ai_incidents_2026.md"
+
+    def setUp(self):
+        self.d = copy.deepcopy(CORPUS)
+
+    def run_v(self):
+        return vi.validate(self.d, UPSTREAM)
+
+    def entry(self, iid="DR-2026-081", source=CLAUDE):
+        return next(s for s in incident(self.d, iid)["sources"] if s["source"] == source)
+
+    def permalink(self, source=CLAUDE):
+        return self.d["sources_catalog"][source]["permalink"]
+
+    def flagged(self, iid="DR-2026-081"):
+        r = self.run_v()
+        return has(r, "source-locator", incident=iid)
+
+    def test_real_entry_resolves(self):
+        e = self.entry()
+        self.assertEqual(e["locator"], "item 23")
+        self.assertEqual(e["url"], self.permalink() + "?plain=1#L128-L129")
+        self.assertFalse(self.flagged())
+
+    def test_range_inside_another_item(self):
+        self.entry()["url"] = self.permalink() + "?plain=1#L131-L132"     # item 24
+        self.assertTrue(self.flagged())
+
+    def test_unknown_item(self):
+        self.entry()["locator"] = "item 99"
+        self.assertTrue(self.flagged())
+
+    def test_permalink_of_another_report(self):
+        self.entry()["url"] = self.permalink("ChatGPT_DeepResearch_ai_incidents_2026.md") + "?plain=1#L128-L129"
+        self.assertTrue(self.flagged())
+
+    def test_reversed_range(self):
+        self.entry()["url"] = self.permalink() + "?plain=1#L129-L128"
+        self.assertTrue(self.flagged())
+
+    def test_range_past_end_of_file(self):
+        self.entry()["url"] = self.permalink() + "?plain=1#L128-L9999"
+        self.assertTrue(self.flagged())
+
+    def test_url_without_line_range(self):
+        self.entry()["url"] = self.permalink()
+        self.assertTrue(self.flagged())
+
+    def test_report_changed_after_pinning(self):
+        self.d["sources_catalog"][self.CLAUDE]["sha256"] = "0" * 64
+        self.assertTrue(has(self.run_v(), "source-locator", msg="sha256"))
+
+    def test_register_url_names_another_item(self):
+        e = self.entry("DB-2026-001", "vz-risk/VCDB")
+        e["url"] = e["url"].rsplit("/", 1)[0] + "/99999"
+        self.assertTrue(self.flagged("DB-2026-001"))
+
+    def test_locator_and_url_are_required(self):
+        e = self.entry()
+        e["locator"] = ""
+        del e["url"]
+        r = self.run_v()
+        self.assertTrue(has(r, "sources", msg="locator", incident="DR-2026-081"))
+        self.assertTrue(has(r, "sources", msg="url", incident="DR-2026-081"))
+
+
 class DisclosureClasses(unittest.TestCase):
     """Decision 14 item 3 (methodology §3.3): classes are derived per CVE link, and from ai_role for a record
     without a validated CVE."""
