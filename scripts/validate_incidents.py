@@ -175,11 +175,16 @@ def source_problems(rec) -> list[str]:
                 out.append(f"sources[{n}] has no `{k}` (§10.2)")
             elif not (isinstance(s[k], str) and s[k].strip()):
                 out.append(f"sources[{n}].{k} {s[k]!r} is not a non-empty string (§10.2)")
+        if "adopted" in s:
+            if not lc.is_vcdb_record(s):
+                out.append(f"sources[{n}].adopted is allowed only on a VCDB record entry (data/json/…) (§10.2)")
+            elif s["adopted"] is not True:
+                out.append(f"sources[{n}].adopted {s['adopted']!r} must be true; leave it out for a coding not adopted (§10.2)")
         if "overrides" in s:
             ov = s["overrides"]
             if not lc.is_adopted_coding(s):
-                out.append(f"sources[{n}].overrides is allowed only on a VCDB record entry (data/json/…) whose coding "
-                           "the record adopted (§10.2)")
+                out.append(f"sources[{n}].overrides is allowed only on a VCDB record entry marked adopted: true, whose "
+                           "coding the record follows (§10.2)")
             elif not (isinstance(ov, dict) and ov and all(isinstance(k, str) and k.strip() and isinstance(v, str) and v.strip()
                                                          for k, v in ov.items())):
                 out.append(f"sources[{n}].overrides must map VERIS fields to non-empty reasons (§10.2)")
@@ -389,11 +394,15 @@ def check_class_b(d, up, r: Result):
     check_veris_schema(d, up, r)
 
 
+VCDB_PINNED = r"https://github\.com/vz-risk/VCDB/blob/[0-9a-f]{40}/"
+
+
 def check_source_locators(d, r, root: Path = lc.ROOT):
     """Methodology §10.2: where a sources entry points. For a source with a `permalink` in sources_catalog (a report
     held in this repo), the file at `path` still has the catalog `sha256`, `url` is the permalink with a line range
-    (?plain=1#L<a>[-L<b>]), the locator resolves to one passage (lc.locate) and the range lies inside it. For a register,
-    `url` ends with the register item of the locator (its last token). Malformed entries are left to `sources`."""
+    (?plain=1#L<a>[-L<b>]), the locator resolves to one passage (lc.locate) and the range lies inside it. A VCDB record
+    is cited by a URL pinned to a VCDB commit (…/blob/<commit>/<locator>); any other register `url` ends with the
+    register item of the locator (its last token). Malformed entries are left to `sources`."""
     catalog = d.get("sources_catalog") or {}
     files = {}
     for name, cat in catalog.items():
@@ -428,6 +437,9 @@ def check_source_locators(d, r, root: Path = lc.ROOT):
                     if not span[0] <= a <= b <= span[1]:
                         r.add("B", "source-locator", f"{where}: lines {a}-{b} are not inside {loc!r} (lines "
                               f"{span[0]}-{span[1]})", i["id"])
+            elif lc.is_vcdb_record(s) and not re.fullmatch(VCDB_PINNED + re.escape(loc), url):
+                r.add("B", "source-locator", f"{where}: url is not pinned to a VCDB commit: "
+                      f"https://github.com/vz-risk/VCDB/blob/<commit>/{loc}", i["id"])
             elif src in lc.REGISTER_SOURCES and not url.endswith("/" + loc.split()[-1]):
                 r.add("B", "source-locator", f"{where}: url {url!r} does not end with /{loc.split()[-1]}", i["id"])
 

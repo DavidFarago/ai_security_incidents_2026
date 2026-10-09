@@ -818,6 +818,53 @@ class Reference(unittest.TestCase):
         self.assertTrue(has(self.run_v(), "sources", msg="overrides", incident="DB-2026-003"))
 
 
+class AdoptedCoding(unittest.TestCase):
+    """Methodology §10.2: `adopted: true` marks the VCDB record whose VERIS coding a record follows; only that entry may
+    carry `overrides`. A VCDB record is cited by a URL pinned to a VCDB commit."""
+
+    def setUp(self):
+        self.d = copy.deepcopy(CORPUS)
+
+    def run_v(self):
+        return vi.validate(self.d, UPSTREAM)
+
+    def entry(self, iid, prefix):
+        return next(s for s in incident(self.d, iid)["sources"] if s["locator"].startswith(prefix))
+
+    def test_adopted_on_a_vcdb_issue(self):
+        self.entry("DB-2026-001", "issues/")["adopted"] = True
+        self.assertTrue(has(self.run_v(), "sources", msg="adopted", incident="DB-2026-001"))
+
+    def test_adopted_on_an_aiid_entry(self):
+        self.entry("DB-2026-003", "AIID")["adopted"] = True
+        self.assertTrue(has(self.run_v(), "sources", msg="adopted", incident="DB-2026-003"))
+
+    def test_adopted_not_true(self):
+        self.entry("DB-2026-024", "data/json/")["adopted"] = "yes"
+        self.assertTrue(has(self.run_v(), "sources", msg="adopted", incident="DB-2026-024"))
+
+    def test_override_on_a_record_that_is_not_adopted(self):
+        e = self.entry("DB-2026-024", "data/json/")
+        e.pop("adopted", None)
+        e["overrides"] = {"reference": "x"}
+        self.assertTrue(has(self.run_v(), "sources", msg="overrides", incident="DB-2026-024"))
+
+    def test_record_url_on_master(self):
+        e = self.entry("DB-2026-024", "data/json/")
+        e["url"] = "https://github.com/vz-risk/VCDB/blob/master/" + e["locator"]
+        self.assertTrue(has(self.run_v(), "source-locator", msg="pinned", incident="DB-2026-024"))
+
+    def test_real_adopted_entries_are_pinned_and_marked(self):
+        n = 0
+        for rec in lib_corpus.records(CORPUS):
+            for s in rec["sources"]:
+                if s["source"] == "vz-risk/VCDB" and s["locator"].startswith("data/json/"):
+                    n += 1
+                    self.assertIs(s.get("adopted"), True, rec["id"])
+                    self.assertRegex(s["url"], r"^https://github\.com/vz-risk/VCDB/blob/[0-9a-f]{40}/", rec["id"])
+        self.assertGreaterEqual(n, 11)
+
+
 class DisclosureClasses(unittest.TestCase):
     """Decision 14 item 3 (methodology §3.3): classes are derived per CVE link, and from ai_role for a record
     without a validated CVE."""

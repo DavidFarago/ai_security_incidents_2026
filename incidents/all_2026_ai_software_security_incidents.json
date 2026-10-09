@@ -1759,7 +1759,8 @@
         {
           "source": "vz-risk/VCDB",
           "locator": "data/json/validated/FE704346-BF9A-4435-927B-16A7ECF24C43.json",
-          "url": "https://github.com/vz-risk/VCDB/blob/master/data/json/validated/FE704346-BF9A-4435-927B-16A7ECF24C43.json",
+          "url": "https://github.com/vz-risk/VCDB/blob/230cf22b56a481dd1a994b21e4d94c59e2bccea9/data/json/validated/FE704346-BF9A-4435-927B-16A7ECF24C43.json",
+          "adopted": true,
           "overrides": {
             "reference": "Added https://finance.yahoo.com/sectors/healthcare/articles/novo-nordisk-hit-cyber-incident-154512317.html: given for this event by vz-risk/VCDB issues/23360."
           }
@@ -5976,7 +5977,8 @@
         {
           "source": "vz-risk/VCDB",
           "locator": "data/json/submitted/53D3CE8F-BB77-42D6-BA86-133B5F52BB58.json",
-          "url": "https://github.com/vz-risk/VCDB/blob/master/data/json/submitted/53D3CE8F-BB77-42D6-BA86-133B5F52BB58.json"
+          "url": "https://github.com/vz-risk/VCDB/blob/230cf22b56a481dd1a994b21e4d94c59e2bccea9/data/json/submitted/53D3CE8F-BB77-42D6-BA86-133B5F52BB58.json",
+          "adopted": true
         }
       ],
       "veris": {
@@ -12724,7 +12726,8 @@
         {
           "source": "vz-risk/VCDB",
           "locator": "data/json/validated/94733B5A-B002-43E7-885B-5C2913582D22.json",
-          "url": "https://github.com/vz-risk/VCDB/blob/master/data/json/validated/94733B5A-B002-43E7-885B-5C2913582D22.json"
+          "url": "https://github.com/vz-risk/VCDB/blob/230cf22b56a481dd1a994b21e4d94c59e2bccea9/data/json/validated/94733B5A-B002-43E7-885B-5C2913582D22.json",
+          "adopted": true
         }
       ],
       "veris": {
@@ -13002,7 +13005,8 @@
         {
           "source": "vz-risk/VCDB",
           "locator": "data/json/validated/13CBB4AD-A22C-4664-A112-7528CAB0AAC3.json",
-          "url": "https://github.com/vz-risk/VCDB/blob/master/data/json/validated/13CBB4AD-A22C-4664-A112-7528CAB0AAC3.json"
+          "url": "https://github.com/vz-risk/VCDB/blob/230cf22b56a481dd1a994b21e4d94c59e2bccea9/data/json/validated/13CBB4AD-A22C-4664-A112-7528CAB0AAC3.json",
+          "adopted": true
         }
       ],
       "veris": {
@@ -13755,7 +13759,8 @@
         {
           "source": "vz-risk/VCDB",
           "locator": "data/json/validated/49E476BC-7B08-41C7-9864-B14A6B0D64AD.json",
-          "url": "https://github.com/vz-risk/VCDB/blob/master/data/json/validated/49E476BC-7B08-41C7-9864-B14A6B0D64AD.json"
+          "url": "https://github.com/vz-risk/VCDB/blob/230cf22b56a481dd1a994b21e4d94c59e2bccea9/data/json/validated/49E476BC-7B08-41C7-9864-B14A6B0D64AD.json",
+          "adopted": true
         }
       ],
       "veris": {
@@ -13898,7 +13903,8 @@
         {
           "source": "vz-risk/VCDB",
           "locator": "data/json/validated/AAEFD515-974F-4153-BCDD-6B4179F1846E.json",
-          "url": "https://github.com/vz-risk/VCDB/blob/master/data/json/validated/AAEFD515-974F-4153-BCDD-6B4179F1846E.json"
+          "url": "https://github.com/vz-risk/VCDB/blob/230cf22b56a481dd1a994b21e4d94c59e2bccea9/data/json/validated/AAEFD515-974F-4153-BCDD-6B4179F1846E.json",
+          "adopted": true
         }
       ],
       "veris": {
@@ -14649,7 +14655,8 @@
         {
           "source": "vz-risk/VCDB",
           "locator": "data/json/validated/032C9EBE-C5A4-4BAA-B096-5C7C7855E0AA.json",
-          "url": "https://github.com/vz-risk/VCDB/blob/master/data/json/validated/032C9EBE-C5A4-4BAA-B096-5C7C7855E0AA.json"
+          "url": "https://github.com/vz-risk/VCDB/blob/230cf22b56a481dd1a994b21e4d94c59e2bccea9/data/json/validated/032C9EBE-C5A4-4BAA-B096-5C7C7855E0AA.json",
+          "adopted": true
         }
       ],
       "veris": {
@@ -14788,7 +14795,8 @@
         {
           "source": "vz-risk/VCDB",
           "locator": "data/json/validated/0418FC68-9D79-4D42-8E9E-4CEB9ECBCBEA.json",
-          "url": "https://github.com/vz-risk/VCDB/blob/master/data/json/validated/0418FC68-9D79-4D42-8E9E-4CEB9ECBCBEA.json",
+          "url": "https://github.com/vz-risk/VCDB/blob/230cf22b56a481dd1a994b21e4d94c59e2bccea9/data/json/validated/0418FC68-9D79-4D42-8E9E-4CEB9ECBCBEA.json",
+          "adopted": true,
           "overrides": {
             "reference": "Removed https://straussborrelli.com/data-breach-blog/: a blog index page."
           }
@@ -14921,7 +14929,8 @@
         {
           "source": "vz-risk/VCDB",
           "locator": "data/json/submitted/996F8B75-6F39-4898-A7E9-EDB4787E17F4.json",
-          "url": "https://github.com/vz-risk/VCDB/blob/master/data/json/submitted/996F8B75-6F39-4898-A7E9-EDB4787E17F4.json"
+          "url": "https://github.com/vz-risk/VCDB/blob/230cf22b56a481dd1a994b21e4d94c59e2bccea9/data/json/submitted/996F8B75-6F39-4898-A7E9-EDB4787E17F4.json",
+          "adopted": true
         }
       ],
       "veris": {
@@ -19003,7 +19012,8 @@
         {
           "source": "vz-risk/VCDB",
           "locator": "data/json/submitted/0B685211-665C-44C5-9246-386B23007039.json",
-          "url": "https://github.com/vz-risk/VCDB/blob/master/data/json/submitted/0B685211-665C-44C5-9246-386B23007039.json"
+          "url": "https://github.com/vz-risk/VCDB/blob/230cf22b56a481dd1a994b21e4d94c59e2bccea9/data/json/submitted/0B685211-665C-44C5-9246-386B23007039.json",
+          "adopted": true
         }
       ],
       "veris": {
@@ -19147,7 +19157,8 @@
         {
           "source": "vz-risk/VCDB",
           "locator": "data/json/submitted/0090C11A-1761-42CC-B093-DE291F9F1F19.json",
-          "url": "https://github.com/vz-risk/VCDB/blob/master/data/json/submitted/0090C11A-1761-42CC-B093-DE291F9F1F19.json"
+          "url": "https://github.com/vz-risk/VCDB/blob/230cf22b56a481dd1a994b21e4d94c59e2bccea9/data/json/submitted/0090C11A-1761-42CC-B093-DE291F9F1F19.json",
+          "adopted": true
         }
       ],
       "veris": {
