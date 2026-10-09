@@ -132,7 +132,7 @@ def cite_md(c):
 
 def reporting_md(e):
     urls = []
-    for tok in (x.strip() for x in e["veris"].get("reference", "").split(";")):
+    for tok in (x.strip() for x in e["veris"].get("reference", "").split("; ")):
         if tok.startswith("http"):
             u = tok.split()[0]
             if u not in urls:
@@ -253,8 +253,8 @@ def render_md(d):
         L.append("")
     L += ["---", "", "## Method & caveats", "",
           f"- **Incident IDs.** `DB-2026-nnn` (*database*) = at least one register source (AIID export or VCDB; {ids['DB']} incidents), `DR-2026-nnn` (*direct report*) = no register source, found through a deep-research or primary report ({ids['DR']}, all from deep-research reports so far). The number is the position in this report's priority ranking (the `#` column of the index) and is frozen — later re-ranking changes the table, not the ID; new incidents continue from 100.",
-          f"- **Scope & union.** {cnt['total_incidents']} incidents = {n_db_src} (from the AIID + VCDB registers) + {n_dr_src} (from the four deep-research reports), with no overlap. Contents are identical to the two source JSONs; only each incident's original-source citations were normalised.",
-          "- **Original sources.** Register incidents cite the AIID export (`" + XLSX + "`) and/or the VERIS Community Database (`vz-risk/VCDB`) — the latter at the exact `data/json/{validated,submitted}/<uuid>.json` record or the `issues/<n>` intake. Report incidents cite the passage of `ChatGPT`/`ClaudeCode`/`Grok`_DeepResearch_ai_incidents_2026.md that describes them (e.g. `item 23`), linked with its line range at the commit that added the reports. The **Reporting** links are the primary vendor/news/CVE sources from each record.",
+          f"- **Scope & union.** {cnt['total_incidents']} incidents = {n_db_src} (from the AIID + VCDB registers) + {n_dr_src} (from the four deep-research reports), with no overlap. Contents are those of the two source JSONs, except for the revisions recorded in methodology §14, among them the normalised original-source citations (`sources`) and the reporting links (`veris.reference`).",
+          "- **Original sources.** Register incidents cite the AIID export (`" + XLSX + "`) and/or the VERIS Community Database (`vz-risk/VCDB`) — the latter at the exact `data/json/{validated,submitted}/<uuid>.json` record or the `issues/<n>` intake. Report incidents cite the passage of `ChatGPT`/`ClaudeCode`/`Grok`_DeepResearch_ai_incidents_2026.md that describes them (e.g. `item 23`), linked with its line range at the commit that added the reports. The **Reporting** links (at most three, one per site) come from each record's `veris.reference`: every link its sources give for the event, plus reporting found by the analyst, primary disclosures first.",
           "- **Coding.** Each incident carries a standard VERIS record (Actor/Action/Asset/Attribute, CIA, graded disclosure, scope, timeline, confidence) plus a separate report layer (AI role/component/mechanism, observed & potential severity, CWE/CVE with mapping basis). Where VERIS has no native concept (model extraction, prompt injection, autonomous agent action) the nearest valid coding is used and the AI meaning is carried in the report layer.",
           "- **Ranking.** By **observed** severity, potential as tiebreaker — a report-specific ordinal rubric (Critical > High > Medium > Low > Negligible), **not** CVSS, the ChatGPT report's AIRIS, or the CC report's blended tier. Vulnerability-discovery / coordinated-disclosure PoC items sit at Negligible/Low observed and High/Critical potential.",
           "- **Non-software-security rows.** Five MIT/VCDB register items are `security_incident = False positive` (privacy/likeness/governance harms, not asset compromises); ten conventional VCDB breaches with no AI component are flagged as such. Both are retained for register completeness, each with an AI-involvement note.",

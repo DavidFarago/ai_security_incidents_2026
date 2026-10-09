@@ -3,13 +3,15 @@
 
 Class A (lookup): each copied field of validated_cve_details.cves[] is re-derived from the records cached under
   vulnerabilities/upstream/ by scripts/fetch_upstream.py, with the rules of methodology §10.2 ("Copied CVE
-  metadata"). A mismatch is an error unless the cves[] entry names the field in `overrides`; every override is printed.
+  metadata"). A mismatch is an error unless the cves[] entry names the field in `overrides`; every override is printed,
+  as is every `overrides` reason on a VCDB entry whose coding a record adopted (methodology §10.2).
 Class B (bookkeeping): set algebra of the validated layer, the VERIS action.*.cve alignment, vocabularies, the ID
   scheme with its numbering over all record arrays up to id_scheme.highest_assigned, the sub-threshold rule
   (a disclosure that meets methodology §3.3 (a) or (c) must be promoted), the wrappers of retired records, the
   `sources` of every live record (at least one entry, each with `source`, `locator` and `url`; §10.2) and each
   entry's position (a register url names the register item of the locator; a report held in this repo is cited by
-  its pinned permalink with a line range inside the passage that the locator names),
+  its pinned permalink with a line range inside the passage that the locator names), `veris.reference` (URLs only,
+  separated by "; ", none of them a discovery channel),
   ranking_table vs incidents, recomputable counts, and the VERIS block against the VERIS JSON schema. No overrides.
 
 Every check of a record runs over the live records, `incidents` and `sub_threshold_incidents` alike (methodology
@@ -173,6 +175,14 @@ def source_problems(rec) -> list[str]:
                 out.append(f"sources[{n}] has no `{k}` (§10.2)")
             elif not (isinstance(s[k], str) and s[k].strip()):
                 out.append(f"sources[{n}].{k} {s[k]!r} is not a non-empty string (§10.2)")
+        if "overrides" in s:
+            ov = s["overrides"]
+            if not lc.is_adopted_coding(s):
+                out.append(f"sources[{n}].overrides is allowed only on a VCDB record entry (data/json/…) whose coding "
+                           "the record adopted (§10.2)")
+            elif not (isinstance(ov, dict) and ov and all(isinstance(k, str) and k.strip() and isinstance(v, str) and v.strip()
+                                                         for k, v in ov.items())):
+                out.append(f"sources[{n}].overrides must map VERIS fields to non-empty reasons (§10.2)")
     return out
 
 
@@ -333,6 +343,9 @@ def check_class_b(d, up, r: Result):
         for s in srcs:
             if s not in catalog:
                 r.add("B", "source-catalog", f"source {s!r} is not in sources_catalog", iid)
+        for s in i["sources"] if isinstance(i.get("sources"), list) else []:
+            if lc.is_adopted_coding(s) and isinstance(s.get("overrides"), dict):
+                r.overrides += [(iid, f"{s['source']} {s['locator']}", k, v) for k, v in s["overrides"].items()]
         if v.get("security_incident") not in lc.STATUSES:
             r.add("B", "vocabulary", f"security_incident {v.get('security_incident')!r}", iid)
         elif v["security_incident"] in ("Confirmed", "Suspected") and not has_effect(v.get("attribute") or {}):
@@ -368,6 +381,7 @@ def check_class_b(d, up, r: Result):
             r.add("B", "veris-action-cve", f"exploited CVE {x} is in neither action.hacking.cve nor action.malware.cve", iid, x)
 
     check_source_locators(d, r)
+    check_reference(d, r)
     check_sub_threshold(d, r)
     check_retired(d, r)
     check_ranking_table(d, r)
@@ -416,6 +430,31 @@ def check_source_locators(d, r, root: Path = lc.ROOT):
                               f"{span[0]}-{span[1]})", i["id"])
             elif src in lc.REGISTER_SOURCES and not url.endswith("/" + loc.split()[-1]):
                 r.add("B", "source-locator", f"{where}: url {url!r} does not end with /{loc.split()[-1]}", i["id"])
+
+
+REGISTER_ITEM = re.compile(r"https?://(www\.)?(github\.com/vz-risk/VCDB(/|$)|incidentdatabase\.ai/cite/)")
+
+
+def check_reference(d, r):
+    """Methodology §10.2: veris.reference lists the reporting on the record's event — URLs separated by "; ", each
+    once — and no discovery channel: none of the record's sources[].url, no register item (VCDB, AIID) and no link into
+    this repository. Whether a URL is about the event is judgment (Class C)."""
+    repos = {c["permalink"].split("/blob/")[0] for c in (d.get("sources_catalog") or {}).values() if c.get("permalink")}
+    for i in lc.records(d):
+        iid, ref = i["id"], i["veris"].get("reference")
+        if not isinstance(ref, str) or not ref.strip():
+            r.add("B", "reference", "veris.reference is empty; list the reporting on the event as URLs (§10.2)", iid)
+            continue
+        own = {s.get("url") for s in i["sources"] if isinstance(s, dict)} if isinstance(i.get("sources"), list) else set()
+        toks = ref.split("; ")
+        for tok in toks:
+            if not re.fullmatch(r"https?://\S+", tok) or re.search(r"[;,]https?://", tok):
+                r.add("B", "reference", f"{tok[:70]!r} is not one URL; tokens are URLs separated by '; ' (§10.2)", iid)
+            elif tok in own or REGISTER_ITEM.match(tok) or any(tok.startswith(p) for p in repos):
+                r.add("B", "reference", f"{tok[:90]} is a discovery channel, which belongs in sources[] (§10.2)", iid)
+        for tok, n in Counter(toks).items():
+            if n > 1:
+                r.add("B", "reference", f"{tok[:90]} occurs {n} times", iid)
 
 
 def check_sub_threshold(d, r):

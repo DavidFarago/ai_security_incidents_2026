@@ -736,6 +736,88 @@ class SourceLocators(unittest.TestCase):
         self.assertTrue(has(r, "sources", msg="url", incident="DR-2026-081"))
 
 
+class Reference(unittest.TestCase):
+    """Methodology §10.2: veris.reference lists the reporting on the record's event, as URLs separated by "; ", none of
+    them a discovery channel. A difference from an adopted VCDB coding is explained in `overrides` on that VCDB entry."""
+
+    def setUp(self):
+        self.d = copy.deepcopy(CORPUS)
+
+    def run_v(self):
+        return vi.validate(self.d, UPSTREAM)
+
+    def set_ref(self, value, iid="DR-2026-081"):
+        incident(self.d, iid)["veris"]["reference"] = value
+
+    def add_ref(self, url, iid="DR-2026-081"):
+        v = incident(self.d, iid)["veris"]
+        v["reference"] += "; " + url
+
+    def flagged(self, iid="DR-2026-081"):
+        return has(self.run_v(), "reference", incident=iid)
+
+    # ---- form
+    def test_cve_token(self):
+        self.add_ref("CVE-2026-42824")
+        self.assertTrue(self.flagged())
+
+    def test_urls_joined_by_a_space(self):
+        self.set_ref("https://a.example/x https://b.example/y")
+        self.assertTrue(self.flagged())
+
+    def test_urls_joined_without_space(self):
+        self.set_ref("https://a.example/x;https://b.example/y")
+        self.assertTrue(self.flagged())
+
+    def test_empty(self):
+        self.set_ref("")
+        self.assertTrue(self.flagged())
+
+    def test_duplicate(self):
+        self.add_ref(incident(self.d, "DR-2026-081")["veris"]["reference"].split("; ")[0])
+        self.assertTrue(self.flagged())
+
+    # ---- no discovery channel
+    def test_own_vcdb_issue(self):
+        self.add_ref("https://github.com/vz-risk/VCDB/issues/23174", "DB-2026-001")
+        self.assertTrue(self.flagged("DB-2026-001"))
+
+    def test_other_records_aiid_page(self):
+        self.add_ref("https://incidentdatabase.ai/cite/1412")
+        self.assertTrue(self.flagged())
+
+    def test_repo_permalink(self):
+        self.add_ref(next(s["url"] for s in incident(self.d, "DR-2026-081")["sources"]))
+        self.assertTrue(self.flagged())
+
+    # ---- overrides on the VCDB record whose coding was adopted
+    def vcdb_record_entry(self, iid="DB-2026-024"):
+        return next(s for s in incident(self.d, iid)["sources"] if s["locator"].startswith("data/json/"))
+
+    def test_valid_register_override_is_printed(self):
+        self.vcdb_record_entry()["overrides"] = {"reference": "test reason 7f3a"}
+        r = self.run_v()
+        self.assertFalse(has(r, "sources", incident="DB-2026-024"))
+        self.assertIn("test reason 7f3a", vi.report(r, False))
+
+    def test_override_with_empty_reason(self):
+        self.vcdb_record_entry()["overrides"] = {"reference": " "}
+        self.assertTrue(has(self.run_v(), "sources", msg="overrides", incident="DB-2026-024"))
+
+    def test_override_not_a_dict(self):
+        self.vcdb_record_entry()["overrides"] = "reference differs"
+        self.assertTrue(has(self.run_v(), "sources", msg="overrides", incident="DB-2026-024"))
+
+    def test_override_on_a_vcdb_issue(self):
+        e = next(s for s in incident(self.d, "DB-2026-001")["sources"] if s["locator"].startswith("issues/"))
+        e["overrides"] = {"reference": "x"}
+        self.assertTrue(has(self.run_v(), "sources", msg="overrides", incident="DB-2026-001"))
+
+    def test_override_on_an_aiid_entry(self):
+        incident(self.d, "DB-2026-003")["sources"][0]["overrides"] = {"reference": "x"}
+        self.assertTrue(has(self.run_v(), "sources", msg="overrides", incident="DB-2026-003"))
+
+
 class DisclosureClasses(unittest.TestCase):
     """Decision 14 item 3 (methodology §3.3): classes are derived per CVE link, and from ai_role for a record
     without a validated CVE."""

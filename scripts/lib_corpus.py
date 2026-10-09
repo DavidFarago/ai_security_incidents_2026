@@ -99,6 +99,12 @@ def is_source_entry(s) -> bool:
     return isinstance(s, dict) and isinstance(s.get("source"), str) and bool(s["source"].strip())
 
 
+def is_adopted_coding(s) -> bool:
+    """A `sources` entry naming a VCDB-encoded record, whose VERIS coding the record adopted (methodology §10.2). Only
+    such an entry may carry `overrides`: the reasons for deliberate differences from that coding."""
+    return isinstance(s, dict) and s.get("source") == "vz-risk/VCDB" and str(s.get("locator", "")).startswith("data/json/")
+
+
 def source_names(rec: dict) -> list:
     """The `source` of every well-formed `sources` entry of a record, in order; [] when `sources` is missing or not a
     list. A malformed entry is skipped here; the verifier's `sources` check reports it."""
