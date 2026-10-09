@@ -7258,17 +7258,21 @@
         "actor": {
           "external": {
             "variety": [
-              "Unknown"
+              "Organized crime"
             ],
             "motive": [
               "Financial"
+            ],
+            "name": [
+              "ShinyHunters"
             ],
             "country": [
               "Unknown"
             ],
             "region": [
               "000000"
-            ]
+            ],
+            "notes": "ShinyHunters advertised the stolen Vercel data on a hacking forum; Hudson Rock rates it highly probable that they used the infostealer access to Context.ai. Neither Vercel nor Context.ai has confirmed the attribution."
           }
         },
         "action": {
@@ -7289,9 +7293,10 @@
               "Capture stored data"
             ],
             "vector": [
-              "Download by malware"
+              "Web application - download"
             ],
-            "notes": "Initial Context compromise via infostealer (Roblox cheat)."
+            "name": "Lumma",
+            "notes": "Lumma infostealer on a Context.ai employee's machine (February 2026), delivered with Roblox 'auto-farm' scripts and executors the employee downloaded; it stole Google Workspace, Supabase, Datadog and Authkit credentials (Hudson Rock)."
           }
         },
         "asset": {
@@ -7341,7 +7346,11 @@
         "timeline": {
           "incident": {
             "year": 2026,
-            "month": 4
+            "month": 2
+          },
+          "discovery": {
+            "unit": "Months",
+            "value": 2
           }
         },
         "victim": {
