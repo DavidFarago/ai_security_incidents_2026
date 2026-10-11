@@ -457,7 +457,8 @@ def check_reference(d, r):
         if not isinstance(ref, str) or not ref.strip():
             r.add("B", "reference", "veris.reference is empty; list the reporting on the event as URLs (§10.2)", iid)
             continue
-        own = {s.get("url") for s in i["sources"] if isinstance(s, dict)} if isinstance(i.get("sources"), list) else set()
+        srcs = i.get("sources") if isinstance(i.get("sources"), list) else []
+        own = {s["url"] for s in srcs if isinstance(s, dict) and isinstance(s.get("url"), str)}
         toks = ref.split("; ")
         for tok in toks:
             if not re.fullmatch(r"https?://\S+", tok) or re.search(r"[;,]https?://", tok):

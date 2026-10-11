@@ -611,6 +611,14 @@ class Sources(unittest.TestCase):
         incident(self.d, "DR-2026-081")["sources"][0]["locator"] = 3
         self.check_malformed()
 
+    def test_unhashable_url(self):
+        # check_reference compares veris.reference with the record's sources[].url.
+        for url in (["https://example.org/a"], {"href": "https://example.org/a"}):
+            with self.subTest(url=url):
+                self.setUp()
+                incident(self.d, "DR-2026-081")["sources"][0]["url"] = url
+                self.check_malformed()
+
     def test_sources_not_a_list(self):
         incident(self.d, "DR-2026-081")["sources"] = "ClaudeCode_DeepResearch_ai_incidents_2026.md"
         r = self.run_v()
