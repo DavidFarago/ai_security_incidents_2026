@@ -111,13 +111,13 @@ Terminology: **sources** (`incidents/sources/`) are the incident sources — the
 
 ## Sources & provenance
 
-Every incident's `sources` field cites its **original** source(s):
+Every incident's `sources` field cites its **original** source(s), the discovery channel: where the record was found. Each entry names the source, the item in it (`locator`) and the item's `url`:
 
 - **`incidentdatabase.ai_20260824_ai_incidents_2026.xlsx`** — AI Incident Database (AIID) export, 2026-08-24 (cited with `AIID <id>` + the cite-page URL).
 - **`vz-risk/VCDB`** — the [VERIS Community Database](https://github.com/vz-risk/VCDB), cited at the exact encoded record (`data/json/{validated,submitted}/<uuid>.json`) or the 2026 issue intake (`issues/<n>`). No local VCDB snapshot is bundled; citations point upstream.
 - **`ChatGPT_DeepResearch_ai_incidents_2026.md`**, **`ClaudeCode_DeepResearch_ai_incidents_2026.md`**, **`Grok_DeepResearch_ai_incidents_2026.md`** — three independent deep-research incident reviews (kept in `incidents/sources/`).
 
-Each record also carries **`veris.reference`**: the reporting on the incident's event, as URLs. It holds every link the record's sources give for the event, plus reporting found by the analyst, primary disclosures first (methodology §10.2). The `.md` shows up to three of them as the "Reporting" links.
+Each record also carries **`veris.reference`**: the reporting on the incident's event, as URLs. It holds every link the record's sources give for the event, plus reporting found by the analyst, primary disclosures first (methodology §10.2). No URL appears in both fields: `veris.reference` holds no `sources` url, no register item and no link into this repository. The `.md` shows up to three of the reference URLs as the "Reporting" links.
 
 Citation counts across the corpus: VCDB 41 · ClaudeCode 36 · ChatGPT 19 · AIID 17 · Grok 9.
 

@@ -17,6 +17,9 @@ Class B (bookkeeping): set algebra of the validated layer, the VERIS action.*.cv
 Every check of a record runs over the live records, `incidents` and `sub_threshold_incidents` alike (methodology
 §10.2); counts and the ranking table cover `incidents` only. A retired record is frozen: only its wrapper is checked.
 
+Only the `sources` check of core_checks reports a malformed `sources` entry. Every other check that reads `sources`
+skips such an entry, for example through lc.source_names or lc.is_source_entry, instead of crashing on it.
+
 The verifier does NOT and CANNOT check judgment (Class C): whether a CVE belongs to the incident, its `relation`,
 the notes, severities and their rationales, ai_role, the inclusion decision, §3.3 condition (b), or whether a
 record without a CVE is a vulnerability disclosure. Each of those needs a cited source sentence from the analyst; a
@@ -196,8 +199,8 @@ def core_checks(d: dict) -> list[Finding]:
     numbering also the retired ones.
 
     Every live record has at least one `sources` entry, an object with non-empty strings `source`, `locator` and `url`
-    (methodology §10.2). A malformed entry is reported here, so the builders
-    stop with a message instead of crashing on it; the other checks read sources through lc.source_names.
+    (methodology §10.2). A malformed entry is reported here, so the builders stop with a message instead of crashing
+    on it.
 
     The ID format is checked first. While an ID is malformed its number is unknown, so the numbering check is skipped
     instead of reported (validate() names the skip). Numbering (methodology §4.1): each array is in ascending order,
