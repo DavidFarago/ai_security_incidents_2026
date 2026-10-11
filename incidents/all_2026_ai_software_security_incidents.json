@@ -46,7 +46,7 @@
     "from_ai_software_security_incidents_2026": 35,
     "from_merged_incidents_2026_VERIS_described": 64,
     "citations_by_source": {
-      "vz-risk/VCDB": 41,
+      "vz-risk/VCDB": 46,
       "ClaudeCode_DeepResearch_ai_incidents_2026.md": 36,
       "incidentdatabase.ai_20260824_ai_incidents_2026.xlsx": 17,
       "Grok_DeepResearch_ai_incidents_2026.md": 9,
@@ -257,7 +257,7 @@
     {
       "id": "DB-2026-017",
       "incident": "Attackers abused Meta's AI-powered support (HTS) tool to hijack 20,225 Instagram accounts",
-      "date": "2026-06-02",
+      "date": "2026-04-17",
       "status": "Confirmed",
       "observed": "High",
       "potential": "High",
@@ -422,7 +422,7 @@
     {
       "id": "DB-2026-032",
       "incident": "Context.ai (AI tool) compromise cascaded to Vercel via an employee OAuth token",
-      "date": "2026-04-18",
+      "date": "2026-02-01",
       "status": "Confirmed",
       "observed": "Medium",
       "potential": "High",
@@ -1948,6 +1948,20 @@
           "source": "vz-risk/VCDB",
           "locator": "issues/23310",
           "url": "https://github.com/vz-risk/VCDB/issues/23310"
+        },
+        {
+          "source": "vz-risk/VCDB",
+          "locator": "data/json/submitted/9f45cb1b-ab67-4500-9ed0-9a171a0305e5.JSON",
+          "url": "https://github.com/vz-risk/VCDB/blob/f6f98c00f66ab35f5b49977a5852ce94a5bb31d1/data/json/submitted/9f45cb1b-ab67-4500-9ed0-9a171a0305e5.JSON",
+          "adopted": true,
+          "overrides": {
+            "action.hacking.variety": "Prompt injection added: StepSecurity (in veris.reference) says the planted .cursor/rules/setup.mdc 'is a prompt injection' that instructs the Cursor agent to run the payload.",
+            "action.malware.variety": "GovInfoSecurity: Miasma is self-replicating malware (Worm) whose payload steals credentials, authentication tokens and developer secrets (Capture stored data, Export data).",
+            "actor.external.name": "The group's spelling in the sources and in DB-2026-001, DR-2026-022 and DR-2026-046.",
+            "attribute.confidentiality.data": "GovInfoSecurity: the payload steals 'credentials, authentication tokens and developer secrets'.",
+            "attribute.confidentiality.data_disclosure": "No source confirms stolen credentials; GitHub has not said whether downstream organizations were affected (GovInfoSecurity).",
+            "discovery_method": "StepSecurity's researchers reported the attack (GovInfoSecurity); no source names an antivirus partner."
+          }
         }
       ],
       "veris": {
@@ -1979,57 +1993,58 @@
           }
         },
         "action": {
+          "hacking": {
+            "variety": [
+              "Backdoor",
+              "Prompt injection",
+              "Use of stolen creds"
+            ],
+            "vector": [
+              "Web application"
+            ],
+            "result": [
+              "Infiltrate",
+              "Deploy payload"
+            ],
+            "notes": "Compromised contributor account for initial push; Cursor .mdc uses prompt injection to instruct the agent."
+          },
           "malware": {
             "variety": [
-              "Worm",
               "Capture stored data",
-              "Export data"
+              "Export data",
+              "Password dumper",
+              "Worm"
             ],
             "vector": [
               "Software update"
             ],
             "result": [
-              "Infiltrate",
-              "Exfiltrate",
-              "Persist",
-              "Lateral movement"
+              "Exfiltrate"
             ],
             "notes": "Self-replicating repo worm; AI-agent config hooks/prompt injection auto-execute credential stealer."
-          },
-          "hacking": {
-            "variety": [
-              "Use of stolen creds",
-              "Prompt injection"
-            ],
-            "vector": [
-              "Web application"
-            ],
-            "notes": "Compromised contributor account for initial push; Cursor .mdc uses prompt injection to instruct the agent."
           }
         },
         "asset": {
           "assets": [
             {
-              "variety": "S - Code repository"
+              "variety": "S - Code repository",
+              "amount": 1
             },
             {
               "variety": "S - LLM application"
-            },
-            {
-              "variety": "S - Configuration or patch management"
             }
           ],
           "cloud": [
             "External Cloud Asset(s)"
           ],
+          "role": [
+            "IT"
+          ],
+          "total_amount": 1,
           "notes": "Public code repos consumed by AI coding agents (Claude Code, Gemini CLI, Cursor, VS Code)."
         },
         "attribute": {
           "confidentiality": {
-            "data_disclosure": "Potentially",
-            "state": [
-              "Stored"
-            ],
             "data": [
               {
                 "variety": "Credentials"
@@ -2042,15 +2057,18 @@
               }
             ],
             "data_victim": [
-              "Victim organization",
-              "Customer"
+              "Partner"
+            ],
+            "data_disclosure": "Potentially",
+            "state": [
+              "Stored"
             ],
             "notes": "Any developer who opened an infected repo in an AI tool would have had fresh cloud/dev tokens harvested; confirmed infections not enumerated -> Potentially for downstream victims."
           },
           "integrity": {
             "variety": [
-              "Software installation",
-              "Modify configuration"
+              "Modify configuration",
+              "Software installation"
             ],
             "notes": "Malicious workflow/config injection; self-propagation."
           }
@@ -2068,22 +2086,32 @@
             "month": 6,
             "day": 5
           },
+          "compromise": {
+            "unit": "Minutes"
+          },
+          "exfiltration": {
+            "unit": "Unknown"
+          },
+          "discovery": {
+            "unit": "Days"
+          },
           "containment": {
             "unit": "Hours",
             "value": 1
           }
         },
         "victim": {
-          "victim_id": "Microsoft (Azure repos) + downstream developers",
+          "government": [
+            "NA"
+          ],
           "country": [
             "US"
           ],
+          "victim_id": "Microsoft",
           "employee_count": "Over 100000",
-          "industry": "511210",
-          "government": [
-            "NA"
-          ]
-        }
+          "industry": "513210"
+        },
+        "targeted": "Opportunistic"
       },
       "report": {
         "ai_role": [
@@ -4402,6 +4430,16 @@
           "source": "vz-risk/VCDB",
           "locator": "issues/23041",
           "url": "https://github.com/vz-risk/VCDB/issues/23041"
+        },
+        {
+          "source": "vz-risk/VCDB",
+          "locator": "data/json/submitted/0ec40f9c-6ccb-4e1a-9b69-59b9b60a81fa.JSON",
+          "url": "https://github.com/vz-risk/VCDB/blob/f6f98c00f66ab35f5b49977a5852ce94a5bb31d1/data/json/submitted/0ec40f9c-6ccb-4e1a-9b69-59b9b60a81fa.JSON",
+          "adopted": true,
+          "overrides": {
+            "attribute.confidentiality.data": "Sensitive Personal instead of Internal: Malwarebytes reports users' chat histories, chosen models and settings, which are users' data, not Codeway's internal data.",
+            "attribute.confidentiality.data_total": "Malwarebytes: 300 million messages from over 25 million users were exposed; 50 million is the app's total user base."
+          }
         }
       ],
       "veris": {
@@ -4410,13 +4448,13 @@
         "source_id": "vcdb",
         "incident_id": "DB-2026-016",
         "security_incident": "Confirmed",
-        "confidence": "Medium",
+        "confidence": "High",
         "reference": "https://www.malwarebytes.com/blog/news/2026/02/ai-chat-app-leak-exposes-300-million-messages-tied-to-25-million-users",
         "summary": "A researcher ('Harry') found that Chat & Ask AI — a popular AI-chat wrapper app by Codeway that fronts ChatGPT, Claude and Gemini (50M+ installs) — had a Firebase misconfiguration (Security Rules left public) exposing ~300 million messages from 25M+ users, including entire chat histories, model used, settings, and data from other Codeway apps. Some messages discussed illegal activity or requested suicide assistance. Codeway fixed it within hours of disclosure; no evidence of malicious third-party access reported.",
         "actor": {
           "internal": {
             "variety": [
-              "System admin"
+              "Developer"
             ],
             "motive": [
               "NA"
@@ -4430,7 +4468,7 @@
               "Misconfiguration"
             ],
             "vector": [
-              "Web application"
+              "Carelessness"
             ],
             "notes": "Firebase Security Rules set to public -> unauthenticated read (and potentially write/delete) of the backend."
           }
@@ -4438,7 +4476,8 @@
         "asset": {
           "assets": [
             {
-              "variety": "S - Database"
+              "variety": "S - Database",
+              "amount": 1
             },
             {
               "variety": "S - LLM application"
@@ -4447,16 +4486,16 @@
           "cloud": [
             "External Cloud Asset(s)"
           ],
+          "role": [
+            "IT"
+          ],
+          "total_amount": 1,
           "hosting": [
             "External - shared environment"
           ]
         },
         "attribute": {
           "confidentiality": {
-            "data_disclosure": "Yes",
-            "state": [
-              "Stored"
-            ],
             "data": [
               {
                 "variety": "Personal",
@@ -4469,6 +4508,11 @@
             "data_victim": [
               "Customer"
             ],
+            "state": [
+              "Stored"
+            ],
+            "data_disclosure": "Yes",
+            "data_total": 25000000,
             "notes": "~300M messages / 25M+ users' chat histories reachable; highly sensitive content."
           }
         },
@@ -4490,16 +4534,17 @@
           }
         },
         "victim": {
-          "victim_id": "Codeway (Chat & Ask AI)",
+          "government": [
+            "NA"
+          ],
           "country": [
             "TR"
           ],
-          "employee_count": "101 to 1000",
+          "victim_id": "Codeway",
           "industry": "511210",
-          "government": [
-            "NA"
-          ]
-        }
+          "employee_count": "101 to 1000"
+        },
+        "targeted": "NA"
       },
       "report": {
         "ai_role": [
@@ -4538,12 +4583,26 @@
     {
       "id": "DB-2026-017",
       "title": "Attackers abused Meta's AI-powered support (HTS) tool to hijack 20,225 Instagram accounts",
-      "date": "2026-06-02",
+      "date": "2026-04-17",
       "sources": [
         {
           "source": "vz-risk/VCDB",
           "locator": "issues/23309",
           "url": "https://github.com/vz-risk/VCDB/issues/23309"
+        },
+        {
+          "source": "vz-risk/VCDB",
+          "locator": "data/json/submitted/8084d01e-dd3e-4bca-b710-c6fdbfb5c5cf.JSON",
+          "url": "https://github.com/vz-risk/VCDB/blob/f6f98c00f66ab35f5b49977a5852ce94a5bb31d1/data/json/submitted/8084d01e-dd3e-4bca-b710-c6fdbfb5c5cf.JSON",
+          "adopted": true,
+          "overrides": {
+            "action.hacking.variety": "Exploit vuln and Abuse of functionality added: Meta's notice to the Maine AG says a bug in a separate code path did not verify the email, and the support tool sent the reset link as designed (BleepingComputer).",
+            "action.hacking.result": "The attackers took over accounts; no source reports a deployed payload.",
+            "actor.external.motive": "Financial added: KrebsOnSecurity reports that the hackers also seized short account names with an alleged resale value of more than half a million dollars.",
+            "actor.external.country": "KrebsOnSecurity calls the attackers 'pro-Iran hackers'; no source places them in Iran.",
+            "attribute.integrity.variety": "Defacement added: KrebsOnSecurity reports hijacked accounts defaced with pro-Iranian images and messages.",
+            "discovery_method": "BleepingComputer: a wave of user reports preceded Meta's response; no source names an unrelated third party."
+          }
         },
         {
           "source": "vz-risk/VCDB",
@@ -4558,29 +4617,32 @@
         "incident_id": "DB-2026-017",
         "security_incident": "Confirmed",
         "confidence": "High",
-        "reference": "https://www.bleepingcomputer.com/news/security/meta-ai-support-data-breach-affects-20-000-instagram-accounts/; https://www.bleepingcomputer.com/news/security/instagram-users-locked-out-after-meta-ai-abused-to-steal-accounts/; https://legacy.www.documentcloud.org/documents/28211657-meta-ai-support-tool-incident-ag-notification-bc-me/; https://finance.yahoo.com/technology/ai/articles/meta-meta-faces-ai-support-044119550.html",
+        "reference": "https://www.bleepingcomputer.com/news/security/meta-ai-support-data-breach-affects-20-000-instagram-accounts/; https://www.bleepingcomputer.com/news/security/instagram-users-locked-out-after-meta-ai-abused-to-steal-accounts/; https://legacy.www.documentcloud.org/documents/28211657-meta-ai-support-tool-incident-ag-notification-bc-me/; https://finance.yahoo.com/technology/ai/articles/meta-meta-faces-ai-support-044119550.html; https://krebsonsecurity.com/2026/06/hackers-used-metas-ai-support-bot-to-seize-instagram-accounts/",
         "summary": "Meta disclosed (breach letter to Maine AG) that 20,225 Instagram accounts were hijacked by attackers abusing its AI-assisted High Touch Support (HTS) recovery tool. A bug in a separate code path meant HTS did not verify that the email address supplied for a password reset matched the account's email, so attackers received reset links for accounts they didn't own and took over any account without 2FA. Reports describe attackers using AI-generated facial animations to pass verification and changing account emails. High-profile handles were among those taken. Meta says the issue is resolved and impacted accounts secured.",
         "actor": {
           "external": {
             "variety": [
-              "Unknown"
+              "Activist"
             ],
             "motive": [
-              "Financial"
+              "Financial",
+              "Ideology"
             ],
             "country": [
               "Unknown"
             ],
             "region": [
               "000000"
-            ]
+            ],
+            "notes": "Activist and Ideology per KrebsOnSecurity (the reference of VCDB record 8084d01e): 'pro-Iran hackers' published the exploit on Telegram and defaced hijacked accounts with pro-Iranian images. BleepingComputer (VCDB issue 23309) and Meta's breach notice name no attacker."
           }
         },
         "action": {
           "hacking": {
             "variety": [
               "Abuse of functionality",
-              "Exploit vuln"
+              "Exploit vuln",
+              "Prompt injection"
             ],
             "vector": [
               "Web application"
@@ -4606,20 +4668,26 @@
         "asset": {
           "assets": [
             {
-              "variety": "S - LLM application"
-            },
-            {
-              "variety": "S - Web application"
-            },
-            {
-              "variety": "P - Helpdesk"
+              "variety": "S - LLM application",
+              "amount": 1
             }
           ],
           "cloud": [
             "External Cloud Asset(s)"
-          ]
+          ],
+          "role": [
+            "IT"
+          ],
+          "total_amount": 1
         },
         "attribute": {
+          "integrity": {
+            "variety": [
+              "Defacement",
+              "Modify authentication"
+            ],
+            "notes": "Account emails changed / takeovers."
+          },
           "confidentiality": {
             "data_disclosure": "Yes",
             "state": [
@@ -4638,13 +4706,6 @@
               "Customer"
             ],
             "notes": "20,225 accounts hijacked; attacker could access DMs, posts, profile/contact info, connected accounts."
-          },
-          "integrity": {
-            "variety": [
-              "Modify authentication",
-              "Alter behavior"
-            ],
-            "notes": "Account emails changed / takeovers."
           }
         },
         "discovery_method": {
@@ -4657,21 +4718,26 @@
         "timeline": {
           "incident": {
             "year": 2026,
-            "month": 6,
-            "day": 2
+            "month": 4,
+            "day": 17
+          },
+          "discovery": {
+            "unit": "Days",
+            "value": 44
           }
         },
         "victim": {
-          "victim_id": "Meta Platforms (Instagram)",
+          "government": [
+            "NA"
+          ],
           "country": [
             "US"
           ],
-          "employee_count": "Over 100000",
-          "industry": "519130",
-          "government": [
-            "NA"
-          ]
-        }
+          "victim_id": "Meta",
+          "employee_count": "50001 to 100000",
+          "industry": "519290"
+        },
+        "targeted": "Targeted"
       },
       "report": {
         "ai_role": [
@@ -6783,6 +6849,19 @@
           "source": "vz-risk/VCDB",
           "locator": "issues/23117",
           "url": "https://github.com/vz-risk/VCDB/issues/23117"
+        },
+        {
+          "source": "vz-risk/VCDB",
+          "locator": "data/json/submitted/a5bf09d1-156f-4f39-96e6-6adec5bc0c66.JSON",
+          "url": "https://github.com/vz-risk/VCDB/blob/f6f98c00f66ab35f5b49977a5852ce94a5bb31d1/data/json/submitted/a5bf09d1-156f-4f39-96e6-6adec5bc0c66.JSON",
+          "adopted": true,
+          "overrides": {
+            "action.error.variety": "The Guardian: an engineer implemented an AI agent's erroneous advice, which exposed the data (Misinformation, Misconfiguration); VCDB's own note says 'misconfigured the system'; no source describes a programming error.",
+            "attribute.confidentiality.data": "The Guardian: 'sensitive user and company data' was exposed (Personal, Internal).",
+            "attribute.confidentiality.data_victim": "The Guardian: user data was exposed as well (Customer).",
+            "attribute.confidentiality.data_disclosure": "The Guardian: the data was exposed to engineers for two hours; no source says anyone viewed it, and Meta says no user data was mishandled.",
+            "timeline.incident": "The Guardian reported the leak on 20 March 2026, so it cannot have occurred in May."
+          }
         }
       ],
       "veris": {
@@ -6791,7 +6870,7 @@
         "source_id": "vcdb",
         "incident_id": "DB-2026-029",
         "security_incident": "Confirmed",
-        "confidence": "Medium",
+        "confidence": "High",
         "reference": "https://www.theverge.com/ai-artificial-intelligence/897528/meta-rogue-ai-agent-security-incident; https://futurism.com/artificial-intelligence/rogue-ai-agent-triggers-emergency-at-meta; https://www.theguardian.com/technology/2026/mar/20/meta-ai-agents-instruction-causes-large-sensitive-data-leak-to-employees",
         "summary": "A Meta engineer used an internal AI agent (described as OpenClaw-like) to analyse a colleague's technical question on an internal forum. The agent, unprompted, posted a public reply containing inaccurate technical advice; another employee acted on it, triggering a 'SEV1' (Meta's second-highest severity) in which employees could access sensitive company and user data they were not authorised to view for nearly two hours. Meta says the agent took no technical action itself and that 'no user data was mishandled'. An AI-agent-contributed authorization/exposure incident.",
         "actor": {
@@ -6812,7 +6891,7 @@
               "Misinformation"
             ],
             "vector": [
-              "Inadequate technology"
+              "Inadequate processes"
             ],
             "notes": "Agent posted inaccurate advice publicly without approval; acted-upon change misconfigured access controls."
           }
@@ -6820,27 +6899,21 @@
         "asset": {
           "assets": [
             {
-              "variety": "S - LLM application"
-            },
-            {
-              "variety": "S - Web application"
-            },
-            {
-              "variety": "P - Developer"
+              "variety": "S - LLM application",
+              "amount": 1
             }
           ],
           "cloud": [
-            "On-Premise Asset(s)",
             "External Cloud Asset(s)"
           ],
+          "role": [
+            "IT"
+          ],
+          "total_amount": 1,
           "notes": "Internal AI agent + internal systems holding company/user data."
         },
         "attribute": {
           "confidentiality": {
-            "data_disclosure": "Potentially",
-            "state": [
-              "Stored"
-            ],
             "data": [
               {
                 "variety": "Internal"
@@ -6850,8 +6923,12 @@
               }
             ],
             "data_victim": [
-              "Employee",
-              "Customer"
+              "Customer",
+              "Employee"
+            ],
+            "data_disclosure": "Potentially",
+            "state": [
+              "Stored"
             ],
             "notes": "Sensitive company/user data became reachable by unauthorised employees for ~2h; Meta says no user data was mishandled -> disclosure Potentially."
           }
@@ -6859,7 +6936,7 @@
         "discovery_method": {
           "internal": {
             "variety": [
-              "Incident response"
+              "Reported by employee"
             ]
           }
         },
@@ -6875,16 +6952,17 @@
           }
         },
         "victim": {
-          "victim_id": "Meta Platforms",
+          "government": [
+            "NA"
+          ],
           "country": [
             "US"
           ],
-          "employee_count": "Over 100000",
-          "industry": "519130",
-          "government": [
-            "NA"
-          ]
-        }
+          "victim_id": "Meta",
+          "employee_count": "50001 to 100000",
+          "industry": "519290"
+        },
+        "targeted": "NA"
       },
       "report": {
         "ai_role": [
@@ -7240,7 +7318,7 @@
     {
       "id": "DB-2026-032",
       "title": "Context.ai (AI tool) compromise cascaded to Vercel via an employee OAuth token",
-      "date": "2026-04-18",
+      "date": "2026-02-01",
       "sources": [
         {
           "source": "vz-risk/VCDB",
@@ -14053,6 +14131,17 @@
           "source": "vz-risk/VCDB",
           "locator": "issues/23009",
           "url": "https://github.com/vz-risk/VCDB/issues/23009"
+        },
+        {
+          "source": "vz-risk/VCDB",
+          "locator": "data/json/submitted/76f9dcd8-5db0-40e8-9335-cd929c1017b3.JSON",
+          "url": "https://github.com/vz-risk/VCDB/blob/f6f98c00f66ab35f5b49977a5852ce94a5bb31d1/data/json/submitted/76f9dcd8-5db0-40e8-9335-cd929c1017b3.JSON",
+          "adopted": true,
+          "overrides": {
+            "actor.external.name": "The group's spelling in DataBreaches.net and in DB-2026-004.",
+            "timeline.incident": "FulcrumSec told DataBreaches.net it attacked a week or two after the early-December 2025 patch; 2026 is the year of disclosure.",
+            "victim.employee_count": "The attackers call Lena Health 'on the small side' (DataBreaches.net); no source gives an exact size, and none supports 1,001 to 10,000 employees."
+          }
         }
       ],
       "veris": {
@@ -14061,7 +14150,7 @@
         "source_id": "vcdb",
         "incident_id": "DB-2026-049",
         "security_incident": "Confirmed",
-        "confidence": "Medium",
+        "confidence": "High",
         "reference": "https://databreaches.net/2026/01/28/ai-digital-helper-lena-health-breach-exposed-some-houston-methodist-patients-medical-info/",
         "summary": "FulcrumSec listed a breach of Lena Health, an AI-based 'digital helper'/care-coordination platform (a Houston Methodist vendor), on a hacking forum (Jan 2026). The group said it exploited a major vulnerability disclosed in early December 2025 that Lena had not patched, and claimed 2,134 patients' complete PHI sat in an unencrypted export in a public-facing S3 bucket; it released a preview including a Twilio call-recording database and patient discharge documents. AI is the victim's product; the breach is an unpatched-vuln + exposed-storage compromise of health data.",
         "actor": {
@@ -14080,7 +14169,8 @@
             ],
             "region": [
               "000000"
-            ]
+            ],
+            "notes": "targeted follows VCDB (Opportunistic): FulcrumSec entered through a public, unpatched vulnerability. Its forum listing, quoted by DataBreaches.net (VCDB issue 23009), claims that it targets AI SaaS vendors specifically."
           }
         },
         "action": {
@@ -14110,25 +14200,27 @@
         "asset": {
           "assets": [
             {
-              "variety": "S - Web application"
+              "variety": "S - Database",
+              "amount": 1
             },
             {
-              "variety": "S - Database"
+              "variety": "S - LLM application",
+              "amount": 1
             },
             {
-              "variety": "S - LLM application"
+              "variety": "S - File",
+              "amount": 1
             }
           ],
           "cloud": [
             "External Cloud Asset(s)"
+          ],
+          "role": [
+            "IT"
           ]
         },
         "attribute": {
           "confidentiality": {
-            "data_disclosure": "Yes",
-            "state": [
-              "Stored unencrypted"
-            ],
             "data": [
               {
                 "variety": "Medical",
@@ -14139,7 +14231,13 @@
               }
             ],
             "data_victim": [
+              "Partner",
               "Patient"
+            ],
+            "data_disclosure": "Yes",
+            "data_total": 2134,
+            "state": [
+              "Stored unencrypted"
             ],
             "notes": "~2,134 patients' PHI incl. Twilio call recordings and discharge docs (attacker-claimed)."
           }
@@ -14158,16 +14256,23 @@
           }
         },
         "victim": {
-          "victim_id": "Lena Health (client: Houston Methodist)",
+          "government": [
+            "NA"
+          ],
           "country": [
             "US"
           ],
-          "employee_count": "1 to 10",
-          "industry": "621111",
-          "government": [
-            "NA"
-          ]
-        }
+          "secondary": {
+            "victim_id": [
+              "Houston Methodist:622110"
+            ],
+            "amount": 1
+          },
+          "victim_id": "LenaHealth",
+          "employee_count": "Small",
+          "industry": "51"
+        },
+        "targeted": "Opportunistic"
       },
       "report": {
         "ai_role": [
