@@ -838,21 +838,7 @@ Where the CVE information lives in the 2026 corpus files:
 
 The as-cited fields are retained unchanged for provenance; the validated fields are canonical; the VERIS action fields are derived from them. Only CVEs were validated: the CWE fields (`report.weaknesses`, `cwe`, the CWE part of `cve_cwe`) are as cited.
 
-**Sources and references.** Two fields cite material on a record. They have different jobs, and no URL appears in both:
-
-- `sources` records where the record was found, its discovery channel: a VCDB issue or VCDB-encoded record, an AIID entry, or a passage of a report held in this repository. `sources[].url` shows that item.
-- `veris.reference` lists the reporting on the record's event: the advisories, write-ups and articles about the event itself.
-
-Every live record has at least one `sources` entry, an object with three non-empty strings: `source`, a key of `sources_catalog`; `locator`, the item in the source's own terms; and `url`, where the source itself shows that item.
-
-- **Register:** `locator` is the register's item (`issues/23174`, `data/json/validated/<uuid>.json`, `AIID 1412`), and `url` ends with it. A VCDB-encoded record (`data/json/…`) is cited at a fixed VCDB commit (`https://github.com/vz-risk/VCDB/blob/<commit>/<locator>`). The URL then shows the cited version, and it stays valid when VCDB validates the record and moves it from `submitted/` to `validated/`. The field `adopted: true` on such an entry marks the VCDB record whose VERIS coding the citing record follows (see "Change logs in the data").
-- **Report held in this repository:** `sources_catalog` records a `permalink` (the file at a fixed commit) and the file's `sha256`. `locator` is a path in the report's own terms, its components separated by ` › `: a numbered item (`item 23`), a numbered section (`§3.6`), or the text of a heading or of a bold lead, for example `§3.7 › Agent-harness CVEs` or `Model and pipeline exploitation disclosures › Microsoft 365 Copilot SearchLeak`. `url` is the permalink with the line range of the passage (`…?plain=1#L128-L129`).
-
-`veris.reference` holds URLs only, separated by `"; "`, each once. It holds every link that one of the record's sources gives for the event (a VCDB record's `reference`, the links of a VCDB issue or an AIID entry, the links in a report's passage) and reporting that the analyst found. For reporting the analyst adds, primary disclosures come first: the owner's or vendor's advisory, the finder's write-up, the victim's or a regulator's disclosure. Independent technical analysis by an established security research team comes second, and news only when neither exists. Every URL must be about the record's event: a link about another event, a homepage, an index page or background reading stays out. The discovery channel stays in `sources`, as in VCDB, where the issue number goes into `plus.github`: no `sources[].url`, register item URL or file name appears in `reference`. CVE IDs belong in the CVE layers (§6.4), not in `reference`.
-
-The verifier checks this for `incidents` and `sub_threshold_incidents` alike: the shape of every entry (a malformed entry is an error, not a crash), that a register `url` ends with the item of its `locator` (for a VCDB record, at a pinned commit), that `adopted` appears only on the entry of a VCDB-encoded record and `overrides` only on an adopted entry, and, for a report, that the file still has its `sha256`, that the `locator` names exactly one passage and that the line range lies inside it. It also checks that `reference` consists of URLs, each once, none of them a discovery channel. Whether a passage describes the record and whether a URL is about the event is judgment. A retired record is frozen and not checked.
-
-**Live and retired records.** Every record keeps its ID for good (§4.1). Three arrays hold the records, each in ascending number order:
+**Live and retired records.** Every record keeps its ID for good (§4.1). A **live record** is a record in `incidents` or `sub_threshold_incidents`; a **retired record** is frozen in a wrapper in `retired_incidents`. The three arrays hold the records, each in ascending number order:
 
 ```yaml
 id_scheme:
@@ -872,11 +858,25 @@ retired_incidents:                     # frozen records that stopped being relev
     record: {id: "DR-2026-0nn"}        # the complete record as it was when retired, unchanged
 ```
 
-- `incidents` and `sub_threshold_incidents` hold the **live** records. Both are verified alike: copied CVE metadata, the VERIS schema, the §3.1 status rule, the validated layer. A move between them (§3.3) changes nothing else in the record.
+- Both live arrays are verified alike: copied CVE metadata, the VERIS schema, the §3.1 status rule, the validated layer. A move between them (§3.3) changes nothing else in the record.
 - Counts, `ranking_table` and the derived incident reports cover `incidents`. `cve_validation` covers both live arrays, because a move undoes no validation.
 - A record in `sub_threshold_incidents` that has validated CVEs must be a disclosure (§3.3), and the verifier fails while the record meets condition (a) or (c).
 - **Retirement.** A record that stops being relevant, for example a duplicate, is never deleted. Its relevant content is first written into the live records it points to; then it moves, unchanged, into a wrapper in `retired_incidents`. The reasons are `duplicate` (the record describes the same event as a live record) and `merged` (its content now belongs to one or more other live records); `into` lists those live records. The verifier checks the wrapper only: the frozen record is history, and no upstream refresh touches it. Builders and scores never read `retired_incidents`.
 - No field marks a record as a disclosure, with its class, or as affecting a victim: §3.3 derives the first two from the relations and `ai_role`, §3.1 the third from `security_incident` and `attribute`.
+
+**Sources and references.** Two fields cite material on a record. They have different jobs, and no URL appears in both:
+
+- `sources` records where the record was found, its discovery channel: a VCDB issue or VCDB-encoded record, an AIID entry, or a passage of a report held in this repository. `sources[].url` shows that item.
+- `veris.reference` lists the reporting on the record's event: the advisories, write-ups and articles about the event itself.
+
+Every live record has at least one `sources` entry, an object with three non-empty strings: `source`, a key of `sources_catalog`; `locator`, the item in the source's own terms; and `url`, where the source itself shows that item.
+
+- **Register:** `locator` is the register's item (`issues/23174`, `data/json/validated/<uuid>.json`, `AIID 1412`), and `url` ends with it. A VCDB-encoded record (`data/json/…`) is cited at a fixed VCDB commit (`https://github.com/vz-risk/VCDB/blob/<commit>/<locator>`). The URL then shows the cited version, and it stays valid when VCDB validates the record and moves it from `submitted/` to `validated/`. The field `adopted: true` on such an entry marks the VCDB record whose VERIS coding the citing record follows (see "Change logs in the data").
+- **Report held in this repository:** `sources_catalog` records a `permalink` (the file at a fixed commit) and the file's `sha256`. `locator` is a path in the report's own terms, its components separated by ` › `: a numbered item (`item 23`), a numbered section (`§3.6`), or the text of a heading or of a bold lead, for example `§3.7 › Agent-harness CVEs` or `Model and pipeline exploitation disclosures › Microsoft 365 Copilot SearchLeak`. `url` is the permalink with the line range of the passage (`…?plain=1#L128-L129`).
+
+`veris.reference` holds URLs only, separated by `"; "`, each once. It holds every link that one of the record's sources gives for the event (a VCDB record's `reference`, the links of a VCDB issue or an AIID entry, the links in a report's passage) and reporting that the analyst found. For reporting the analyst adds, primary disclosures come first: the owner's or vendor's advisory, the finder's write-up, the victim's or a regulator's disclosure. Independent technical analysis by an established security research team comes second, and news only when neither exists. Every URL must be about the record's event: a link about another event, a homepage, an index page or background reading stays out. The discovery channel stays in `sources`, as in VCDB, where the issue number goes into `plus.github`: no `sources[].url`, register item URL or file name appears in `reference`. CVE IDs belong in the CVE layers (§6.4), not in `reference`.
+
+The verifier checks this for every live record: the shape of every entry (a malformed entry is an error, not a crash), that a register `url` ends with the item of its `locator` (for a VCDB record, at a pinned commit), that `adopted` appears only on the entry of a VCDB-encoded record and `overrides` only on an adopted entry, and, for a report, that the file still has its `sha256`, that the `locator` names exactly one passage and that the line range lies inside it. It also checks that `reference` consists of URLs, each once, none of them a discovery channel. Whether a passage describes the record and whether a URL is about the event is judgment. A retired record is frozen and not checked.
 
 **Copied CVE metadata.** The following fields of `validated_cve_details.cves[]` are copies of upstream records. `scripts/validate_incidents.py` re-derives each one from the records cached under `vulnerabilities/upstream/` and fails on any difference:
 
