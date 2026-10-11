@@ -1,0 +1,145 @@
+# VCDB adoption review — 5 records (2026-10-09)
+
+Attached as a git note to the commit "Adopt VCDB's coding for five encoded intake issues". Written to the JSON on 2026-10-11 after the user's go, with the dates of DB-2026-017 and DB-2026-032 aligned to their timelines.
+Outcomes: **A** adopt VCDB's value; **B** a value other than VCDB's, reason in `overrides`; **extend** VCDB leaves the field empty, ours fills it; **fix** our own value corrected where VCDB is empty (reason in the commit message). `notes` are not compared; ours are kept, and rule-C notes are listed at the end.
+
+## DB-2026-005 — VCDB record `data/json/submitted/9f45cb1b-ab67-4500-9ed0-9a171a0305e5.JSON` (issue 23310)
+
+| Field | Ours | VCDB | New | Outcome | Reason |
+|---|---|---|---|---|---|
+| `action.hacking.variety` | ["Use of stolen creds", "Prompt injection"] | ["Use of stolen creds", "Backdoor"] | ["Backdoor", "Prompt injection", "Use of stolen creds"] | B | Prompt injection added: StepSecurity (in veris.reference) says the planted .cursor/rules/setup.mdc 'is a prompt injection' that instructs the Cursor agent to run the payload. |
+| `action.malware.variety` | ["Worm", "Capture stored data", "Export data"] | ["Password dumper"] | ["Capture stored data", "Export data", "Password dumper", "Worm"] | B | GovInfoSecurity: Miasma is self-replicating malware (Worm) whose payload steals credentials, authentication tokens and developer secrets (Capture stored data, Export data). |
+| `actor.external.name` | ["TeamPCP"] | ["teampcp"] | ["TeamPCP"] | B | The group's spelling in the sources and in DB-2026-001, DR-2026-022 and DR-2026-046. |
+| `attribute.confidentiality.data` | [{"variety": "Credentials"}, {"variety": "API key"}, {"variety": "Secrets"}] | [{"variety": "API key"}] | [{"variety": "Credentials"}, {"variety": "API key"}, {"variety": "Secrets"}] | B | GovInfoSecurity: the payload steals 'credentials, authentication tokens and developer secrets'. |
+| `attribute.confidentiality.data_disclosure` | "Potentially" | "Yes" | "Potentially" | B | No source confirms stolen credentials; GitHub has not said whether downstream organizations were affected (GovInfoSecurity). |
+| `discovery_method` | {"external": {"variety": ["Security researcher"]}} | {"partner": {"variety": ["Antivirus"]}} | {"external": {"variety": ["Security researcher"]}} | B | StepSecurity's researchers reported the attack (GovInfoSecurity); no source names an antivirus partner. |
+| `action.hacking.result` | — | ["Infiltrate", "Deploy payload"] | ["Infiltrate", "Deploy payload"] | A adopt |  |
+| `action.malware.result` | ["Infiltrate", "Exfiltrate", "Persist", "Lateral movement"] | ["Exfiltrate"] | ["Exfiltrate"] | A adopt |  |
+| `asset.assets` | [{"variety": "S - Code repository"}, {"variety": "S - LLM application"}, {"variety": "S - Configuration or patch management"}] | [{"variety": "S - Code repository", "amount": 1}, {"variety": "S - LLM application"}] | [{"variety": "S - Code repository", "amount": 1}, {"variety": "S - LLM application"}] | A adopt |  |
+| `asset.role` | — | ["IT"] | ["IT"] | A adopt |  |
+| `asset.total_amount` | — | 1 | 1 | A adopt |  |
+| `attribute.confidentiality.data_victim` | ["Victim organization", "Customer"] | ["Partner"] | ["Partner"] | A adopt |  |
+| `attribute.integrity.variety` | ["Software installation", "Modify configuration"] | ["Modify configuration", "Software installation"] | ["Modify configuration", "Software installation"] | A adopt |  |
+| `targeted` | — | "Opportunistic" | "Opportunistic" | A adopt |  |
+| `timeline.compromise.unit` | — | "Minutes" | "Minutes" | A adopt |  |
+| `timeline.discovery.unit` | — | "Days" | "Days" | A adopt |  |
+| `timeline.exfiltration.unit` | — | "Unknown" | "Unknown" | A adopt |  |
+| `victim.industry` | "511210" | "513210" | "513210" | A adopt |  |
+| `victim.victim_id` | "Microsoft (Azure repos) + downstream developers" | "Microsoft" | "Microsoft" | A adopt |  |
+| `actor.external.country` | ["Unknown"] | — | ["Unknown"] | extend |  |
+| `actor.external.region` | ["000000"] | — | ["000000"] | extend |  |
+| `attribute.confidentiality.state` | ["Stored"] | — | ["Stored"] | extend |  |
+| `timeline.containment.unit` | "Hours" | — | "Hours" | extend |  |
+| `timeline.containment.value` | 1 | — | 1 | extend |  |
+
+## DB-2026-016 — VCDB record `data/json/submitted/0ec40f9c-6ccb-4e1a-9b69-59b9b60a81fa.JSON` (issue 23041)
+
+| Field | Ours | VCDB | New | Outcome | Reason |
+|---|---|---|---|---|---|
+| `attribute.confidentiality.data` | [{"variety": "Personal", "amount": 25000000}, {"variety": "Sensitive Personal"}] | [{"variety": "Personal"}, {"variety": "Internal"}] | [{"variety": "Personal", "amount": 25000000}, {"variety": "Sensitive Personal"}] | B | Sensitive Personal instead of Internal: Malwarebytes reports users' chat histories, chosen models and settings, which are users' data, not Codeway's internal data. |
+| `attribute.confidentiality.data_total` | — | 50000000 | 25000000 | B | Malwarebytes: 300 million messages from over 25 million users were exposed; 50 million is the app's total user base. |
+| `action.error.vector` | ["Web application"] | ["Carelessness"] | ["Carelessness"] | A adopt |  |
+| `actor.internal.variety` | ["System admin"] | ["Developer"] | ["Developer"] | A adopt |  |
+| `asset.assets` | [{"variety": "S - Database"}, {"variety": "S - LLM application"}] | [{"variety": "S - Database", "amount": 1}, {"variety": "S - LLM application"}] | [{"variety": "S - Database", "amount": 1}, {"variety": "S - LLM application"}] | A adopt |  |
+| `asset.role` | — | ["IT"] | ["IT"] | A adopt |  |
+| `asset.total_amount` | — | 1 | 1 | A adopt |  |
+| `confidence` | "Medium" | "High" | "High" | A adopt |  |
+| `targeted` | — | "NA" | "NA" | A adopt |  |
+| `victim.victim_id` | "Codeway (Chat & Ask AI)" | "Codeway" | "Codeway" | A adopt |  |
+| `asset.hosting` | ["External - shared environment"] | — | ["External - shared environment"] | extend |  |
+| `timeline.containment.unit` | "Hours" | — | "Hours" | extend |  |
+| `timeline.containment.value` | 4 | — | 4 | extend |  |
+| `timeline.incident.month` | 2 | — | 2 | extend |  |
+
+## DB-2026-017 — VCDB record `data/json/submitted/8084d01e-dd3e-4bca-b710-c6fdbfb5c5cf.JSON` (issue 23309)
+
+| Field | Ours | VCDB | New | Outcome | Reason |
+|---|---|---|---|---|---|
+| `action.hacking.result` | ["Infiltrate"] | ["Deploy payload"] | ["Infiltrate"] | B | The attackers took over accounts; no source reports a deployed payload. |
+| `action.hacking.variety` | ["Abuse of functionality", "Exploit vuln"] | ["Prompt injection"] | ["Abuse of functionality", "Exploit vuln", "Prompt injection"] | B | Exploit vuln and Abuse of functionality added: Meta's notice to the Maine AG says a bug in a separate code path did not verify the email, and the support tool sent the reset link as designed (BleepingComputer). |
+| `actor.external.country` | ["Unknown"] | ["IR"] | ["Unknown"] | B | KrebsOnSecurity calls the attackers 'pro-Iran hackers'; no source places them in Iran. |
+| `actor.external.motive` | ["Financial"] | ["Ideology"] | ["Financial", "Ideology"] | B | Financial added: KrebsOnSecurity reports that the hackers also seized short account names with an alleged resale value of more than half a million dollars. |
+| `attribute.integrity.variety` | ["Modify authentication", "Alter behavior"] | ["Modify authentication"] | ["Defacement", "Modify authentication"] | B | Defacement added: KrebsOnSecurity reports hijacked accounts defaced with pro-Iranian images and messages. |
+| `discovery_method` | {"external": {"variety": ["Customer"]}} | {"external": {"variety": ["Unrelated 3rd party"]}} | {"external": {"variety": ["Customer"]}} | B | BleepingComputer: a wave of user reports preceded Meta's response; no source names an unrelated third party. |
+| `timeline.discovery.unit` | — | — | "Days" | fix (ours) | Meta discovered the flaw on 31 May (its notice), 44 days after 17 April. |
+| `timeline.discovery.value` | — | — | 44 | fix (ours) | Meta discovered the flaw on 31 May (its notice), 44 days after 17 April. |
+| `timeline.incident.day` | 2 | — | 17 | fix (ours) | Meta's filing with the Maine AG gives 17 April 2026 as the breach date (BleepingComputer); ours said 2 June. |
+| `timeline.incident.month` | 6 | — | 4 | fix (ours) | Meta's filing with the Maine AG gives 17 April 2026 as the breach date (BleepingComputer); ours said 2 June. |
+| `actor.external.variety` | ["Unknown"] | ["Activist"] | ["Activist"] | A adopt |  |
+| `asset.assets` | [{"variety": "S - LLM application"}, {"variety": "S - Web application"}, {"variety": "P - Helpdesk"}] | [{"variety": "S - LLM application", "amount": 1}] | [{"variety": "S - LLM application", "amount": 1}] | A adopt |  |
+| `asset.role` | — | ["IT"] | ["IT"] | A adopt |  |
+| `asset.total_amount` | — | 1 | 1 | A adopt |  |
+| `targeted` | — | "Targeted" | "Targeted" | A adopt |  |
+| `victim.employee_count` | "Over 100000" | "50001 to 100000" | "50001 to 100000" | A adopt |  |
+| `victim.industry` | "519130" | "519290" | "519290" | A adopt |  |
+| `victim.victim_id` | "Meta Platforms (Instagram)" | "Meta" | "Meta" | A adopt |  |
+| `action.social.target` | ["Helpdesk"] | — | ["Helpdesk"] | extend |  |
+| `action.social.variety` | ["Forgery"] | — | ["Forgery"] | extend |  |
+| `action.social.vector` | ["Web application"] | — | ["Web application"] | extend |  |
+| `actor.external.region` | ["000000"] | — | ["000000"] | extend |  |
+| `attribute.confidentiality.data` | [{"variety": "Credentials", "amount": 20225}, {"variety": "Personal"}] | — | [{"variety": "Credentials", "amount": 20225}, {"variety": "Personal"}] | extend |  |
+| `attribute.confidentiality.data_disclosure` | "Yes" | — | "Yes" | extend |  |
+| `attribute.confidentiality.data_victim` | ["Customer"] | — | ["Customer"] | extend |  |
+| `attribute.confidentiality.state` | ["Stored"] | — | ["Stored"] | extend |  |
+
+## DB-2026-029 — VCDB record `data/json/submitted/a5bf09d1-156f-4f39-96e6-6adec5bc0c66.JSON` (issue 23117)
+
+| Field | Ours | VCDB | New | Outcome | Reason |
+|---|---|---|---|---|---|
+| `action.error.variety` | ["Misconfiguration", "Misinformation"] | ["Programming error"] | ["Misconfiguration", "Misinformation"] | B | The Guardian: an engineer implemented an AI agent's erroneous advice, which exposed the data (Misinformation, Misconfiguration); VCDB's own note says 'misconfigured the system'; no source describes a programming error. |
+| `attribute.confidentiality.data` | [{"variety": "Internal"}, {"variety": "Personal"}] | [{"variety": "Personal"}] | [{"variety": "Internal"}, {"variety": "Personal"}] | B | The Guardian: 'sensitive user and company data' was exposed (Personal, Internal). |
+| `attribute.confidentiality.data_disclosure` | "Potentially" | "Yes" | "Potentially" | B | The Guardian: the data was exposed to engineers for two hours; no source says anyone viewed it, and Meta says no user data was mishandled. |
+| `attribute.confidentiality.data_victim` | ["Employee", "Customer"] | ["Employee"] | ["Customer", "Employee"] | B | The Guardian: user data was exposed as well (Customer). |
+| `timeline.incident.day` | 18 | — | 18 | B | The Guardian reported the leak on 20 March 2026, so it cannot have occurred in May. |
+| `timeline.incident.month` | 3 | 5 | 3 | B | The Guardian reported the leak on 20 March 2026, so it cannot have occurred in May. |
+| `action.error.vector` | ["Inadequate technology"] | ["Inadequate processes"] | ["Inadequate processes"] | A adopt |  |
+| `asset.assets` | [{"variety": "S - LLM application"}, {"variety": "S - Web application"}, {"variety": "P - Developer"}] | [{"variety": "S - LLM application", "amount": 1}] | [{"variety": "S - LLM application", "amount": 1}] | A adopt |  |
+| `asset.cloud` | ["On-Premise Asset(s)", "External Cloud Asset(s)"] | ["External Cloud Asset(s)"] | ["External Cloud Asset(s)"] | A adopt |  |
+| `asset.role` | — | ["IT"] | ["IT"] | A adopt |  |
+| `asset.total_amount` | — | 1 | 1 | A adopt |  |
+| `confidence` | "Medium" | "High" | "High" | A adopt |  |
+| `discovery_method` | {"internal": {"variety": ["Incident response"]}} | {"internal": {"variety": ["Reported by employee"]}} | {"internal": {"variety": ["Reported by employee"]}} | A adopt |  |
+| `targeted` | — | "NA" | "NA" | A adopt |  |
+| `victim.employee_count` | "Over 100000" | "50001 to 100000" | "50001 to 100000" | A adopt |  |
+| `victim.industry` | "519130" | "519290" | "519290" | A adopt |  |
+| `victim.victim_id` | "Meta Platforms" | "Meta" | "Meta" | A adopt |  |
+| `attribute.confidentiality.state` | ["Stored"] | — | ["Stored"] | extend |  |
+| `timeline.containment.unit` | "Hours" | — | "Hours" | extend |  |
+| `timeline.containment.value` | 2 | — | 2 | extend |  |
+
+## DB-2026-049 — VCDB record `data/json/submitted/76f9dcd8-5db0-40e8-9335-cd929c1017b3.JSON` (issue 23009)
+
+| Field | Ours | VCDB | New | Outcome | Reason |
+|---|---|---|---|---|---|
+| `actor.external.name` | ["FulcrumSec"] | ["fulcrumsec"] | ["FulcrumSec"] | B | The group's spelling in DataBreaches.net and in DB-2026-004. |
+| `timeline.incident.month` | 12 | — | 12 | B | FulcrumSec told DataBreaches.net it attacked a week or two after the early-December 2025 patch; 2026 is the year of disclosure. |
+| `timeline.incident.year` | 2025 | 2026 | 2025 | B | FulcrumSec told DataBreaches.net it attacked a week or two after the early-December 2025 patch; 2026 is the year of disclosure. |
+| `victim.employee_count` | "1 to 10" | "1001 to 10000" | "Small" | B | The attackers call Lena Health 'on the small side' (DataBreaches.net); no source gives an exact size, and none supports 1,001 to 10,000 employees. |
+| `asset.assets` | [{"variety": "S - Web application"}, {"variety": "S - Database"}, {"variety": "S - LLM application"}] | [{"variety": "S - Database", "amount": 1}, {"variety": "S - LLM application", "amount": 1}, {"variety": "S - File", "amount": 1}] | [{"variety": "S - Database", "amount": 1}, {"variety": "S - LLM application", "amount": 1}, {"variety": "S - File", "amount": 1}] | A adopt |  |
+| `asset.role` | — | ["IT"] | ["IT"] | A adopt |  |
+| `attribute.confidentiality.data_total` | — | 2134 | 2134 | A adopt |  |
+| `attribute.confidentiality.data_victim` | ["Patient"] | ["Partner", "Patient"] | ["Partner", "Patient"] | A adopt |  |
+| `confidence` | "Medium" | "High" | "High" | A adopt |  |
+| `targeted` | — | "Opportunistic" | "Opportunistic" | A adopt |  |
+| `victim.industry` | "621111" | "51" | "51" | A adopt |  |
+| `victim.secondary.amount` | — | 1 | 1 | A adopt |  |
+| `victim.secondary.victim_id` | — | ["Houston Methodist:622110"] | ["Houston Methodist:622110"] | A adopt |  |
+| `victim.victim_id` | "Lena Health (client: Houston Methodist)" | "LenaHealth" | "LenaHealth" | A adopt |  |
+| `action.error.variety` | ["Misconfiguration"] | — | ["Misconfiguration"] | extend |  |
+| `action.error.vector` | ["Web application"] | — | ["Web application"] | extend |  |
+| `actor.external.country` | ["Unknown"] | — | ["Unknown"] | extend |  |
+| `actor.external.region` | ["000000"] | — | ["000000"] | extend |  |
+| `attribute.confidentiality.data` | [{"variety": "Medical", "amount": 2134}, {"variety": "Personal"}] | [{"variety": "Medical"}, {"variety": "Personal"}] | [{"variety": "Medical", "amount": 2134}, {"variety": "Personal"}] | extend | VCDB's items, with the amounts from ours |
+| `attribute.confidentiality.state` | ["Stored unencrypted"] | — | ["Stored unencrypted"] | extend |  |
+
+## Rule-C notes
+
+- **DB-2026-017** `actor.external.notes`: Activist and Ideology per KrebsOnSecurity (the reference of VCDB record 8084d01e): 'pro-Iran hackers' published the exploit on Telegram and defaced hijacked accounts with pro-Iranian images. BleepingComputer (VCDB issue 23309) and Meta's breach notice name no attacker.
+- **DB-2026-049** `actor.external.notes`: targeted follows VCDB (Opportunistic): FulcrumSec entered through a public, unpatched vulnerability. Its forum listing, quoted by DataBreaches.net (VCDB issue 23009), claims that it targets AI SaaS vendors specifically.
+
+## Other changes
+
+- Each VCDB record becomes a `sources` entry after the issue it encodes, pinned to VCDB commit `f6f98c00`, with `adopted: true` and the B reasons as `overrides`.
+- DB-2026-017's `veris.reference` gains https://krebsonsecurity.com/2026/06/hackers-used-metas-ai-support-bot-to-seize-instagram-accounts/ (the VCDB record's reference); the other four VCDB references are already there.
+- `counts.citations_by_source["vz-risk/VCDB"]` +5.
+- VCDB record 8084d01e names issue 23117 in `plus.github`, but its event is issue 23309's; not reported to VCDB.
