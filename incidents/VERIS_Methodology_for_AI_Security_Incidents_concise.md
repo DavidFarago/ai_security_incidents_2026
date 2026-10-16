@@ -4,6 +4,8 @@
 
 ## 1. Purpose and methodological decision
 
+AI significantly changes software and software development, and likely software security too. This methodology serves one question: how has software security changed through the recent AI disruptions? To see the change while it happens, the corpus considers only very recent security incidents, those of 2026, in which AI was materially involved.
+
 This document defines a methodology for describing, evaluating, and ranking **AI-related software security incidents** using **VERIS (Vocabulary for Event Recording and Incident Sharing)** as the primary external framework.
 
 The methodology is intended for a report on AI-related software security incidents in 2026, but should remain reusable for future incident collections.

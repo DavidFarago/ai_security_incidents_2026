@@ -6,6 +6,10 @@ A VERIS-coded catalogue of **2026 software-security incidents in which AI was ma
 
 The dataset consolidates five original sources into one consistent, machine-readable corpus, each incident described with the [VERIS](https://verisframework.org/) schema plus a small AI-specific report layer, following the methodology in [`incidents/VERIS_Methodology_for_AI_Security_Incidents_concise.md`](incidents/VERIS_Methodology_for_AI_Security_Incidents_concise.md).
 
+## Why this repository exists
+
+AI significantly changes software and software development, and likely software security too. This repository takes a view on how software security has changed through the recent AI disruptions. To see the change while it happens, it considers only very recent security incidents, those of 2026, in which AI was materially involved.
+
 ## Approach
 
 **Incident-first.** The unit of this project is the *incident*, not the vulnerability. Everything else is derived from the incident list:
