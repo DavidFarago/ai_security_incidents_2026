@@ -187,6 +187,21 @@ class Mutations(unittest.TestCase):
         self.d["ranking_table"][0]["observed"] = "Low"
         self.assertTrue(has(self.run_v(), "ranking-table", incident="DB-2026-001"))
 
+    # ---- methodology §4.2, §4.3: the motive of a deliberate action; a false positive has no effect
+    def test_deliberate_action_needs_a_motive(self):
+        # DR-2026-008 has a hacking action; motive NA means an unintentional action.
+        incident(self.d, "DR-2026-008")["veris"]["actor"]["external"]["motive"] = ["NA"]
+        self.assertTrue(has(self.run_v(), "motive", incident="DR-2026-008"))
+
+    def test_error_with_motive_na_passes(self):
+        # DB-2026-026 has only an error action, and an error is unintentional.
+        self.assertEqual(incident(self.d, "DB-2026-026")["veris"]["action"].keys(), {"error"})
+        self.assertFalse(has(self.run_v(), "motive", incident="DB-2026-026"))
+
+    def test_false_positive_with_effect(self):
+        incident(self.d, "DB-2026-096")["veris"]["attribute"]["confidentiality"]["data_disclosure"] = "Potentially"
+        self.assertTrue(has(self.run_v(), "status-effect", msg="False positive", incident="DB-2026-096"))
+
     # ---- ranking_table order (methodology §9.3): observed desc, potential desc, ID asc
     def add_counted_copy(self, like):
         """A copy of a counted record with the next ID, and a copy of its ranking_table row (not yet placed)."""

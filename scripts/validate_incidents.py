@@ -12,8 +12,9 @@ Class B (bookkeeping): set algebra of the validated layer, the VERIS action.*.cv
   entry's position (a register url names the register item of the locator; a report held in this repo is cited by
   its pinned permalink with a line range inside the passage that the locator names), `veris.reference` (URLs only,
   separated by "; ", none of them a discovery channel),
-  ranking_table (each counted incident once, in ranking order: methodology §9.3), recomputable counts, and the VERIS
-  block against the VERIS JSON schema. No overrides.
+  ranking_table (each counted incident once, in ranking order: methodology §9.3), the motive of deliberate actions
+  and no effect on a false positive (methodology §4.2, §4.3), recomputable counts, and the VERIS block against the
+  VERIS JSON schema. No overrides.
 
 Every check of a record runs over the live records, `incidents` and `sub_threshold_incidents` alike (methodology
 §10.2); counts and the ranking table cover `incidents` only. A retired record is frozen: only its wrapper is checked.
@@ -51,6 +52,8 @@ CLASS_A_FIELDS = ["state", "cna", "published", "product", "title", "cvss", "cwe"
                   "kev_date_added", "record_url"]
 INTRINSIC = ("state", "cna", "published", "product", "cvss_version", "cvss_score", "cwe", "cisa_kev", "title", "credits")
 FROZEN_COUNTS = ["counts.from_ai_software_security_incidents_2026", "counts.from_merged_incidents_2026_VERIS_described"]
+# VERIS actions that someone takes on purpose; their actor needs a motive other than NA (methodology §4.2).
+DELIBERATE_ACTIONS = {"hacking", "malware", "social", "misuse"}
 
 
 @dataclass
@@ -367,6 +370,14 @@ def check_class_b(d, up, r: Result):
         elif v["security_incident"] in ("Confirmed", "Suspected") and not has_effect(v.get("attribute") or {}):
             r.add("B", "status-effect", f"{v['security_incident']} without an effect in veris.attribute "
                   "(methodology §3.1): use Near miss or record the effect", iid)
+        elif v["security_incident"] == "False positive" and has_effect(v.get("attribute") or {}):
+            r.add("B", "status-effect", "False positive with an effect in veris.attribute (methodology §4.3): a false "
+                  "positive affects no asset, so data_disclosure is No and no integrity or availability variety is set", iid)
+        deliberate = sorted(set(v.get("action") or {}) & DELIBERATE_ACTIONS)
+        motives = [m for a in (v.get("actor") or {}).values() if isinstance(a, dict) for m in a.get("motive") or []]
+        if deliberate and not [m for m in motives if m != "NA"]:
+            r.add("B", "motive", f"action {', '.join(deliberate)} needs an actor motive other than NA (methodology §4.2): "
+                  "NA means an unintentional action", iid)
         for k in ("observed_severity", "potential_severity"):
             if rep.get(k) not in lc.SEVERITIES:
                 r.add("B", "vocabulary", f"report.{k} {rep.get(k)!r}", iid)

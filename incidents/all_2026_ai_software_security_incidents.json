@@ -4130,9 +4130,10 @@
               "Developer"
             ],
             "motive": [
-              "NA"
+              "NA",
+              "Convenience"
             ],
-            "notes": "Autonomous agent acted without authorization from the operator; accidental/destructive (error), abetted by an over-privileged token (use-of-token akin to over-scoped creds)."
+            "notes": "Autonomous agent (Cursor, Claude Opus 4.6) acting for PocketOS's developer without the operator's authorization. Motive NA for the errors: the token's blanket scope, and the deletion of production, which the agent 'guessed' was scoped to staging. Motive Convenience for the misuse: it decided on its own to 'fix' a credential mismatch with a token it found in an unrelated file (The Register)."
           }
         },
         "action": {
@@ -4148,12 +4149,12 @@
           },
           "misuse": {
             "variety": [
-              "Possession abuse"
+              "Privilege abuse"
             ],
             "vector": [
               "Remote access"
             ],
-            "notes": "Over-broad CLI token (blanket destructive scope) discovered in an unrelated file and used."
+            "notes": "Over-broad CLI token found in an unrelated file and used: it 'had been created for adding and removing custom domains through the Railway CLI but was scoped for any operation, including destructive ones' (The Register)."
           }
         },
         "asset": {
@@ -6385,20 +6386,14 @@
         "reference": "https://www.wiz.io/blog/exposed-moltbook-database-reveals-millions-of-api-keys; https://www.businessinsider.com/moltbook-ai-agent-hack-wiz-security-email-database-2026-2",
         "summary": "Moltbook, a viral 'social network for AI agents' that its creator said was built almost entirely by AI ('vibe-coded'), left its Supabase backend exposed: a Supabase API key was hard-coded in client-side JavaScript with no Row-Level-Security policies, granting anyone unauthenticated full read AND write access to the production database. Wiz researchers reached it in under three minutes and enumerated ~35,000 user emails (plus ~29,600 early-access emails), ~4,060 private agent DMs (some containing plaintext third-party API keys), ~17,000 human accounts and ~1.5 million agent API/claim tokens. With write access and the tokens an attacker could impersonate any agent, deface or delete posts, and inject prompt-injection payloads consumed by other agents. Wiz disclosed on 31 Jan 2026; Moltbook remediated within hours (final patch ~01:00 UTC 1 Feb) and said data accessed during research was deleted.",
         "actor": {
-          "external": {
+          "internal": {
             "variety": [
-              "Unaffiliated"
+              "Developer"
             ],
             "motive": [
               "NA"
             ],
-            "country": [
-              "US"
-            ],
-            "region": [
-              "019021"
-            ],
-            "notes": "Discoverer was Wiz (security research). No evidence of malicious third-party access."
+            "notes": "Moltbook's founder, who 'vibe-coded' the platform ('I didn't write a single line of code', quoted by Wiz): its production database had no Row Level Security. The finder, Wiz, is in discovery_method; it read data, tested write access and modified a post while verifying the flaw."
           }
         },
         "action": {
@@ -14330,20 +14325,14 @@
         "reference": "https://www.nbcnews.com/tech/security/ai-toy-maker-exposed-thousands-responses-kids-senators-miko-rcna258326; https://www.blackburn.senate.gov/2026/2/technology/blackburn-blumenthal-demand-answers-from-toy-maker-for-exposing-sensitive-data-involving-children-to-the-public; https://country.iheart.com/content/2026-02-12-ai-toy-maker-reportedly-exposed-thousands-of-responses-to-children/",
         "summary": "US Senators Blackburn and Blumenthal reported (letter 12 Feb 2026) that AI-toy maker Miko left 'what appears to be all of the audio responses of the toy' in an unsecured, publicly accessible database dating back to December 2025; the toy's replies often contained children's names and conversation details, letting anyone reconstruct conversations even without the children's own voice audio. Staff found it using public tools examining the toy's Wi-Fi traffic; Miko secured the database the afternoon it was notified. Miko's CEO said there was 'no breach or leak of user data' and that no children's voices/PII are publicly accessible. A children's-data exposure at an AI product.",
         "actor": {
-          "external": {
+          "internal": {
             "variety": [
-              "Unaffiliated"
+              "Unknown"
             ],
             "motive": [
               "NA"
             ],
-            "country": [
-              "US"
-            ],
-            "region": [
-              "019021"
-            ],
-            "notes": "Discovered by US Senate staff; no malicious actor."
+            "notes": "Miko, the toy maker, left the database of the toy's audio responses unsecured and publicly accessible (NBC); no source names a person or role. The finders, the staff of Senators Blackburn and Blumenthal, are in discovery_method."
           }
         },
         "action": {
@@ -16756,7 +16745,7 @@
               "Unaffiliated"
             ],
             "motive": [
-              "NA"
+              "Fun"
             ],
             "country": [
               "Unknown"
@@ -16764,7 +16753,7 @@
             "region": [
               "000000"
             ],
-            "notes": "Hobbyist who stumbled on the flaw and reported it; no malicious use."
+            "notes": "Software engineer Sammy Azdoufal, who wanted to drive his own Romo with a PS5 controller 'just for fun' (DroneXL) and stumbled on the cross-tenant access; he reported it via The Verge and did not exploit it (PopSci)."
           }
         },
         "action": {
@@ -16802,7 +16791,7 @@
         },
         "attribute": {
           "confidentiality": {
-            "data_disclosure": "Potentially",
+            "data_disclosure": "Yes",
             "state": [
               "Stored",
               "Transmitted"
@@ -16818,7 +16807,7 @@
             "data_victim": [
               "Customer"
             ],
-            "notes": "data_disclosure=Potentially: ~7,000 units were reachable (camera/mic/maps) but only the researcher accessed them; no evidence of malicious viewing."
+            "notes": "data_disclosure=Yes: 'In nine minutes, his scanner collected over 100,000 messages' from other owners' vacuums (DroneXL), so unauthorized access occurred (methodology §3.2); ~7,000 units in 24 countries were reachable (camera, microphone, maps); no evidence of malicious use (PopSci: he 'chose not to exploit that')."
           }
         },
         "discovery_method": {
@@ -16862,7 +16851,7 @@
           "broken cloud authorization (MQTT wildcard)"
         ],
         "observed_severity": "Low",
-        "observed_severity_rationale": "Highly sensitive in-home audio/video/maps for ~7,000 units in 24 countries was reachable, but only the researcher accessed it and DJI patched within ~2 weeks; realized harm negligible.",
+        "observed_severity_rationale": "Highly sensitive in-home audio/video/maps for ~7,000 units in 24 countries was reachable; the finder's scanner collected over 100,000 messages from other owners' units, but he did not exploit them, and DJI patched within ~2 weeks; limited realized harm.",
         "potential_severity": "High",
         "potential_severity_rationale": "Had a malicious actor found the same wildcard subscription first, live surveillance of thousands of private homes (camera + microphone + floor plans) was achievable at scale with no owner awareness.",
         "potential_severity_confidence": "High",
@@ -18277,22 +18266,19 @@
         "security_incident": "Confirmed",
         "confidence": "Medium",
         "reference": "https://www.rnz.co.nz/news/health/616376/pharmacy-scrambles-to-scrub-internet-of-patients-private-messages; https://databreaches.net/2026/06/28/nz-pharmacy-scrambles-to-scrub-internet-of-patients-private-messages/; https://www.pharmacytoday.co.nz/article/news/pharmacists-warned-use-extreme-caution-when-vibe-coding-wake-privacy-breach; https://www.msn.com/en-nz/news/national/pharmacy-scrambles-to-scrub-internet-of-patients-private-messages/ar-AA26gS6C",
-        "summary": "Unichem Petone pharmacy (Wellington, NZ) notified ~29 patients after its website — built with the AI 'vibe-coding' platform Base44 — leaked private messages submitted via its 'contact us' form. A system error created public web 'trails' of messages meant to go privately to the pharmacy's email, exposing patients' private (including health-related) messages online. The pharmacy scrambled to scrub the content; the case prompted warnings that AI-built sites need security auditing. An AI-generated-weakness data-exposure incident.",
+        "summary": "Unichem Petone pharmacy (Wellington, NZ) notified ~29 patients after its website — built with AI ('vibe-coded') — leaked private messages submitted via its 'contact us' form. A system error created public web 'trails' of messages meant to go privately to the pharmacy's email, exposing patients' private (including health-related) messages online. The pharmacy scrambled to scrub the content; the case prompted warnings that AI-built sites need security auditing. An AI-generated-weakness data-exposure incident.",
         "actor": {
-          "external": {
-            "variety": [
-              "Unaffiliated"
+          "partner": {
+            "country": [
+              "Unknown"
+            ],
+            "region": [
+              "000000"
             ],
             "motive": [
               "NA"
             ],
-            "country": [
-              "NZ"
-            ],
-            "region": [
-              "009061"
-            ],
-            "notes": "Publicly discovered exposure; no attacker."
+            "notes": "The website provider that the pharmacy switched to in early June 2026: a 'system error' with its portal made the contact-form messages public (owner Joseph Tsou to RNZ). RNZ names no provider. Green Cross Health: the site was 'managed separately by the individual licensee'. The finder, a Stuff reporter, is in discovery_method."
           }
         },
         "action": {
@@ -18316,7 +18302,7 @@
           "cloud": [
             "External Cloud Asset(s)"
           ],
-          "notes": "Website built on the Base44 AI vibe-coding platform."
+          "notes": "Website built with AI ('vibe coding'); no readable source names the platform."
         },
         "attribute": {
           "confidentiality": {
@@ -18347,6 +18333,7 @@
             ]
           }
         },
+        "discovery_notes": "A Stuff reporter alerted the owner; he found the messages when he searched for a person's name (RNZ).",
         "timeline": {
           "incident": {
             "year": 2026,
@@ -18370,7 +18357,7 @@
           "AI-generated weakness"
         ],
         "ai_component": [
-          "AI website builder (Base44 vibe-coding)"
+          "AI website builder (vibe coding)"
         ],
         "ai_security_mechanism": [
           "insecure AI-generated web code exposing form data"
@@ -18396,7 +18383,7 @@
         "added": [],
         "removed": [],
         "cves": [],
-        "note": "Vibe-coded (Base44) site leaked contact-form messages; no CVE assigned."
+        "note": "Vibe-coded site leaked contact-form messages; no CVE assigned."
       }
     },
     {
@@ -18420,20 +18407,14 @@
         "reference": "https://the-decoder.de/datenpanne-bei-claude-geteilte-chats-tauchten-in-suchmaschinen-auf/",
         "summary": "Users found (~27 Jul 2026) that thousands of Claude conversations shared via Anthropic's 'share link' feature were indexed by search engines because the share pages lacked a noindex tag; a 'site:claude.ai/share' query surfaced them, some containing crypto keys and legal matters, plus user-created artifacts. Anthropic quickly removed Google indexing; Bing/Brave lagged. Because users had explicitly created share links, this is a misconfiguration amplifying user-shared content rather than a hack (mirrors OpenAI's 2024 error).",
         "actor": {
-          "external": {
+          "internal": {
             "variety": [
-              "Unaffiliated"
+              "Developer"
             ],
             "motive": [
               "NA"
             ],
-            "country": [
-              "Unknown"
-            ],
-            "region": [
-              "000000"
-            ],
-            "notes": "No attacker; public discovery."
+            "notes": "Anthropic, which runs the share feature: its share pages were 'offenbar' (apparently) not protected by a noindex tag (The Decoder). The finders, users on Reddit, are in discovery_method."
           }
         },
         "action": {
@@ -18487,10 +18468,11 @@
         "discovery_method": {
           "external": {
             "variety": [
-              "Unrelated 3rd party"
+              "Customer"
             ]
           }
         },
+        "discovery_notes": "'Wie Nutzer auf Reddit entdeckten' ('as users on Reddit discovered', The Decoder): Claude users found the indexed share pages with a site:claude.ai/share search.",
         "timeline": {
           "incident": {
             "year": 2026,
@@ -18570,23 +18552,14 @@
         "reference": "https://www.procontra-online.de/versicherer/artikel/nach-datenpanne-universa-kunden-koennen-ein-stueck-weit-aufatmen; https://www.it-boltwise.de/datenpanne-bei-universa-crawler-greift-zeitweise-offene-kundendaten-ab.html",
         "summary": "German insurer Universa Versicherung misconfigured a server (reported ~7 Jul) that briefly exposed customer names, addresses, policy numbers and tariff data; an automated crawler associated with OpenAI accessed/indexed the exposed data before Universa's controls detected it and shut the server down. Universa notified the Bavarian DPA, engaged forensics, and asked OpenAI to delete the data; OpenAI said the data was not used for model training and no other unauthorized access occurred. Health data, credentials and card numbers were not exposed. An AI web crawler as the (non-malicious) accessor of exposed data.",
         "actor": {
-          "external": {
+          "internal": {
             "variety": [
-              "Other"
+              "Unknown"
             ],
             "motive": [
               "NA"
             ],
-            "country": [
-              "US"
-            ],
-            "region": [
-              "019021"
-            ],
-            "name": [
-              "OpenAI crawler"
-            ],
-            "notes": "AI crawler as accessor (non-malicious); underlying cause is Universa's misconfiguration."
+            "notes": "Universa: 'Es kam im Rahmen einer IT-Umstellung versehentlich zu einer temporär fehlenden Sicherheitseinstellung auf einem unserer IT-Systeme' (during an IT changeover a security setting was accidentally and temporarily missing on one of its IT systems; procontra); no person or role is named. The OpenAI web crawler that read the data is named in attribute.confidentiality.notes."
           }
         },
         "action": {
@@ -18726,15 +18699,6 @@
           }
         },
         "action": {
-          "misuse": {
-            "variety": [
-              "Data mishandling"
-            ],
-            "vector": [
-              "Web application"
-            ],
-            "notes": "PHI file uploaded to an external, third-party-hosted AI platform outside internal systems."
-          },
           "error": {
             "variety": [
               "Misdelivery"
@@ -18742,7 +18706,7 @@
             "vector": [
               "Inadequate processes"
             ],
-            "notes": "Inadvertent upload of patient data to an external AI tool."
+            "notes": "LLUH: the file 'was inadvertently uploaded to an external artificial intelligence (AI) platform' during an IRB-approved research study; LLUH is reviewing its policies on external AI tools."
           }
         },
         "asset": {
@@ -19036,7 +19000,7 @@
         },
         "attribute": {
           "confidentiality": {
-            "data_disclosure": "Potentially",
+            "data_disclosure": "No",
             "data": [
               {
                 "variety": "Sensitive Personal"
@@ -19045,7 +19009,7 @@
             "data_victim": [
               "Customer"
             ],
-            "notes": "Intimate footage seen by contractors; a review-practice exposure, not an intrusion."
+            "notes": "No unauthorized access to an asset: Meta sent the footage to its contractor Sama for human review (AIID 1418: 'Meta AI smart glasses reportedly sent media and transcripts from AI interactions to Sama contractors in Kenya for human review'); a privacy and consent dispute, not an intrusion."
           }
         },
         "discovery_method": {
