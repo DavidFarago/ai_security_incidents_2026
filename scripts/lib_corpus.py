@@ -7,6 +7,7 @@ from __future__ import annotations
 import json
 import re
 from pathlib import Path
+from typing import NamedTuple
 
 ROOT = Path(__file__).resolve().parents[1]
 JSON_PATH = ROOT / "incidents" / "all_2026_ai_software_security_incidents.json"
@@ -177,10 +178,7 @@ def locate(lines: list, locator) -> tuple | str:
 
 
 def cve_links(d: dict):
-    """Yield (record, cves[] entry) for every validated incident-CVE link of the live records.
-
-    For the verifier; the builders count `incidents` only and iterate it themselves.
-    """
+    """Yield (record, cves[] entry) for every validated record-CVE link of the live records (both live arrays)."""
     for inc in records(d):
         for c in (inc.get("validated_cve_details") or {}).get("cves") or []:
             yield inc, c
@@ -223,3 +221,47 @@ def disclosure_classes(rec: dict) -> set:
     out = {k for role, k in (("AI-generated weakness", "AI-written"), ("AI-discovered vulnerability", "AI-discovered"))
            if role in roles}
     return out or {"AI-stack"}
+
+
+def link_classes(rec: dict, relation: str) -> set:
+    """The classes through which one CVE link of a record enters a score: the link's own class (link_class), or, for a
+    link without one, the record's classes (disclosure_classes). Only the descriptive segment profile counts such a
+    link, a `related` one (automate_sourcing_handover.md §5.6); scores count in-play links only."""
+    k = link_class(relation, rec["report"].get("ai_role"))
+    return {k} if k else disclosure_classes(rec)
+
+
+class Score(NamedTuple):
+    obs: int
+    pot: int
+    obs_tiers: tuple   # the severity behind each weight that the score adds, highest first
+    pot_tiers: tuple
+
+
+def ibss(contribs, weights: dict = SEV_WEIGHT) -> Score:
+    """IBSS of one entity (methodology §3.3 "Scores") from its contributions, one (array, record_id,
+    observed_severity, potential_severity, classes) per record link that involves the entity.
+
+    A counted incident (array `incidents`) adds its weights once, however many of its contributions reach the entity.
+    A sub-threshold record adds nothing on its own: per class, the entity gets the highest observed weight and,
+    separately, the highest potential weight among the sub-threshold contributions of that class. A contribution enters
+    every class it names; one without a class raises ValueError. Thread B passes lc.disclosure_classes(rec) as the
+    classes of an analyst CWE (report.weaknesses[].cwe) and, for its linear sensitivity score, the weights 1 to 5 as
+    `weights`.
+    """
+    counted, best = {}, {}
+    for array, rid, observed, potential, classes in contribs:
+        if array == "incidents":
+            counted[rid] = (observed, potential)
+        elif array == "sub_threshold_incidents":
+            if not classes:
+                raise ValueError(f"{rid}: a sub-threshold contribution needs a class (methodology §3.3)")
+            for k in classes:
+                o, p = best.get(k, (observed, potential))
+                best[k] = (max(o, observed, key=weights.get), max(p, potential, key=weights.get))
+        else:
+            raise ValueError(f"{rid}: {array!r} is not a live array")
+    tiers = list(counted.values()) + list(best.values())
+    order = lambda ts: tuple(sorted(ts, key=SEVERITIES.index))
+    return Score(sum(weights[o] for o, _ in tiers), sum(weights[p] for _, p in tiers),
+                 order(o for o, _ in tiers), order(p for _, p in tiers))

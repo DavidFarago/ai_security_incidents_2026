@@ -2,7 +2,8 @@
 """Build the derived incident reports from the 2026 AI software-security incident dataset.
 
 Reads  incidents/all_2026_ai_software_security_incidents.json          (source of truth)
-Writes incidents/all_2026_ai_software_security_incidents.{csv,md}      (derived; never edited by hand)
+Writes incidents/all_2026_ai_software_security_incidents.{csv,md}      (the counted incidents; derived, never edited by hand)
+       incidents/all_2026_ai_software_security_incidents_sub_threshold.{csv,md}  (the sub-threshold records, methodology §3.3)
 
 Ported from the one-time build_all_csv_md.py of 2026-08-26 (outside this repository). The CSV has the as-cited
 `cve` column and the canonical `validated_cve` column; the Markdown shows the as-cited CVEs on the VERIS line and a
@@ -18,6 +19,7 @@ import csv
 import io
 import re
 import sys
+from collections import Counter
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
@@ -176,11 +178,11 @@ def validated_md(e):
 
 
 # ----------------------------------------------------------------------------- CSV
-def render_csv(d):
+def render_csv(records):
     buf = io.StringIO(newline="")
     w = csv.writer(buf)
     w.writerow(CSV_COLS)
-    for e in d["incidents"]:
+    for e in records:
         v, rep = e["veris"], e["report"]
         actor = veris_categories(v.get("actor", {}))
         action = veris_categories(v.get("action", {}))
@@ -202,8 +204,44 @@ def render_csv(d):
 
 
 # ----------------------------------------------------------------------------- Markdown
+SUB_BASE = "all_2026_ai_software_security_incidents_sub_threshold"
+
+
+def class_counts(records):
+    """Records per class of methodology §3.3 (lc.disclosure_classes); a record can have several classes."""
+    cc = Counter(k for e in records for k in lc.disclosure_classes(e))
+    return " · ".join(f"{k} {cc[k]}" for k in lc.DISCLOSURE_CLASSES)
+
+
+def entry_md(e, label):
+    """The detail entry of one record, headed by `label` (the number in the incidents MD, the ID in the sub-threshold MD)."""
+    v, r = e["veris"], e["report"]
+    head = f"**{label}. {e['title']} — {shortdate(e)}.**"
+    cve = ""
+    cves = [x["cve"] for x in r.get("vulnerabilities") or [] if x.get("cve")]
+    if cves:
+        cve = " · CVE: " + ", ".join(cves[:4]) + ("…" if len(cves) > 4 else "")
+    note = (f"*VERIS: {v['security_incident']} · Observed **{r['observed_severity']}**, Potential **{r['potential_severity']}** "
+            f"(confidence {v.get('confidence', '?')}). {r['potential_severity_rationale']}{cve}*")
+    srcline = "**Sources:** " + ", ".join(cite_md(c) for c in e["sources"])
+    rep = reporting_md(e)
+    if rep:
+        srcline += " · **Reporting:** " + rep
+    L = [head + " " + v["summary"]]
+    if r.get("ai_involvement_note"):
+        L.append(f"*AI-involvement: {r['ai_involvement_note']}*")
+    return L + [note, srcline, validated_md(e), ""]
+
+
+def footer(d):
+    return [f"*Prepared from the AI Incident Database and VERIS Community Database registers plus ChatGPT, Claude Code and Grok deep-research reports, coded per `VERIS_Methodology_for_AI_Security_Incidents_concise.md`, compiled {d['generated']}. Not affiliated with or endorsed by any vendor named herein; all trademarks belong to their owners.*", "",
+            "*Licensed under [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/); adapts material from the VERIS Community Database and the AI Incident Database (both CC BY-SA 4.0). Attribution and changes: `README.md`, section License.*",
+            ""]
+
+
 def render_md(d):
     inc = d["incidents"]
+    subs = d.get("sub_threshold_incidents") or []
     num = {e["id"]: lc.incident_number(e["id"]) for e in inc}
     cc, bs, cnt = d["counts"]["by_observed_severity"], d["counts"]["citations_by_source"], d["counts"]
     ids = d["id_scheme"]["counts"]
@@ -215,6 +253,7 @@ def render_md(d):
          "**The full 2026 corpus: every incident from the AIID+VCDB register set and the four deep-research reports, VERIS-coded, with corrected original-source citations. Where AI was a cause, a weapon, a target, the loot, or the tool that found (or wrote) the flaw.**", "",
          f"Compiled {d['generated']}. Union of `ai_software_security_incidents_2026.json` ({n_db_src}) and `merged_incidents_2026_VERIS_described.json` ({n_dr_src}). Ordered highest → lowest **observed** severity (realized harm), with **potential** severity (the bounded counterfactual from the demonstrated attack path) alongside — kept separate per the VERIS methodology, never collapsed. Severity is a report-specific ordinal rubric from VERIS evidence, **not** CVSS/AIRIS.", "",
          f"- **{cc['Critical']} Critical · {cc['High']} High · {cc['Medium']} Medium · {cc['Low']} Low · {cc['Negligible']} Negligible** ({cnt['total_incidents']} incidents; {cnt['by_status']['Near miss']} near-miss, {cnt['by_status']['False positive']} *False positive* as outside the software-security inclusion criterion).",
+         f"- **Sub-threshold disclosures** (not counted here; methodology §3.3): {len(subs)} records ({class_counts(subs)}), in `{SUB_BASE}.md` / `.csv`.",
          f"- **Original sources cited** (per methodology §5/§6): AIID export `{XLSX}` and the VERIS Community Database `{VCDB}` for the register incidents; the three deep-research reports (`ChatGPT`/`ClaudeCode`/`Grok`_DeepResearch_ai_incidents_2026.md) for the rest. Citation counts: VCDB {bs.get(VCDB, 0)} · ClaudeCode {bs.get('ClaudeCode_DeepResearch_ai_incidents_2026.md', 0)} · ChatGPT {bs.get('ChatGPT_DeepResearch_ai_incidents_2026.md', 0)} · AIID {bs.get(XLSX, 0)} · Grok {bs.get('Grok_DeepResearch_ai_incidents_2026.md', 0)}.",
          "", "Full VERIS + report-layer coding is in the companion `all_2026_ai_software_security_incidents.json` / `.csv`.",
          "", "---", "", "## Incident index", "",
@@ -234,22 +273,7 @@ def render_md(d):
         rng = f"{min(nums)}" if len(nums) == 1 else f"{min(nums)}–{max(nums)}"
         L += [f"### {tlabel} tier ({rng})", ""]
         for e in grp:
-            v, r = e["veris"], e["report"]
-            head = f"**{num[e['id']]}. {e['title']} — {shortdate(e)}.**"
-            cve = ""
-            cves = [x["cve"] for x in r.get("vulnerabilities") or [] if x.get("cve")]
-            if cves:
-                cve = " · CVE: " + ", ".join(cves[:4]) + ("…" if len(cves) > 4 else "")
-            note = (f"*VERIS: {v['security_incident']} · Observed **{r['observed_severity']}**, Potential **{r['potential_severity']}** "
-                    f"(confidence {v.get('confidence', '?')}). {r['potential_severity_rationale']}{cve}*")
-            srcline = "**Sources:** " + ", ".join(cite_md(c) for c in e["sources"])
-            rep = reporting_md(e)
-            if rep:
-                srcline += " · **Reporting:** " + rep
-            L.append(head + " " + v["summary"])
-            if r.get("ai_involvement_note"):
-                L.append(f"*AI-involvement: {r['ai_involvement_note']}*")
-            L += [note, srcline, validated_md(e), ""]
+            L += entry_md(e, num[e["id"]])
         L.append("")
     L += ["---", "", "## Method & caveats", "",
           f"- **Incident IDs.** `DB-2026-nnn` (*database*) = at least one register source (AIID export or VCDB; {ids['DB']} incidents), `DR-2026-nnn` (*direct report*) = no register source, found through a deep-research or primary report ({ids['DR']}, all from deep-research reports so far). The number is the position in this report's priority ranking (the `#` column of the index) and is frozen — later re-ranking changes the table, not the ID; new incidents continue from 100.",
@@ -260,31 +284,51 @@ def render_md(d):
           "- **Non-software-security rows.** Five MIT/VCDB register items are `security_incident = False positive` (privacy/likeness/governance harms, not asset compromises); ten conventional VCDB breaches with no AI component are flagged as such. Both are retained for register completeness, each with an AI-involvement note.",
           f"- **CVE validation ({cv['validated_on']}).** Every CVE ID in the original records was resolved against CVE.org/NVD and checked against the incident description; CISA KEV, the GitHub Advisory Database and each incident's primary sources were searched for omitted CVEs. The per-incident **Validated CVEs** line (and the `validated_cve` / `validated_cve_details` attributes in the JSON, `validated_cve` column in the CSV) carries the corrected list, grouped by relation ({relations}), with removed IDs and their reasons. Original title/summary text was left untouched, so a title may still cite an ID that the validation line removes or re-attributes. The VERIS `action.hacking.cve` / `action.malware.cve` fields in the JSON hold exactly the validated *exploited* CVEs.",
           "- **Granularity note.** The Anthropic July-2026 cyber-evaluation incident (`DB-2026-019`) is coded as one incident under its single disclosure/root cause, though the ChatGPT report enumerated its three sub-incidents separately.",
-          "", "---", "",
-          f"*Prepared from the AI Incident Database and VERIS Community Database registers plus ChatGPT, Claude Code and Grok deep-research reports, coded per `VERIS_Methodology_for_AI_Security_Incidents_concise.md`, compiled {d['generated']}. Not affiliated with or endorsed by any vendor named herein; all trademarks belong to their owners.*", "",
-          "*Licensed under [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/); adapts material from the VERIS Community Database and the AI Incident Database (both CC BY-SA 4.0). Attribution and changes: `README.md`, section License.*",
-          ""]
+          "", "---", ""] + footer(d)
+    return "\n".join(L)
+
+
+def render_sub_md(d):
+    """The sub-threshold records (methodology §3.3): an index with their classes, then the detail entries, in ID order."""
+    subs = d.get("sub_threshold_incidents") or []
+    L = ["# All 2026 AI-Related Software-Security Incidents — Sub-threshold disclosures (VERIS-coded)", "",
+         "**The vulnerability disclosures of the 2026 corpus that fail methodology §3.3: no CISA KEV listing, no reported exploitation and no realized harm. Each keeps a complete, verified record (the array `sub_threshold_incidents` of the JSON), but none is counted as an incident; scores such as IBSS see them only through their class, with at most one weight per class and entity.**", "",
+         f"Compiled {d['generated']}. {len(subs)} records: {class_counts(subs)} (a record can have several classes). Ordered by ID. The classes are derived from `validated_cve_details.cves[].relation` and `report.ai_role` (methodology §3.3). The counted incidents are in `all_2026_ai_software_security_incidents.md`.", "",
+         "---", "", "## Record index", "",
+         "| ID | Incident | Date | Class | AI's role (VERIS) | Source(s) | Observed | Potential |",
+         "|----|----------|------|-------|-------------------|-----------|----------|-----------|"]
+    for e in subs:
+        cls = ", ".join(sorted(lc.disclosure_classes(e), key=lc.DISCLOSURE_CLASSES.index))
+        role = ", ".join(e["report"]["ai_role"]) or "—"
+        L.append(f"| {e['id']} | {e['title']} | {shortdate(e)} | {cls} | {role} | {srcshort(e)} | "
+                 f"{e['report']['observed_severity']} | {e['report']['potential_severity']} |")
+    L += ["", "---", "", "## Records in detail", ""]
+    for e in subs:
+        L += entry_md(e, e["id"])
+    L += ["---", ""] + footer(d)
     return "\n".join(L)
 
 
 def render(d):
-    """(csv_text, md_text) for the corpus; fails fast on the core checks."""
+    """The four derived texts, keyed by the suffix of their path after the base name; fails fast on the core checks."""
     problems = core_checks(d)
     if problems:
         sys.exit(str(problems[0]))
-    return render_csv(d), render_md(d)
+    subs = d.get("sub_threshold_incidents") or []
+    return {".csv": render_csv(d["incidents"]), ".md": render_md(d),
+            "_sub_threshold.csv": render_csv(subs), "_sub_threshold.md": render_sub_md(d)}
 
 
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--json", default=lc.JSON_PATH, type=Path)
     ap.add_argument("--out-base", default=lc.ROOT / "incidents" / "all_2026_ai_software_security_incidents", type=Path,
-                    help="output path without extension; .csv and .md are appended")
+                    help="output path without extension; .csv, .md, _sub_threshold.csv and _sub_threshold.md are appended")
     a = ap.parse_args()
-    csv_text, md_text = render(lc.load_corpus(a.json))
-    a.out_base.with_suffix(".csv").write_text(csv_text, encoding="utf-8", newline="")
-    a.out_base.with_suffix(".md").write_text(md_text, encoding="utf-8")
-    print(f"wrote {a.out_base}.csv ({csv_text.count(chr(10)) - 1} data rows) and .md ({md_text.count(chr(10))} lines)")
+    for suffix, text in render(lc.load_corpus(a.json)).items():
+        Path(f"{a.out_base}{suffix}").write_text(text, encoding="utf-8", newline="" if suffix.endswith(".csv") else None)
+        size = f"{text.count(chr(10)) - 1} data rows" if suffix.endswith(".csv") else f"{text.count(chr(10))} lines"
+        print(f"wrote {a.out_base}{suffix} ({size})")
 
 
 if __name__ == "__main__":

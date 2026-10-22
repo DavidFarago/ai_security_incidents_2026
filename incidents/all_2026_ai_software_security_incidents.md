@@ -5,6 +5,7 @@
 Compiled 2026-08-26. Union of `ai_software_security_incidents_2026.json` (35) and `merged_incidents_2026_VERIS_described.json` (64). Ordered highest → lowest **observed** severity (realized harm), with **potential** severity (the bounded counterfactual from the demonstrated attack path) alongside — kept separate per the VERIS methodology, never collapsed. Severity is a report-specific ordinal rubric from VERIS evidence, **not** CVSS/AIRIS.
 
 - **2 Critical · 22 High · 31 Medium · 17 Low · 27 Negligible** (99 incidents; 23 near-miss, 5 *False positive* as outside the software-security inclusion criterion).
+- **Sub-threshold disclosures** (not counted here; methodology §3.3): 0 records (AI-written 0 · AI-stack 0 · AI-discovered 0), in `all_2026_ai_software_security_incidents_sub_threshold.md` / `.csv`.
 - **Original sources cited** (per methodology §5/§6): AIID export `incidentdatabase.ai_20260824_ai_incidents_2026.xlsx` and the VERIS Community Database `vz-risk/VCDB` for the register incidents; the three deep-research reports (`ChatGPT`/`ClaudeCode`/`Grok`_DeepResearch_ai_incidents_2026.md) for the rest. Citation counts: VCDB 46 · ClaudeCode 36 · ChatGPT 19 · AIID 17 · Grok 9.
 
 Full VERIS + report-layer coding is in the companion `all_2026_ai_software_security_incidents.json` / `.csv`.

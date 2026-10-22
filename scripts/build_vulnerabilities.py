@@ -40,7 +40,6 @@ EXPLOITED_FAMILY = ["exploited", "exploited-unconfirmed", "attempted", "toolkit"
 IN_PLAY = lc.IN_PLAY  # the relations whose links count in IBSS (methodology §3.3 "Scores")
 
 SEVERITIES = lc.SEVERITIES
-SEV_WEIGHT = lc.SEV_WEIGHT  # IBSS: each incident counted once, weight doubles per tier
 CVSS_BANDS = ["9.0-10.0", "7.0-8.9", "4.0-6.9", "0.1-3.9", "no CVSS"]
 
 SEGMENTS = [
@@ -52,6 +51,9 @@ SEGMENTS = [
     ("related", "CVEs recorded as related context only (relation related)"),
 ]
 SEGMENT_INDEX = {s: i for i, (s, _) in enumerate(SEGMENTS)}
+# The segment of a CVE link that has a class of methodology §3.3 (lc.link_class); the other links get theirs by relation.
+CLASS_SEGMENT = {"AI-written": "ai-written", "AI-stack": "ai-stack-vulnerability", "AI-discovered": "ai-discovered"}
+SUB = "sub_threshold_incidents"   # the live array of the sub-threshold records (methodology §3.3); † in the README
 
 RADAR_RE = re.compile(r"AI tool: (?P<tool>[^;]+); contribution: (?P<contribution>\w+); cause: (?P<cause>\w+)")
 LONG_LIST = 10  # incidents with more CVEs than this get their list moved below the table in the .md
@@ -93,6 +95,10 @@ def link(cve: str) -> str:
 
 
 def md_table(headers, rows) -> str:
+    rows = list(rows)
+    for row in rows:
+        if len(row) != len(headers):
+            raise ValueError(f"row of {len(row)} cells under {len(headers)} headers {headers}: {list(row)[:3]}")
     out = ["| " + " | ".join(headers) + " |", "|" + "|".join("---" for _ in headers) + "|"]
     out += ["| " + " | ".join(md(c) for c in row) + " |" for row in rows]
     return "\n".join(out)
@@ -121,36 +127,59 @@ def load(path: Path) -> dict:
 
 
 def build_links(d: dict) -> list[dict]:
-    """One record per incident–CVE link, carrying the incident facts and the per-CVE metadata."""
+    """One entry per record–CVE link of the live records (both live arrays), carrying the record's facts, its array,
+    the link's classes (lc.link_classes) and the per-CVE metadata."""
     links = []
-    for inc in d["incidents"]:
-        det = inc.get("validated_cve_details") or {}
-        roles = list(inc["report"].get("ai_role") or [])
-        for c in det.get("cves") or []:
-            rel = c["relation"]
-            if rel in EXPLOITED_FAMILY:
-                seg = "ai-exploited"
-            elif rel == "discovered":
-                seg = "ai-discovered"
-            elif rel == "self-vulnerability":
-                seg = "ai-written" if "AI-generated weakness" in roles else "ai-stack-vulnerability"
-            elif rel == "self-malicious-release":
-                seg = "malicious-release"
-            else:
-                seg = "related"
-            radar = RADAR_RE.search(c.get("note") or "")
-            links.append({
-                "incident_id": inc["id"], "incident_title": inc["title"], "incident_date": inc["date"],
-                "observed": inc["report"]["observed_severity"], "potential": inc["report"]["potential_severity"],
-                "ai_role": roles, "segment": seg,
-                "cve": c["cve"], "relation": rel, "in_original": c.get("in_original"), "state": c.get("state"),
-                "cna": c.get("cna"), "published": c.get("published"), "product": c.get("product"),
-                "cvss_version": c.get("cvss_version"), "cvss_score": c.get("cvss_score"),
-                "cwe": list(c.get("cwe") or []), "cisa_kev": bool(c.get("cisa_kev")), "kev_date_added": c.get("kev_date_added"),
-                "credits": c.get("credits"), "title": c.get("title"), "note": c.get("note"),
-                "radar": radar.groupdict() if radar else None,
-            })
+    for array in lc.LIVE_ARRAYS:
+        for inc in d.get(array) or []:
+            links += record_links(inc, array)
     return links
+
+
+def record_links(inc: dict, array: str) -> list[dict]:
+    """The links of one record; the segment comes from the link's class, else from its relation."""
+    out = []
+    det = inc.get("validated_cve_details") or {}
+    roles = list(inc["report"].get("ai_role") or [])
+    for c in det.get("cves") or []:
+        rel = c["relation"]
+        if rel in EXPLOITED_FAMILY:
+            seg = "ai-exploited"
+        elif rel == "self-malicious-release":
+            seg = "malicious-release"
+        elif k := lc.link_class(rel, roles):
+            seg = CLASS_SEGMENT[k]
+        else:
+            seg = "related"
+        radar = RADAR_RE.search(c.get("note") or "")
+        out.append({
+            "array": array, "classes": lc.link_classes(inc, rel),
+            "incident_id": inc["id"], "incident_title": inc["title"], "incident_date": inc["date"],
+            "observed": inc["report"]["observed_severity"], "potential": inc["report"]["potential_severity"],
+            "ai_role": roles, "segment": seg,
+            "cve": c["cve"], "relation": rel, "in_original": c.get("in_original"), "state": c.get("state"),
+            "cna": c.get("cna"), "published": c.get("published"), "product": c.get("product"),
+            "cvss_version": c.get("cvss_version"), "cvss_score": c.get("cvss_score"),
+            "cwe": list(c.get("cwe") or []), "cisa_kev": bool(c.get("cisa_kev")), "kev_date_added": c.get("kev_date_added"),
+            "credits": c.get("credits"), "title": c.get("title"), "note": c.get("note"),
+            "radar": radar.groupdict() if radar else None,
+        })
+    return out
+
+
+def score(ls):
+    """IBSS (lc.ibss) over links: a counted incident adds its weight once, the sub-threshold records once per class."""
+    return lc.ibss((l["array"], l["incident_id"], l["observed"], l["potential"], l["classes"]) for l in ls)
+
+
+def ids_by_array(ls, key="incident_id"):
+    """The distinct values of `key` among links, per live array: (counted incidents, sub-threshold records), sorted."""
+    return tuple(sorted({l[key] for l in ls if l["array"] == a}) for a in lc.LIVE_ARRAYS)
+
+
+def live_in_id_order(d):
+    """(array, record) for every live record, in ID order over both arrays."""
+    return sorted(((a, i) for a in lc.LIVE_ARRAYS for i in d.get(a) or []), key=lambda ai: lc.incident_number(ai[1]["id"]))
 
 
 # ----------------------------------------------------------------------------- tables
@@ -159,9 +188,9 @@ def table_incident_cves(d, links):
     for l in links:
         by_inc[l["incident_id"]].append(l)
     headers = ["incident_id", "observed_severity", "potential_severity", "cve_count", "cves", "cves_by_relation",
-               "non_cve_identifier_count", "incident_title"]
+               "non_cve_identifier_count", "incident_title", "array"]
     rows = []
-    for inc in d["incidents"]:
+    for array, inc in live_in_id_order(d):
         ls = sorted(by_inc.get(inc["id"], []), key=lambda l: (-RELATION_WEIGHT[l["relation"]], cve_key(l["cve"])))
         groups = []
         for rel in RELATION_ORDER:
@@ -170,7 +199,7 @@ def table_incident_cves(d, links):
                 groups.append(f"{rel}: {', '.join(cs)}")
         n_non = len((inc.get("validated_cve_details") or {}).get("non_cve_identifiers") or [])
         rows.append([inc["id"], inc["report"]["observed_severity"], inc["report"]["potential_severity"], len(ls),
-                     [l["cve"] for l in ls], " | ".join(groups), n_non, inc["title"]])
+                     [l["cve"] for l in ls], " | ".join(groups), n_non, inc["title"], array])
     return headers, rows
 
 
@@ -187,7 +216,7 @@ def cvss_band_short(score):
 
 
 def ibss_per_cve(links):
-    """IBSS of each CVE over its in-play links (blank/absent for CVEs that are only discovered/related)."""
+    """IBSS of each CVE over its in-play links (absent for CVEs that are only `related`/`toolkit`)."""
     by = defaultdict(list)
     for l in links:
         by[l["cve"]].append(l)
@@ -196,10 +225,9 @@ def ibss_per_cve(links):
         ip = sorted((l for l in ls if l["relation"] in IN_PLAY), key=lambda l: l["incident_id"])
         if not ip:
             continue
+        s = score(ip)
         out[cve] = {
-            "obs": sum(SEV_WEIGHT[l["observed"]] for l in ip), "pot": sum(SEV_WEIGHT[l["potential"]] for l in ip),
-            "obs_tiers": tuple(sorted((l["observed"] for l in ip), key=SEVERITIES.index)),
-            "pot_tiers": tuple(sorted((l["potential"] for l in ip), key=SEVERITIES.index)),
+            "obs": s.obs, "pot": s.pot, "obs_tiers": s.obs_tiers, "pot_tiers": s.pot_tiers,
             "cvss": ls[0]["cvss_score"], "cvss_version": ls[0]["cvss_version"], "kev": ls[0]["cisa_kev"],
             "incidents": [l["incident_id"] for l in ip], "relations": [l["relation"] for l in ip],
             "in_036": any(l["incident_id"] == "DR-2026-036" for l in ip),
@@ -234,20 +262,24 @@ def table_cve_incidents(links):
     for l in links:
         by_cve[l["cve"]].append(l)
     ibss = ibss_per_cve(links)
-    headers = ["cve", "incident_count", "incidents", "relations", "max_relation", "cisa_kev", "cvss_score", "cvss_version",
-               "ibss_observed", "ibss_potential", "cna", "published", "product", "cna_cwe", "title"]
+    headers = ["cve", "incident_count", "sub_threshold_incident_count", "incidents", "sub_threshold_incidents", "relations",
+               "max_relation", "cisa_kev", "cvss_score", "cvss_version", "ibss_observed", "ibss_potential", "cna", "published",
+               "product", "cna_cwe", "title"]
     rows = []
     for cve, ls in by_cve.items():
         ls.sort(key=lambda l: l["incident_id"])
-        best = max(ls, key=lambda l: RELATION_WEIGHT[l["relation"]])
+        best = max(ls, key=lambda l: RELATION_WEIGHT[l["relation"]])   # relations of all live records (handover O5)
         first = ls[0]  # intrinsic fields are identical across incidents (checked in the design review)
         ib = ibss.get(cve)
-        rows.append([cve, len(ls), [l["incident_id"] for l in ls], SEP.join(f"{l['incident_id']}:{l['relation']}" for l in ls),
+        inc_ids, sub_ids = ids_by_array(ls)
+        rows.append([cve, len(inc_ids), len(sub_ids), inc_ids, sub_ids, SEP.join(f"{l['incident_id']}:{l['relation']}" for l in ls),
                      best["relation"], first["cisa_kev"], first["cvss_score"], first["cvss_version"],
                      ib["obs"] if ib else None, ib["pot"] if ib else None, first["cna"],
                      first["published"], first["product"], first["cwe"], first["title"]])
     # CVSS desc (score as published, versions mixed) -> KEV -> relation weight -> CVE id; rows without CVSS last.
-    rows.sort(key=lambda r: (r[6] is None, -(r[6] if r[6] is not None else 0), not r[5], -RELATION_WEIGHT[r[4]], cve_key(r[0])))
+    ix = {h: i for i, h in enumerate(headers)}
+    cvss, kev, rel = ix["cvss_score"], ix["cisa_kev"], ix["max_relation"]
+    rows.sort(key=lambda r: (r[cvss] is None, -(r[cvss] if r[cvss] is not None else 0), not r[kev], -RELATION_WEIGHT[r[rel]], cve_key(r[0])))
     return headers, rows
 
 
@@ -327,85 +359,101 @@ def credits_discovery(credits):
 
 
 def table_discovered(links):
-    headers = ["cve", "incident_id", "credits", "cna", "product", "published", "cvss_score", "cvss_version", "cna_cwe", "title"]
+    headers = ["cve", "incident_id", "credits", "cna", "product", "published", "cvss_score", "cvss_version", "cna_cwe", "title", "array"]
     rows = [[l["cve"], l["incident_id"], credits_all(l["credits"]), l["cna"], l["product"], l["published"], l["cvss_score"], l["cvss_version"],
-             l["cwe"], l["title"]] for l in links if l["relation"] == "discovered"]
+             l["cwe"], l["title"], l["array"]] for l in links if l["relation"] == "discovered"]
     rows.sort(key=lambda r: (r[1], cve_key(r[0])))
     return headers, rows
 
 
-def ibss_of(incident_ids, sev):
-    """IBSS (observed, potential) of a set of incidents, each counted once."""
-    return (sum(SEV_WEIGHT[sev[k][0]] for k in incident_ids), sum(SEV_WEIGHT[sev[k][1]] for k in incident_ids))
+def per_array(ls):
+    """The number of links per live array: [counted incidents, sub-threshold records]."""
+    return [sum(1 for l in ls if l["array"] == a) for a in lc.LIVE_ARRAYS]
 
 
 def table_cwe_profile(links):
-    """CNA-assigned CWE frequency of the validated CVEs, per segment (CVE link = unit), with IBSS over the distinct incidents."""
-    sev = {l["incident_id"]: (l["observed"], l["potential"]) for l in links}
+    """CNA-assigned CWE frequency of the validated CVEs, per segment (CVE link = unit), counted per live array, with IBSS
+    over the records (lc.ibss: a counted incident once, the sub-threshold records once per class). Rows rank by the links
+    of both arrays."""
     seg_links = defaultdict(list)
     for l in links:
         seg_links[l["segment"]].append(l)
-    headers = ["segment", "cwe", "cve_links", "distinct_cves", "incidents", "ibss_observed", "ibss_potential", "share_of_segment_cwe_tagged_links"]
+    headers = ["segment", "cwe", "cve_links", "sub_threshold_cve_links", "distinct_cves", "sub_threshold_distinct_cves",
+               "incidents", "sub_threshold_incidents", "ibss_observed", "ibss_potential",
+               "share_of_segment_cwe_tagged_links", "sub_threshold_share_of_segment_cwe_tagged_links"]
     rows, totals = [], []
     for seg, _ in SEGMENTS:
         ls = seg_links.get(seg, [])
         tagged = [l for l in ls if l["cwe"]]
-        cnt, cves, incs = Counter(), defaultdict(set), defaultdict(set)
+        n_tagged = per_array(tagged)
+        by_cwe = defaultdict(list)
         for l in tagged:
             for w in l["cwe"]:
-                cnt[w] += 1
-                cves[w].add(l["cve"])
-                incs[w].add(l["incident_id"])
-        for w, n in sorted(cnt.items(), key=lambda kv: (-kv[1], cwe_key(kv[0]))):
-            o, pp = ibss_of(incs[w], sev)
-            rows.append([seg, w, n, len(cves[w]), len(incs[w]), o, pp, round(n / len(tagged), 3) if tagged else 0])
-        seg_incs = {l["incident_id"] for l in ls}
-        o, pp = ibss_of(seg_incs, sev)
-        totals.append([seg, len(ls), len({l["cve"] for l in ls}), len(seg_incs), o, pp, len(tagged), len(cnt)])
-    total_headers = ["segment", "cve_links", "distinct_cves", "incidents", "ibss_observed", "ibss_potential", "links_with_cna_cwe", "distinct_cwes"]
+                by_cwe[w].append(l)
+        for w, wl in sorted(by_cwe.items(), key=lambda kv: (-len(kv[1]), cwe_key(kv[0]))):
+            n, cves, incs, s = per_array(wl), ids_by_array(wl, "cve"), ids_by_array(wl), score(wl)
+            rows.append([seg, w, n[0], n[1], len(cves[0]), len(cves[1]), len(incs[0]), len(incs[1]), s.obs, s.pot,
+                         *(round(k / t, 3) if t else 0 for k, t in zip(n, n_tagged))])
+        n, cves, incs, s = per_array(ls), ids_by_array(ls, "cve"), ids_by_array(ls), score(ls)
+        cwes = [{w for l in tagged if l["array"] == a for w in l["cwe"]} for a in lc.LIVE_ARRAYS]
+        totals.append([seg, n[0], n[1], len(cves[0]), len(cves[1]), len(incs[0]), len(incs[1]), s.obs, s.pot,
+                       n_tagged[0], n_tagged[1], len(cwes[0]), len(cwes[1])])
+    total_headers = ["segment", "cve_links", "sub_threshold_cve_links", "distinct_cves", "sub_threshold_distinct_cves",
+                     "incidents", "sub_threshold_incidents", "ibss_observed", "ibss_potential",
+                     "links_with_cna_cwe", "sub_threshold_links_with_cna_cwe", "distinct_cwes", "sub_threshold_distinct_cwes"]
     return headers, rows, total_headers, totals
 
 
 def table_cwe_ibss_cve_path(links):
-    """CNA-CWE IBSS via in-play CVEs: the CVE-path half of the CWE thread's union formula (incident counted once per CWE)."""
-    sev = {l["incident_id"]: (l["observed"], l["potential"]) for l in links}
-    incs, cves, nlinks, segs = defaultdict(set), defaultdict(set), Counter(), defaultdict(set)
+    """CNA-CWE IBSS via in-play CVEs: the CVE-path half of the CWE thread's union formula (lc.ibss: a counted incident once
+    per CWE, the sub-threshold records once per class). Ranks follow the combined IBSS."""
+    by_cwe, segs = defaultdict(list), defaultdict(set)
     for l in links:
         if l["relation"] not in IN_PLAY:
             continue
         for w in l["cwe"]:
-            incs[w].add(l["incident_id"]); cves[w].add(l["cve"]); nlinks[w] += 1; segs[w].add(l["segment"])
-    headers = ["cwe", "incidents", "cve_links", "distinct_cves", "ibss_observed", "ibss_potential", "rank_observed", "rank_potential", "incident_ids", "segments"]
+            by_cwe[w].append(l)
+            segs[w].add(l["segment"])
+    headers = ["cwe", "incidents", "sub_threshold_incidents", "cve_links", "sub_threshold_cve_links", "distinct_cves",
+               "sub_threshold_distinct_cves", "ibss_observed", "ibss_potential", "rank_observed", "rank_potential",
+               "incident_ids", "sub_threshold_incident_ids", "segments"]
     rows = []
-    for w in incs:
-        o, pp = ibss_of(incs[w], sev)
-        rows.append([w, len(incs[w]), nlinks[w], len(cves[w]), o, pp, 0, 0, sorted(incs[w]), sorted(segs[w], key=SEGMENT_INDEX.get)])
-    rows.sort(key=lambda r: (-r[4], -r[5], -r[1], cwe_key(r[0])))
+    for w, wl in by_cwe.items():
+        incs, n, cves, s = ids_by_array(wl), per_array(wl), ids_by_array(wl, "cve"), score(wl)
+        rows.append([w, len(incs[0]), len(incs[1]), n[0], n[1], len(cves[0]), len(cves[1]), s.obs, s.pot, 0, 0,
+                     incs[0], incs[1], sorted(segs[w], key=SEGMENT_INDEX.get)])
+    ix = {h: i for i, h in enumerate(headers)}
+    obs, pot = ix["ibss_observed"], ix["ibss_potential"]
+    n_rec = lambda r: r[ix["incidents"]] + r[ix["sub_threshold_incidents"]]
+    rows.sort(key=lambda r: (-r[obs], -r[pot], -n_rec(r), cwe_key(r[0])))
     for k, r in enumerate(rows, 1):
-        r[6] = k
-    for k, r in enumerate(sorted(rows, key=lambda r: (-r[5], -r[4], -r[1], cwe_key(r[0]))), 1):
-        r[7] = k
+        r[ix["rank_observed"]] = k
+    for k, r in enumerate(sorted(rows, key=lambda r: (-r[pot], -r[obs], -n_rec(r), cwe_key(r[0]))), 1):
+        r[ix["rank_potential"]] = k
     return headers, rows
 
 
 def table_radar(links):
-    headers = ["dimension", "value", "cve_count"]
+    headers = ["dimension", "value", "cve_count", "sub_threshold_cve_count"]
     rows = []
-    parsed = [l["radar"] for l in links if l["segment"] == "ai-written" and l["radar"]]
+    parsed = [l for l in links if l["segment"] == "ai-written" and l["radar"]]
     unparsed = sum(1 for l in links if l["segment"] == "ai-written" and not l["radar"])
     for dim in ("contribution", "cause"):
-        for val, n in sorted(Counter(r[dim] for r in parsed).items(), key=lambda kv: (-kv[1], kv[0])):
-            rows.append([dim, val, n])
+        by_val = defaultdict(list)
+        for l in parsed:
+            by_val[l["radar"][dim]].append(l)
+        for val, vl in sorted(by_val.items(), key=lambda kv: (-len(kv[1]), kv[0])):
+            rows.append([dim, val, *per_array(vl)])
     return headers, rows, len(parsed), unparsed
 
 
 def table_non_cve(d):
-    headers = ["incident_id", "identifier", "scheme", "kind", "note"]
+    headers = ["incident_id", "identifier", "scheme", "kind", "note", "array"]
     rows = []
-    for inc in d["incidents"]:
+    for array, inc in live_in_id_order(d):
         for n in (inc.get("validated_cve_details") or {}).get("non_cve_identifiers") or []:
             scheme = re.match(r"[A-Za-z]+", n["id"])
-            rows.append([inc["id"], n["id"], scheme.group(0) if scheme else "", n.get("kind"), n.get("note")])
+            rows.append([inc["id"], n["id"], scheme.group(0) if scheme else "", n.get("kind"), n.get("note"), array])
     return headers, rows
 
 
@@ -444,11 +492,15 @@ def table_coverage(d):
 
 
 def table_cvss_vs_observed(d, links):
-    m = defaultdict(Counter)
+    """Links of counted incidents per CVSS band and observed severity; the links of sub-threshold records per band only."""
+    m, sub = defaultdict(Counter), Counter()
     for l in links:
-        m[cvss_band(l["cvss_score"])][l["observed"]] += 1
-    headers = ["cvss_band_of_cve"] + SEVERITIES + ["total_links"]
-    rows = [[b] + [m[b][s] for s in SEVERITIES] + [sum(m[b].values())] for b in BANDS]
+        if l["array"] == SUB:
+            sub[cvss_band(l["cvss_score"])] += 1
+        else:
+            m[cvss_band(l["cvss_score"])][l["observed"]] += 1
+    headers = ["cvss_band_of_cve"] + SEVERITIES + ["total_links", "sub_threshold_links"]
+    rows = [[b] + [m[b][s] for s in SEVERITIES] + [sum(m[b].values()), sub[b]] for b in BANDS]
     return headers, rows
 
 
@@ -548,7 +600,7 @@ def table_action_list(d, links, recs, manifest):
     """patch / remove / watch — one row per identifier (CVE or malicious non-CVE id), in triage order: action, KEV,
     evidence (EVIDENCE_RANK), the identifier's IBSS potential, CVSS. A CVE's IBSS potential comes from its in-play
     links; a malicious non-CVE identifier's from the records that list it."""
-    headers = ["action", "identifier", "scheme", "artifact", "evidence", "incidents", "max_observed", "cisa_kev", "cvss", "cvss_source",
+    headers = ["action", "identifier", "scheme", "artifact", "evidence", "incidents", "sub_threshold_incidents", "max_observed", "cisa_kev", "cvss", "cvss_source",
                "product_or_package", "ecosystem", "affected_versions", "fixed_or_unaffected", "scope", "cna_or_source", "published", "version_data", "note",
                "ibss_potential"]
     rows = []
@@ -572,10 +624,10 @@ def table_action_list(d, links, recs, manifest):
         evidence = max((r for r in rels), key=lambda r: RELATION_WEIGHT[r])
         aff, fixed, pkgs = cve_affected(rec) if rec else ("not fetched", "", [])
         first = ls[0]
-        score, ver, src = first["cvss_score"], first["cvss_version"], "CNA"
-        if score is None and rec:
-            score, ver, prov = cve_adp_cvss(rec)
-            src = prov or "ADP" if score is not None else ""
+        cvss, ver, src = first["cvss_score"], first["cvss_version"], "CNA"
+        if cvss is None and rec:
+            cvss, ver, prov = cve_adp_cvss(rec)
+            src = prov or "ADP" if cvss is not None else ""
         segs = {l["segment"] for l in ls}
         if segs == {"ai-written"}:
             scope = "AI-written corpus (DR-2026-036, aggregate)"
@@ -589,21 +641,20 @@ def table_action_list(d, links, recs, manifest):
             scope = "AI-stack product disclosure" if action == "patch" else "campaign context"
         eco = "; ".join(dict.fromkeys(e for e, _ in pkgs if e)) if pkgs else ""
         prod = "; ".join(dict.fromkeys(n for _, n in pkgs)) if pkgs else (first["product"] or "")
-        rows.append([action, cve, "CVE", artifact, evidence,
-                     [l["incident_id"] for l in sorted(ls, key=lambda l: l["incident_id"])],
-                     min((l["observed"] for l in ls), key=SEVERITIES.index),
-                     first["cisa_kev"], f"{fmt(score)} (v{ver})" if score is not None else "", src if score is not None else "",
+        rows.append([action, cve, "CVE", artifact, evidence, *ids_by_array(ls),
+                     min((l["observed"] for l in ls), key=SEVERITIES.index),   # over all live records
+                     first["cisa_kev"], f"{fmt(cvss)} (v{ver})" if cvss is not None else "", src if cvss is not None else "",
                      prod, eco, aff, fixed, scope, first["cna"], first["published"],
                      f"cve.org record fetched {manifest.get(cve, {}).get('fetched_on', '')}" if rec else "not fetched",
                      first["title"] or "", ibss[cve]["pot"] if cve in ibss else None])
     # non-CVE malicious identifiers -> remove
-    listed_by = defaultdict(dict)
-    for inc in d["incidents"]:
+    listed_by = defaultdict(list)   # identifier -> [(array, record)] of the live records that list it, in ID order
+    for array, inc in live_in_id_order(d):
         for n in (inc.get("validated_cve_details") or {}).get("non_cve_identifiers") or []:
             if is_malicious_non_cve(n):
-                listed_by[n["id"]][inc["id"]] = inc["report"]["potential_severity"]
+                listed_by[n["id"]].append((array, inc))
     seen = set()
-    for inc in d["incidents"]:
+    for _, inc in live_in_id_order(d):
         for n in (inc.get("validated_cve_details") or {}).get("non_cve_identifiers") or []:
             if not is_malicious_non_cve(n) or n["id"] in seen:
                 continue
@@ -623,32 +674,42 @@ def table_action_list(d, links, recs, manifest):
             names = "; ".join(dict.fromkeys(nm for _, nm, _, _ in pk if nm))
             vers = " | ".join(f"{nm}: {vr}" for _, nm, vr, _ in pk if vr) if pk else ("not fetched" if not rec else "versions not specified")
             fixed = "; ".join(dict.fromkeys(f"{nm} {fp}" for _, nm, _, fp in pk if fp))
-            rows.append(["remove", x, x.split("-")[0], "malicious-release", n.get("kind", ""), [inc["id"]], inc["report"]["observed_severity"], False, "", "",
+            listing = listed_by[x]
+            ib = lc.ibss((a, i["id"], i["report"]["observed_severity"], i["report"]["potential_severity"], lc.disclosure_classes(i))
+                         for a, i in listing)
+            rows.append(["remove", x, x.split("-")[0], "malicious-release", n.get("kind", ""),
+                         *([i["id"] for a, i in listing if a == arr] for arr in lc.LIVE_ARRAYS),
+                         min((i["report"]["observed_severity"] for _, i in listing), key=SEVERITIES.index), False, "", "",
                          names, eco, vers, fixed, "malicious package release", src, pub,
-                         f"{src} record fetched {manifest.get(x, {}).get('fetched_on', '')}" if rec else "not fetched", title,
-                         sum(SEV_WEIGHT[p] for p in listed_by[x].values())])
+                         f"{src} record fetched {manifest.get(x, {}).get('fetched_on', '')}" if rec else "not fetched", title, ib.pot])
     # missing values (no IBSS: watch rows; no CVSS) sort last
-    rows.sort(key=lambda r: (ACTION_ORDER[r[0]], not r[7], -(EVIDENCE_RANK.get(r[4], 0)), "aggregate" in r[14],
-                             -(r[19] if r[19] is not None else -1), -(float(r[8].split()[0]) if r[8] else -1), r[1]))
+    ix = {h: i for i, h in enumerate(headers)}
+    act, kev, ev, scope, ibp, cv = (ix[k] for k in ("action", "cisa_kev", "evidence", "scope", "ibss_potential", "cvss"))
+    rows.sort(key=lambda r: (ACTION_ORDER[r[act]], not r[kev], -(EVIDENCE_RANK.get(r[ev], 0)), "aggregate" in r[scope],
+                             -(r[ibp] if r[ibp] is not None else -1), -(float(r[cv].split()[0]) if r[cv] else -1), r[1]))
     return headers, rows
 
 
-def group_remove_packages(action_rows):
+def group_remove_packages(headers, action_rows):
     """Group the advisory rows (GHSA / MAL / PYSEC) of the action list by (package, ecosystem)."""
     grp = {}
-    for r in action_rows:
-        if r[0] != "remove" or r[2] == "CVE":
+    for row in action_rows:
+        r = dict(zip(headers, row))
+        if r["action"] != "remove" or r["scheme"] == "CVE":
             continue
-        parts = r[12].split(" | ") if r[12] and r[12] != "not fetched" else [f"{r[10] or '?'}: ?"]
+        vers_all = r["affected_versions"]
+        parts = vers_all.split(" | ") if vers_all and vers_all != "not fetched" else [f"{r['product_or_package'] or '?'}: ?"]
         for part in parts:
             name, _, vers = part.partition(": ")
-            eco = {"pip": "PyPI"}.get((r[11] or "").lower(), r[11] or "")
+            eco = {"pip": "PyPI"}.get((r["ecosystem"] or "").lower(), r["ecosystem"] or "")
             key = (name.strip().lower(), eco.lower())
-            g = grp.setdefault(key, {"name": name.strip(), "eco": eco, "versions": set(), "ids": [], "incidents": set(), "obs": set()})
+            g = grp.setdefault(key, {"name": name.strip(), "eco": eco, "versions": set(), "ids": [], "incidents": set(),
+                                     "sub_threshold_incidents": set(), "obs": set()})
             g["versions"].update(v.strip().lstrip("= ") for v in re.split(r"[;,]", vers) if v.strip())
-            if r[1] not in g["ids"]:
-                g["ids"].append(r[1])
-            g["incidents"].update(r[5]); g["obs"].add(r[6])
+            if r["identifier"] not in g["ids"]:
+                g["ids"].append(r["identifier"])
+            g["incidents"].update(r["incidents"]); g["sub_threshold_incidents"].update(r["sub_threshold_incidents"])
+            g["obs"].add(r["max_observed"])
     return grp
 
 
@@ -674,9 +735,9 @@ def table_incident_cna_cwes(d, links):
     for l in links:
         by_inc[l["incident_id"]].append(l)
     headers = ["incident_id", "in_play_cve_count", "other_cve_count", "cna_cwes_in_play", "cve_to_cwe_in_play",
-               "as_cited_cwe", "as_cited_mapping_basis", "as_cited_confidence"]
+               "as_cited_cwe", "as_cited_mapping_basis", "as_cited_confidence", "array"]
     rows = []
-    for inc in d["incidents"]:
+    for array, inc in live_in_id_order(d):
         ls = by_inc.get(inc["id"])
         if not ls:
             continue
@@ -686,19 +747,27 @@ def table_incident_cna_cwes(d, links):
         ws = inc["report"].get("weaknesses") or []
         rows.append([inc["id"], len(inplay), len(ls) - len(inplay), cwes, mapping,
                      " | ".join(w.get("cwe", "") for w in ws), " | ".join(w.get("mapping_basis", "") for w in ws),
-                     " | ".join(w.get("confidence", "") for w in ws)])
+                     " | ".join(w.get("confidence", "") for w in ws), array])
     return headers, rows
 
 
 # ----------------------------------------------------------------------------- report
 def build_report(d, links, T) -> str:
     inc = d["incidents"]
+    subs = d.get(SUB) or []
+    sub_ids = {i["id"] for i in subs}
+    mark = lambda iid: f"{iid}†" if iid in sub_ids else iid                   # † = a sub-threshold record
+    mark_ids = lambda text: re.sub(r"(?:DB|DR)-2026-\d{3}", lambda m: mark(m.group(0)), text)
+    nm = lambda n, m: f"{n} + {m}†" if m else n                              # a count split by live array
+    named = lambda headers, rows: [dict(zip(headers, row)) for row in rows]  # rows by column name
     n_with = sum(1 for i in inc if i.get("validated_cve"))
+    n_sub_with = sum(1 for i in subs if i.get("validated_cve"))
+    n_sub_links = sum(1 for l in links if l["array"] == SUB)
     distinct = {l["cve"] for l in links}
     _occ = Counter(l["cve"] for l in links)
     pct_single = round(100 * sum(1 for c in _occ.values() if c == 1) / len(_occ))
     if max(_occ.values()) > 2:
-        raise SystemExit("a CVE occurs in more than two incidents — update the prose that says 'all in exactly two'")
+        raise SystemExit("a CVE occurs in more than two live records — update the prose that says 'all in exactly two'")
     multi = sorted((c for c, n in Counter(l["cve"] for l in links).items() if n > 1), key=cve_key)
     kev = {l["cve"] for l in links if l["cisa_kev"]}
     expl = [r for r in T["exploited"][1]]
@@ -724,8 +793,10 @@ def build_report(d, links, T) -> str:
     neg_with = next(r[2] for r in cov if r[0] == "Negligible")
     A("## Coverage — which incidents the CVE lens can see")
     A("")
-    A("Everything below is built from the incidents that have a validated CVE. This table says how many that is, per observed-severity tier, "
-      f"before any CVE statistic is read. *Out of scope* = the {oos_n} records kept for register completeness (false positives and incidents with no "
+    A("Everything below is built from the live records that have a validated CVE: the counted incidents (`incidents`) and the sub-threshold "
+      "records (`sub_threshold_incidents`, marked † throughout; methodology §3.3). This table says how many counted incidents that is, per "
+      "observed-severity tier (`report.observed_severity`), before any CVE statistic is read; the table after it counts the sub-threshold "
+      f"records per class. *Out of scope* = the {oos_n} records kept for register completeness (false positives and incidents with no "
       "AI component); they never carry CVEs.")
     A("")
     A(md_table(["Observed severity", "Incidents", "With validated CVE", "Without CVE (in scope)", "Without CVE (out of scope)"], cov))
@@ -736,8 +807,23 @@ def build_report(d, links, T) -> str:
       "disclosure of a vulnerability, nothing has happened yet. Low observed harm in the CVE-side statistics is therefore partly by construction.")
     A(f"- {len(only_non)} incidents are identified only by non-CVE identifiers: {', '.join(only_non)}.")
     A("")
+    class_rows = []
+    for k in lc.DISCLOSURE_CLASSES:
+        rs = [i for i in subs if k in lc.disclosure_classes(i)]
+        kl = [l for l in links if l["array"] == SUB and lc.link_class(l["relation"], l["ai_role"]) == k]
+        class_rows.append([k, len(rs), sum(1 for i in rs if i.get("validated_cve")), len(kl), len({l["cve"] for l in kl})])
+    A(f"**Sub-threshold records per class** ({len(subs)} records, not counted above). A sub-threshold record is a vulnerability disclosure "
+      "without a KEV listing, an exploitation report or realized harm (methodology §3.3). A record can have several classes. *CVE links* are "
+      "the links whose relation (`validated_cve_details.cves[].relation`) gives the class: `self (vulnerability)` or `discovered`; a record "
+      "without a CVE takes its class from `report.ai_role`.")
+    A("")
+    A(md_table(["Class", "Records", "Records with a CVE", "CVE links", "Distinct CVEs"], class_rows))
+    A("")
     A("## Conventions")
     A("")
+    A("- **Counted and sub-threshold records.** An ID marked † is a sub-threshold record (`sub_threshold_incidents`); every other ID is a "
+      "counted incident (`incidents`). A count without a prefix counts the counted incidents; a `sub_threshold_` column of the CSV files, "
+      "and the `+ m†` part of a count here, counts the sub-threshold records. IBSS combines both arrays (see **IBSS**).")
     A("- **Relation** of a CVE to its incident (methodology §6.4, Rule 2). This build uses the methodology's listing order as the "
       "sort weight for ties: " + " > ".join(f"`{r}`" for r in RELATION_ORDER) + ". Only `exploited` CVEs are written to VERIS `action.*.cve`.")
     A("")
@@ -763,12 +849,14 @@ def build_report(d, links, T) -> str:
     A("- **CISA KEV** is evidence that a CVE is exploited *somewhere*, not that it was exploited in *this* incident (§6.4).")
     A("- **CVSS** is the CNA/NVD score of the *vulnerability* with its version; it is never used as incident severity. "
       "Incident severity is the report's ordinal **observed** / **potential** rubric.")
-    A("- **IBSS** (incident-based severity score) of an entity = the sum, over the incidents it is linked to (each counted once), of that "
-      "incident's severity weight: Negligible 1 · Low 2 · Medium 4 · High 8 · Critical 16 — computed separately for observed and potential "
-      "severity. It is designed for CWEs, which span many incidents. For CVEs it is computed over **in-play** links only and left blank for "
-      f"CVEs that are only `related`/`toolkit`; since {pct_single} % of CVEs occur in a single incident, a CVE's IBSS is usually just that incident's "
-      "weight — see the *IBSS vs CVSS* section. "
-      "Incidents — not CVEs — are the unit because a CVE count measures cataloguing practice as much as prevalence: CNA conventions differ (the Linux kernel CNA assigns a CVE per fixing commit; Mozilla issues per-bug CVEs but also rollup CVEs covering many memory-safety bugs at once; ecosystem CNAs often issue one CVE per affected package), so the same underlying flaw can be 1 or 11 CVEs depending on who assigned them — the MCP STDIO transport flaw (DR-2026-059) is eleven. IBSS therefore scores a weakness by the harm of the incidents it was involved in, each incident counted once, and reports prevalence (CVE links, distinct CVEs) beside it rather than folding it in. This is the deliberate inverse of MITRE's CWE Top 25 score (CVE count × average CVSS), which ranks the catalogue.")
+    A("- **IBSS** (incident-based severity score; methodology §3.3, \"Scores\") of an entity = the sum of the severity weights of the "
+      "records that involve it — Negligible 1 · Low 2 · Medium 4 · High 8 · Critical 16 — computed separately for the observed "
+      "(`report.observed_severity`) and the potential severity (`report.potential_severity`). A counted incident adds its weight once per "
+      "entity; the sub-threshold records (†) add, per class (AI-written, AI-stack, AI-discovered), only the highest weight among that "
+      "class's records, observed and potential separately. It is designed for CWEs, which span many incidents. For CVEs it is computed "
+      f"over **in-play** links only and left blank for CVEs that are only `related`/`toolkit`; since {pct_single} % of CVEs occur in a single "
+      "record, a CVE's IBSS is usually just that record's weight — see the *IBSS vs CVSS* section. "
+      "Incidents — not CVEs — are the unit because a CVE count measures cataloguing practice as much as prevalence: CNA conventions differ (the Linux kernel CNA assigns a CVE per fixing commit; Mozilla issues per-bug CVEs but also rollup CVEs covering many memory-safety bugs at once; ecosystem CNAs often issue one CVE per affected package), so the same underlying flaw can be 1 or 11 CVEs depending on who assigned them — the MCP STDIO transport flaw (DR-2026-059) is eleven. IBSS therefore scores a weakness by the harm of the incidents it was involved in, each counted incident once and each class of sub-threshold records once, and reports prevalence (CVE links, distinct CVEs) beside it rather than folding it in. This is the deliberate inverse of MITRE's CWE Top 25 score (CVE count × average CVSS), which ranks the catalogue.")
     A("- **Segments** used for the CNA-CWE profile (defined over relation × AI role, one per CVE link):")
     for s, desc in SEGMENTS:
         A(f"  - `{s}` — {desc}")
@@ -777,16 +865,17 @@ def build_report(d, links, T) -> str:
     A("## Summary")
     A("")
     A(f"- **{len(inc)} incidents**; **{n_with}** carry validated CVEs, {len(inc) - n_with} do not "
-      f"({len(only_non)} of those have only non-CVE identifiers: {', '.join(only_non)}).")
-    A(f"- **{len(distinct)} distinct CVEs**, {len(links)} incident–CVE links. Only {len(multi)} CVEs occur in more than one incident "
-      f"(all in exactly two): {', '.join(link(c) for c in multi)}.")
-    A("- Links by relation: " + ", ".join(f"`{lab(r)}` {rel_counts[r]}" for r in RELATION_ORDER if rel_counts[r]) + ".")
+      f"({len(only_non)} of those have only non-CVE identifiers: {', '.join(only_non)}). "
+      f"Beside them **{len(subs)} sub-threshold records** (†), {n_sub_with} of them with validated CVEs.")
+    A(f"- **{len(distinct)} distinct CVEs**, {len(links)} record–CVE links ({len(links) - n_sub_links} of counted incidents, {n_sub_links} of "
+      f"sub-threshold records). Only {len(multi)} CVEs occur in more than one record (all in exactly two): {', '.join(link(c) for c in multi)}.")
+    A("- Links by relation (all live records): " + ", ".join(f"`{lab(r)}` {rel_counts[r]}" for r in RELATION_ORDER if rel_counts[r]) + ".")
     A(f"- **{len(kev)} distinct CVEs on CISA KEV**; {len(expl)} CVE links in the exploited family "
       f"({', '.join(f'{r} {sum(1 for x in expl if x[1] == r)}' for r in EXPLOITED_FAMILY)}).")
-    big = sorted(((len(i['validated_cve']), i['id']) for i in inc if len(i.get('validated_cve') or []) >= 10), reverse=True)
-    A(f"- Aggregate incidents (≥10 CVEs): " + ", ".join(f"{i} ({n})" for n, i in big)
+    big = sorted(((len(i['validated_cve']), i['id']) for i in lc.records(d) if len(i.get('validated_cve') or []) >= 10), reverse=True)
+    A("- Aggregate records (≥10 CVEs): " + ", ".join(f"{mark(i)} ({n})" for n, i in big)
       + ". DR-2026-036 alone holds " + f"{big[0][0]} of {len(distinct)} distinct CVEs — statistics that count CVEs are dominated by it; the segment split below isolates it as `ai-written`.")
-    A(f"- {n_non} non-CVE identifiers across {n_non_inc} incidents (GHSA, MAL, PYSEC, vendor advisories).")
+    A(f"- {n_non} non-CVE identifiers across {n_non_inc} live records (GHSA, MAL, PYSEC, vendor advisories).")
     removed = cv.get("cves_removed", [])
     still = [c for c in removed if c in distinct]
     gone = [c for c in removed if c not in distinct]
@@ -794,18 +883,19 @@ def build_report(d, links, T) -> str:
       + (f"; {', '.join(still)} (mis-filed under one incident, re-attributed to another — see Table 2)" if still else "") + ".")
     A("")
     # ---- Findings (computed)
-    X0 = T["ibss"]; AL0 = T["action"][1]
-    dr_share = sum(1 for i in inc if i.get("validated_cve") and i["id"].startswith("DR"))
+    X0 = T["ibss"]; ALH, AL0 = T["action"]; AL0n = named(ALH, AL0)
+    n_live_with = n_with + n_sub_with
+    dr_share = sum(1 for i in lc.records(d) if i.get("validated_cve") and i["id"].startswith("DR"))
     expl_links = [l for l in links if l["relation"] == "exploited"]
     expl_all_kev = all(l["cisa_kev"] for l in expl_links)
     fam = [l for l in links if l["relation"] in EXPLOITED_FAMILY and l["cvss_score"] is not None]
     fam_lo, fam_hi = (min(l["cvss_score"] for l in fam), max(l["cvss_score"] for l in fam)) if fam else (None, None)
-    adp_rows = sum(1 for r in AL0 if r[9] == "CISA-ADP" and r[4] == "self-vulnerability")  # flaws in AI products and AI-written code
-    rem_pk = len(group_remove_packages(AL0))
+    adp_rows = sum(1 for r in AL0n if r["cvss_source"] == "CISA-ADP" and r["evidence"] == "self-vulnerability")  # flaws in AI products and AI-written code
+    rem_pk = len(group_remove_packages(ALH, AL0))
     top3 = {}
     for seg, _ in SEGMENTS:
-        rs = [r for r in T["cwe_profile"][1] if r[0] == seg][:3]
-        top3[seg] = ", ".join(f"{r[1]} ({r[2]})" for r in rs)
+        rs = [r for r in named(T["cwe_profile"][0], T["cwe_profile"][1]) if r["segment"] == seg][:3]
+        top3[seg] = ", ".join(f"{r['cwe']} ({r['cve_links'] + r['sub_threshold_cve_links']})" for r in rs)
     pi = [i for i in inc if "Prompt injection" in (i["veris"].get("action", {}).get("hacking", {}).get("variety") or [])]
     pi_obs = Counter(i["report"]["observed_severity"] for i in pi); pi_pot = Counter(i["report"]["potential_severity"] for i in pi)
     prof = lambda c: " ".join(f"{s[0]}{c[s]}" for s in SEVERITIES if c[s])
@@ -813,8 +903,9 @@ def build_report(d, links, T) -> str:
     A("")
     A(f"1. **CVE covers the disclosures, not the breaches.** {ser_without} of the {ser_total} in-scope High/Critical incidents have no CVE; "
       f"{neg_with} of the {n_with} CVE-bearing incidents are observed Negligible (see *Coverage*). The CVE-side tables describe the third of the corpus that is easiest to identify, not the third that hurt most.")
-    A(f"2. **The CVE side is deep-research-sourced.** {dr_share} of the {n_with} incidents with a validated CVE come from the deep-research reports (DR ids), "
-      f"{n_with - dr_share} from the registers — registers record breaches, not vulnerability disclosures. The CVEs are validated at CVE.org; the *sample* of CVE-bearing incidents is not representative of AI-related incidents.")
+    A(f"2. **The CVE side is deep-research-sourced.** {dr_share} of the {n_live_with} live records with a validated CVE"
+      + (f" ({n_with} counted, {n_sub_with} sub-threshold)" if n_sub_with else "") + f" come from the deep-research reports (DR ids), "
+      f"{n_live_with - dr_share} from the registers — registers record breaches, not vulnerability disclosures. The CVEs are validated at CVE.org; the *sample* of CVE-bearing incidents is not representative of AI-related incidents.")
     A(f"3. **Exploitation evidence tracked harm; the base score did not.** {'Every' if expl_all_kev else 'Not every'} confirmed-`exploited` CVE is on CISA KEV, "
       f"and the exploited family spans CVSS {fmt(fam_lo)}–{fmt(fam_hi)} — the same range as unexploited disclosures.")
     low_cves = {c for c, _ in X0["low_cvss_high_pot"]}
@@ -826,12 +917,12 @@ def build_report(d, links, T) -> str:
       f"{X0['band_share']['7.0-8.9'][2]:.0%} / {X0['band_share']['4.0-6.9'][2]:.0%} for 7.0–8.9 / 4.0–6.9 — CVSS separates the top band, not the middle. "
       f"{len(low_incs)} incidents; a case, not a statistic.")
     A(f"5. **Three populations, three countermeasure programmes.** Top CNA CWEs — AI-written code: {top3['ai-written']}; AI-exploited: {top3['ai-exploited']}; "
-      f"AI-discovered: {top3['ai-discovered']}; AI-stack products: {top3['ai-stack-vulnerability']} (CVE links). The AI-written profile is one external corpus (Radar) and needs a baseline before any \"AI writes X\" claim.")
+      f"AI-discovered: {top3['ai-discovered']}; AI-stack products: {top3['ai-stack-vulnerability']} (CVE links of all live records). The AI-written profile is one external corpus (Radar) and needs a baseline before any \"AI writes X\" claim.")
     A(f"6. **The CVE ecosystem is not yet fit for AI-stack components.** {adp_rows} `self (vulnerability)` CVEs (flaws in AI products and AI-written code) carry no CNA CVSS — the score used here comes from CISA-ADP; "
       f"the MCP STDIO cluster (DR-2026-059) has no CNA CVSS, no CWE and product `n/a` in its records.")
     A(f"7. **Prompt injection: highest potential, least realized harm so far.** {len(pi)} incidents carry VERIS `hacking.variety = Prompt injection`; observed {prof(pi_obs)}, potential {prof(pi_pot)}. "
       f"Most are disclosed PoCs from the deep-research sources.")
-    A(f"8. **Malicious releases need removal, not patching.** {sum(1 for r in AL0 if r[0] == 'remove' and r[2] == 'CVE')} CVEs and {rem_pk} package releases are malware by design "
+    A(f"8. **Malicious releases need removal, not patching.** {sum(1 for r in AL0n if r['action'] == 'remove' and r['scheme'] == 'CVE')} CVEs and {rem_pk} package releases are malware by design "
       f"(CNA CWE-506 / malware advisories); they are separated from the weakness profiles and listed under *remove* in the action list.")
     A("")
     A("Who should read what: vulnerability management → *Action list* and *KEV CVEs*; developers of AI systems → *CNA-assigned CWE profile* (`ai-stack-vulnerability`, `ai-exploited`) and the incident-level CWE ranking of the CWE thread; "
@@ -840,34 +931,35 @@ def build_report(d, links, T) -> str:
     A("## Files")
     A("")
     A(md_table(["file", "content"], [
-        ["`incident_cves.csv`", "Table 1 — one row per incident (001–099): its validated CVEs, grouped by relation"],
-        ["`cve_incidents.csv`", "Table 2 — one row per CVE: incidents it occurs in, relation, KEV, CVSS, product, CNA CWE"],
+        ["`incident_cves.csv`", "Table 1 — one row per live record (counted incidents and sub-threshold records, column `array`): its validated CVEs, grouped by relation"],
+        ["`cve_incidents.csv`", "Table 2 — one row per CVE: the records it occurs in, per array; relation, KEV, CVSS, product, CNA CWE"],
         ["`incidents_cve_coverage.csv`", "Coverage — per observed tier: incidents with a validated CVE, without (in scope), without (out of scope)"],
-        ["`cvss_vs_observed.csv`", "CVSS band of the CVE vs observed severity of its incident (all links)"],
+        ["`cvss_vs_observed.csv`", "CVSS band of the CVE vs observed severity of its incident (links of counted incidents); links of sub-threshold records per band"],
         ["`ibss_vs_cvss.csv`", "IBSS (potential) band × CVSS band of the in-play CVEs — the IBSS-vs-CVSS experiment"],
         ["`action_list.csv`", "Action list — patch / remove / watch, one row per identifier, with affected and fixed versions from the cached upstream records"],
         ["`kev_cves.csv`", "Every KEV-listed CVE in the corpus with its action and incident relations"],
         ["`cves_exploited.csv`", "Exploited-family CVEs (exploited / exploited-unconfirmed / attempted / toolkit) — evidence table behind the patch rows"],
         ["`upstream/`", "Raw CVE.org / GitHub Advisory / OSV records cached by `scripts/fetch_upstream.py` (manifest.json, LICENSES.md); never edited"],
         ["`cves_ai_discovered.csv`", "CVEs credited to AI systems / AI-assisted teams, with the CVE record's credits"],
-        ["`non_cve_identifiers.csv`", "GHSA / MAL / PYSEC / vendor identifiers per incident"],
-        ["`incident_cna_cwes.csv`", "Per incident: CNA CWEs of its in-play CVEs beside the as-cited CWE — input for the CWE validation (Thread B)"],
-        ["`cve_cwe_profile_by_segment.csv`, `cve_cwe_segment_totals.csv`", "CNA-assigned CWE frequency of the validated CVEs per segment, with IBSS over the distinct incidents; segment totals"],
+        ["`non_cve_identifiers.csv`", "GHSA / MAL / PYSEC / vendor identifiers per live record"],
+        ["`incident_cna_cwes.csv`", "Per live record: CNA CWEs of its in-play CVEs beside the as-cited CWE — input for the CWE validation (Thread B)"],
+        ["`cve_cwe_profile_by_segment.csv`, `cve_cwe_segment_totals.csv`", "CNA-assigned CWE frequency of the validated CVEs per segment and array, with IBSS over the records; segment totals"],
         ["`cwe_ibss_cve_path.csv`", "CNA-CWE IBSS via in-play CVEs — the CVE-path baseline the CWE ranking will be compared against"],
         ["`ai_written_radar_profile.csv`", "Vibe Security Radar contribution / cause profile of the `ai-written` CVEs"],
     ]))
     A("")
 
     # ---- Table 1
-    A("## Table 1 — incidents and their validated CVEs")
+    A("## Table 1 — live records and their validated CVEs")
     A("")
-    A(f"Rank order (= ID number). Incidents with more than {LONG_LIST} CVEs are listed in full in the next section. "
+    A(f"ID order; † marks a sub-threshold record. Records with more than {LONG_LIST} CVEs are listed in full in the next section. "
       "`non-CVE ids` = count of GHSA/MAL/PYSEC/vendor identifiers (see the non-CVE table).")
     A("")
     long_ones = []
     rows = []
-    for r in T["incident_cves"][1]:
-        iid, obs, pot, n, cves, groups, n_non, title = r
+    for r in named(*T["incident_cves"]):
+        iid, obs, pot, n, groups, n_non, title = (r[k] for k in ("incident_id", "observed_severity", "potential_severity", "cve_count",
+                                                                   "cves_by_relation", "non_cve_identifier_count", "incident_title"))
         if n == 0:
             cell = "—" if not n_non else f"— ({n_non} non-CVE ids)"
         elif n > LONG_LIST:
@@ -881,15 +973,15 @@ def build_report(d, links, T) -> str:
             cell = "; ".join(parts)
             if n_non:
                 cell += f" (+{n_non} non-CVE ids)"
-        rows.append([iid, title, obs, pot, n, cell])
+        rows.append([mark(iid), title, obs, pot, n, cell])
     A(md_table(["ID", "Incident", "Observed", "Potential", "#", "Validated CVEs (by relation)"], rows))
     A("")
-    A("### Full CVE lists of the aggregate incidents")
+    A("### Full CVE lists of the aggregate records")
     A("")
     for r in long_ones:
-        iid, obs, pot, n, cves, groups, n_non, title = r
+        iid, obs, pot, n, groups = (r[k] for k in ("incident_id", "observed_severity", "potential_severity", "cve_count", "cves_by_relation"))
         A(f"<a id=\"{iid.lower()}\"></a>")
-        A(f"**{iid} — {md(title)}** ({n} CVEs; observed {obs}, potential {pot})")
+        A(f"**{mark(iid)} — {md(r['incident_title'])}** ({n} CVEs; observed {obs}, potential {pot})")
         A("")
         for g in groups.split(" | "):
             rel, cs = g.split(": ", 1)
@@ -897,33 +989,38 @@ def build_report(d, links, T) -> str:
         A("")
 
     # ---- Table 2
-    n_nocvss = sum(1 for r in T["cve_incidents"][1] if r[6] is None)
-    A("## Table 2 — CVEs and the incidents they occur in")
+    CI = named(*T["cve_incidents"])
+    n_nocvss = sum(1 for r in CI if r["cvss_score"] is None)
+    A("## Table 2 — CVEs and the records they occur in")
     A("")
-    A(f"Only {len(multi)} CVEs recur, all of them twice: {', '.join(link(c) for c in multi)} (bold **2** in the `#` column). "
+    A(f"Only {len(multi)} CVEs recur, all of them twice: {', '.join(link(c) for c in multi)} (bold in the `#` column, where "
+      "`n + m†` = n counted incidents and m sub-threshold records). "
       "Since CVSS and KEV are the fields readers triage by, the table is ordered by **CVSS** (the score as published by the CNA; versions are mixed "
       f"and shown), then KEV, then relation; the {n_nocvss} CVEs without a CVSS score follow at the end, ordered by KEV, then relation. "
       "`IBSS obs` / `IBSS pot` are the incident-based severity scores over in-play links, blank for CVEs that are only "
       "`related`/`toolkit` (see *IBSS vs CVSS* below).")
     A("")
     rows = []
-    for r in T["cve_incidents"][1]:
-        cve, n, incs, rels, best, kev_, score, ver, ibo, ibp, cna, pub, prod, cwe, title = r
-        rows.append([link(cve), f"**{n}**" if n > 1 else n, lab_pairs(rels).replace(SEP, "<br>"), "**KEV**" if kev_ else "",
-                     f"{fmt(score)} (v{ver})" if score is not None else "", fmt(ibo), fmt(ibp),
-                     cna, pub, prod, fmt(cwe).replace(SEP, ", "), title])
-    A(md_table(["CVE", "#", "Incident : relation", "KEV", "CVSS", "IBSS obs", "IBSS pot", "CNA", "Published", "Product", "CNA CWE", "Title"], rows))
+    for r in CI:
+        n, m, cvss = r["incident_count"], r["sub_threshold_incident_count"], r["cvss_score"]
+        rows.append([link(r["cve"]), f"**{nm(n, m)}**" if n + m > 1 else nm(n, m), mark_ids(lab_pairs(r["relations"])).replace(SEP, "<br>"),
+                     "**KEV**" if r["cisa_kev"] else "", f"{fmt(cvss)} (v{r['cvss_version']})" if cvss is not None else "",
+                     fmt(r["ibss_observed"]), fmt(r["ibss_potential"]), r["cna"], r["published"], r["product"],
+                     fmt(r["cna_cwe"]).replace(SEP, ", "), r["title"]])
+    A(md_table(["CVE", "#", "Record : relation", "KEV", "CVSS", "IBSS obs", "IBSS pot", "CNA", "Published", "Product", "CNA CWE", "Title"], rows))
     A("")
 
     # ---- CVSS vs observed
     A("## CVSS of the CVE vs observed severity of its incident (all links)")
     A("")
-    A("Each cell counts incident–CVE links. The vulnerability's CVSS and the incident's realized harm are different things — "
-      f"this table is the empirical form of the methodology's argument (§6.3). It covers all {len(links)} links, whatever their relation; "
-      "the next section refines the comparison to in-play CVEs and scores them with IBSS.")
+    A("Each severity cell counts the links of counted incidents by the incident's observed severity (`report.observed_severity`); the last "
+      "column counts the links of sub-threshold records (†) per CVSS band. The vulnerability's CVSS and the incident's realized harm are "
+      "different things — this table is the empirical form of the methodology's argument (§6.3). It covers all "
+      f"{len(links) - n_sub_links} links of counted incidents, whatever their relation, and the {n_sub_links} links of sub-threshold "
+      "records; the next section refines the comparison to in-play CVEs and scores them with IBSS.")
     A("")
     h, rows = T["cvss"]
-    A(md_table(["CVSS band of CVE"] + SEVERITIES + ["Total"], rows))
+    A(md_table(["CVSS band of CVE"] + SEVERITIES + ["Total", "Sub-threshold links"], rows))
     A("")
     A("Read together with the *Coverage* table at the top: the CVE-bearing incidents are disclosure-heavy, so the Negligible/Low columns are populated partly by construction.")
     A("")
@@ -935,9 +1032,9 @@ def build_report(d, links, T) -> str:
     A(f"IBSS was designed for CWEs, where one weakness spans many incidents. Applying it to CVEs is a first check of two things only: "
       f"whether the tier weights behave sensibly, and how a CVE's technical score relates to the harm its incident realized (observed) or "
       f"could have realized (potential). Three limits apply. **(1)** {s['n_single']} of the {s['n_inplay']} in-play CVEs have a single "
-      f"in-play incident, so their IBSS is just that incident's weight — the summation is barely exercised. **(2)** Each in-play CVE receives the "
-      f"*full* weight of its incident; where several CVEs share an incident (e.g. the Artifactory CVEs of DB-2026-006) the score does not "
-      f"establish per-CVE causation. **(3)** {s['n_036']} of the {s['n_inplay']} in-play CVEs belong to DR-2026-036, and {s['n_036_const']} of those share one observed "
+      f"in-play record, so their IBSS is just that record's weight — the summation is barely exercised. **(2)** Each in-play CVE receives the "
+      f"*full* weight of every counted incident it is in play in, and per class that of the highest-weighted sub-threshold record (†); "
+      f"where several CVEs share an incident (e.g. the Artifactory CVEs of DB-2026-006) the score does not establish per-CVE causation. **(3)** {s['n_036']} of the {s['n_inplay']} in-play CVEs belong to DR-2026-036, and {s['n_036_const']} of those share one observed "
       f"(Medium = 4) and one potential (High = 8) value, so aggregate statistics are dominated by that incident; figures are therefore also "
       f"given without it.")
     A("")
@@ -961,8 +1058,8 @@ def build_report(d, links, T) -> str:
     A("")
     def cve_rows(items):
         return [[link(c), f"{fmt(v['cvss'])} (v{v['cvss_version']})" if v["cvss"] is not None else "—", "**KEV**" if v["kev"] else "",
-                 v["obs"], v["pot"], SEP.join(f"{i}:{lab(r)}" for i, r in zip(v["incidents"], v["relations"]))] for c, v in items]
-    H = ["CVE", "CVSS", "KEV", "IBSS obs", "IBSS pot", "Incident : relation"]
+                 v["obs"], v["pot"], SEP.join(f"{mark(i)}:{lab(r)}" for i, r in zip(v["incidents"], v["relations"]))] for c, v in items]
+    H = ["CVE", "CVSS", "KEV", "IBSS obs", "IBSS pot", "Record : relation"]
     A(f"### Top potential band — IBSS_potential ≥ 16 ({len(X['top_band'])} CVEs)")
     A("")
     A(md_table(H, cve_rows(X["top_band"])))
@@ -988,9 +1085,9 @@ def build_report(d, links, T) -> str:
     A("")
 
     # ---- action list
-    AL = T["action"][1]
-    n_fetched = sum(1 for r in AL if r[17] != "not fetched")
-    fetch_dates = sorted({r[17].split("fetched ")[-1] for r in AL if r[17] != "not fetched"})
+    AL = AL0n
+    n_fetched = sum(1 for r in AL if r["version_data"] != "not fetched")
+    fetch_dates = sorted({r["version_data"].split("fetched ")[-1] for r in AL if r["version_data"] != "not fetched"})
     A("## Action list — patch · remove · watch")
     A("")
     A("One row per identifier, derived from the relation vocabulary and the CNA CWE. **patch** = a vulnerability that was exploited, attempted, carried "
@@ -1007,31 +1104,33 @@ def build_report(d, links, T) -> str:
       "A CVE takes the potential of its whole incident, which a different flaw of the same incident may set; the CVSS column shows the CVE's own score.")
     A("")
     def act_rows(items):
-        return [[link(r[1]) if r[2] == "CVE" else r[1], lab(r[4]) if r[2] == "CVE" else r[4], SEP.join(r[5]).replace(SEP, "<br>"), r[6], "**KEV**" if r[7] else "",
-                 fmt(r[19]), (r[8] + (f" ({r[9]})" if r[9] and r[9] != "CNA" else "")), r[10], r[11], r[12], r[13]] for r in items]
-    AH = ["ID", "Evidence", "Incidents", "Max observed", "KEV", "IBSS pot", "CVSS", "Product / package", "Ecosystem", "Affected versions", "Fixed / unaffected"]
-    patch = [r for r in AL if r[0] == "patch"]
-    agg = [r for r in patch if "aggregate" in r[14]]
+        return [[link(r["identifier"]) if r["scheme"] == "CVE" else r["identifier"], lab(r["evidence"]) if r["scheme"] == "CVE" else r["evidence"],
+                 "<br>".join(map(mark, r["incidents"] + r["sub_threshold_incidents"])), r["max_observed"], "**KEV**" if r["cisa_kev"] else "",
+                 fmt(r["ibss_potential"]), r["cvss"] + (f" ({r['cvss_source']})" if r["cvss_source"] and r["cvss_source"] != "CNA" else ""),
+                 r["product_or_package"], r["ecosystem"], r["affected_versions"], r["fixed_or_unaffected"]] for r in items]
+    AH = ["ID", "Evidence", "Records", "Max observed", "KEV", "IBSS pot", "CVSS", "Product / package", "Ecosystem", "Affected versions", "Fixed / unaffected"]
+    patch = [r for r in AL if r["action"] == "patch"]
+    agg = [r for r in patch if "aggregate" in r["scope"]]
     A(f"### patch ({len(patch)} CVEs; {len(patch) - len(agg)} shown, {len(agg)} of the AI-written aggregate corpus DR-2026-036 in the CSV only)")
     A("")
-    A(md_table(AH, act_rows([r for r in patch if "aggregate" not in r[14]])))
+    A(md_table(AH, act_rows([r for r in patch if "aggregate" not in r["scope"]])))
     A("")
-    rem = [r for r in AL if r[0] == "remove"]
-    rem_cve = [r for r in rem if r[2] == "CVE"]
+    rem = [r for r in AL if r["action"] == "remove"]
+    rem_cve = [r for r in rem if r["scheme"] == "CVE"]
     # the same malicious release is often listed by GHSA, MAL and PYSEC -> group by package
-    grp = group_remove_packages(AL)
+    grp = group_remove_packages(ALH, AL0)
     A(f"### remove — {len(rem_cve)} CVEs and {len(grp)} malicious package releases ({len(rem) - len(rem_cve)} GHSA / MAL / PYSEC advisories, grouped by package; one row per advisory in the CSV)")
     A("")
     A("Purge the listed versions, rotate every credential the package could reach (cloud keys, CI tokens, SSH keys), and hunt for the persistence it planted.")
     A("")
     A(md_table(AH, act_rows(rem_cve)))
     A("")
-    A(md_table(["Package", "Ecosystem", "Malicious versions", "Advisories", "Incidents", "Max observed"],
+    A(md_table(["Package", "Ecosystem", "Malicious versions", "Advisories", "Records", "Max observed"],
                [[g["name"], g["eco"], ", ".join(sorted(g["versions"], key=lambda s: [(0, int(x)) if x.isdigit() else (1, x) for x in re.split(r"[.\-]", s)])), ", ".join(g["ids"]),
-                 ", ".join(sorted(g["incidents"])), min(g["obs"], key=SEVERITIES.index)]
+                 ", ".join(map(mark, sorted(g["incidents"] | g["sub_threshold_incidents"]))), min(g["obs"], key=SEVERITIES.index)]
                 for g in sorted(grp.values(), key=lambda g: (SEVERITIES.index(min(g["obs"], key=SEVERITIES.index)), g["name"].lower()))]))
     A("")
-    watch = [r for r in AL if r[0] == "watch"]
+    watch = [r for r in AL if r["action"] == "watch"]
     A(f"### watch ({len(watch)} KEV CVEs related to a campaign)")
     A("")
     A(md_table(AH, act_rows(watch)) if watch else "none")
@@ -1045,7 +1144,7 @@ def build_report(d, links, T) -> str:
       "not necessarily in these incidents (§6.4). The `action` column links each to the action list above.")
     A("")
     A(md_table(["CVE", "Action", "KEV added", "Incident : relation", "CVSS", "Product", "CNA CWE", "Title"],
-               [[link(r[0]), r[1], r[2], lab_pairs(r[3]).replace(SEP, "<br>"), f"{fmt(r[4])} (v{r[5]})" if r[4] is not None else "", r[6], fmt(r[7]).replace(SEP, ", "), r[8]] for r in KV]))
+               [[link(r[0]), r[1], r[2], mark_ids(lab_pairs(r[3])).replace(SEP, "<br>"), f"{fmt(r[4])} (v{r[5]})" if r[4] is not None else "", r[6], fmt(r[7]).replace(SEP, ", "), r[8]] for r in KV]))
     A("")
 
     # ---- exploited
@@ -1056,7 +1155,7 @@ def build_report(d, links, T) -> str:
       "`toolkit` = an exploit was present in the attacker's recovered tooling. `lag` = days from CVE publication to the incident date "
       "(only where the incident date is a full ISO date; negative = the incident predates the CVE's publication — zero-day use where the relation is confirmed, otherwise unconfirmed).")
     A("")
-    rows = [[link(r[0]), lab(r[1]), r[2], r[3], r[6], fmt(r[7]), f"{fmt(r[8])} (v{r[9]})" if r[8] is not None else "", "**KEV**" if r[10] else "",
+    rows = [[link(r[0]), lab(r[1]), mark(r[2]), r[3], r[6], fmt(r[7]), f"{fmt(r[8])} (v{r[9]})" if r[8] is not None else "", "**KEV**" if r[10] else "",
              r[13], fmt(r[14]).replace(SEP, ", "), r[15]] for r in T["exploited"][1]]
     A(md_table(["CVE", "Relation", "Incident", "Observed", "Published", "Lag (d)", "CVSS", "KEV", "Product", "CNA CWE", "Title"], rows))
     A("")
@@ -1071,9 +1170,9 @@ def build_report(d, links, T) -> str:
       "`cves_ai_discovered.csv` has every credit with its role, including coordinators and remediation developers.")
     A("")
     cred = {(l["cve"], l["incident_id"]): l["credits"] for l in links}
-    rows = [[link(r[0]), r[1], credits_discovery(cred[(r[0], r[1])]), r[3], r[4], r[5], f"{fmt(r[6])} (v{r[7]})" if r[6] is not None else "", fmt(r[8]).replace(SEP, ", "), r[9]]
+    rows = [[link(r[0]), mark(r[1]), credits_discovery(cred[(r[0], r[1])]), r[3], r[4], r[5], f"{fmt(r[6])} (v{r[7]})" if r[6] is not None else "", fmt(r[8]).replace(SEP, ", "), r[9]]
             for r in T["discovered"][1]]
-    A(md_table(["CVE", "Incident", "Credits", "CNA", "Product", "Published", "CVSS", "CNA CWE", "Title"], rows))
+    A(md_table(["CVE", "Record", "Credits", "CNA", "Product", "Published", "CVSS", "CNA CWE", "Title"], rows))
     A("")
 
     # ---- non-CVE
@@ -1082,19 +1181,19 @@ def build_report(d, links, T) -> str:
     A("Malicious package releases, account-takeover publishes and vendor-fixed flaws often never receive a CVE (methodology §6.6); "
       "GHSA / MAL / PYSEC / vendor advisory ids are recorded here and never placed in CVE fields.")
     A("")
-    A(md_table(["Incident", "Identifier", "Scheme", "Kind", "Note"], T["non_cve"][1]))
+    A(md_table(["Record", "Identifier", "Scheme", "Kind", "Note"], [[mark(r[0]), r[1], r[2], r[3], r[4]] for r in T["non_cve"][1]]))
     A("")
 
     # ---- Thread B input
-    A("## Per-incident CNA CWEs of in-play CVEs (input for the CWE validation)")
+    A("## Per-record CNA CWEs of in-play CVEs (input for the CWE validation)")
     A("")
-    A("For every incident with validated CVEs: the CWEs the CNAs assigned to its in-play CVEs, beside the as-cited incident CWE "
+    A("For every live record with validated CVEs: the CWEs the CNAs assigned to its in-play CVEs, beside the as-cited incident CWE "
       "(`report.weaknesses`, unvalidated). Where the two disagree, the CWE validation decides; nothing is ranked from this table here.")
     A("")
-    rows = [[r[0], r[1], r[2], fmt(r[3]).replace(SEP, ", "),
+    rows = [[mark(r[0]), r[1], r[2], fmt(r[3]).replace(SEP, ", "),
              fmt(r[4]).replace(SEP, "<br>") if r[1] <= LONG_LIST else f"{r[1]} CVEs — see `incident_cna_cwes.csv`",
              r[5], r[6], r[7]] for r in T["cna_cwes"][1]]
-    A(md_table(["Incident", "In-play CVEs", "Other CVEs", "CNA CWEs (in-play)", "CVE → CNA CWE", "As-cited CWE", "As-cited basis", "Conf."], rows))
+    A(md_table(["Record", "In-play CVEs", "Other CVEs", "CNA CWEs (in-play)", "CVE → CNA CWE", "As-cited CWE", "As-cited basis", "Conf."], rows))
     A("")
     # ---- CWE profile
     A("## CNA-assigned CWE profile of the validated CVEs, per segment")
@@ -1103,32 +1202,43 @@ def build_report(d, links, T) -> str:
       "This is *not* the incident-level CWE ranking (that is built in the CWE thread from the incident layer, where each incident counts once); "
       "it shows what kind of vulnerabilities each population of CVEs consists of.")
     A("")
-    A(md_table(["Segment", "CVE links", "Distinct CVEs", "Incidents", "IBSS obs", "IBSS pot", "Links with CNA CWE", "Distinct CWEs"], T["cwe_profile"][3]))
+    TOT = {t["segment"]: t for t in named(T["cwe_profile"][2], T["cwe_profile"][3])}
+    A(md_table(["Segment", "CVE links", "Distinct CVEs", "Records", "IBSS obs", "IBSS pot", "Links with CNA CWE", "Distinct CWEs"],
+               [[t["segment"], nm(t["cve_links"], t["sub_threshold_cve_links"]), nm(t["distinct_cves"], t["sub_threshold_distinct_cves"]),
+                 nm(t["incidents"], t["sub_threshold_incidents"]), t["ibss_observed"], t["ibss_potential"],
+                 nm(t["links_with_cna_cwe"], t["sub_threshold_links_with_cna_cwe"]), nm(t["distinct_cwes"], t["sub_threshold_distinct_cwes"])]
+                for t in TOT.values()]))
     A("")
-    A("How to read the per-segment rows: **CVE links** = number of incident–CVE pairs in the segment whose CVE record carries this CWE "
-      "(a CVE that occurs in two incidents counts twice); **Distinct CVEs** = the same without double-counting recurring CVEs; "
-      "**Incidents** = distinct incidents among those links; **Share** = CVE links with this CWE ÷ links in the segment that carry any CNA CWE "
-      "(the *Links with CNA CWE* column above); **IBSS obs / pot** = incident-based severity score over those incidents, each counted once (Negligible 1 · Low 2 · Medium 4 · High 8 · Critical 16, observed and potential separately) — for `related` this attributes an incident's harm to the CWE of a *sibling* CVE, shown as context weight for comparison with the CWE thread (whose Rule 1 excludes `related`), not as the weakness's risk. Shares within a segment add up to more than 100 % because one CVE record can carry several CWEs. "
+    A("How to read the per-segment rows: **CVE links** = number of record–CVE pairs in the segment whose CVE record carries this CWE "
+      "(a CVE that occurs in two records counts twice); **Distinct CVEs** = the same without double-counting recurring CVEs; "
+      "**Records** = distinct records among those links; `n + m†` = n of counted incidents, m of sub-threshold records; **Share** = CVE links "
+      "with this CWE ÷ links in the segment that carry any CNA CWE (the *Links with CNA CWE* column above), per array; **IBSS obs / pot** = "
+      "incident-based severity score over those records (Negligible 1 · Low 2 · Medium 4 · High 8 · Critical 16, observed and potential "
+      "separately; each counted incident once, the sub-threshold records once per class) — for `related` this attributes an incident's harm to the CWE of a *sibling* CVE, shown as context weight for comparison with the CWE thread (whose Rule 1 excludes `related`), not as the weakness's risk. Shares within a segment add up to more than 100 % because one CVE record can carry several CWEs. "
       "Example: `ai-exploited` / CWE-306 = 4 links (Langflow CVE-2026-33017 and CVE-2025-3248, marimo CVE-2026-39987 in two incidents), "
       "3 distinct CVEs, 4 incidents, 4 ÷ 14 = 29 %. CWEs that the incident record assigns directly (`report.weaknesses`) are **not** counted "
       "here; they appear beside the CNA CWEs in the preceding per-incident table and feed the incident-level CWE ranking of the CWE thread.")
     A("")
     by_seg = defaultdict(list)
-    for r in T["cwe_profile"][1]:
-        by_seg[r[0]].append(r)
+    for r in named(T["cwe_profile"][0], T["cwe_profile"][1]):
+        by_seg[r["segment"]].append(r)
     for seg, desc in SEGMENTS:
         rs = by_seg.get(seg, [])
         if not rs:
             continue
         A(f"### `{seg}` — top {min(12, len(rs))} of {len(rs)} CWEs")
         A("")
-        tot = next(x for x in T["cwe_profile"][3] if x[0] == seg)
-        if tot[3] == 1:
+        tot = TOT[seg]
+        if tot["incidents"] + tot["sub_threshold_incidents"] == 1:
             one = next(l["incident_id"] for l in links if l["segment"] == seg)
-            A(f"All links of this segment stem from one incident ({one}), so IBSS is the same for every row (observed {tot[4]}, potential {tot[5]}) — "
-              "the column will differentiate once further incidents join the segment.")
+            A(f"All links of this segment stem from one record ({mark(one)}), so IBSS is the same for every row (observed {tot['ibss_observed']}, "
+              f"potential {tot['ibss_potential']}) — the column will differentiate once further records join the segment.")
             A("")
-        A(md_table(["CWE", "CVE links", "Distinct CVEs", "Incidents", "IBSS obs", "IBSS pot", "Share"], [[r[1], r[2], r[3], r[4], r[5], r[6], f"{r[7]:.0%}"] for r in rs[:12]]))
+        share = lambda r: f"{r['share_of_segment_cwe_tagged_links']:.0%}" + (
+            f" + {r['sub_threshold_share_of_segment_cwe_tagged_links']:.0%}†" if r["sub_threshold_cve_links"] else "")
+        A(md_table(["CWE", "CVE links", "Distinct CVEs", "Records", "IBSS obs", "IBSS pot", "Share"],
+                   [[r["cwe"], nm(r["cve_links"], r["sub_threshold_cve_links"]), nm(r["distinct_cves"], r["sub_threshold_distinct_cves"]),
+                     nm(r["incidents"], r["sub_threshold_incidents"]), r["ibss_observed"], r["ibss_potential"], share(r)] for r in rs[:12]]))
         A("")
         if seg == "ai-written":
             rh, rr, n_parsed, n_unparsed = T["radar"]
@@ -1137,20 +1247,22 @@ def build_report(d, links, T) -> str:
             A("Radar's `contribution` type says how the AI tool was involved in the flawed code; `cause` is Radar's coarse cause category. "
               "Per-AI-tool counts are deliberately not tabulated: they reflect Radar's attribution method and tool market share, not defect rates.")
             A("")
-            A(md_table(["Dimension", "Value", "CVEs"], rr))
+            A(md_table(["Dimension", "Value", "CVEs"], [[r[0], r[1], nm(r[2], r[3])] for r in rr]))
             A("")
 
     # ---- CVE-path CWE IBSS baseline
-    CB = T["cwe_ibss"][1]
+    CB = named(*T["cwe_ibss"])
     A("## CNA-CWE IBSS via in-play CVEs — the CVE-path baseline for the CWE ranking")
     A("")
-    A("For every CNA-assigned CWE of an in-play CVE: the incidents it reaches through those CVEs (each incident counted once per CWE), their IBSS, and the prevalence behind it. "
+    A("For every CNA-assigned CWE of an in-play CVE: the records it reaches through those CVEs (each counted incident once per CWE, the sub-threshold records once per class), their IBSS, and the prevalence behind it. "
       "This is the CVE-path half of the CWE thread's formula (incidents linked to a CWE = analyst mapping ∪ CNA CWE of in-play CVEs): the difference between this table and "
       f"`cwe_priority` will be the contribution of the direct incident-level mapping — which is why analyst-only weaknesses such as CWE-1357 do not appear here at all. "
       f"Sorted by observed IBSS; {len(CB)} CWEs. **Not the CWE ranking.** Full table with ranks: `cwe_ibss_cve_path.csv`.")
     A("")
-    A(md_table(["CWE", "Incidents", "Distinct CVEs", "IBSS obs", "IBSS pot", "Rank pot", "Incidents (ids)", "Segments"],
-               [[r[0], r[1], r[3], r[4], r[5], r[7], ", ".join(r[8]), ", ".join(r[9])] for r in CB]))
+    A(md_table(["CWE", "Records", "Distinct CVEs", "IBSS obs", "IBSS pot", "Rank pot", "Records (ids)", "Segments"],
+               [[r["cwe"], nm(r["incidents"], r["sub_threshold_incidents"]), nm(r["distinct_cves"], r["sub_threshold_distinct_cves"]),
+                 r["ibss_observed"], r["ibss_potential"], r["rank_potential"],
+                 ", ".join(map(mark, r["incident_ids"] + r["sub_threshold_incident_ids"])), ", ".join(r["segments"])] for r in CB]))
     A("")
     A("## Caveats")
     A("")
@@ -1212,7 +1324,7 @@ def main():
     write_csv(a.out / "incident_cna_cwes.csv", *T["cna_cwes"])
     (a.out / "README.md").write_text(build_report(d, links, T), encoding="utf-8")
 
-    print(f"incidents {len(d['incidents'])} | links {len(links)} | distinct CVEs {len({l['cve'] for l in links})} | "
+    print(f"incidents {len(d['incidents'])} | sub-threshold records {len(d.get(SUB) or [])} | links {len(links)} | distinct CVEs {len({l['cve'] for l in links})} | "
           f"exploited-family {len(T['exploited'][1])} | discovered {len(T['discovered'][1])} | non-CVE ids {len(T['non_cve'][1])} | "
           f"incidents in CNA-CWE table {len(T['cna_cwes'][1])} | action rows {len(T['action'][1])} (upstream records: {sum(len(v) for v in recs.values())}) | "
           f"wrote {len([f for f in a.out.iterdir() if f.is_file()])} files to {a.out}")

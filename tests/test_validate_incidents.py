@@ -9,83 +9,24 @@ from __future__ import annotations
 import copy
 import sys
 import unittest
-from collections import Counter
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
+sys.path.insert(0, str(ROOT / "tests"))
 
 import lib_corpus  # noqa: E402
 import validate_incidents as vi  # noqa: E402
+from corpus_helpers import add_record, incident, link, move, recount, retire, sub, take  # noqa: E402
 
 CORPUS = lib_corpus.load_corpus(lib_corpus.JSON_PATH)
 UPSTREAM = lib_corpus.load_upstream(lib_corpus.UPSTREAM_DIR)
-
-
-def incident(d, iid):
-    return next(i for i in d["incidents"] if i["id"] == iid)
-
-
-def link(d, iid, cve):
-    return next(c for c in incident(d, iid)["validated_cve_details"]["cves"] if c["cve"] == cve)
 
 
 def has(result, check, msg=None, **where):
     """A finding of `check` at `where`, whose message contains `msg` when given."""
     return any(f.check == check and (msg is None or msg in f.message) and all(getattr(f, k) == v for k, v in where.items())
                for f in result.errors)
-
-
-def by_number(rec):
-    return lib_corpus.incident_number(rec["id"])
-
-
-def take(d, iid):
-    """Remove a counted record from incidents and its ranking_table row."""
-    rec = incident(d, iid)
-    d["incidents"].remove(rec)
-    d["ranking_table"] = [x for x in d["ranking_table"] if x["id"] != iid]
-    return rec
-
-
-def move(d, iid):
-    """Move a counted record to sub_threshold_incidents (methodology §3.3), keeping that array in ID order."""
-    rec = take(d, iid)
-    d.setdefault("sub_threshold_incidents", []).append(rec)
-    d["sub_threshold_incidents"].sort(key=by_number)
-    return rec
-
-
-def sub(d, iid):
-    return next(i for i in d["sub_threshold_incidents"] if i["id"] == iid)
-
-
-def retire(d, iid, into, reason="duplicate"):
-    """Retire a counted record (methodology §10.2): frozen, in a wrapper in retired_incidents, in ID order."""
-    w = {"id": iid, "retired_on": "2026-10-03", "reason": reason, "into": into, "note": "test", "record": take(d, iid)}
-    d.setdefault("retired_incidents", []).append(w)
-    d["retired_incidents"].sort(key=by_number)
-    return w
-
-
-def add_record(d, like, iid, array="incidents", bump=True):
-    """Append a copy of `like` with a new ID to `array`; with bump, raise id_scheme.highest_assigned to its number."""
-    new = copy.deepcopy(incident(d, like))
-    new["id"] = new["veris"]["incident_id"] = iid
-    d.setdefault(array, []).append(new)
-    if bump:
-        d["id_scheme"]["highest_assigned"] = lib_corpus.incident_number(iid)
-    return new
-
-
-def recount(d):
-    """Recompute counts.* and id_scheme.counts over incidents, as an analyst fixing them by hand would."""
-    inc, cnt = d["incidents"], d["counts"]
-    cnt["total_incidents"] = len(inc)
-    cnt["by_observed_severity"] = {s: sum(1 for i in inc if i["report"]["observed_severity"] == s) for s in lib_corpus.SEVERITIES}
-    cnt["by_status"] = {s: sum(1 for i in inc if i["veris"]["security_incident"] == s) for s in lib_corpus.STATUSES}
-    cnt["citations_by_source"] = dict(Counter(s["source"] for i in inc for s in i["sources"]))
-    d["id_scheme"]["counts"] = {p: sum(1 for i in inc if i["id"].startswith(p + "-")) for p in ("DB", "DR")}
 
 
 class RealCorpus(unittest.TestCase):

@@ -4,7 +4,7 @@ Derived from **`incidents/all_2026_ai_software_security_incidents.json`** (datas
 
 ## Coverage — which incidents the CVE lens can see
 
-Everything below is built from the incidents that have a validated CVE. This table says how many that is, per observed-severity tier, before any CVE statistic is read. *Out of scope* = the 15 records kept for register completeness (false positives and incidents with no AI component); they never carry CVEs.
+Everything below is built from the live records that have a validated CVE: the counted incidents (`incidents`) and the sub-threshold records (`sub_threshold_incidents`, marked † throughout; methodology §3.3). This table says how many counted incidents that is, per observed-severity tier (`report.observed_severity`), before any CVE statistic is read; the table after it counts the sub-threshold records per class. *Out of scope* = the 15 records kept for register completeness (false positives and incidents with no AI component); they never carry CVEs.
 
 | Observed severity | Incidents | With validated CVE | Without CVE (in scope) | Without CVE (out of scope) |
 |---|---|---|---|---|
@@ -19,8 +19,17 @@ Everything below is built from the incidents that have a validated CVE. This tab
 - The CVE-bearing set is disclosure-heavy: 16 of 32 incidents with a CVE are observed *Negligible* — the incident is the disclosure of a vulnerability, nothing has happened yet. Low observed harm in the CVE-side statistics is therefore partly by construction.
 - 6 incidents are identified only by non-CVE identifiers: DB-2026-005, DR-2026-012, DR-2026-035, DR-2026-045, DR-2026-046, DR-2026-063.
 
+**Sub-threshold records per class** (0 records, not counted above). A sub-threshold record is a vulnerability disclosure without a KEV listing, an exploitation report or realized harm (methodology §3.3). A record can have several classes. *CVE links* are the links whose relation (`validated_cve_details.cves[].relation`) gives the class: `self (vulnerability)` or `discovered`; a record without a CVE takes its class from `report.ai_role`.
+
+| Class | Records | Records with a CVE | CVE links | Distinct CVEs |
+|---|---|---|---|---|
+| AI-written | 0 | 0 | 0 | 0 |
+| AI-stack | 0 | 0 | 0 | 0 |
+| AI-discovered | 0 | 0 | 0 | 0 |
+
 ## Conventions
 
+- **Counted and sub-threshold records.** An ID marked † is a sub-threshold record (`sub_threshold_incidents`); every other ID is a counted incident (`incidents`). A count without a prefix counts the counted incidents; a `sub_threshold_` column of the CSV files, and the `+ m†` part of a count here, counts the sub-threshold records. IBSS combines both arrays (see **IBSS**).
 - **Relation** of a CVE to its incident (methodology §6.4, Rule 2). This build uses the methodology's listing order as the sort weight for ties: `exploited` > `self-malicious-release` > `exploited-unconfirmed` > `attempted` > `toolkit` > `self-vulnerability` > `discovered` > `related`. Only `exploited` CVEs are written to VERIS `action.*.cve`.
 
   | relation | meaning (methodology §6.4) |
@@ -46,7 +55,7 @@ Everything below is built from the incidents that have a validated CVE. This tab
 
 - **CISA KEV** is evidence that a CVE is exploited *somewhere*, not that it was exploited in *this* incident (§6.4).
 - **CVSS** is the CNA/NVD score of the *vulnerability* with its version; it is never used as incident severity. Incident severity is the report's ordinal **observed** / **potential** rubric.
-- **IBSS** (incident-based severity score) of an entity = the sum, over the incidents it is linked to (each counted once), of that incident's severity weight: Negligible 1 · Low 2 · Medium 4 · High 8 · Critical 16 — computed separately for observed and potential severity. It is designed for CWEs, which span many incidents. For CVEs it is computed over **in-play** links only and left blank for CVEs that are only `related`/`toolkit`; since 97 % of CVEs occur in a single incident, a CVE's IBSS is usually just that incident's weight — see the *IBSS vs CVSS* section. Incidents — not CVEs — are the unit because a CVE count measures cataloguing practice as much as prevalence: CNA conventions differ (the Linux kernel CNA assigns a CVE per fixing commit; Mozilla issues per-bug CVEs but also rollup CVEs covering many memory-safety bugs at once; ecosystem CNAs often issue one CVE per affected package), so the same underlying flaw can be 1 or 11 CVEs depending on who assigned them — the MCP STDIO transport flaw (DR-2026-059) is eleven. IBSS therefore scores a weakness by the harm of the incidents it was involved in, each incident counted once, and reports prevalence (CVE links, distinct CVEs) beside it rather than folding it in. This is the deliberate inverse of MITRE's CWE Top 25 score (CVE count × average CVSS), which ranks the catalogue.
+- **IBSS** (incident-based severity score; methodology §3.3, "Scores") of an entity = the sum of the severity weights of the records that involve it — Negligible 1 · Low 2 · Medium 4 · High 8 · Critical 16 — computed separately for the observed (`report.observed_severity`) and the potential severity (`report.potential_severity`). A counted incident adds its weight once per entity; the sub-threshold records (†) add, per class (AI-written, AI-stack, AI-discovered), only the highest weight among that class's records, observed and potential separately. It is designed for CWEs, which span many incidents. For CVEs it is computed over **in-play** links only and left blank for CVEs that are only `related`/`toolkit`; since 97 % of CVEs occur in a single record, a CVE's IBSS is usually just that record's weight — see the *IBSS vs CVSS* section. Incidents — not CVEs — are the unit because a CVE count measures cataloguing practice as much as prevalence: CNA conventions differ (the Linux kernel CNA assigns a CVE per fixing commit; Mozilla issues per-bug CVEs but also rollup CVEs covering many memory-safety bugs at once; ecosystem CNAs often issue one CVE per affected package), so the same underlying flaw can be 1 or 11 CVEs depending on who assigned them — the MCP STDIO transport flaw (DR-2026-059) is eleven. IBSS therefore scores a weakness by the harm of the incidents it was involved in, each counted incident once and each class of sub-threshold records once, and reports prevalence (CVE links, distinct CVEs) beside it rather than folding it in. This is the deliberate inverse of MITRE's CWE Top 25 score (CVE count × average CVSS), which ranks the catalogue.
 - **Segments** used for the CNA-CWE profile (defined over relation × AI role, one per CVE link):
   - `ai-exploited` — CVEs used, attempted or carried by the AI-enabled attacker / agent (relation exploited, exploited-unconfirmed, attempted, toolkit)
   - `ai-written` — self (vulnerability) CVEs of incidents whose AI role includes 'AI-generated weakness' — vulnerabilities in AI-authored code (Vibe Security Radar corpus)
@@ -58,21 +67,21 @@ Everything below is built from the incidents that have a validated CVE. This tab
 
 ## Summary
 
-- **99 incidents**; **32** carry validated CVEs, 67 do not (6 of those have only non-CVE identifiers: DB-2026-005, DR-2026-012, DR-2026-035, DR-2026-045, DR-2026-046, DR-2026-063).
-- **322 distinct CVEs**, 333 incident–CVE links. Only 11 CVEs occur in more than one incident (all in exactly two): [CVE-2025-3248](https://www.cve.org/CVERecord?id=CVE-2025-3248), [CVE-2025-65720](https://www.cve.org/CVERecord?id=CVE-2025-65720), [CVE-2026-15903](https://www.cve.org/CVERecord?id=CVE-2026-15903), [CVE-2026-28472](https://www.cve.org/CVERecord?id=CVE-2026-28472), [CVE-2026-30623](https://www.cve.org/CVERecord?id=CVE-2026-30623), [CVE-2026-33634](https://www.cve.org/CVERecord?id=CVE-2026-33634), [CVE-2026-39987](https://www.cve.org/CVERecord?id=CVE-2026-39987), [CVE-2026-54316](https://www.cve.org/CVERecord?id=CVE-2026-54316), [CVE-2026-54769](https://www.cve.org/CVERecord?id=CVE-2026-54769), [CVE-2026-59726](https://www.cve.org/CVERecord?id=CVE-2026-59726), [CVE-2026-76021](https://www.cve.org/CVERecord?id=CVE-2026-76021).
-- Links by relation: `exploited` 5, `self (malicious release)` 4, `exploited-unconfirmed` 5, `attempted` 3, `toolkit` 7, `self (vulnerability)` 196, `discovered` 52, `related` 61.
+- **99 incidents**; **32** carry validated CVEs, 67 do not (6 of those have only non-CVE identifiers: DB-2026-005, DR-2026-012, DR-2026-035, DR-2026-045, DR-2026-046, DR-2026-063). Beside them **0 sub-threshold records** (†), 0 of them with validated CVEs.
+- **322 distinct CVEs**, 333 record–CVE links (333 of counted incidents, 0 of sub-threshold records). Only 11 CVEs occur in more than one record (all in exactly two): [CVE-2025-3248](https://www.cve.org/CVERecord?id=CVE-2025-3248), [CVE-2025-65720](https://www.cve.org/CVERecord?id=CVE-2025-65720), [CVE-2026-15903](https://www.cve.org/CVERecord?id=CVE-2026-15903), [CVE-2026-28472](https://www.cve.org/CVERecord?id=CVE-2026-28472), [CVE-2026-30623](https://www.cve.org/CVERecord?id=CVE-2026-30623), [CVE-2026-33634](https://www.cve.org/CVERecord?id=CVE-2026-33634), [CVE-2026-39987](https://www.cve.org/CVERecord?id=CVE-2026-39987), [CVE-2026-54316](https://www.cve.org/CVERecord?id=CVE-2026-54316), [CVE-2026-54769](https://www.cve.org/CVERecord?id=CVE-2026-54769), [CVE-2026-59726](https://www.cve.org/CVERecord?id=CVE-2026-59726), [CVE-2026-76021](https://www.cve.org/CVERecord?id=CVE-2026-76021).
+- Links by relation (all live records): `exploited` 5, `self (malicious release)` 4, `exploited-unconfirmed` 5, `attempted` 3, `toolkit` 7, `self (vulnerability)` 196, `discovered` 52, `related` 61.
 - **16 distinct CVEs on CISA KEV**; 20 CVE links in the exploited family (exploited 5, exploited-unconfirmed 5, attempted 3, toolkit 7).
-- Aggregate incidents (≥10 CVEs): DR-2026-036 (161), DR-2026-094 (28), DR-2026-088 (21), DR-2026-059 (17), DR-2026-062 (16), DR-2026-058 (14). DR-2026-036 alone holds 161 of 322 distinct CVEs — statistics that count CVEs are dominated by it; the segment split below isolates it as `ai-written`.
-- 142 non-CVE identifiers across 20 incidents (GHSA, MAL, PYSEC, vendor advisories).
+- Aggregate records (≥10 CVEs): DR-2026-036 (161), DR-2026-094 (28), DR-2026-088 (21), DR-2026-059 (17), DR-2026-062 (16), DR-2026-058 (14). DR-2026-036 alone holds 161 of 322 distinct CVEs — statistics that count CVEs are dominated by it; the segment split below isolates it as `ai-written`.
+- 142 non-CVE identifiers across 20 live records (GHSA, MAL, PYSEC, vendor advisories).
 - Removed from the incident that originally cited them during validation: CVE-2026-29032, CVE-2026-29040, CVE-2026-35020 (non-existent / rejected — never cited here); CVE-2026-45321 (mis-filed under one incident, re-attributed to another — see Table 2).
 
 ## Findings
 
 1. **CVE covers the disclosures, not the breaches.** 14 of the 23 in-scope High/Critical incidents have no CVE; 16 of the 32 CVE-bearing incidents are observed Negligible (see *Coverage*). The CVE-side tables describe the third of the corpus that is easiest to identify, not the third that hurt most.
-2. **The CVE side is deep-research-sourced.** 29 of the 32 incidents with a validated CVE come from the deep-research reports (DR ids), 3 from the registers — registers record breaches, not vulnerability disclosures. The CVEs are validated at CVE.org; the *sample* of CVE-bearing incidents is not representative of AI-related incidents.
+2. **The CVE side is deep-research-sourced.** 29 of the 32 live records with a validated CVE come from the deep-research reports (DR ids), 3 from the registers — registers record breaches, not vulnerability disclosures. The CVEs are validated at CVE.org; the *sample* of CVE-bearing incidents is not representative of AI-related incidents.
 3. **Exploitation evidence tracked harm; the base score did not.** Every confirmed-`exploited` CVE is on CISA KEV, and the exploited family spans CVSS 6.5–10 — the same range as unexploited disclosures.
 4. **Medium CVSS ≠ safe.** 4 CVEs rated CVSS < 7.0 sit in potential-Critical incidents (jfrog/artifactory 3, anthropics/claude-code 1; incidents DB-2026-006, DR-2026-056). Per CVSS band, the share of CVEs in a potential-Critical incident is 33% for 9.0–10.0 against 6% / 5% for 7.0–8.9 / 4.0–6.9 — CVSS separates the top band, not the middle. 2 incidents; a case, not a statistic.
-5. **Three populations, three countermeasure programmes.** Top CNA CWEs — AI-written code: CWE-918 (21), CWE-22 (19), CWE-78 (11); AI-exploited: CWE-306 (4), CWE-918 (3), CWE-94 (2); AI-discovered: CWE-416 (4), CWE-121 (3), CWE-295 (3); AI-stack products: CWE-77 (4), CWE-94 (4), CWE-22 (3) (CVE links). The AI-written profile is one external corpus (Radar) and needs a baseline before any "AI writes X" claim.
+5. **Three populations, three countermeasure programmes.** Top CNA CWEs — AI-written code: CWE-918 (21), CWE-22 (19), CWE-78 (11); AI-exploited: CWE-306 (4), CWE-918 (3), CWE-94 (2); AI-discovered: CWE-416 (4), CWE-121 (3), CWE-295 (3); AI-stack products: CWE-77 (4), CWE-94 (4), CWE-22 (3) (CVE links of all live records). The AI-written profile is one external corpus (Radar) and needs a baseline before any "AI writes X" claim.
 6. **The CVE ecosystem is not yet fit for AI-stack components.** 15 `self (vulnerability)` CVEs (flaws in AI products and AI-written code) carry no CNA CVSS — the score used here comes from CISA-ADP; the MCP STDIO cluster (DR-2026-059) has no CNA CVSS, no CWE and product `n/a` in its records.
 7. **Prompt injection: highest potential, least realized harm so far.** 18 incidents carry VERIS `hacking.variety = Prompt injection`; observed H3 M1 L1 N13, potential C4 H13 M1. Most are disclosed PoCs from the deep-research sources.
 8. **Malicious releases need removal, not patching.** 5 CVEs and 48 package releases are malware by design (CNA CWE-506 / malware advisories); they are separated from the weakness profiles and listed under *remove* in the action list.
@@ -83,25 +92,25 @@ Who should read what: vulnerability management → *Action list* and *KEV CVEs*;
 
 | file | content |
 |---|---|
-| `incident_cves.csv` | Table 1 — one row per incident (001–099): its validated CVEs, grouped by relation |
-| `cve_incidents.csv` | Table 2 — one row per CVE: incidents it occurs in, relation, KEV, CVSS, product, CNA CWE |
+| `incident_cves.csv` | Table 1 — one row per live record (counted incidents and sub-threshold records, column `array`): its validated CVEs, grouped by relation |
+| `cve_incidents.csv` | Table 2 — one row per CVE: the records it occurs in, per array; relation, KEV, CVSS, product, CNA CWE |
 | `incidents_cve_coverage.csv` | Coverage — per observed tier: incidents with a validated CVE, without (in scope), without (out of scope) |
-| `cvss_vs_observed.csv` | CVSS band of the CVE vs observed severity of its incident (all links) |
+| `cvss_vs_observed.csv` | CVSS band of the CVE vs observed severity of its incident (links of counted incidents); links of sub-threshold records per band |
 | `ibss_vs_cvss.csv` | IBSS (potential) band × CVSS band of the in-play CVEs — the IBSS-vs-CVSS experiment |
 | `action_list.csv` | Action list — patch / remove / watch, one row per identifier, with affected and fixed versions from the cached upstream records |
 | `kev_cves.csv` | Every KEV-listed CVE in the corpus with its action and incident relations |
 | `cves_exploited.csv` | Exploited-family CVEs (exploited / exploited-unconfirmed / attempted / toolkit) — evidence table behind the patch rows |
 | `upstream/` | Raw CVE.org / GitHub Advisory / OSV records cached by `scripts/fetch_upstream.py` (manifest.json, LICENSES.md); never edited |
 | `cves_ai_discovered.csv` | CVEs credited to AI systems / AI-assisted teams, with the CVE record's credits |
-| `non_cve_identifiers.csv` | GHSA / MAL / PYSEC / vendor identifiers per incident |
-| `incident_cna_cwes.csv` | Per incident: CNA CWEs of its in-play CVEs beside the as-cited CWE — input for the CWE validation (Thread B) |
-| `cve_cwe_profile_by_segment.csv`, `cve_cwe_segment_totals.csv` | CNA-assigned CWE frequency of the validated CVEs per segment, with IBSS over the distinct incidents; segment totals |
+| `non_cve_identifiers.csv` | GHSA / MAL / PYSEC / vendor identifiers per live record |
+| `incident_cna_cwes.csv` | Per live record: CNA CWEs of its in-play CVEs beside the as-cited CWE — input for the CWE validation (Thread B) |
+| `cve_cwe_profile_by_segment.csv`, `cve_cwe_segment_totals.csv` | CNA-assigned CWE frequency of the validated CVEs per segment and array, with IBSS over the records; segment totals |
 | `cwe_ibss_cve_path.csv` | CNA-CWE IBSS via in-play CVEs — the CVE-path baseline the CWE ranking will be compared against |
 | `ai_written_radar_profile.csv` | Vibe Security Radar contribution / cause profile of the `ai-written` CVEs |
 
-## Table 1 — incidents and their validated CVEs
+## Table 1 — live records and their validated CVEs
 
-Rank order (= ID number). Incidents with more than 10 CVEs are listed in full in the next section. `non-CVE ids` = count of GHSA/MAL/PYSEC/vendor identifiers (see the non-CVE table).
+ID order; † marks a sub-threshold record. Records with more than 10 CVEs are listed in full in the next section. `non-CVE ids` = count of GHSA/MAL/PYSEC/vendor identifiers (see the non-CVE table).
 
 | ID | Incident | Observed | Potential | # | Validated CVEs (by relation) |
 |---|---|---|---|---|---|
@@ -205,7 +214,7 @@ Rank order (= ID number). Incidents with more than 10 CVEs are listed in full in
 | DB-2026-098 | Grok disclosed adult performer Siri Dahl's legal name and birthdate - doxxing (AIID 1443) | Negligible | Low | 0 | — |
 | DB-2026-099 | NotebookLM voice-replication lawsuit — David Greene v. Google (AIID 1386) | Negligible | Negligible | 0 | — |
 
-### Full CVE lists of the aggregate incidents
+### Full CVE lists of the aggregate records
 
 <a id="dr-2026-036"></a>
 **DR-2026-036 — Vibe-coding vulnerability wave / Vibe Security Radar AI-authored-vulnerability corpus** (161 CVEs; observed Medium, potential High)
@@ -242,11 +251,11 @@ Rank order (= ID number). Incidents with more than 10 CVEs are listed in full in
 - *discovered* (22): [CVE-2026-2763](https://www.cve.org/CVERecord?id=CVE-2026-2763), [CVE-2026-2764](https://www.cve.org/CVERecord?id=CVE-2026-2764), [CVE-2026-2765](https://www.cve.org/CVERecord?id=CVE-2026-2765), [CVE-2026-2766](https://www.cve.org/CVERecord?id=CVE-2026-2766), [CVE-2026-2769](https://www.cve.org/CVERecord?id=CVE-2026-2769), [CVE-2026-2770](https://www.cve.org/CVERecord?id=CVE-2026-2770), [CVE-2026-2771](https://www.cve.org/CVERecord?id=CVE-2026-2771), [CVE-2026-2772](https://www.cve.org/CVERecord?id=CVE-2026-2772), [CVE-2026-2773](https://www.cve.org/CVERecord?id=CVE-2026-2773), [CVE-2026-2774](https://www.cve.org/CVERecord?id=CVE-2026-2774), [CVE-2026-2775](https://www.cve.org/CVERecord?id=CVE-2026-2775), [CVE-2026-2785](https://www.cve.org/CVERecord?id=CVE-2026-2785), [CVE-2026-2786](https://www.cve.org/CVERecord?id=CVE-2026-2786), [CVE-2026-2787](https://www.cve.org/CVERecord?id=CVE-2026-2787), [CVE-2026-2788](https://www.cve.org/CVERecord?id=CVE-2026-2788), [CVE-2026-2789](https://www.cve.org/CVERecord?id=CVE-2026-2789), [CVE-2026-2791](https://www.cve.org/CVERecord?id=CVE-2026-2791), [CVE-2026-2796](https://www.cve.org/CVERecord?id=CVE-2026-2796), [CVE-2026-2797](https://www.cve.org/CVERecord?id=CVE-2026-2797), [CVE-2026-2799](https://www.cve.org/CVERecord?id=CVE-2026-2799), [CVE-2026-2804](https://www.cve.org/CVERecord?id=CVE-2026-2804), [CVE-2026-2805](https://www.cve.org/CVERecord?id=CVE-2026-2805)
 - *related* (6): [CVE-2026-4702](https://www.cve.org/CVERecord?id=CVE-2026-4702), [CVE-2026-4704](https://www.cve.org/CVERecord?id=CVE-2026-4704), [CVE-2026-4705](https://www.cve.org/CVERecord?id=CVE-2026-4705), [CVE-2026-4718](https://www.cve.org/CVERecord?id=CVE-2026-4718), [CVE-2026-4723](https://www.cve.org/CVERecord?id=CVE-2026-4723), [CVE-2026-4724](https://www.cve.org/CVERecord?id=CVE-2026-4724)
 
-## Table 2 — CVEs and the incidents they occur in
+## Table 2 — CVEs and the records they occur in
 
-Only 11 CVEs recur, all of them twice: [CVE-2025-3248](https://www.cve.org/CVERecord?id=CVE-2025-3248), [CVE-2025-65720](https://www.cve.org/CVERecord?id=CVE-2025-65720), [CVE-2026-15903](https://www.cve.org/CVERecord?id=CVE-2026-15903), [CVE-2026-28472](https://www.cve.org/CVERecord?id=CVE-2026-28472), [CVE-2026-30623](https://www.cve.org/CVERecord?id=CVE-2026-30623), [CVE-2026-33634](https://www.cve.org/CVERecord?id=CVE-2026-33634), [CVE-2026-39987](https://www.cve.org/CVERecord?id=CVE-2026-39987), [CVE-2026-54316](https://www.cve.org/CVERecord?id=CVE-2026-54316), [CVE-2026-54769](https://www.cve.org/CVERecord?id=CVE-2026-54769), [CVE-2026-59726](https://www.cve.org/CVERecord?id=CVE-2026-59726), [CVE-2026-76021](https://www.cve.org/CVERecord?id=CVE-2026-76021) (bold **2** in the `#` column). Since CVSS and KEV are the fields readers triage by, the table is ordered by **CVSS** (the score as published by the CNA; versions are mixed and shown), then KEV, then relation; the 62 CVEs without a CVSS score follow at the end, ordered by KEV, then relation. `IBSS obs` / `IBSS pot` are the incident-based severity scores over in-play links, blank for CVEs that are only `related`/`toolkit` (see *IBSS vs CVSS* below).
+Only 11 CVEs recur, all of them twice: [CVE-2025-3248](https://www.cve.org/CVERecord?id=CVE-2025-3248), [CVE-2025-65720](https://www.cve.org/CVERecord?id=CVE-2025-65720), [CVE-2026-15903](https://www.cve.org/CVERecord?id=CVE-2026-15903), [CVE-2026-28472](https://www.cve.org/CVERecord?id=CVE-2026-28472), [CVE-2026-30623](https://www.cve.org/CVERecord?id=CVE-2026-30623), [CVE-2026-33634](https://www.cve.org/CVERecord?id=CVE-2026-33634), [CVE-2026-39987](https://www.cve.org/CVERecord?id=CVE-2026-39987), [CVE-2026-54316](https://www.cve.org/CVERecord?id=CVE-2026-54316), [CVE-2026-54769](https://www.cve.org/CVERecord?id=CVE-2026-54769), [CVE-2026-59726](https://www.cve.org/CVERecord?id=CVE-2026-59726), [CVE-2026-76021](https://www.cve.org/CVERecord?id=CVE-2026-76021) (bold in the `#` column, where `n + m†` = n counted incidents and m sub-threshold records). Since CVSS and KEV are the fields readers triage by, the table is ordered by **CVSS** (the score as published by the CNA; versions are mixed and shown), then KEV, then relation; the 62 CVEs without a CVSS score follow at the end, ordered by KEV, then relation. `IBSS obs` / `IBSS pot` are the incident-based severity scores over in-play links, blank for CVEs that are only `related`/`toolkit` (see *IBSS vs CVSS* below).
 
-| CVE | # | Incident : relation | KEV | CVSS | IBSS obs | IBSS pot | CNA | Published | Product | CNA CWE | Title |
+| CVE | # | Record : relation | KEV | CVSS | IBSS obs | IBSS pot | CNA | Published | Product | CNA CWE | Title |
 |---|---|---|---|---|---|---|---|---|---|---|---|
 | [CVE-2025-68613](https://www.cve.org/CVERecord?id=CVE-2025-68613) | 1 | DR-2026-008:attempted | **KEV** | 10 (v3.1) | 8 | 16 | GitHub_M | 2025-12-19 | n8n-io/n8n | CWE-913 | n8n Vulnerable to Remote Code Execution via Expression Injection |
 | [CVE-2026-28353](https://www.cve.org/CVERecord?id=CVE-2026-28353) | 1 | DR-2026-010:self (malicious release) |  | 10 (v4.0) | 8 | 16 | GitHub_M | 2026-03-05 | aquasecurity/trivy-vscode-extension | CWE-506 | Trivy Vulnerability Scanner: Unauthorized AI Agent Execution Code Included in OpenVSX Extension Release |
@@ -573,21 +582,21 @@ Only 11 CVEs recur, all of them twice: [CVE-2025-3248](https://www.cve.org/CVERe
 
 ## CVSS of the CVE vs observed severity of its incident (all links)
 
-Each cell counts incident–CVE links. The vulnerability's CVSS and the incident's realized harm are different things — this table is the empirical form of the methodology's argument (§6.3). It covers all 333 links, whatever their relation; the next section refines the comparison to in-play CVEs and scores them with IBSS.
+Each severity cell counts the links of counted incidents by the incident's observed severity (`report.observed_severity`); the last column counts the links of sub-threshold records (†) per CVSS band. The vulnerability's CVSS and the incident's realized harm are different things — this table is the empirical form of the methodology's argument (§6.3). It covers all 333 links of counted incidents, whatever their relation, and the 0 links of sub-threshold records; the next section refines the comparison to in-play CVEs and scores them with IBSS.
 
-| CVSS band of CVE | Critical | High | Medium | Low | Negligible | Total |
-|---|---|---|---|---|---|---|
-| Critical 9.0-10.0 | 1 | 14 | 21 | 15 | 10 | 61 |
-| High 7.0-8.9 | 0 | 10 | 74 | 8 | 20 | 112 |
-| Medium 4.0-6.9 | 0 | 4 | 60 | 2 | 15 | 81 |
-| Low 0.1-3.9 | 0 | 0 | 9 | 1 | 3 | 13 |
-| no CVSS | 0 | 3 | 5 | 11 | 47 | 66 |
+| CVSS band of CVE | Critical | High | Medium | Low | Negligible | Total | Sub-threshold links |
+|---|---|---|---|---|---|---|---|
+| Critical 9.0-10.0 | 1 | 14 | 21 | 15 | 10 | 61 | 0 |
+| High 7.0-8.9 | 0 | 10 | 74 | 8 | 20 | 112 | 0 |
+| Medium 4.0-6.9 | 0 | 4 | 60 | 2 | 15 | 81 | 0 |
+| Low 0.1-3.9 | 0 | 0 | 9 | 1 | 3 | 13 | 0 |
+| no CVSS | 0 | 3 | 5 | 11 | 47 | 66 | 0 |
 
 Read together with the *Coverage* table at the top: the CVE-bearing incidents are disclosure-heavy, so the Negligible/Low columns are populated partly by construction.
 
 ## IBSS vs CVSS — a first experiment
 
-IBSS was designed for CWEs, where one weakness spans many incidents. Applying it to CVEs is a first check of two things only: whether the tier weights behave sensibly, and how a CVE's technical score relates to the harm its incident realized (observed) or could have realized (potential). Three limits apply. **(1)** 255 of the 260 in-play CVEs have a single in-play incident, so their IBSS is just that incident's weight — the summation is barely exercised. **(2)** Each in-play CVE receives the *full* weight of its incident; where several CVEs share an incident (e.g. the Artifactory CVEs of DB-2026-006) the score does not establish per-CVE causation. **(3)** 161 of the 260 in-play CVEs belong to DR-2026-036, and 160 of those share one observed (Medium = 4) and one potential (High = 8) value, so aggregate statistics are dominated by that incident; figures are therefore also given without it.
+IBSS was designed for CWEs, where one weakness spans many incidents. Applying it to CVEs is a first check of two things only: whether the tier weights behave sensibly, and how a CVE's technical score relates to the harm its incident realized (observed) or could have realized (potential). Three limits apply. **(1)** 255 of the 260 in-play CVEs have a single in-play record, so their IBSS is just that record's weight — the summation is barely exercised. **(2)** Each in-play CVE receives the *full* weight of every counted incident it is in play in, and per class that of the highest-weighted sub-threshold record (†); where several CVEs share an incident (e.g. the Artifactory CVEs of DB-2026-006) the score does not establish per-CVE causation. **(3)** 161 of the 260 in-play CVEs belong to DR-2026-036, and 160 of those share one observed (Medium = 4) and one potential (High = 8) value, so aggregate statistics are dominated by that incident; figures are therefore also given without it.
 
 - A Spearman rank correlation between CVSS and IBSS is computed by the build script but **not reported at this stage**: 161 of the 214 scored in-play CVEs share one severity value (DR-2026-036), and the remaining n = 57 come from only 23 incidents or incident sets (DR-2026-088 alone holds 14). The CVEs of one incident share its IBSS, so they are not independent observations, and an interval computed as if they were would overstate the precision. The corpus is planned to grow (further sources, later years), and the correlation will be reported once the in-play CVEs spread over enough incidents for the interval to be informative. Until then the band table below carries the comparison.
 - Potential is the fairer comparison — CVSS and potential both describe what *could* happen; observed shows what did.
@@ -606,7 +615,7 @@ Share of in-play CVEs with at least one **potential-Critical** incident, per CVS
 
 ### Top potential band — IBSS_potential ≥ 16 (34 CVEs)
 
-| CVE | CVSS | KEV | IBSS obs | IBSS pot | Incident : relation |
+| CVE | CVSS | KEV | IBSS obs | IBSS pot | Record : relation |
 |---|---|---|---|---|---|
 | [CVE-2026-33634](https://www.cve.org/CVERecord?id=CVE-2026-33634) | 9.4 (v4.0) | **KEV** | 24 | 32 | DB-2026-001:self (malicious release); DR-2026-010:self (malicious release) |
 | [CVE-2026-59726](https://www.cve.org/CVERecord?id=CVE-2026-59726) | 10 (v3.1) |  | 6 | 24 | DR-2026-036:self (vulnerability); DR-2026-057:self (vulnerability) |
@@ -647,7 +656,7 @@ Share of in-play CVEs with at least one **potential-Critical** incident, per CVS
 
 Context outweighs the component score: chained or privileged use turned medium-rated vulnerabilities into critical potential.
 
-| CVE | CVSS | KEV | IBSS obs | IBSS pot | Incident : relation |
+| CVE | CVSS | KEV | IBSS obs | IBSS pot | Record : relation |
 |---|---|---|---|---|---|
 | [CVE-2026-54316](https://www.cve.org/CVERecord?id=CVE-2026-54316) | 6 (v4.0) |  | 2 | 24 | DR-2026-056:self (vulnerability); DR-2026-062:self (vulnerability) |
 | [CVE-2026-65923](https://www.cve.org/CVERecord?id=CVE-2026-65923) | 6.8 (v3.1) |  | 8 | 16 | DB-2026-006:exploited-unconfirmed |
@@ -662,7 +671,7 @@ none — every in-play CVE rated Critical by CVSS sits in an incident with poten
 
 By strongest in-play relation: 8 `self (vulnerability)`, 5 `discovered`. Severe on paper, no realized harm recorded — the gap the observed/potential split is designed to show.
 
-| CVE | CVSS | KEV | IBSS obs | IBSS pot | Incident : relation |
+| CVE | CVSS | KEV | IBSS obs | IBSS pot | Record : relation |
 |---|---|---|---|---|---|
 | [CVE-2026-12537](https://www.cve.org/CVERecord?id=CVE-2026-12537) | 10 (v4.0) |  | 1 | 16 | DR-2026-056:self (vulnerability) |
 | [CVE-2026-26015](https://www.cve.org/CVERecord?id=CVE-2026-26015) | 10 (v4.0) |  | 2 | 16 | DR-2026-059:self (vulnerability) |
@@ -686,7 +695,7 @@ Rows are in triage order: KEV-listed first; then by the strongest evidence (expl
 
 ### patch (264 CVEs; 106 shown, 158 of the AI-written aggregate corpus DR-2026-036 in the CSV only)
 
-| ID | Evidence | Incidents | Max observed | KEV | IBSS pot | CVSS | Product / package | Ecosystem | Affected versions | Fixed / unaffected |
+| ID | Evidence | Records | Max observed | KEV | IBSS pot | CVSS | Product / package | Ecosystem | Affected versions | Fixed / unaffected |
 |---|---|---|---|---|---|---|---|---|---|---|
 | [CVE-2025-3248](https://www.cve.org/CVERecord?id=CVE-2025-3248) | exploited | DR-2026-008<br>DR-2026-011 | High | **KEV** | 16 | 9.8 (v3.1) | langflow-ai/langflow |  | langflow-ai/langflow: < 1.3.0 | langflow-ai/langflow 1.3.0 |
 | [CVE-2026-9198](https://www.cve.org/CVERecord?id=CVE-2026-9198) | exploited | DR-2026-008 | High | **KEV** | 16 | 9.8 (v3.1) | IBM/Langflow OSS |  | IBM/Langflow OSS: >= 1.0.0, <= 1.10.0 |  |
@@ -799,7 +808,7 @@ Rows are in triage order: KEV-listed first; then by the strongest evidence (expl
 
 Purge the listed versions, rotate every credential the package could reach (cloud keys, CI tokens, SSH keys), and hunt for the persistence it planted.
 
-| ID | Evidence | Incidents | Max observed | KEV | IBSS pot | CVSS | Product / package | Ecosystem | Affected versions | Fixed / unaffected |
+| ID | Evidence | Records | Max observed | KEV | IBSS pot | CVSS | Product / package | Ecosystem | Affected versions | Fixed / unaffected |
 |---|---|---|---|---|---|---|---|---|---|---|
 | [CVE-2026-33634](https://www.cve.org/CVERecord?id=CVE-2026-33634) | self (malicious release) | DB-2026-001<br>DR-2026-010 | Critical | **KEV** | 32 | 9.4 (v4.0) | BerriAI/LiteLLM; aquasecurity/setup-trivy; aquasecurity/trivy; aquasecurity/trivy-action; team-telnyx/telnyx |  | aquasecurity/setup-trivy: < 0.2.6 \| aquasecurity/trivy-action: < 0.35.0 \| aquasecurity/trivy: = 0.69.4 \| BerriAI/LiteLLM: >= 1.82.7, <= 1.82.8 \| team-telnyx/telnyx: >= 4.87.1, <= 4.87.2 | aquasecurity/setup-trivy 0.2.6; aquasecurity/trivy-action 0.35.0 |
 | [CVE-2026-45321](https://www.cve.org/CVERecord?id=CVE-2026-45321) | self (malicious release) | DR-2026-022 | High | **KEV** | 8 | 9.6 (v3.1) | @tanstack/arktype-adapter; @tanstack/eslint-plugin-router; @tanstack/eslint-plugin-start; @tanstack/history; @tanstack/nitro-v2-vite-plugin; @tanstack/outer-vite-plugin; @tanstack/react-router; @tanstack/react-router-devtools; @tanstack/react-router-ssr-query; @tanstack/react-start; @tanstack/react-start-client; @tanstack/react-start-rsc; @tanstack/react-start-server; @tanstack/router-cli; @tanstack/router-core; @tanstack/router-devtools; @tanstack/router-devtools-core; @tanstack/router-generator; @tanstack/router-plugin; @tanstack/router-ssr-query-core; @tanstack/router-utils; @tanstack/solid-router; @tanstack/solid-router-devtools; @tanstack/solid-router-ssr-query; @tanstack/solid-start; @tanstack/solid-start-client; @tanstack/solid-start-server; @tanstack/start-client-core; @tanstack/start-fn-stubs; @tanstack/start-plugin-core; @tanstack/start-server-core; @tanstack/start-static-server-functions; @tanstack/start-storage-context; @tanstack/valibot-adapter; @tanstack/virtual-file-routes; @tanstack/vue-router; @tanstack/vue-router-devtools; @tanstack/vue-router-ssr-query; @tanstack/vue-start; @tanstack/vue-start-client; @tanstack/vue-start-server; @tanstack/zod-adapter |  | @tanstack/arktype-adapter: 1.166.12; 1.166.15 \| @tanstack/eslint-plugin-router: 1.161.9; 1.161.12 \| @tanstack/eslint-plugin-start: 0.0.4; 0.0.7 \| @tanstack/history: 1.161.9; 1.161.12 \| @tanstack/nitro-v2-vite-plugin: 1.154.12; 1.154.15 \| @tanstack/react-router: 1.169.5; 1.169.8 \| @tanstack/react-router-devtools: 1.166.16; 1.166.19 \| @tanstack/react-router-ssr-query: 1.166.15; 1.166.18 \| @tanstack/react-start: 1.167.68; 1.167.71 \| @tanstack/react-start-client: 1.166.51; 1.166.54 \| @tanstack/react-start-rsc: 0.0.47; 0.0.50 \| @tanstack/react-start-server: 1.166.55; 1.166.58 \| @tanstack/router-cli: 1.166.46; 1.166.49 \| @tanstack/router-core: 1.169.5; 1.169.8 \| @tanstack/router-devtools: 1.166.16; 1.166.19 \| @tanstack/router-devtools-core: 1.167.6; 1.167.9 \| @tanstack/router-generator: 1.166.45; 1.166.48 \| @tanstack/router-plugin: 1.167.38; 1.167.41 \| @tanstack/router-ssr-query-core: 1.168.3; 1.168.6 \| @tanstack/router-utils: 1.161.11; 1.161.14 \| @tanstack/outer-vite-plugin: 1.166.53; 1.166.56 \| @tanstack/solid-router: 1.169.5; 1.169.8 \| @tanstack/solid-router-devtools: 1.166.16; 1.166.19 \| @tanstack/solid-router-ssr-query: 1.166.15; 1.166.18 \| @tanstack/solid-start: 1.167.65; 1.167.68 \| @tanstack/solid-start-client: 1.166.50; 1.166.53 \| @tanstack/solid-start-server: 1.166.54; 1.166.57 \| @tanstack/start-client-core: 1.168.5; 1.168.8 \| @tanstack/start-fn-stubs: 1.161.9; 1.161.12 \| @tanstack/start-plugin-core: 1.169.23; 1.169.26 \| @tanstack/start-server-core: 1.167.33; 1.167.36 \| @tanstack/start-static-server-functions: 1.166.44; 1.166.47 \| @tanstack/start-storage-context: 1.166.38; 1.166.41 \| @tanstack/valibot-adapter: 1.166.12; 1.166.15 \| @tanstack/virtual-file-routes: 1.161.10; 1.161.13 \| @tanstack/vue-router: 1.169.5; 1.169.8 \| @tanstack/vue-router-devtools: 1.166.16; 1.166.19 \| @tanstack/vue-router-ssr-query: 1.166.15; 1.166.18 \| @tanstack/vue-start: 1.167.61; 1.167.64 \| @tanstack/vue-start-client: 1.166.46; 1.166.49 \| @tanstack/vue-start-server: 1.166.50; 1.166.53 \| @tanstack/zod-adapter: 1.166.12; 1.166.15 |  |
@@ -807,7 +816,7 @@ Purge the listed versions, rotate every credential the package could reach (clou
 | [CVE-2026-34841](https://www.cve.org/CVERecord?id=CVE-2026-34841) | related | DR-2026-025 | Medium |  |  | 9.8 (v3.1) | usebruno/bruno |  | usebruno/bruno: < 3.2.1 | usebruno/bruno 3.2.1 |
 | [CVE-2026-45758](https://www.cve.org/CVERecord?id=CVE-2026-45758) | related | DR-2026-022 | High |  |  | 9.6 (v3.1) | guardrails-ai/guardrails |  | guardrails-ai/guardrails: = 0.10.1 |  |
 
-| Package | Ecosystem | Malicious versions | Advisories | Incidents | Max observed |
+| Package | Ecosystem | Malicious versions | Advisories | Records | Max observed |
 |---|---|---|---|---|---|
 | litellm | PyPI | 1.82.7, 1.82.8 | GHSA-92x9-889m-jgmw, MAL-2026-2144, PYSEC-2026-2 | DB-2026-001 | Critical |
 | telnyx | PyPI | 4.87.1, 4.87.2 | MAL-2026-2254 | DB-2026-001 | Critical |
@@ -860,7 +869,7 @@ Purge the listed versions, rotate every credential the package could reach (clou
 
 ### watch (5 KEV CVEs related to a campaign)
 
-| ID | Evidence | Incidents | Max observed | KEV | IBSS pot | CVSS | Product / package | Ecosystem | Affected versions | Fixed / unaffected |
+| ID | Evidence | Records | Max observed | KEV | IBSS pot | CVSS | Product / package | Ecosystem | Affected versions | Fixed / unaffected |
 |---|---|---|---|---|---|---|---|---|---|---|
 | [CVE-2026-0770](https://www.cve.org/CVERecord?id=CVE-2026-0770) | related | DR-2026-008 | High | **KEV** |  | 9.8 (v3.0) | Langflow/Langflow |  | Langflow/Langflow: 1.4.2 |  |
 | [CVE-2025-34291](https://www.cve.org/CVERecord?id=CVE-2025-34291) | related | DR-2026-008 | High | **KEV** |  | 9.4 (v4.0) | Langflow/Langflow |  | Langflow/Langflow: <= 1.6.9 |  |
@@ -922,7 +931,7 @@ Relation `exploited` / `exploited-unconfirmed` = the CVE was (probably) the way 
 
 Relation `discovered`: the CVE is credited to the AI system or AI-assisted team the incident is about. `Credits` lists the discovery credits of the CVE record where the CNA publishes any (methodology §6.7): roles finder, reporter, analyst and tool, plus credits whose role the record does not state. `cves_ai_discovered.csv` has every credit with its role, including coordinators and remediation developers.
 
-| CVE | Incident | Credits | CNA | Product | Published | CVSS | CNA CWE | Title |
+| CVE | Record | Credits | CNA | Product | Published | CVSS | CNA CWE | Title |
 |---|---|---|---|---|---|---|---|---|
 | [CVE-2026-4747](https://www.cve.org/CVERecord?id=CVE-2026-4747) | DR-2026-058 | Nicholas Carlini using Claude, Anthropic | freebsd | FreeBSD/FreeBSD | 2026-03-26 |  | CWE-121 | Remote code execution via RPCSEC_GSS packet validation |
 | [CVE-2026-5194](https://www.cve.org/CVERecord?id=CVE-2026-5194) | DR-2026-058 | Nicholas Carlini from Anthropic | wolfSSL | wolfSSL/wolfSSL | 2026-04-09 | 9.3 (v4.0) | CWE-295 | wolfSSL ECDSA Certificate Verification |
@@ -981,7 +990,7 @@ Relation `discovered`: the CVE is credited to the AI system or AI-assisted team 
 
 Malicious package releases, account-takeover publishes and vendor-fixed flaws often never receive a CVE (methodology §6.6); GHSA / MAL / PYSEC / vendor advisory ids are recorded here and never placed in CVE fields.
 
-| Incident | Identifier | Scheme | Kind | Note |
+| Record | Identifier | Scheme | Kind | Note |
 |---|---|---|---|---|
 | DB-2026-001 | GHSA-5mg7-485q-xm76 | GHSA | GHSA (reviewed, critical) | Two LiteLLM versions (1.82.7, 1.82.8) published containing credential-harvesting malware; no CVE of its own |
 | DB-2026-001 | GHSA-92x9-889m-jgmw | GHSA | GHSA (malware) | OSSF malware entry for litellm 1.82.7/1.82.8 |
@@ -1126,11 +1135,11 @@ Malicious package releases, account-takeover publishes and vendor-fixed flaws of
 | DR-2026-094 | MFSA 2026-20 | MFSA | Mozilla advisory | Firefox 149 - 6 further Anthropic-credited CVEs |
 | DR-2026-095 | MFSA 2026-30 | MFSA | Mozilla advisory | Firefox 150 (43 CVEs incl. the three rollups carrying the Mythos findings) |
 
-## Per-incident CNA CWEs of in-play CVEs (input for the CWE validation)
+## Per-record CNA CWEs of in-play CVEs (input for the CWE validation)
 
-For every incident with validated CVEs: the CWEs the CNAs assigned to its in-play CVEs, beside the as-cited incident CWE (`report.weaknesses`, unvalidated). Where the two disagree, the CWE validation decides; nothing is ranked from this table here.
+For every live record with validated CVEs: the CWEs the CNAs assigned to its in-play CVEs, beside the as-cited incident CWE (`report.weaknesses`, unvalidated). Where the two disagree, the CWE validation decides; nothing is ranked from this table here.
 
-| Incident | In-play CVEs | Other CVEs | CNA CWEs (in-play) | CVE → CNA CWE | As-cited CWE | As-cited basis | Conf. |
+| Record | In-play CVEs | Other CVEs | CNA CWEs (in-play) | CVE → CNA CWE | As-cited CWE | As-cited basis | Conf. |
 |---|---|---|---|---|---|---|---|
 | DB-2026-001 | 1 | 0 | CWE-506 | CVE-2026-33634:CWE-506 | CWE-1357 / CWE-506 / CWE-522 | Analyst inference (reliance on compromised component; embedded malicious code; credential exposure) | High |
 | DB-2026-006 | 5 | 3 | CWE-287, CWE-502, CWE-918 | CVE-2026-65617:CWE-502<br>CVE-2026-65923:CWE-918<br>CVE-2026-65924:CWE-918<br>CVE-2026-65925:CWE-918<br>CVE-2026-66014:CWE-287 | CWE-22 / CWE-918 / CWE-94 | CVE/CNA (JFrog) + demonstrated dataset-loader RCE / template injection | High |
@@ -1169,7 +1178,7 @@ For every incident with validated CVEs: the CWEs the CNAs assigned to its in-pla
 
 Descriptive CVE statistics: the unit is the **CVE link**, not the incident, and the CWE is the one the CNA assigned to the CVE record. This is *not* the incident-level CWE ranking (that is built in the CWE thread from the incident layer, where each incident counts once); it shows what kind of vulnerabilities each population of CVEs consists of.
 
-| Segment | CVE links | Distinct CVEs | Incidents | IBSS obs | IBSS pot | Links with CNA CWE | Distinct CWEs |
+| Segment | CVE links | Distinct CVEs | Records | IBSS obs | IBSS pot | Links with CNA CWE | Distinct CWEs |
 |---|---|---|---|---|---|---|---|
 | ai-exploited | 20 | 19 | 6 | 48 | 72 | 14 | 10 |
 | ai-written | 161 | 161 | 1 | 4 | 8 | 158 | 76 |
@@ -1178,11 +1187,11 @@ Descriptive CVE statistics: the unit is the **CVE link**, not the incident, and 
 | ai-discovered | 52 | 51 | 8 | 9 | 64 | 28 | 20 |
 | related | 61 | 61 | 15 | 48 | 160 | 44 | 33 |
 
-How to read the per-segment rows: **CVE links** = number of incident–CVE pairs in the segment whose CVE record carries this CWE (a CVE that occurs in two incidents counts twice); **Distinct CVEs** = the same without double-counting recurring CVEs; **Incidents** = distinct incidents among those links; **Share** = CVE links with this CWE ÷ links in the segment that carry any CNA CWE (the *Links with CNA CWE* column above); **IBSS obs / pot** = incident-based severity score over those incidents, each counted once (Negligible 1 · Low 2 · Medium 4 · High 8 · Critical 16, observed and potential separately) — for `related` this attributes an incident's harm to the CWE of a *sibling* CVE, shown as context weight for comparison with the CWE thread (whose Rule 1 excludes `related`), not as the weakness's risk. Shares within a segment add up to more than 100 % because one CVE record can carry several CWEs. Example: `ai-exploited` / CWE-306 = 4 links (Langflow CVE-2026-33017 and CVE-2025-3248, marimo CVE-2026-39987 in two incidents), 3 distinct CVEs, 4 incidents, 4 ÷ 14 = 29 %. CWEs that the incident record assigns directly (`report.weaknesses`) are **not** counted here; they appear beside the CNA CWEs in the preceding per-incident table and feed the incident-level CWE ranking of the CWE thread.
+How to read the per-segment rows: **CVE links** = number of record–CVE pairs in the segment whose CVE record carries this CWE (a CVE that occurs in two records counts twice); **Distinct CVEs** = the same without double-counting recurring CVEs; **Records** = distinct records among those links; `n + m†` = n of counted incidents, m of sub-threshold records; **Share** = CVE links with this CWE ÷ links in the segment that carry any CNA CWE (the *Links with CNA CWE* column above), per array; **IBSS obs / pot** = incident-based severity score over those records (Negligible 1 · Low 2 · Medium 4 · High 8 · Critical 16, observed and potential separately; each counted incident once, the sub-threshold records once per class) — for `related` this attributes an incident's harm to the CWE of a *sibling* CVE, shown as context weight for comparison with the CWE thread (whose Rule 1 excludes `related`), not as the weakness's risk. Shares within a segment add up to more than 100 % because one CVE record can carry several CWEs. Example: `ai-exploited` / CWE-306 = 4 links (Langflow CVE-2026-33017 and CVE-2025-3248, marimo CVE-2026-39987 in two incidents), 3 distinct CVEs, 4 incidents, 4 ÷ 14 = 29 %. CWEs that the incident record assigns directly (`report.weaknesses`) are **not** counted here; they appear beside the CNA CWEs in the preceding per-incident table and feed the incident-level CWE ranking of the CWE thread.
 
 ### `ai-exploited` — top 10 of 10 CWEs
 
-| CWE | CVE links | Distinct CVEs | Incidents | IBSS obs | IBSS pot | Share |
+| CWE | CVE links | Distinct CVEs | Records | IBSS obs | IBSS pot | Share |
 |---|---|---|---|---|---|---|
 | CWE-306 | 4 | 3 | 4 | 32 | 48 | 29% |
 | CWE-918 | 3 | 3 | 1 | 8 | 16 | 21% |
@@ -1197,9 +1206,9 @@ How to read the per-segment rows: **CVE links** = number of incident–CVE pairs
 
 ### `ai-written` — top 12 of 76 CWEs
 
-All links of this segment stem from one incident (DR-2026-036), so IBSS is the same for every row (observed 4, potential 8) — the column will differentiate once further incidents join the segment.
+All links of this segment stem from one record (DR-2026-036), so IBSS is the same for every row (observed 4, potential 8) — the column will differentiate once further records join the segment.
 
-| CWE | CVE links | Distinct CVEs | Incidents | IBSS obs | IBSS pot | Share |
+| CWE | CVE links | Distinct CVEs | Records | IBSS obs | IBSS pot | Share |
 |---|---|---|---|---|---|---|
 | CWE-918 | 21 | 21 | 1 | 4 | 8 | 13% |
 | CWE-22 | 19 | 19 | 1 | 4 | 8 | 12% |
@@ -1235,7 +1244,7 @@ Radar's `contribution` type says how the AI tool was involved in the flawed code
 
 ### `ai-stack-vulnerability` — top 12 of 20 CWEs
 
-| CWE | CVE links | Distinct CVEs | Incidents | IBSS obs | IBSS pot | Share |
+| CWE | CVE links | Distinct CVEs | Records | IBSS obs | IBSS pot | Share |
 |---|---|---|---|---|---|---|
 | CWE-77 | 4 | 4 | 3 | 4 | 32 | 17% |
 | CWE-94 | 4 | 4 | 3 | 3 | 24 | 17% |
@@ -1252,13 +1261,13 @@ Radar's `contribution` type says how the AI tool was involved in the flawed code
 
 ### `malicious-release` — top 1 of 1 CWEs
 
-| CWE | CVE links | Distinct CVEs | Incidents | IBSS obs | IBSS pot | Share |
+| CWE | CVE links | Distinct CVEs | Records | IBSS obs | IBSS pot | Share |
 |---|---|---|---|---|---|---|
 | CWE-506 | 4 | 3 | 3 | 32 | 40 | 100% |
 
 ### `ai-discovered` — top 12 of 20 CWEs
 
-| CWE | CVE links | Distinct CVEs | Incidents | IBSS obs | IBSS pot | Share |
+| CWE | CVE links | Distinct CVEs | Records | IBSS obs | IBSS pot | Share |
 |---|---|---|---|---|---|---|
 | CWE-416 | 4 | 4 | 3 | 3 | 20 | 14% |
 | CWE-121 | 3 | 3 | 2 | 3 | 24 | 11% |
@@ -1275,7 +1284,7 @@ Radar's `contribution` type says how the AI tool was involved in the flawed code
 
 ### `related` — top 12 of 33 CWEs
 
-| CWE | CVE links | Distinct CVEs | Incidents | IBSS obs | IBSS pot | Share |
+| CWE | CVE links | Distinct CVEs | Records | IBSS obs | IBSS pot | Share |
 |---|---|---|---|---|---|---|
 | CWE-78 | 9 | 9 | 3 | 7 | 32 | 20% |
 | CWE-22 | 4 | 4 | 3 | 11 | 40 | 9% |
@@ -1292,9 +1301,9 @@ Radar's `contribution` type says how the AI tool was involved in the flawed code
 
 ## CNA-CWE IBSS via in-play CVEs — the CVE-path baseline for the CWE ranking
 
-For every CNA-assigned CWE of an in-play CVE: the incidents it reaches through those CVEs (each incident counted once per CWE), their IBSS, and the prevalence behind it. This is the CVE-path half of the CWE thread's formula (incidents linked to a CWE = analyst mapping ∪ CNA CWE of in-play CVEs): the difference between this table and `cwe_priority` will be the contribution of the direct incident-level mapping — which is why analyst-only weaknesses such as CWE-1357 do not appear here at all. Sorted by observed IBSS; 96 CWEs. **Not the CWE ranking.** Full table with ranks: `cwe_ibss_cve_path.csv`.
+For every CNA-assigned CWE of an in-play CVE: the records it reaches through those CVEs (each counted incident once per CWE, the sub-threshold records once per class), their IBSS, and the prevalence behind it. This is the CVE-path half of the CWE thread's formula (incidents linked to a CWE = analyst mapping ∪ CNA CWE of in-play CVEs): the difference between this table and `cwe_priority` will be the contribution of the direct incident-level mapping — which is why analyst-only weaknesses such as CWE-1357 do not appear here at all. Sorted by observed IBSS; 96 CWEs. **Not the CWE ranking.** Full table with ranks: `cwe_ibss_cve_path.csv`.
 
-| CWE | Incidents | Distinct CVEs | IBSS obs | IBSS pot | Rank pot | Incidents (ids) | Segments |
+| CWE | Records | Distinct CVEs | IBSS obs | IBSS pot | Rank pot | Records (ids) | Segments |
 |---|---|---|---|---|---|---|---|
 | CWE-306 | 6 | 9 | 38 | 72 | 1 | DR-2026-008, DR-2026-011, DR-2026-020, DR-2026-023, DR-2026-036, DR-2026-057 | ai-exploited, ai-written, ai-stack-vulnerability |
 | CWE-506 | 3 | 3 | 32 | 40 | 6 | DB-2026-001, DR-2026-010, DR-2026-022 | malicious-release |

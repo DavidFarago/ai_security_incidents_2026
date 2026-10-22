@@ -1,0 +1,1 @@
+id,date,incident,status,observed_severity,potential_severity,potential_confidence,confidence,sources,source_citations,ai_role,ai_component,ai_security_mechanism,actor,action,asset,data_disclosure,cve,validated_cve,cwe,victim,industry_naics,observed_severity_rationale,potential_severity_rationale,references

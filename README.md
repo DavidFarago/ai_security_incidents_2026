@@ -32,8 +32,9 @@ Rather than invent a bespoke AI-incident score, this project adopts **VERIS** �
 | `.json` | **Source of truth.** Full nested coding per incident, plus metadata, a source catalogue, and a ranking table. |
 | `.csv` | One flattened row per incident (25 columns), including a `source_citations` column with full provenance. |
 | `.md` | A severity-ranked field guide: an incident index plus a narrative entry per incident. |
+| `_sub_threshold.{csv,md}` | The sub-threshold records (the array `sub_threshold_incidents` of the JSON; methodology §3.3) in the same two forms; the `.md` lists them in ID order, with their class (AI-written, AI-stack, AI-discovered). |
 
-The per-CVE validated layer (each CVE's relation to the incident, CVSS, KEV flag, CNA CWE, credits) exists in full only in the `.json`; the `.md` shows it condensed as a relation-grouped "Validated CVEs" line per entry, and the `.csv` lists only the CVE and CWE ids (`cve` as cited, `validated_cve`, `cwe`) — so a change to relations alters the `.json` and `.md` but not the `.csv`. The `.csv` and `.md` are generated from the JSON by `scripts/build_incidents_report.py`, and everything under `vulnerabilities/` by `scripts/build_vulnerabilities.py` (see *Verifying and rebuilding*); edit only the JSON.
+The per-CVE validated layer (each CVE's relation to the incident, CVSS, KEV flag, CNA CWE, credits) exists in full only in the `.json`; the `.md` shows it condensed as a relation-grouped "Validated CVEs" line per entry, and the `.csv` lists only the CVE and CWE ids (`cve` as cited, `validated_cve`, `cwe`) — so a change to relations alters the `.json` and `.md` but not the `.csv`. The `.csv` and `.md` files, the sub-threshold ones included, are generated from the JSON by `scripts/build_incidents_report.py`, and everything under `vulnerabilities/` by `scripts/build_vulnerabilities.py` (see *Verifying and rebuilding*); edit only the JSON.
 
 **99 incidents**, severity-ranked by *observed* (realized) harm:
 
@@ -88,6 +89,7 @@ incidents/
 ├─ all_2026_ai_software_security_incidents.json   # 99 incidents — source of truth
 ├─ all_2026_ai_software_security_incidents.csv    # flattened, one row per incident
 ├─ all_2026_ai_software_security_incidents.md     # severity-ranked field guide
+├─ all_2026_ai_software_security_incidents_sub_threshold.{csv,md}  # the sub-threshold records (methodology §3.3)
 ├─ VERIS_Methodology_for_AI_Security_Incidents_concise.md
 └─ sources/                                        # the original sources
    ├─ ChatGPT_DeepResearch_ai_incidents_2026.{md,docx,pdf}
