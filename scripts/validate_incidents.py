@@ -12,9 +12,10 @@ Class B (bookkeeping): set algebra of the validated layer, the VERIS action.*.cv
   entry's position (a register url names the register item of the locator; a report held in this repo is cited by
   its pinned permalink with a line range inside the passage that the locator names), `veris.reference` (URLs only,
   separated by "; ", none of them a discovery channel),
-  ranking_table (each counted incident once, in ranking order: methodology §9.3), the motive of deliberate actions
-  and no effect on a false positive (methodology §4.2, §4.3), recomputable counts, and the VERIS block against the
-  VERIS JSON schema. No overrides.
+  ranking_table (each counted incident once, in ranking order: methodology §9.3), the motive of deliberate actions,
+  no effect on a false positive and an internal or partner actor for every misuse (methodology §4.2, §4.3), the event
+  chain of a record with several action categories or actor types (§4.6), recomputable counts, and the VERIS block
+  against the VERIS JSON schema. No overrides.
 
 Every check of a record runs over the live records, `incidents` and `sub_threshold_incidents` alike (methodology
 §10.2); counts and the ranking table cover `incidents` only. A retired record is frozen: only its wrapper is checked.
@@ -54,6 +55,16 @@ INTRINSIC = ("state", "cna", "published", "product", "cvss_version", "cvss_score
 FROZEN_COUNTS = ["counts.from_ai_software_security_incidents_2026", "counts.from_merged_incidents_2026_VERIS_described"]
 # VERIS actions that someone takes on purpose; their actor needs a motive other than NA (methodology §4.2).
 DELIBERATE_ACTIONS = {"hacking", "malware", "social", "misuse"}
+# The codes of a veris.plus.event_chain step and what they stand for in the record (methodology §4.6): the actor and
+# action sections, the first letter of an asset variety ("S - Database" -> S), the attribute sections. "unk" is always
+# allowed.
+EVENT_CHAIN = {
+    "actor": ("actor", {"ext": "external", "int": "internal", "prt": "partner", "unk": "unknown"}),
+    "action": ("action", {"env": "environmental", "err": "error", "hak": "hacking", "mal": "malware", "mis": "misuse",
+                          "phy": "physical", "soc": "social", "unk": "unknown"}),
+    "asset": ("asset.assets", {"emb": "E", "med": "M", "net": "N", "ppl": "P", "srv": "S", "ter": "T", "usr": "U"}),
+    "attribute": ("attribute", {"cp": "confidentiality", "ia": "integrity", "au": "availability"}),
+}
 
 
 @dataclass
@@ -373,6 +384,10 @@ def check_class_b(d, up, r: Result):
         elif v["security_incident"] == "False positive" and has_effect(v.get("attribute") or {}):
             r.add("B", "status-effect", "False positive with an effect in veris.attribute (methodology §4.3): a false "
                   "positive affects no asset, so data_disclosure is No and no integrity or availability variety is set", iid)
+        if "misuse" in (v.get("action") or {}) and not {"internal", "partner"} & set(v.get("actor") or {}):
+            r.add("B", "misuse-actor", "veris.action.misuse needs an internal or partner actor: VERIS reserves misuse for "
+                  "parties the organization trusts; an outsider's abuse of a service is hacking (methodology §4.3)", iid)
+        check_event_chain(i, r)
         deliberate = sorted(set(v.get("action") or {}) & DELIBERATE_ACTIONS)
         motives = [m for a in (v.get("actor") or {}).values() if isinstance(a, dict) for m in a.get("motive") or []]
         if deliberate and not [m for m in motives if m != "NA"]:
@@ -414,6 +429,33 @@ def check_class_b(d, up, r: Result):
     check_ranking_table(d, r)
     check_counts(d, r)
     check_veris_schema(d, up, r)
+
+
+def check_event_chain(i, r):
+    """Methodology §4.6: a record with more than one action category or actor type has a veris.plus.event_chain; every
+    step's actor, action, asset and attribute has a counterpart in the record ("unk" always passes); every actor type and
+    action category of the record appears in some step. The VERIS schema checks the codes themselves."""
+    v, iid = i["veris"], i["id"]
+    have = {"actor": set(v.get("actor") or {}), "action": set(v.get("action") or {}),
+            "asset": {str(a.get("variety", "")).split(" - ")[0] for a in (v.get("asset") or {}).get("assets") or []
+                      if isinstance(a, dict)},
+            "attribute": set(v.get("attribute") or {})}
+    chain = (v.get("plus") or {}).get("event_chain")
+    if not isinstance(chain, list):
+        if len(have["action"]) > 1 or len(have["actor"]) > 1:
+            r.add("B", "event-chain", f"{len(have['action'])} action categories and {len(have['actor'])} actor types but no "
+                  "veris.plus.event_chain (methodology §4.6)", iid)
+        return
+    steps = [st for st in chain if isinstance(st, dict)]
+    for n, st in enumerate(steps, 1):
+        for key, (where, codes) in EVENT_CHAIN.items():
+            code = st.get(key)
+            if code != "unk" and code in codes and codes[code] not in have[key]:
+                r.add("B", "event-chain", f"step {n}: {key} {code!r} has no counterpart in veris.{where}", iid)
+    for key in ("actor", "action"):
+        used = {EVENT_CHAIN[key][1].get(st.get(key)) for st in steps}
+        for missing in sorted(have[key] - used):
+            r.add("B", "event-chain", f"{key} {missing} appears in no step of veris.plus.event_chain", iid)
 
 
 VCDB_PINNED = r"https://github\.com/vz-risk/VCDB/blob/[0-9a-f]{40}/"

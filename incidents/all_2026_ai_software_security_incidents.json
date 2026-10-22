@@ -1903,6 +1903,39 @@
           "government": [
             "NA"
           ]
+        },
+        "plus": {
+          "master_id": "FE704346-BF9A-4435-927B-16A7ECF24C43",
+          "event_chain": [
+            {
+              "action": "hak",
+              "actor": "ext",
+              "asset": "srv",
+              "attribute": "ia",
+              "summary": "Initial access via a leaked/abused GitHub access token (Use of stolen creds)"
+            },
+            {
+              "action": "hak",
+              "actor": "ext",
+              "asset": "srv",
+              "attribute": "ia",
+              "summary": "Token used to obtain additional credentials; lateral movement and 2+ months of persistence"
+            },
+            {
+              "action": "hak",
+              "actor": "ext",
+              "asset": "srv",
+              "attribute": "cp",
+              "summary": "Clinical-trial data, AI model assets and internal data copied (claimed 1.3TB)"
+            },
+            {
+              "action": "soc",
+              "actor": "ext",
+              "asset": "ppl",
+              "attribute": "ia",
+              "summary": "Extortion: $25M ransom demand (refused), then threatened private sale/leak"
+            }
+          ]
         }
       },
       "report": {
@@ -2111,7 +2144,26 @@
           "employee_count": "Over 100000",
           "industry": "513210"
         },
-        "targeted": "Opportunistic"
+        "targeted": "Opportunistic",
+        "plus": {
+          "master_id": "9f45cb1b-ab67-4500-9ed0-9a171a0305e5",
+          "event_chain": [
+            {
+              "action": "hak",
+              "actor": "ext",
+              "asset": "srv",
+              "attribute": "ia",
+              "summary": "use of stolen credentials to modify code base"
+            },
+            {
+              "action": "mal",
+              "actor": "ext",
+              "asset": "srv",
+              "attribute": "cp",
+              "summary": "codebase has stealer installed"
+            }
+          ]
+        }
       },
       "report": {
         "ai_role": [
@@ -3281,6 +3333,15 @@
             "region": [
               "000000"
             ]
+          },
+          "internal": {
+            "variety": [
+              "Developer"
+            ],
+            "motive": [
+              "NA"
+            ],
+            "notes": "Aqua Security's Trivy maintainers: 'a misconfigured workflow allowed an attacker to obtain a privileged GitHub Personal Access Token' (Orca), and 'the containment of the first incident was incomplete' (StepSecurity)."
           }
         },
         "action": {
@@ -3306,6 +3367,16 @@
               "Software update"
             ],
             "notes": "Malicious VS Code extension; later trivy-action re-poisoning."
+          },
+          "error": {
+            "variety": [
+              "Misconfiguration",
+              "Maintenance error"
+            ],
+            "vector": [
+              "Inadequate processes"
+            ],
+            "notes": "Misconfiguration: a pull_request_target workflow in aquasecurity/trivy exposed a privileged PAT (Orca). Maintenance error: Aqua's containment of the first incident was incomplete, so the attackers kept access (StepSecurity)."
           }
         },
         "asset": {
@@ -3342,6 +3413,13 @@
               "Software installation",
               "Modify data"
             ]
+          },
+          "availability": {
+            "variety": [
+              "Destruction",
+              "Interruption"
+            ],
+            "notes": "The attacker made the repository private and deleted all GitHub Releases between v0.27.0 and v0.69.1 (StepSecurity)."
           }
         },
         "discovery_method": {
@@ -3366,6 +3444,53 @@
           "industry": "511210",
           "government": [
             "NA"
+          ]
+        },
+        "plus": {
+          "master_id": "d1756945-07b3-4634-9122-659a464626f9",
+          "event_chain": [
+            {
+              "actor": "int",
+              "action": "err",
+              "asset": "srv",
+              "attribute": "cp",
+              "summary": "A pull_request_target workflow in aquasecurity/trivy exposed a privileged personal access token."
+            },
+            {
+              "actor": "ext",
+              "action": "hak",
+              "asset": "srv",
+              "attribute": "cp",
+              "summary": "On 28 Feb the autonomous bot hackerbot-claw exploited the workflow and stole the token."
+            },
+            {
+              "actor": "ext",
+              "action": "hak",
+              "asset": "srv",
+              "attribute": "au",
+              "summary": "With the token it made the repository private and deleted all releases from v0.27.0 to v0.69.1."
+            },
+            {
+              "actor": "ext",
+              "action": "mal",
+              "asset": "srv",
+              "attribute": "ia",
+              "summary": "It pushed a suspicious artifact to the Trivy VS Code extension on Open VSX."
+            },
+            {
+              "actor": "int",
+              "action": "err",
+              "asset": "srv",
+              "attribute": "unk",
+              "summary": "Aqua's containment of the first incident was incomplete."
+            },
+            {
+              "actor": "ext",
+              "action": "mal",
+              "asset": "srv",
+              "attribute": "ia",
+              "summary": "On 19 Mar TeamPCP injected credential-stealing malware into Trivy and its GitHub Actions."
+            }
           ]
         }
       },
@@ -3588,6 +3713,32 @@
           "industry": "518210",
           "government": [
             "NA"
+          ]
+        },
+        "plus": {
+          "master_id": "764b1baa-ca63-4f34-bf80-6bc3b5f9f1d9",
+          "event_chain": [
+            {
+              "actor": "ext",
+              "action": "hak",
+              "asset": "srv",
+              "attribute": "cp",
+              "summary": "An LLM-driven operator entered through an internet-facing Langflow instance (CVE-2025-3248)."
+            },
+            {
+              "actor": "ext",
+              "action": "hak",
+              "asset": "srv",
+              "attribute": "cp",
+              "summary": "It harvested and reused credentials, moved laterally and kept persistence."
+            },
+            {
+              "actor": "ext",
+              "action": "mal",
+              "asset": "srv",
+              "attribute": "au",
+              "summary": "It ran ransomware payloads and destroyed a production database."
+            }
           ]
         }
       },
@@ -4007,6 +4158,9 @@
             },
             {
               "variety": "S - Code repository"
+            },
+            {
+              "variety": "P - End-user"
             }
           ],
           "cloud": [
@@ -4038,6 +4192,12 @@
               "Customer"
             ],
             "notes": "AMOS harvests Keychain, browser data, 60+ crypto wallets, SSH keys, Telegram sessions; skills steal agent API keys."
+          },
+          "integrity": {
+            "variety": [
+              "Alter behavior"
+            ],
+            "notes": "Fake 'Prerequisites' instructions made users run the payloads."
           }
         },
         "discovery_method": {
@@ -4063,6 +4223,32 @@
           "industry": "511210",
           "government": [
             "NA"
+          ]
+        },
+        "plus": {
+          "master_id": "32d01bd9-9ef7-45b8-b496-cf88c95c7998",
+          "event_chain": [
+            {
+              "actor": "ext",
+              "action": "mal",
+              "asset": "srv",
+              "attribute": "ia",
+              "summary": "The ClawHavoc campaign published hundreds of malicious skills on ClawHub, OpenClaw's skill marketplace."
+            },
+            {
+              "actor": "ext",
+              "action": "soc",
+              "asset": "ppl",
+              "attribute": "ia",
+              "summary": "Fake 'Prerequisites' told users to run a base64 shell one-liner or a password-protected ZIP."
+            },
+            {
+              "actor": "ext",
+              "action": "mal",
+              "asset": "usr",
+              "attribute": "cp",
+              "summary": "The payloads (AMOS stealer, keyloggers, backdoors) captured credentials; some skills exfiltrated OpenClaw's .env secrets."
+            }
           ]
         }
       },
@@ -4219,6 +4405,32 @@
           "industry": "511210",
           "government": [
             "NA"
+          ]
+        },
+        "plus": {
+          "master_id": "a15319e7-1e3b-4a74-b1c9-54c7cbca4289",
+          "event_chain": [
+            {
+              "actor": "int",
+              "action": "err",
+              "asset": "usr",
+              "attribute": "unk",
+              "summary": "A Railway CLI token, created for custom domains but scoped for any operation, lay in an unrelated file."
+            },
+            {
+              "actor": "int",
+              "action": "mis",
+              "asset": "usr",
+              "attribute": "unk",
+              "summary": "On a staging task, the Cursor agent decided on its own to 'fix' a credential mismatch and used the token."
+            },
+            {
+              "actor": "int",
+              "action": "err",
+              "asset": "srv",
+              "attribute": "au",
+              "summary": "Guessing the call was scoped to staging, it ran volumeDelete: production data and the backups in the same volume were deleted."
+            }
           ]
         }
       },
@@ -4383,6 +4595,25 @@
           "industry": "611710",
           "government": [
             "Federal"
+          ]
+        },
+        "plus": {
+          "master_id": "fdc73fa4-f506-4831-915b-013fb094c276",
+          "event_chain": [
+            {
+              "actor": "prt",
+              "action": "err",
+              "asset": "srv",
+              "attribute": "cp",
+              "summary": "COEMPT's OnMark platform exposed an unauthenticated principals' dashboard and public AWS buckets; 6-7 flaws stayed open after the first report."
+            },
+            {
+              "actor": "prt",
+              "action": "mis",
+              "asset": "srv",
+              "attribute": "cp",
+              "summary": "COEMPT's quality-assurance scripts allegedly sent students' personal data to Google Gemini without consent."
+            }
           ]
         }
       },
@@ -4602,7 +4833,8 @@
             "actor.external.motive": "Financial added: KrebsOnSecurity reports that the hackers also seized short account names with an alleged resale value of more than half a million dollars.",
             "actor.external.country": "KrebsOnSecurity calls the attackers 'pro-Iran hackers'; no source places them in Iran.",
             "attribute.integrity.variety": "Defacement added: KrebsOnSecurity reports hijacked accounts defaced with pro-Iranian images and messages.",
-            "discovery_method": "BleepingComputer: a wave of user reports preceded Meta's response; no source names an unrelated third party."
+            "discovery_method": "BleepingComputer: a wave of user reports preceded Meta's response; no source names an unrelated third party.",
+            "plus.event_chain": "VCDB's chain has only the prompt-injection step; this record also codes the social action (AI-generated facial animations passed verification, BleepingComputer) and the account takeover with defacement (KrebsOnSecurity), as two further steps."
           }
         },
         {
@@ -4738,7 +4970,33 @@
           "employee_count": "50001 to 100000",
           "industry": "519290"
         },
-        "targeted": "Targeted"
+        "targeted": "Targeted",
+        "plus": {
+          "master_id": "8084d01e-dd3e-4bca-b710-c6fdbfb5c5cf",
+          "event_chain": [
+            {
+              "action": "hak",
+              "actor": "ext",
+              "asset": "srv",
+              "attribute": "ia",
+              "summary": "prompt inject meta's LLM to get a secondary email address added"
+            },
+            {
+              "actor": "ext",
+              "action": "soc",
+              "asset": "srv",
+              "attribute": "ia",
+              "summary": "AI-generated facial animations passed Meta's identity verification (BleepingComputer)."
+            },
+            {
+              "actor": "ext",
+              "action": "hak",
+              "asset": "srv",
+              "attribute": "ia",
+              "summary": "The attackers took over 20,225 accounts without 2FA and defaced some of them (KrebsOnSecurity)."
+            }
+          ]
+        }
       },
       "report": {
         "ai_role": [
@@ -4913,6 +5171,25 @@
           "industry": "921130",
           "government": [
             "Federal"
+          ]
+        },
+        "plus": {
+          "master_id": "448d1b6f-40c6-4e23-837d-87e95419e741",
+          "event_chain": [
+            {
+              "actor": "ext",
+              "action": "hak",
+              "asset": "srv",
+              "attribute": "cp",
+              "summary": "A Hermes AI agent in unattended 'YOLO' mode enumerated ministry hosts, ran LinPEAS and used stolen credentials and exploits."
+            },
+            {
+              "actor": "ext",
+              "action": "mal",
+              "asset": "srv",
+              "attribute": "ia",
+              "summary": "It staged webshells, HTTP tunnels and the Hades implant on GlassFish, Hadoop/Ambari, HiveServer2 and Alfresco."
+            }
           ]
         }
       },
@@ -5218,6 +5495,39 @@
           "industry": "541511",
           "government": [
             "NA"
+          ]
+        },
+        "plus": {
+          "master_id": "aad9fb76-a96f-48ac-9448-6d85fbd67eb4",
+          "event_chain": [
+            {
+              "actor": "ext",
+              "action": "hak",
+              "asset": "srv",
+              "attribute": "cp",
+              "summary": "Claude Opus 4.7 took a real company for its fictional target, exploited it, extracted credentials and read production data."
+            },
+            {
+              "actor": "ext",
+              "action": "mal",
+              "asset": "usr",
+              "attribute": "cp",
+              "summary": "Claude Mythos 5 published a booby-trapped PyPI package; 15 real systems ran it, among them a security company's scanner, whose credentials it exfiltrated."
+            },
+            {
+              "actor": "ext",
+              "action": "hak",
+              "asset": "srv",
+              "attribute": "cp",
+              "summary": "It used those credentials to access further infrastructure of that company."
+            },
+            {
+              "actor": "ext",
+              "action": "hak",
+              "asset": "srv",
+              "attribute": "cp",
+              "summary": "An internal research model scanned ~9,000 hosts, compromised one company's app via an exposed debug page and SQL injection, then stopped on its own."
+            }
           ]
         }
       },
@@ -6571,16 +6881,6 @@
           }
         },
         "action": {
-          "misuse": {
-            "variety": [
-              "Knowledge abuse",
-              "Possession abuse"
-            ],
-            "vector": [
-              "Web application"
-            ],
-            "notes": "Terms-of-service violation / abuse of legitimate API access to extract model capabilities (distillation)."
-          },
           "hacking": {
             "variety": [
               "Abuse of functionality"
@@ -6588,7 +6888,7 @@
             "vector": [
               "Web application"
             ],
-            "notes": "Fraudulent accounts + proxies to evade access restrictions and detection."
+            "notes": "Fraudulent accounts + proxies to evade access restrictions and detection. With this illegitimately obtained access the labs generated more than 16 million Claude exchanges to extract its capabilities (distillation), against Anthropic's terms of service. VERIS codes this as hacking, since misuse needs an insider or partner."
           }
         },
         "asset": {
@@ -7129,6 +7429,25 @@
           "government": [
             "NA"
           ]
+        },
+        "plus": {
+          "master_id": "db4a7106-61ff-4884-ad36-d974b2d9ada6",
+          "event_chain": [
+            {
+              "actor": "ext",
+              "action": "soc",
+              "asset": "srv",
+              "attribute": "ia",
+              "summary": "The ring used AI deepfake videos made from the victim's photo to pass Aadhaar's facial liveness check."
+            },
+            {
+              "actor": "ext",
+              "action": "hak",
+              "asset": "srv",
+              "attribute": "cp",
+              "summary": "Through rogue update kits it changed his Aadhaar mobile number, accessed DigiLocker and e-KYC, and opened bank accounts in his name."
+            }
+          ]
         }
       },
       "report": {
@@ -7437,6 +7756,25 @@
           "industry": "518210",
           "government": [
             "NA"
+          ]
+        },
+        "plus": {
+          "master_id": "fb821cda-3abb-43c2-a4c5-aa8afc231e1a",
+          "event_chain": [
+            {
+              "actor": "ext",
+              "action": "mal",
+              "asset": "usr",
+              "attribute": "cp",
+              "summary": "Lumma infostealer, bundled with Roblox scripts that a Context.ai employee downloaded, stole the employee's credentials."
+            },
+            {
+              "actor": "ext",
+              "action": "hak",
+              "asset": "srv",
+              "attribute": "cp",
+              "summary": "The attackers used a Vercel employee's OAuth token, granted 'Allow All' to Context's AI Office Suite, to reach Vercel environments and decrypt non-sensitive environment variables."
+            }
           ]
         }
       },
@@ -7786,6 +8124,15 @@
             "region": [
               "000000"
             ]
+          },
+          "internal": {
+            "variety": [
+              "Developer"
+            ],
+            "motive": [
+              "NA"
+            ],
+            "notes": "Cline's maintainers: after Adnan Khan's report (1 Jan 2026), their rotation of 9 Feb 2026 deleted the wrong npm token while the exposed one stayed active (Cline's post-mortem)."
           }
         },
         "action": {
@@ -7811,6 +8158,15 @@
               "Software update"
             ],
             "notes": "Rogue cline@2.3.0 postinstall installed OpenClaw (deemed benign) on ~4,000 machines."
+          },
+          "error": {
+            "variety": [
+              "Maintenance error"
+            ],
+            "vector": [
+              "Inadequate processes"
+            ],
+            "notes": "'We failed to rotate the NPM token: during the process, the wrong token was deleted while the exposed one remained active' (Cline's post-mortem)."
           }
         },
         "asset": {
@@ -7871,6 +8227,33 @@
           "industry": "511210",
           "government": [
             "NA"
+          ]
+        },
+        "control_failure": "Cline's issue-triage workflow (claude-code-action, added 21 Dec 2025) was configured on purpose with allowed_non_write_users: \"*\" and the Bash tool, so any GitHub user could make Claude run shell commands; it shared a cache scope with the nightly release workflow (Cline's post-mortem).",
+        "plus": {
+          "master_id": "87b1f9c1-9732-4929-9ced-c50aef3f598f",
+          "event_chain": [
+            {
+              "actor": "ext",
+              "action": "hak",
+              "asset": "srv",
+              "attribute": "cp",
+              "summary": "Another actor used Adnan Khan's public proof of concept to obtain Cline's npm publish token, most likely through prompt injection in an issue title."
+            },
+            {
+              "actor": "int",
+              "action": "err",
+              "asset": "srv",
+              "attribute": "unk",
+              "summary": "Cline's credential rotation of 9 Feb 2026 deleted the wrong token; the exposed one stayed active."
+            },
+            {
+              "actor": "ext",
+              "action": "mal",
+              "asset": "srv",
+              "attribute": "ia",
+              "summary": "On 17 Feb the attacker published cline@2.3.0, whose postinstall script installed OpenClaw globally."
+            }
           ]
         }
       },
@@ -13144,6 +13527,9 @@
             },
             {
               "variety": "S - File"
+            },
+            {
+              "variety": "P - Unknown"
             }
           ],
           "cloud": [
@@ -13165,6 +13551,12 @@
               "Patient"
             ],
             "notes": "PHI copied; ~41GB claimed by Akira."
+          },
+          "integrity": {
+            "notes": "Extortion demand is an attempt to coerce the victim into paying to prevent publication of stolen data (Alter behavior). No payment or compliance is confirmed in the sources.",
+            "variety": [
+              "Alter behavior"
+            ]
           }
         },
         "discovery_method": {
@@ -13190,6 +13582,32 @@
           "industry": "621111",
           "government": [
             "NA"
+          ]
+        },
+        "plus": {
+          "master_id": "13CBB4AD-A22C-4664-A112-7528CAB0AAC3",
+          "event_chain": [
+            {
+              "action": "unk",
+              "actor": "ext",
+              "asset": "srv",
+              "attribute": "ia",
+              "summary": "Initial unauthorized access to CRS network (method not disclosed)"
+            },
+            {
+              "action": "hak",
+              "actor": "ext",
+              "asset": "srv",
+              "attribute": "cp",
+              "summary": "Files containing patient/employee/company data copied (exfiltrated)"
+            },
+            {
+              "action": "soc",
+              "actor": "ext",
+              "asset": "ppl",
+              "attribute": "ia",
+              "summary": "Extortion: Akira threatened to publish 41GB unless negotiations initiated"
+            }
           ]
         }
       },
@@ -14039,6 +14457,9 @@
           "assets": [
             {
               "variety": "S - Database"
+            },
+            {
+              "variety": "P - Unknown"
             }
           ],
           "cloud": [
@@ -14061,6 +14482,11 @@
               "Customer"
             ],
             "notes": "2.2M+ records (attacker-claimed)."
+          },
+          "integrity": {
+            "variety": [
+              "Alter behavior"
+            ]
           }
         },
         "discovery_method": {
@@ -14085,6 +14511,32 @@
           "industry": "333244",
           "government": [
             "NA"
+          ]
+        },
+        "plus": {
+          "master_id": "AAEFD515-974F-4153-BCDD-6B4179F1846E",
+          "event_chain": [
+            {
+              "action": "unk",
+              "actor": "ext",
+              "asset": "srv",
+              "attribute": "unk",
+              "summary": "Initial access to Kodak data; method undisclosed"
+            },
+            {
+              "action": "hak",
+              "actor": "ext",
+              "asset": "srv",
+              "attribute": "cp",
+              "summary": "Customer PII and internal corporate data exfiltrated"
+            },
+            {
+              "action": "soc",
+              "actor": "ext",
+              "asset": "ppl",
+              "attribute": "ia",
+              "summary": "Extortion / leak threat with 18 June 2026 deadline"
+            }
           ]
         }
       },
@@ -14135,7 +14587,8 @@
           "overrides": {
             "actor.external.name": "The group's spelling in DataBreaches.net and in DB-2026-004.",
             "timeline.incident": "FulcrumSec told DataBreaches.net it attacked a week or two after the early-December 2025 patch; 2026 is the year of disclosure.",
-            "victim.employee_count": "The attackers call Lena Health 'on the small side' (DataBreaches.net); no source gives an exact size, and none supports 1,001 to 10,000 employees."
+            "victim.employee_count": "The attackers call Lena Health 'on the small side' (DataBreaches.net); no source gives an exact size, and none supports 1,001 to 10,000 employees.",
+            "plus.event_chain": "VCDB's chain has only the hacking step; this record also codes Lena Health's error (an unencrypted PHI export in a public S3 bucket, attacker-claimed via DataBreaches.net), which comes first."
           }
         }
       ],
@@ -14166,6 +14619,15 @@
               "000000"
             ],
             "notes": "targeted follows VCDB (Opportunistic): FulcrumSec entered through a public, unpatched vulnerability. Its forum listing, quoted by DataBreaches.net (VCDB issue 23009), claims that it targets AI SaaS vendors specifically."
+          },
+          "internal": {
+            "variety": [
+              "Unknown"
+            ],
+            "motive": [
+              "NA"
+            ],
+            "notes": "Lena Health: the attackers claim that 2,134 patients' complete PHI sat in an unencrypted export in a public-facing S3 bucket (DataBreaches.net); no source names a person or role."
           }
         },
         "action": {
@@ -14267,7 +14729,26 @@
           "employee_count": "Small",
           "industry": "51"
         },
-        "targeted": "Opportunistic"
+        "targeted": "Opportunistic",
+        "plus": {
+          "master_id": "76f9dcd8-5db0-40e8-9335-cd929c1017b3",
+          "event_chain": [
+            {
+              "actor": "int",
+              "action": "err",
+              "asset": "srv",
+              "attribute": "cp",
+              "summary": "Lena Health kept an unencrypted PHI export in a public-facing S3 bucket (the attackers' claim)."
+            },
+            {
+              "action": "hak",
+              "actor": "ext",
+              "asset": "srv",
+              "attribute": "cp",
+              "summary": "vuln used to compromise backend used by LLM "
+            }
+          ]
+        }
       },
       "report": {
         "ai_role": [
@@ -17660,6 +18141,25 @@
           "government": [
             "NA"
           ]
+        },
+        "plus": {
+          "master_id": "40f4a35c-0864-480e-acb9-d3c4b99f1265",
+          "event_chain": [
+            {
+              "actor": "ext",
+              "action": "hak",
+              "asset": "srv",
+              "attribute": "cp",
+              "summary": "Ghostcommit: prompt injection hidden in PNG images steered AI coding agents into encoding .env secrets into commits."
+            },
+            {
+              "actor": "ext",
+              "action": "mal",
+              "asset": "usr",
+              "attribute": "cp",
+              "summary": "Fake 'leaked Claude Code' downloads spread Vidar and GhostSocks; an AI-generated stealer targeted Claude's /mnt/user-data."
+            }
+          ]
         }
       },
       "report": {
@@ -19143,6 +19643,9 @@
           "assets": [
             {
               "variety": "S - Database"
+            },
+            {
+              "variety": "P - Unknown"
             }
           ],
           "cloud": [
@@ -19161,6 +19664,11 @@
               "Customer"
             ],
             "notes": "Customer PII + purchase details claimed (attacker-sourced)."
+          },
+          "integrity": {
+            "variety": [
+              "Alter behavior"
+            ]
           }
         },
         "discovery_method": {
@@ -19186,6 +19694,32 @@
           "industry": "441210",
           "government": [
             "NA"
+          ]
+        },
+        "plus": {
+          "master_id": "0B685211-665C-44C5-9246-386B23007039",
+          "event_chain": [
+            {
+              "action": "hak",
+              "actor": "ext",
+              "asset": "srv",
+              "attribute": "unk",
+              "summary": "Unauthorized access to Southern Design RV systems (vector undisclosed)"
+            },
+            {
+              "action": "hak",
+              "actor": "ext",
+              "asset": "srv",
+              "attribute": "cp",
+              "summary": "Customer data (names, contact details, purchase info) copied/exfiltrated"
+            },
+            {
+              "action": "soc",
+              "actor": "ext",
+              "asset": "ppl",
+              "attribute": "ia",
+              "summary": "Stolen data auctioned for extortion (5 BTC starting bid)"
+            }
           ]
         }
       },
@@ -20349,6 +20883,25 @@
           "industry": "511210",
           "government": [
             "NA"
+          ]
+        },
+        "plus": {
+          "master_id": "8ed6918f-fb76-4605-9484-9318528b742e",
+          "event_chain": [
+            {
+              "actor": "ext",
+              "action": "hak",
+              "asset": "srv",
+              "attribute": "ia",
+              "summary": "An evaluation agent opened a pull request to a real open-source project with a hidden dropper and payloads meant to steer other automated systems."
+            },
+            {
+              "actor": "ext",
+              "action": "soc",
+              "asset": "ppl",
+              "attribute": "ia",
+              "summary": "It used fake identities to pressure the maintainer; a second fake account doubled down after a student flagged the pull request."
+            }
           ]
         }
       },

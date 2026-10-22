@@ -201,9 +201,9 @@ A record involves a CWE, product or vendor through a CVE that it involves: the C
 
 ---
 
-## 4. Minimal VERIS encoding for this project
+## 4. VERIS encoding for this project
 
-Do not try to populate every VERIS field merely because it exists. Use the fields that support the report's decisions.
+Use every VERIS field whose value the sources support and that states something more precisely than prose: a field can be counted, checked and compared with VCDB, prose cannot. Never invent a value to fill a field; leave it empty when the sources are silent. §4.1–§4.5 list the fields that every record needs; §4.6 says when to use the others.
 
 ### 4.1 Identification and evidence
 
@@ -257,6 +257,10 @@ Relevant VERIS action varieties include security concepts such as:
 
 For accidental AI behavior, `action.error` may be more appropriate than forcing the incident into hacking.
 
+**Misuse needs a trusted actor.** VERIS reserves misuse for parties that the organization trusts, such as insiders and partners: they were given access and used it against its purpose. `action.misuse` therefore needs an internal or partner actor (`actor.internal`, `actor.partner`). An outsider who obtains access illegitimately, for example through fraudulent accounts, commits hacking (Abuse of functionality). `scripts/validate_incidents.py` checks it.
+
+**A deliberate choice is no error.** VERIS counts as error only what was done or left undone by mistake, not a choice made on purpose, nor a default, that later proves unwise. Record such a choice in `control_failure` (§4.6).
+
 **False positives.** The VERIS schema requires an action, but a `False positive` (§3.1) has no security action. Code it as `action.unknown` with result `NA` and a note that says why. A false positive affects no asset either: `attribute.confidentiality.data_disclosure` is `No`, and no integrity or availability variety is set. `scripts/validate_incidents.py` checks this, as it checks the effect of a `Confirmed` record (§3.1).
 
 ### 4.4 Asset
@@ -286,6 +290,48 @@ Where relevant, also record:
 - impact/loss categories;
 - monetary impact or ranges when reliably known;
 - VERIS overall impact rating when it can be meaningfully assessed.
+
+### 4.6 Further VERIS fields
+
+The fields below describe an incident beyond §4.1–§4.5. Use each one when the sources support a value.
+
+**Event chain** (`plus.event_chain`). One entry per step of the incident, in time order:
+
+| key | values |
+|---|---|
+| `actor` | `ext`, `int`, `prt` (external, internal, partner actor) or `unk` |
+| `action` | `hak`, `mal`, `soc`, `mis`, `err`, `phy`, `env` (hacking, malware, social, misuse, error, physical, environmental) or `unk` |
+| `asset` | `srv`, `net`, `usr`, `ter`, `med`, `ppl`, `emb` (the first letter of the asset variety: S, N, U, T, M, P, E) or `unk` |
+| `attribute` | `cp`, `ia`, `au` (confidentiality/possession, integrity/authenticity, availability/utility) or `unk` |
+| `summary` | one sentence: what happened in this step |
+
+- VERIS keeps actors and actions in separate lists; the event chain says which actor took which action, in which order. A record with more than one action category (`action`) or actor type (`actor`) therefore needs an event chain. A single-step incident may have one.
+- Every step's actor, action, asset and attribute appears in `actor`, `action`, `asset.assets` and `attribute`; `unk` always passes. Every actor type and action category of the record appears in at least one step. `scripts/validate_incidents.py` checks both.
+- A latent condition that the record codes as an error, such as a credential with too broad a scope, is a step of its own. A step that changes no attribute by itself gets attribute `unk`.
+- A themed bundle (§6.7) lists its items as steps, in the order of its source; they need not form a causal chain.
+- The VCDB schema requires `plus.master_id` in a record with a `plus` section: a random UUID (version 4), created once and never changed. A record that adopts a VCDB coding takes the VCDB record's `master_id`, because both describe the same incident.
+
+**Several motives** (`actor.*.motive`). VERIS has one object per actor type. When that actor took several kinds of action, list one motive per kind, for example `["NA", "Convenience"]` for an error and a misuse, and pair them in the actor's `notes`.
+
+**Discovery** (`discovery_method`, `discovery_notes`): who found the incident; in `discovery_notes`, the source sentence when the variety alone leaves doubt.
+
+**Timeline** (`timeline.incident`, `timeline.compromise`, `timeline.exfiltration`, `timeline.discovery`, `timeline.containment`; the last four with `unit` and `value`): every part that a source dates or measures.
+
+**Targeting** (`targeted`): `Targeted` or `Opportunistic`, when a source says whether the actor chose the victim.
+
+**Impact** (`impact.overall_rating`, `impact.loss`, `impact.overall_amount`): losses that the victim reports or a source quantifies (§8.4).
+
+**Secondary victims** (`victim.secondary`): organizations or people harmed through the victim, such as the customers of a breached service.
+
+**Campaign** (`campaign_id`): one identifier shared by the records of one campaign, for example the attacks of one group in one period.
+
+**Controls and fixes** (`control_failure`, `corrective_action`): the control that failed or was missing, including a deliberate choice that proved inadequate (§4.3), and the fix that the victim made.
+
+**Value chain** (`value_chain`): the attacker's supporting activities that a source names, such as development (for example malware written with an LLM), distribution, targeting and cash-out.
+
+Not used: `ioc` (indicators belong in threat-intelligence feeds), `extra` and `subsets` (VCDB-internal), `cost_corrective_action` (sources rarely give it).
+
+A record that adopts a VCDB coding (§10.2) takes VCDB's values for these fields too, the event chain included; a difference needs a reason in `overrides`.
 
 ---
 
@@ -1064,3 +1110,4 @@ This preserves standardization where a mature framework exists and makes the gen
 - **2026-10-21** — §3.3 "Scores" defines IBSS: the weights 1, 2, 4, 8, 16 of the records that involve an entity, summed separately for `report.observed_severity` and `report.potential_severity`. It states when a record involves an entity: through an in-play CVE link (`validated_cve_details.cves[].relation`, with the table of in-play relations), through that CVE's CWEs and vendor/product pairs, and, for a CWE, through an analyst CWE (`report.weaknesses[].cwe`). `discovered` becomes in play (until now: `exploited`, `exploited-unconfirmed`, `attempted`, `self-vulnerability`, `self-malicious-release`): an AI that found and published a flaw made the flaw known, so the discovery counts with its recorded severity; `toolkit` and `related` never count. A forecast of a later attack never raises the observed weight. The derived tables follow: the 51 AI-discovered CVEs get an IBSS, their CNA CWEs enter the CVE-path CWE table, and each gets a patch row in the action list.
 - **2026-10-22** — §9.3: `ranking_table` lists the counted incidents in ranking order — observed severity descending, potential severity descending, ID ascending — and the verifier checks the order, so a record numbered 100 or higher takes its place by severity, not at the end. §4.1: only the records 001–099 have their position in the ranking of 2026-08-27 as their number; a later record gets `id_scheme.highest_assigned` + 1. Applied to the 2026 corpus: 21 rows of `ranking_table` move: the 4 records that went from observed Low to Negligible on 2026-09-26 (DR-2026-056, 060, 062, 065) now follow the 17 Low records numbered 057 to 076. The incident report follows the table.
 - **2026-10-22 (b)** — §4.2: the verifier fails on a hacking, malware, social or misuse action whose actors all have motive `NA`. §4.3: a `False positive` affects no asset, and the verifier checks it. Applied to the 2026 corpus: the motive list `["NA", "Convenience"]` for DB-2026-014, NA for its errors and Convenience for its misuse (whose variety becomes Privilege abuse, since Possession abuse means physical access) and Fun for DB-2026-061 (whose finder's scanner collected other owners' messages, so `data_disclosure` becomes Yes); DB-2026-072's inadvertent upload is an error only; DB-2026-074 gets `data_disclosure` No. The actor of an error is now the party that made it (§4.2), not the finder or the reader of the exposed data: internal for DB-2026-026, 050, 070 and 071, partner (the website provider) for DB-2026-069; DB-2026-070 was found by customers. DB-2026-069 no longer names Base44, which no readable source supports.
+- **2026-10-22 (c)** — §4: use every VERIS field that the sources support (until now: only the fields that support the report's decisions); never invent a value. §4.3: misuse needs an internal or partner actor; a deliberate choice that proved unwise is no error. New §4.6: when to use the further VERIS fields, above all the event chain (`plus.event_chain`), which the verifier requires for a record with more than one action category or actor type and checks against the record's actors, actions, assets and attributes. Applied to the 2026 corpus: 19 records get an event chain, 5 taken from VCDB as they are (DB-2026-004, 005, 043, 048, 075), 2 extended with a reason in `overrides` (DB-2026-017, 049) and 12 new. Fixed on the way: DR-2026-010 and 035 get the victim's own errors, with an internal actor (010 also the deleted releases as availability loss; 035's triage workflow goes into `control_failure`); DB-2026-013 gets the person whom its social step tricked; DB-2026-027's misuse becomes part of its hacking action; DB-2026-043, 048 and 075 take VCDB's person asset and Alter behavior; DB-2026-049 gets the internal actor of its error.

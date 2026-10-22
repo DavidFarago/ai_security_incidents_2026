@@ -202,6 +202,37 @@ class Mutations(unittest.TestCase):
         incident(self.d, "DB-2026-096")["veris"]["attribute"]["confidentiality"]["data_disclosure"] = "Potentially"
         self.assertTrue(has(self.run_v(), "status-effect", msg="False positive", incident="DB-2026-096"))
 
+    # ---- methodology §4.3, §4.6: event chains and the actor of a misuse
+    def add_malware(self, iid):
+        """Give a record with only a hacking action a second action category."""
+        incident(self.d, iid)["veris"]["action"]["malware"] = {"variety": ["Trojan"], "vector": ["Software update"]}
+
+    def test_several_action_categories_need_an_event_chain(self):
+        self.add_malware("DR-2026-008")
+        incident(self.d, "DR-2026-008")["veris"].pop("plus", None)
+        self.assertTrue(has(self.run_v(), "event-chain", msg="no veris.plus.event_chain", incident="DR-2026-008"))
+
+    def test_event_chain_step_without_counterpart(self):
+        # DR-2026-008 has only an external actor; a step by an internal actor has no counterpart.
+        self.add_malware("DR-2026-008")
+        incident(self.d, "DR-2026-008")["veris"]["plus"] = {"event_chain": [
+            {"actor": "int", "action": "hak", "asset": "srv", "attribute": "cp", "summary": "a"},
+            {"actor": "ext", "action": "mal", "asset": "srv", "attribute": "cp", "summary": "b"}]}
+        self.assertTrue(has(self.run_v(), "event-chain", msg="step 1: actor 'int'", incident="DR-2026-008"))
+
+    def test_event_chain_must_cover_every_action_category(self):
+        self.add_malware("DR-2026-008")
+        incident(self.d, "DR-2026-008")["veris"]["plus"] = {"event_chain": [
+            {"actor": "ext", "action": "hak", "asset": "srv", "attribute": "cp", "summary": "a"},
+            {"actor": "ext", "action": "unk", "asset": "unk", "attribute": "unk", "summary": "b"}]}
+        r = self.run_v()
+        self.assertTrue(has(r, "event-chain", msg="malware appears in no step", incident="DR-2026-008"))
+        self.assertFalse(has(r, "event-chain", msg="step 2", incident="DR-2026-008"), "unk is always allowed")
+
+    def test_misuse_needs_a_trusted_actor(self):
+        incident(self.d, "DR-2026-008")["veris"]["action"]["misuse"] = {"variety": ["Privilege abuse"], "vector": ["Remote access"]}
+        self.assertTrue(has(self.run_v(), "misuse-actor", incident="DR-2026-008"))
+
     # ---- ranking_table order (methodology §9.3): observed desc, potential desc, ID asc
     def add_counted_copy(self, like):
         """A copy of a counted record with the next ID, and a copy of its ranking_table row (not yet placed)."""
