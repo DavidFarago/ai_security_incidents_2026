@@ -71,16 +71,12 @@ Full VERIS + report-layer coding is in the companion `all_2026_ai_software_secur
 | 53 | Elmwood Home Care — LockBit 5.0 ransomware (VCDB; no AI component) | Jan 2026 | No AI (register context) | — | VCDB | Medium | Medium |
 | 54 | Lifepoint Health - use of stolen credentials (VCDB; no AI component) | Feb 2026 | No AI (register context) | — | VCDB | Medium | Medium |
 | 55 | Southern California University of Health Sciences - hacking / exfiltration of 2,206 records (VCDB; no AI component) | Mar 2026 | No AI (register context) | — | VCDB | Medium | Medium |
-| 56 | 'Comment & Control' (Black Hat USA 2026) — GitHub-issue prompt injection drives RCE/credential theft in Claude Code, Gemini CLI, Codex, Copilot | Apr 2026 | Agent harness | AI system/harness attacked | ClaudeCode+Grok | Negligible | Critical |
 | 57 | RufRoot (CVE-2026-59726, CVSS 10.0) in Ruflo/Claude Flow + max-severity agent-harness CVEs (Langroid, LiteLLM) | 2026 | Agent harness | AI system/harness attacked | Grok | Low | Critical |
 | 58 | Project Glasswing / Claude Mythos Preview mass zero-day discovery (WolfSSL CVE-2026-5194, FreeBSD CVE-2026-4747; early Mythos sandbox escape) | Jun 2026 | AI-discovered vuln | AI-discovered vulnerability, AI-agent-caused incident | ClaudeCode | Low | Critical |
 | 59 | Anthropic MCP STDIO transport design RCE in official SDKs (~200k deployments, 14 CVEs) | Apr 2026 | Agent harness | AI system/harness attacked | ClaudeCode | Low | Critical |
-| 60 | Cursor 'DuneSlide' zero-click prompt-injection RCE (CVE-2026-50548 / CVE-2026-50549) | Feb 2026 | Agent harness | AI system/harness attacked | ClaudeCode | Negligible | Critical |
 | 61 | DJI Romo robot-vacuum cloud authorization flaw exposed ~7,000 homes' camera/mic/maps | Jan 2026 | AI-discovered vuln | AI-discovered vulnerability | AIID | Low | High |
-| 62 | Claude Code project-file RCE & vulnerability cluster (Check Point + others) | Feb 2026 | Agent harness | AI system/harness attacked | ChatGPT+ClaudeCode | Negligible | High |
 | 63 | Snowflake GitHub Actions shell injection found & exploited by Wiz Red Agent (internal Jira token) | Jun 2026 | AI-discovered vuln | AI-discovered vulnerability, AI-enabled attacker | ChatGPT+Grok | Low | High |
 | 64 | 'Emerging techniques & AI-slop reckoning' — Ghostcommit image prompt injection, fake Claude Code lures, mouse5212 stealer, Mozilla 0DIN, curl bug-bounty pause | Jul 2026 | AI-driven attack | AI system/harness attacked, AI-enabled attacker | ClaudeCode | Low | High |
-| 65 | claude-code-action permission bypass - one malicious GitHub issue hijacks any public repo running the Claude Code GitHub Action | Jun 2026 | AI product breach | AI system/harness attacked | ClaudeCode | Negligible | High |
 | 66 | Claude Cowork agent deleted ~15 years of family photos via terminal (bypassed Trash) | Feb 2026 | Agent destructive | AI-agent-caused incident | AIID | Low | Medium |
 | 67 | Anthropic accidentally published Claude Code's source map to npm (v2.1.88), exposing internals | Mar 2026 | Agent harness | AI system/harness attacked | VCDB | Low | Medium |
 | 68 | Meta's AI training program (MCI) exposed monitored-employee data to the whole workforce | Jun 2026 | AI product breach | AI system/harness attacked | VCDB | Low | Medium |
@@ -92,6 +88,10 @@ Full VERIS + report-layer coding is in the companion `all_2026_ai_software_secur
 | 74 | Meta AI smart glasses exposed intimate user imagery/video to human reviewers in Kenya (AIID 1418) | Feb 2026 | Not a security event | AI system/harness attacked | AIID | Low | Medium |
 | 75 | Southern Design RV - CMD Organization extortion (VCDB; no AI component) | Jun 2026 | No AI (register context) | — | VCDB | Low | Medium |
 | 76 | Melbourne Football Club — insider privilege abuse (VCDB; no AI component) | Feb 2026 | No AI (register context) | — | VCDB | Low | Low |
+| 56 | 'Comment & Control' (Black Hat USA 2026) — GitHub-issue prompt injection drives RCE/credential theft in Claude Code, Gemini CLI, Codex, Copilot | Apr 2026 | Agent harness | AI system/harness attacked | ClaudeCode+Grok | Negligible | Critical |
+| 60 | Cursor 'DuneSlide' zero-click prompt-injection RCE (CVE-2026-50548 / CVE-2026-50549) | Feb 2026 | Agent harness | AI system/harness attacked | ClaudeCode | Negligible | Critical |
+| 62 | Claude Code project-file RCE & vulnerability cluster (Check Point + others) | Feb 2026 | Agent harness | AI system/harness attacked | ChatGPT+ClaudeCode | Negligible | High |
+| 65 | claude-code-action permission bypass - one malicious GitHub issue hijacks any public repo running the Claude Code GitHub Action | Jun 2026 | AI product breach | AI system/harness attacked | ClaudeCode | Negligible | High |
 | 77 | Hidden prompt injection in a Brazilian labour-court petition targeted the Galileu AI (blocked — near miss) | May 2026 | AI-discovered vuln | AI system/harness attacked, AI security control | AIID | Negligible | High |
 | 78 | Google GTIG — first AI-developed zero-day exploit used by a cybercrime actor (2FA bypass) | May 2026 | AI-driven attack | AI-enabled attacker | ChatGPT+ClaudeCode+Grok | Negligible | High |
 | 79 | XBOW autonomous discovery of critical Microsoft RCEs | Jul 2026 | AI-discovered vuln | AI-discovered vulnerability, AI security control | ChatGPT+ClaudeCode | Negligible | High |
@@ -120,7 +120,7 @@ Full VERIS + report-layer coding is in the companion `all_2026_ai_software_secur
 
 ## Incidents in detail
 
-### CRITICAL tier (1–2)
+### CRITICAL tier (2 incidents)
 
 **1. LiteLLM AI-gateway PyPI supply-chain compromise (TeamPCP) — terabytes of credentials from 2,500+ orgs — Mar 2026.** On 24 Mar 2026 (10:39 UTC, ~40 min live) the threat group TeamPCP published malicious LiteLLM PyPI releases 1.82.7/1.82.8 (and Telnyx 4.87.1/4.87.2 on 27 Mar) after stealing the maintainer's publishing credentials via a prior compromise of the Trivy scanner in LiteLLM's CI. LiteLLM is a widely used open-source LLM gateway (~3.4M downloads/day). The multi-stage payload harvested env vars, SSH keys, cloud/Kubernetes/Docker credentials, DB creds, crypto wallets and CI/CD secrets (exfil to models.litellm.cloud / checkmarx.zone), installed a systemd backdoor, and could create privileged Kubernetes pods for lateral movement. CloudSEK/Hudson Rock analysed a ~195TB leaked dump and assessed credentials exposed from 2,500+ organisations (incl. Microsoft, AWS, Cisco, Samsung, Salesforce). AI recruiter Mercor confirmed it was 'one of thousands of companies' affected; Lapsus$ separately claimed Mercor data.
 *VERIS: Confirmed · Observed **Critical**, Potential **Critical** (confidence High). Stolen cloud/CI-CD credentials at this scale enable follow-on intrusions across thousands of organisations' production and pipelines.*
@@ -133,7 +133,7 @@ Full VERIS + report-layer coding is in the companion `all_2026_ai_software_secur
 **Validated CVEs:** none identified · Jailbroken Claude Code used as attacker; SOCRadar/UpGuard sources name no CVE (20+ unspecified vulns, credential abuse).
 
 
-### HIGH tier (3–24)
+### HIGH tier (22 incidents)
 
 **3. Autonomous offensive agent (CodeWall) breached McKinsey's Lilli AI platform via SQLi in 2 hours — Feb 2026.** Security firm CodeWall pointed its autonomous offensive AI agent at McKinsey's internal AI platform 'Lilli' (43,000+ employees) with no credentials or human-in-the-loop. Within ~2 hours the agent mapped 200+ API endpoints (22 unauthenticated), found one that concatenated JSON *keys* (not values) into SQL, exploited a blind SQL injection that standard scanners missed, and gained full read/write to the production database: 46.5M plaintext chat messages, 728,000 files, 57,000 user accounts, 95 system-prompt/model configs and 3.68M RAG chunks; it also chained an IDOR to read individual search histories. Write access to the prompt-storage table meant system prompts could have been silently rewritten. McKinsey patched within hours of disclosure (test end Feb, disclosed Mar 1) and said a third-party forensics firm found no evidence client data was accessed by any unauthorised third party.
 *VERIS: Confirmed · Observed **High**, Potential **Critical** (confidence High). Write access to the system-prompt table enabled silent, log-free poisoning of advice delivered to 43,000 consultants (poisoned strategy/financial output, guardrail removal, data exfiltration via responses) plus mass exfiltration of highly confidential strategy/M&A data.*
@@ -247,7 +247,7 @@ Full VERIS + report-layer coding is in the companion `all_2026_ai_software_secur
 **Validated CVEs:** none identified · IDOR / public URLs in a bespoke SaaS; no CVE (conventional breach, no AI).
 
 
-### MEDIUM tier (25–55)
+### MEDIUM tier (31 incidents)
 
 **25. axios npm trojan - backdoored axios@1.14.1 / 0.30.4 dropping a RAT (Sapphire Sleet / North Korea) — Mar 2026.** Attackers compromised the axios maintainer's npm credentials and published backdoored axios@1.14.1/0.30.4 with a phantom dependency dropping a cross-platform RAT; Microsoft attributed it to NK actor Sapphire Sleet. It landed the same day as the Claude Code source-map leak, so users updating Claude Code via npm in a narrow window may have pulled the trojanized axios (100M+ weekly downloads; live ~2-3h; 100+ devices seen affected). Included as an AI-adjacent supply-chain incident (touches the AI-tool update path).
 *AI-involvement: AI-adjacent: axios itself is not AI, but it is a dependency in AI coding-tool update paths (overlapped the Claude Code npm leak day).*
@@ -414,7 +414,7 @@ Full VERIS + report-layer coding is in the companion `all_2026_ai_software_secur
 **Validated CVEs:** none identified · Hacking/exfiltration (VCDB); no CVE identified, no AI component.
 
 
-### LOW tier (57–76)
+### LOW tier (17 incidents)
 
 **57. RufRoot (CVE-2026-59726, CVSS 10.0) in Ruflo/Claude Flow + max-severity agent-harness CVEs (Langroid, LiteLLM) — 2026.** 'RufRoot' (CVE-2026-59726, CVSS 10.0) in Ruflo (formerly Claude Flow), a popular multi-agent orchestration harness, exposed a large set of privileged tools — shell execution, database access, persistent memory — through an unauthenticated MCP bridge. Additional maximum-severity findings were reported in Langroid, LiteLLM and related agent infrastructure. These are agent-harness product vulnerabilities; the grok report notes exposure/risk rather than a confirmed mass breach.
 *VERIS: Confirmed · Observed **Low**, Potential **Critical** (confidence Medium). An unauthenticated bridge to privileged agent tools is effectively remote code execution and data access wherever these harnesses are internet-reachable. · CVE: CVE-2026-59726*
@@ -505,7 +505,7 @@ Full VERIS + report-layer coding is in the companion `all_2026_ai_software_secur
 **Validated CVEs:** none identified · Insider privilege abuse (VCDB); no CVE, no AI component.
 
 
-### NEGLIGIBLE observed tier (56–99)
+### NEGLIGIBLE observed tier (27 incidents)
 
 **56. 'Comment & Control' (Black Hat USA 2026) — GitHub-issue prompt injection drives RCE/credential theft in Claude Code, Gemini CLI, Codex, Copilot — Apr 2026.** Researchers showed that a single untrusted GitHub issue/PR title/comment — from an account with no repo privileges — can deliver indirect prompt injection into coding agents. April work (Aonan Guan + JHU) exfiltrated Claude/Gemini/Copilot tokens (CVSS 9.4). At Black Hat (5 Aug) Novee Security drove a GitHub issue into CI runners behind Anthropic's, Google's and OpenAI's coding agents, including Gemini CLI OS-command-injection CVE-2026-12537 (CVSS 10.0) and Claude Code's CVE-2026-54316, bypassing env filtering, secret scanning and firewalls. Vendors patched and hardened trust models.
 *VERIS: Near miss · Observed **Negligible**, Potential **Critical** (confidence High). A no-privilege GitHub issue reaching CI runners with RCE and secret theft (CVSS up to 10.0) across the dominant coding agents is a mass supply-chain risk. · CVE: CVE-2026-12537, CVE-2026-54316*
@@ -651,11 +651,11 @@ Full VERIS + report-layer coding is in the companion `all_2026_ai_software_secur
 
 ## Method & caveats
 
-- **Incident IDs.** `DB-2026-nnn` (*database*) = at least one register source (AIID export or VCDB; 50 incidents), `DR-2026-nnn` (*direct report*) = no register source, found through a deep-research or primary report (49, all from deep-research reports so far). The number is the position in this report's priority ranking (the `#` column of the index) and is frozen — later re-ranking changes the table, not the ID; new incidents continue from 100.
+- **Incident IDs.** `DB-2026-nnn` (*database*) = at least one register source (AIID export or VCDB; 50 incidents), `DR-2026-nnn` (*direct report*) = no register source, found through a deep-research or primary report (49, all from deep-research reports so far). For 001–099 the number is the position in the priority ranking of 2026-08-27; a later record gets the next free number (`id_scheme.highest_assigned` + 1). Numbers are frozen and shown in the `#` column: re-ranking changes the order of this report (`ranking_table`), never an ID.
 - **Scope & union.** 99 incidents = 35 (from the AIID + VCDB registers) + 64 (from the four deep-research reports), with no overlap. Contents are those of the two source JSONs, except for the revisions recorded in methodology §14, among them the normalised original-source citations (`sources`) and the reporting links (`veris.reference`).
 - **Original sources.** Register incidents cite the AIID export (`incidentdatabase.ai_20260824_ai_incidents_2026.xlsx`) and/or the VERIS Community Database (`vz-risk/VCDB`) — the latter at the exact `data/json/{validated,submitted}/<uuid>.json` record or the `issues/<n>` intake. Report incidents cite the passage of `ChatGPT`/`ClaudeCode`/`Grok`_DeepResearch_ai_incidents_2026.md that describes them (e.g. `item 23`), linked with its line range at the commit that added the reports. The **Reporting** links (at most three, one per site) come from each record's `veris.reference`: every link its sources give for the event, plus reporting found by the analyst, primary disclosures first.
 - **Coding.** Each incident carries a standard VERIS record (Actor/Action/Asset/Attribute, CIA, graded disclosure, scope, timeline, confidence) plus a separate report layer (AI role/component/mechanism, observed & potential severity, CWE/CVE with mapping basis). Where VERIS has no native concept (model extraction, prompt injection, autonomous agent action) the nearest valid coding is used and the AI meaning is carried in the report layer.
-- **Ranking.** By **observed** severity, potential as tiebreaker — a report-specific ordinal rubric (Critical > High > Medium > Low > Negligible), **not** CVSS, the ChatGPT report's AIRIS, or the CC report's blended tier. Vulnerability-discovery / coordinated-disclosure PoC items sit at Negligible/Low observed and High/Critical potential.
+- **Ranking.** By **observed** severity (`report.observed_severity`), then **potential** severity (`report.potential_severity`), then the ID number (`ranking_table`; methodology §9.3) — a report-specific ordinal rubric (Critical > High > Medium > Low > Negligible), **not** CVSS, the ChatGPT report's AIRIS, or the CC report's blended tier. Vulnerability-discovery / coordinated-disclosure PoC items sit at Negligible/Low observed and High/Critical potential.
 - **Non-software-security rows.** Five MIT/VCDB register items are `security_incident = False positive` (privacy/likeness/governance harms, not asset compromises); ten conventional VCDB breaches with no AI component are flagged as such. Both are retained for register completeness, each with an AI-involvement note.
 - **CVE validation (2026-08-26).** Every CVE ID in the original records was resolved against CVE.org/NVD and checked against the incident description; CISA KEV, the GitHub Advisory Database and each incident's primary sources were searched for omitted CVEs. The per-incident **Validated CVEs** line (and the `validated_cve` / `validated_cve_details` attributes in the JSON, `validated_cve` column in the CSV) carries the corrected list, grouped by relation (*exploited*, *self-malicious-release*, *exploited-unconfirmed*, *attempted*, *toolkit*, *self-vulnerability*, *discovered*, *related*), with removed IDs and their reasons. Original title/summary text was left untouched, so a title may still cite an ID that the validation line removes or re-attributes. The VERIS `action.hacking.cve` / `action.malware.cve` fields in the JSON hold exactly the validated *exploited* CVEs.
 - **Granularity note.** The Anthropic July-2026 cyber-evaluation incident (`DB-2026-019`) is coded as one incident under its single disclosure/root cause, though the ChatGPT report enumerated its three sub-incidents separately.

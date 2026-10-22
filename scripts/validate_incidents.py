@@ -12,7 +12,8 @@ Class B (bookkeeping): set algebra of the validated layer, the VERIS action.*.cv
   entry's position (a register url names the register item of the locator; a report held in this repo is cited by
   its pinned permalink with a line range inside the passage that the locator names), `veris.reference` (URLs only,
   separated by "; ", none of them a discovery channel),
-  ranking_table vs incidents, recomputable counts, and the VERIS block against the VERIS JSON schema. No overrides.
+  ranking_table (each counted incident once, in ranking order: methodology §9.3), recomputable counts, and the VERIS
+  block against the VERIS JSON schema. No overrides.
 
 Every check of a record runs over the live records, `incidents` and `sub_threshold_incidents` alike (methodology
 §10.2); counts and the ranking table cover `incidents` only. A retired record is frozen: only its wrapper is checked.
@@ -202,6 +203,9 @@ def core_checks(d: dict) -> list[Finding]:
     (methodology §10.2). A malformed entry is reported here, so the builders stop with a message instead of crashing
     on it.
 
+    ranking_table holds each counted incident exactly once (methodology §9.3), so that the incident report, which
+    follows it, drops no record; check_ranking_table checks its order and its fields.
+
     The ID format is checked first. While an ID is malformed its number is unknown, so the numbering check is skipped
     instead of reported (validate() names the skip). Numbering (methodology §4.1): each array is in ascending order,
     and the numbers of incidents, sub_threshold_incidents and retired_incidents together are exactly
@@ -233,6 +237,10 @@ def core_checks(d: dict) -> list[Finding]:
             out.append(Finding("B", "numbering", f"numbers over {', '.join(arrays)} are not 001..highest_assigned ({top:03d}): "
                                + "; ".join(f"{what} {', '.join(f'{n:03d}' for n in ns)}" for what, ns in
                                            (("missing", missing), ("doubled", doubled), ("above highest_assigned", above)) if ns)))
+    rows = [x.get("id") for x in d.get("ranking_table") or []]
+    if len(rows) != len(set(rows)) or set(rows) != {i["id"] for i in d["incidents"]}:
+        out.append(Finding("B", "ranking-table", "ranking_table ids differ from incidents: each counted incident needs "
+                           "exactly one row (§9.3)"))
     for i in recs:
         out += [Finding("B", "sources", msg, i["id"]) for msg in source_problems(i)]
         det = i.get("validated_cve_details") or {}
@@ -526,10 +534,17 @@ def is_date(s) -> bool:
 
 
 def check_ranking_table(d, r):
+    """Methodology §9.3: ranking_table lists the counted incidents in ranking order (lc.ranking_key: observed severity
+    descending, potential severity descending, ID ascending), and each row repeats its record's fields. That each
+    counted incident has exactly one row is a core check."""
     rows = d.get("ranking_table") or []
     by_id = {x["id"]: x for x in rows}
-    if [x["id"] for x in rows] != [i["id"] for i in d["incidents"]] or len(by_id) != len(rows):
-        r.add("B", "ranking-table", "ranking_table ids differ from incidents (set or order)")
+    got = [x["id"] for x in rows]
+    want = [i["id"] for i in sorted(d["incidents"], key=lc.ranking_key)]
+    if sorted(got) == sorted(want) and got != want:
+        k = next(n for n, (a, b) in enumerate(zip(got, want)) if a != b)
+        r.add("B", "ranking-table", f"ranking_table is not in ranking order (§9.3: observed severity desc, potential "
+              f"severity desc, ID asc): row {k + 1} is {got[k]}, expected {want[k]}")
     for i in d["incidents"]:
         row = by_id.get(i["id"])
         if row is None:

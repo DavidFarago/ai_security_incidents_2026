@@ -239,8 +239,14 @@ def footer(d):
             ""]
 
 
+def ranked(d):
+    """The counted incidents in the order of ranking_table (methodology §9.3); core_checks guarantees one row each."""
+    by_id = {e["id"]: e for e in d["incidents"]}
+    return [by_id[x["id"]] for x in d["ranking_table"]]
+
+
 def render_md(d):
-    inc = d["incidents"]
+    inc = ranked(d)
     subs = d.get("sub_threshold_incidents") or []
     num = {e["id"]: lc.incident_number(e["id"]) for e in inc}
     cc, bs, cnt = d["counts"]["by_observed_severity"], d["counts"]["citations_by_source"], d["counts"]
@@ -269,18 +275,16 @@ def render_md(d):
         grp = [e for e in inc if e["report"]["observed_severity"] == tkey]
         if not grp:
             continue
-        nums = [num[e["id"]] for e in grp]
-        rng = f"{min(nums)}" if len(nums) == 1 else f"{min(nums)}–{max(nums)}"
-        L += [f"### {tlabel} tier ({rng})", ""]
+        L += [f"### {tlabel} tier ({len(grp)} incident{'' if len(grp) == 1 else 's'})", ""]
         for e in grp:
             L += entry_md(e, num[e["id"]])
         L.append("")
     L += ["---", "", "## Method & caveats", "",
-          f"- **Incident IDs.** `DB-2026-nnn` (*database*) = at least one register source (AIID export or VCDB; {ids['DB']} incidents), `DR-2026-nnn` (*direct report*) = no register source, found through a deep-research or primary report ({ids['DR']}, all from deep-research reports so far). The number is the position in this report's priority ranking (the `#` column of the index) and is frozen — later re-ranking changes the table, not the ID; new incidents continue from 100.",
+          f"- **Incident IDs.** `DB-2026-nnn` (*database*) = at least one register source (AIID export or VCDB; {ids['DB']} incidents), `DR-2026-nnn` (*direct report*) = no register source, found through a deep-research or primary report ({ids['DR']}, all from deep-research reports so far). For 001–099 the number is the position in the priority ranking of 2026-08-27; a later record gets the next free number (`id_scheme.highest_assigned` + 1). Numbers are frozen and shown in the `#` column: re-ranking changes the order of this report (`ranking_table`), never an ID.",
           f"- **Scope & union.** {cnt['total_incidents']} incidents = {n_db_src} (from the AIID + VCDB registers) + {n_dr_src} (from the four deep-research reports), with no overlap. Contents are those of the two source JSONs, except for the revisions recorded in methodology §14, among them the normalised original-source citations (`sources`) and the reporting links (`veris.reference`).",
           "- **Original sources.** Register incidents cite the AIID export (`" + XLSX + "`) and/or the VERIS Community Database (`vz-risk/VCDB`) — the latter at the exact `data/json/{validated,submitted}/<uuid>.json` record or the `issues/<n>` intake. Report incidents cite the passage of `ChatGPT`/`ClaudeCode`/`Grok`_DeepResearch_ai_incidents_2026.md that describes them (e.g. `item 23`), linked with its line range at the commit that added the reports. The **Reporting** links (at most three, one per site) come from each record's `veris.reference`: every link its sources give for the event, plus reporting found by the analyst, primary disclosures first.",
           "- **Coding.** Each incident carries a standard VERIS record (Actor/Action/Asset/Attribute, CIA, graded disclosure, scope, timeline, confidence) plus a separate report layer (AI role/component/mechanism, observed & potential severity, CWE/CVE with mapping basis). Where VERIS has no native concept (model extraction, prompt injection, autonomous agent action) the nearest valid coding is used and the AI meaning is carried in the report layer.",
-          "- **Ranking.** By **observed** severity, potential as tiebreaker — a report-specific ordinal rubric (Critical > High > Medium > Low > Negligible), **not** CVSS, the ChatGPT report's AIRIS, or the CC report's blended tier. Vulnerability-discovery / coordinated-disclosure PoC items sit at Negligible/Low observed and High/Critical potential.",
+          "- **Ranking.** By **observed** severity (`report.observed_severity`), then **potential** severity (`report.potential_severity`), then the ID number (`ranking_table`; methodology §9.3) — a report-specific ordinal rubric (Critical > High > Medium > Low > Negligible), **not** CVSS, the ChatGPT report's AIRIS, or the CC report's blended tier. Vulnerability-discovery / coordinated-disclosure PoC items sit at Negligible/Low observed and High/Critical potential.",
           "- **Non-software-security rows.** Five MIT/VCDB register items are `security_incident = False positive` (privacy/likeness/governance harms, not asset compromises); ten conventional VCDB breaches with no AI component are flagged as such. Both are retained for register completeness, each with an AI-involvement note.",
           f"- **CVE validation ({cv['validated_on']}).** Every CVE ID in the original records was resolved against CVE.org/NVD and checked against the incident description; CISA KEV, the GitHub Advisory Database and each incident's primary sources were searched for omitted CVEs. The per-incident **Validated CVEs** line (and the `validated_cve` / `validated_cve_details` attributes in the JSON, `validated_cve` column in the CSV) carries the corrected list, grouped by relation ({relations}), with removed IDs and their reasons. Original title/summary text was left untouched, so a title may still cite an ID that the validation line removes or re-attributes. The VERIS `action.hacking.cve` / `action.malware.cve` fields in the JSON hold exactly the validated *exploited* CVEs.",
           "- **Granularity note.** The Anthropic July-2026 cyber-evaluation incident (`DB-2026-019`) is coded as one incident under its single disclosure/root cause, though the ChatGPT report enumerated its three sub-incidents separately.",
@@ -315,7 +319,7 @@ def render(d):
     if problems:
         sys.exit(str(problems[0]))
     subs = d.get("sub_threshold_incidents") or []
-    return {".csv": render_csv(d["incidents"]), ".md": render_md(d),
+    return {".csv": render_csv(ranked(d)), ".md": render_md(d),
             "_sub_threshold.csv": render_csv(subs), "_sub_threshold.md": render_sub_md(d)}
 
 

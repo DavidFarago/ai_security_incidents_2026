@@ -58,6 +58,11 @@ def retire(d, iid, into, reason="duplicate"):
     return w
 
 
+def next_id(d, prefix="DR"):
+    """The ID that a new record gets: id_scheme.highest_assigned + 1 (methodology §4.1)."""
+    return f"{prefix}-2026-{d['id_scheme']['highest_assigned'] + 1:03d}"
+
+
 def add_record(d, like, iid, array="incidents", bump=True):
     """Append a copy of `like` with a new ID to `array`; with bump, raise id_scheme.highest_assigned to its number."""
     new = copy.deepcopy(incident(d, like))

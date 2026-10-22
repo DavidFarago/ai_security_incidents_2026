@@ -17,7 +17,7 @@ sys.path.insert(0, str(ROOT / "tests"))
 
 import lib_corpus  # noqa: E402
 import validate_incidents as vi  # noqa: E402
-from corpus_helpers import add_record, incident, link, move, recount, retire, sub, take  # noqa: E402
+from corpus_helpers import add_record, by_number, incident, link, move, next_id, recount, retire, sub, take  # noqa: E402
 
 CORPUS = lib_corpus.load_corpus(lib_corpus.JSON_PATH)
 UPSTREAM = lib_corpus.load_upstream(lib_corpus.UPSTREAM_DIR)
@@ -187,6 +187,30 @@ class Mutations(unittest.TestCase):
         self.d["ranking_table"][0]["observed"] = "Low"
         self.assertTrue(has(self.run_v(), "ranking-table", incident="DB-2026-001"))
 
+    # ---- ranking_table order (methodology §9.3): observed desc, potential desc, ID asc
+    def add_counted_copy(self, like):
+        """A copy of a counted record with the next ID, and a copy of its ranking_table row (not yet placed)."""
+        new = add_record(self.d, like, next_id(self.d, like[:2]))
+        row = dict(next(x for x in self.d["ranking_table"] if x["id"] == like), id=new["id"])
+        return new, row
+
+    def test_ranking_table_in_id_order_fails(self):
+        self.d["ranking_table"].sort(key=by_number)
+        self.assertTrue(has(self.run_v(), "ranking-table", msg="ranking order"))
+
+    def test_new_record_at_its_ranking_position(self):
+        # DB-2026-001 is Critical/Critical; its copy belongs after the last Critical/Critical row, not at the end.
+        new, row = self.add_counted_copy("DB-2026-001")
+        rows = self.d["ranking_table"]
+        last_tie = max(k for k, x in enumerate(rows) if (x["observed"], x["potential"]) == (row["observed"], row["potential"]))
+        rows.insert(last_tie + 1, row)
+        self.assertFalse(has(self.run_v(), "ranking-table"))
+
+    def test_new_record_in_id_position_fails(self):
+        new, row = self.add_counted_copy("DB-2026-001")
+        self.d["ranking_table"].append(row)
+        self.assertTrue(has(self.run_v(), "ranking-table", msg="ranking order"))
+
     def test_db_prefix_without_register_source(self):
         i = incident(self.d, "DB-2026-001")
         for s in i["sources"]:
@@ -252,10 +276,10 @@ class Mutations(unittest.TestCase):
 
     def test_review_list_from_incident_100(self):
         new = copy.deepcopy(incident(self.d, "DR-2026-081"))   # self-vulnerability only, no KEV, Negligible
-        new["id"] = new["veris"]["incident_id"] = "DR-2026-100"
+        iid = new["id"] = new["veris"]["incident_id"] = next_id(self.d)
         self.d["incidents"].append(new)
         review = self.run_v().measurements["decision1_review"]
-        self.assertIn("DR-2026-100", review)
+        self.assertIn(iid, review)
         self.assertNotIn("DR-2026-081", review, "the list starts at incident 100")
 
 
@@ -279,11 +303,12 @@ class Numbering(unittest.TestCase):
         self.assertTrue(has(r, "numbering", msg="missing 099"))
 
     def test_new_record_above_highest_assigned(self):
-        add_record(self.d, "DR-2026-081", "DR-2026-100", bump=False)
-        self.assertTrue(any("above highest_assigned 100" in f.message for f in self.numbering()))
+        iid = next_id(self.d)
+        add_record(self.d, "DR-2026-081", iid, bump=False)
+        self.assertTrue(any(f"above highest_assigned {iid[-3:]}" in f.message for f in self.numbering()))
 
     def test_new_record_with_bump_is_clean(self):
-        add_record(self.d, "DR-2026-081", "DR-2026-100", "sub_threshold_incidents")
+        add_record(self.d, "DR-2026-081", next_id(self.d), "sub_threshold_incidents")
         self.assertEqual(self.numbering(), [])
 
     def test_highest_assigned_missing(self):

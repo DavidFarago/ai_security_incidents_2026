@@ -97,6 +97,15 @@ def incident_number(iid: str) -> int | None:
     return int(m.group(2)) if m else None
 
 
+def ranking_key(rec: dict) -> tuple:
+    """The ranking order of methodology §9.3 as a sort key: report.observed_severity descending,
+    report.potential_severity descending, then the ID number ascending. An unknown severity or a malformed ID sorts
+    last instead of raising; the verifier reports both."""
+    rank = lambda sev: SEVERITIES.index(sev) if sev in SEVERITIES else len(SEVERITIES)
+    n = incident_number(rec.get("id"))
+    return rank(rec["report"].get("observed_severity")), rank(rec["report"].get("potential_severity")), n if n is not None else 10 ** 6
+
+
 def records(d: dict) -> list:
     """Every live record: the counted `incidents`, then `sub_threshold_incidents` (methodology §3.3, §10.2).
     Retired records are history and are never read as records."""
