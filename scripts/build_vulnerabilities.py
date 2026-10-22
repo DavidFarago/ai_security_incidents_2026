@@ -37,11 +37,10 @@ def lab_pairs(s):
 
 RELATION_WEIGHT = {r: len(RELATION_ORDER) - i for i, r in enumerate(RELATION_ORDER)}
 EXPLOITED_FAMILY = ["exploited", "exploited-unconfirmed", "attempted", "toolkit"]
-IN_PLAY = {"exploited", "exploited-unconfirmed", "attempted", "self-vulnerability", "self-malicious-release"}  # the CVE was the weakness in play
+IN_PLAY = lc.IN_PLAY  # the relations whose links count in IBSS (methodology §3.3 "Scores")
 
 SEVERITIES = lc.SEVERITIES
-# IBSS (incident-based severity score): each incident counted once, weight doubles per tier (decided 2026-08-28).
-SEV_WEIGHT = {"Negligible": 1, "Low": 2, "Medium": 4, "High": 8, "Critical": 16}
+SEV_WEIGHT = lc.SEV_WEIGHT  # IBSS: each incident counted once, weight doubles per tier
 CVSS_BANDS = ["9.0-10.0", "7.0-8.9", "4.0-6.9", "0.1-3.9", "no CVSS"]
 
 SEGMENTS = [
@@ -265,9 +264,13 @@ def table_ibss_vs_cvss(links):
         band_rows.append([pv, " / ".join(sorted(tiers_for[pv]))] + [cnt[b] for b in CVSS_BANDS] + [sum(cnt.values())])
     scored = [v for v in per.values() if v["cvss"] is not None]
     no036 = [v for v in scored if not v["in_036"]]
+    clusters = Counter(tuple(v["incidents"]) for v in no036)   # CVEs of one record share its IBSS value
+    unscored = [v for v in per.values() if v["cvss"] is None]
     stats = {
         "n_inplay": len(per), "n_scored": len(scored), "n_single": sum(1 for v in per.values() if len(v["incidents"]) == 1),
         "n_036": sum(1 for v in per.values() if v["in_036"]), "n_no036_scored": len(no036),
+        "n_no036_clusters": len(clusters), "top_cluster": clusters.most_common(1)[0] if clusters else ((), 0),
+        "n_unscored": len(unscored), "unscored_incidents": sorted({i for v in unscored for i in v["incidents"]}),
         "n_036_const": sum(1 for v in per.values() if v["in_036"] and v["obs"] == 4 and v["pot"] == 8),
         "rho_obs": spearman([v["cvss"] for v in scored], [v["obs"] for v in scored]),
         "rho_pot": spearman([v["cvss"] for v in scored], [v["pot"] for v in scored]),
@@ -529,8 +532,11 @@ def osv_packages(rec):
     return out
 
 
-PATCH_RELATIONS = {"exploited", "exploited-unconfirmed", "attempted", "toolkit", "self-vulnerability"}
+PATCH_RELATIONS = {"exploited", "exploited-unconfirmed", "attempted", "toolkit", "self-vulnerability", "discovered"}
 ACTION_ORDER = {"patch": 0, "remove": 1, "watch": 2}
+# Triage rank of a row's strongest evidence: the relation order of methodology §6.4, except that `discovered` ranks
+# with `self-vulnerability`. Both are disclosures without known exploitation, and who found a flaw is no triage signal.
+EVIDENCE_RANK = {**RELATION_WEIGHT, "discovered": RELATION_WEIGHT["self-vulnerability"]}
 
 
 def is_malicious_non_cve(n):
@@ -539,13 +545,17 @@ def is_malicious_non_cve(n):
 
 
 def table_action_list(d, links, recs, manifest):
-    """patch / remove / watch — one row per identifier (CVE or malicious non-CVE id)."""
+    """patch / remove / watch — one row per identifier (CVE or malicious non-CVE id), in triage order: action, KEV,
+    evidence (EVIDENCE_RANK), the identifier's IBSS potential, CVSS. A CVE's IBSS potential comes from its in-play
+    links; a malicious non-CVE identifier's from the records that list it."""
     headers = ["action", "identifier", "scheme", "artifact", "evidence", "incidents", "max_observed", "cisa_kev", "cvss", "cvss_source",
-               "product_or_package", "ecosystem", "affected_versions", "fixed_or_unaffected", "scope", "cna_or_source", "published", "version_data", "note"]
+               "product_or_package", "ecosystem", "affected_versions", "fixed_or_unaffected", "scope", "cna_or_source", "published", "version_data", "note",
+               "ibss_potential"]
     rows = []
     by = defaultdict(list)
     for l in links:
         by[l["cve"]].append(l)
+    ibss = ibss_per_cve(links)
     for cve, ls in by.items():
         rels = {l["relation"] for l in ls}
         cwes = {w for l in ls for w in l["cwe"]}
@@ -573,6 +583,8 @@ def table_action_list(d, links, recs, manifest):
             scope = "attacker toolkit (use unconfirmed)"
         elif evidence in ("exploited", "exploited-unconfirmed", "attempted"):
             scope = "attack path of an incident"
+        elif evidence == "discovered":
+            scope = "AI-discovered disclosure"
         else:
             scope = "AI-stack product disclosure" if action == "patch" else "campaign context"
         eco = "; ".join(dict.fromkeys(e for e, _ in pkgs if e)) if pkgs else ""
@@ -583,8 +595,13 @@ def table_action_list(d, links, recs, manifest):
                      first["cisa_kev"], f"{fmt(score)} (v{ver})" if score is not None else "", src if score is not None else "",
                      prod, eco, aff, fixed, scope, first["cna"], first["published"],
                      f"cve.org record fetched {manifest.get(cve, {}).get('fetched_on', '')}" if rec else "not fetched",
-                     first["title"] or ""])
+                     first["title"] or "", ibss[cve]["pot"] if cve in ibss else None])
     # non-CVE malicious identifiers -> remove
+    listed_by = defaultdict(dict)
+    for inc in d["incidents"]:
+        for n in (inc.get("validated_cve_details") or {}).get("non_cve_identifiers") or []:
+            if is_malicious_non_cve(n):
+                listed_by[n["id"]][inc["id"]] = inc["report"]["potential_severity"]
     seen = set()
     for inc in d["incidents"]:
         for n in (inc.get("validated_cve_details") or {}).get("non_cve_identifiers") or []:
@@ -608,9 +625,11 @@ def table_action_list(d, links, recs, manifest):
             fixed = "; ".join(dict.fromkeys(f"{nm} {fp}" for _, nm, _, fp in pk if fp))
             rows.append(["remove", x, x.split("-")[0], "malicious-release", n.get("kind", ""), [inc["id"]], inc["report"]["observed_severity"], False, "", "",
                          names, eco, vers, fixed, "malicious package release", src, pub,
-                         f"{src} record fetched {manifest.get(x, {}).get('fetched_on', '')}" if rec else "not fetched", title])
-    rows.sort(key=lambda r: (ACTION_ORDER[r[0]], not r[7], -(RELATION_WEIGHT.get(r[4], 0)), "aggregate" in r[14],
-                             -(float(r[8].split()[0]) if r[8] else -1), r[1]))
+                         f"{src} record fetched {manifest.get(x, {}).get('fetched_on', '')}" if rec else "not fetched", title,
+                         sum(SEV_WEIGHT[p] for p in listed_by[x].values())])
+    # missing values (no IBSS: watch rows; no CVSS) sort last
+    rows.sort(key=lambda r: (ACTION_ORDER[r[0]], not r[7], -(EVIDENCE_RANK.get(r[4], 0)), "aggregate" in r[14],
+                             -(r[19] if r[19] is not None else -1), -(float(r[8].split()[0]) if r[8] else -1), r[1]))
     return headers, rows
 
 
@@ -733,15 +752,21 @@ def build_report(d, links, T) -> str:
         ["`related`", "same product cluster, disclosure batch or campaign, explicitly linked by the sources"],
     ]).replace("\n", "\n  "))
     A("")
-    A(f"- **In-play** = relation in {{{', '.join(sorted(IN_PLAY))}}}: the CVE was the weakness in play in the incident "
-      "(used for the per-incident CNA-CWE table). `discovered`, `related` and `toolkit` describe found, adjacent or merely carried vulnerabilities.")
+    A("- **In play.** A CVE link is *in play* when its relation (`validated_cve_details.cves[].relation` in the JSON) shows that "
+      "the CVE's flaw is part of what happened in the event (methodology §3.3, \"Scores\"). Only in-play links count in IBSS and in "
+      "the per-incident CNA-CWE table.")
+    A("")
+    A("  " + md_table(["In play?", "Relation", "Why"], [
+        ["yes" if in_play else "no", ", ".join(f"`{lab(r)}`" for r in rels), why] for in_play, rels, why in lc.IN_PLAY_TABLE
+    ]).replace("\n", "\n  "))
+    A("")
     A("- **CISA KEV** is evidence that a CVE is exploited *somewhere*, not that it was exploited in *this* incident (§6.4).")
     A("- **CVSS** is the CNA/NVD score of the *vulnerability* with its version; it is never used as incident severity. "
       "Incident severity is the report's ordinal **observed** / **potential** rubric.")
     A("- **IBSS** (incident-based severity score) of an entity = the sum, over the incidents it is linked to (each counted once), of that "
       "incident's severity weight: Negligible 1 · Low 2 · Medium 4 · High 8 · Critical 16 — computed separately for observed and potential "
       "severity. It is designed for CWEs, which span many incidents. For CVEs it is computed over **in-play** links only and left blank for "
-      f"CVEs that are only `discovered`/`related`/`toolkit`; since {pct_single} % of CVEs occur in a single incident, a CVE's IBSS is usually just that incident's "
+      f"CVEs that are only `related`/`toolkit`; since {pct_single} % of CVEs occur in a single incident, a CVE's IBSS is usually just that incident's "
       "weight — see the *IBSS vs CVSS* section. "
       "Incidents — not CVEs — are the unit because a CVE count measures cataloguing practice as much as prevalence: CNA conventions differ (the Linux kernel CNA assigns a CVE per fixing commit; Mozilla issues per-bug CVEs but also rollup CVEs covering many memory-safety bugs at once; ecosystem CNAs often issue one CVE per affected package), so the same underlying flaw can be 1 or 11 CVEs depending on who assigned them — the MCP STDIO transport flaw (DR-2026-059) is eleven. IBSS therefore scores a weakness by the harm of the incidents it was involved in, each incident counted once, and reports prevalence (CVE links, distinct CVEs) beside it rather than folding it in. This is the deliberate inverse of MITRE's CWE Top 25 score (CVE count × average CVSS), which ranks the catalogue.")
     A("- **Segments** used for the CNA-CWE profile (defined over relation × AI role, one per CVE link):")
@@ -775,7 +800,7 @@ def build_report(d, links, T) -> str:
     expl_all_kev = all(l["cisa_kev"] for l in expl_links)
     fam = [l for l in links if l["relation"] in EXPLOITED_FAMILY and l["cvss_score"] is not None]
     fam_lo, fam_hi = (min(l["cvss_score"] for l in fam), max(l["cvss_score"] for l in fam)) if fam else (None, None)
-    adp_rows = sum(1 for r in AL0 if r[9] == "CISA-ADP")
+    adp_rows = sum(1 for r in AL0 if r[9] == "CISA-ADP" and r[4] == "self-vulnerability")  # flaws in AI products and AI-written code
     rem_pk = len(group_remove_packages(AL0))
     top3 = {}
     for seg, _ in SEGMENTS:
@@ -792,12 +817,17 @@ def build_report(d, links, T) -> str:
       f"{n_with - dr_share} from the registers — registers record breaches, not vulnerability disclosures. The CVEs are validated at CVE.org; the *sample* of CVE-bearing incidents is not representative of AI-related incidents.")
     A(f"3. **Exploitation evidence tracked harm; the base score did not.** {'Every' if expl_all_kev else 'Not every'} confirmed-`exploited` CVE is on CISA KEV, "
       f"and the exploited family spans CVSS {fmt(fam_lo)}–{fmt(fam_hi)} — the same range as unexploited disclosures.")
-    A(f"4. **Medium CVSS ≠ safe.** {len(X0['low_cvss_high_pot'])} CVEs rated CVSS < 7.0 sit in potential-Critical incidents (Artifactory chained by evaluation agents into a sandbox escape; Gemini CLI). "
+    low_cves = {c for c, _ in X0["low_cvss_high_pot"]}
+    low_products = Counter(next(l["product"] for l in links if l["cve"] == c) for c in low_cves)
+    low_incs = sorted({l["incident_id"] for l in links if l["cve"] in low_cves and l["relation"] in IN_PLAY and l["potential"] == "Critical"})
+    A(f"4. **Medium CVSS ≠ safe.** {len(low_cves)} CVEs rated CVSS < 7.0 sit in potential-Critical incidents "
+      f"({', '.join(f'{p} {n}' for p, n in sorted(low_products.items(), key=lambda kv: (-kv[1], kv[0])))}; incidents {', '.join(low_incs)}). "
       f"Per CVSS band, the share of CVEs in a potential-Critical incident is {X0['band_share']['9.0-10.0'][2]:.0%} for 9.0–10.0 against "
-      f"{X0['band_share']['7.0-8.9'][2]:.0%} / {X0['band_share']['4.0-6.9'][2]:.0%} for 7.0–8.9 / 4.0–6.9 — CVSS separates the top band, not the middle. Two incidents; a case, not a statistic.")
+      f"{X0['band_share']['7.0-8.9'][2]:.0%} / {X0['band_share']['4.0-6.9'][2]:.0%} for 7.0–8.9 / 4.0–6.9 — CVSS separates the top band, not the middle. "
+      f"{len(low_incs)} incidents; a case, not a statistic.")
     A(f"5. **Three populations, three countermeasure programmes.** Top CNA CWEs — AI-written code: {top3['ai-written']}; AI-exploited: {top3['ai-exploited']}; "
       f"AI-discovered: {top3['ai-discovered']}; AI-stack products: {top3['ai-stack-vulnerability']} (CVE links). The AI-written profile is one external corpus (Radar) and needs a baseline before any \"AI writes X\" claim.")
-    A(f"6. **The CVE ecosystem is not yet fit for AI-stack components.** {adp_rows} in-play CVEs carry no CNA CVSS — the score used here comes from CISA-ADP; "
+    A(f"6. **The CVE ecosystem is not yet fit for AI-stack components.** {adp_rows} `self (vulnerability)` CVEs (flaws in AI products and AI-written code) carry no CNA CVSS — the score used here comes from CISA-ADP; "
       f"the MCP STDIO cluster (DR-2026-059) has no CNA CVSS, no CWE and product `n/a` in its records.")
     A(f"7. **Prompt injection: highest potential, least realized harm so far.** {len(pi)} incidents carry VERIS `hacking.variety = Prompt injection`; observed {prof(pi_obs)}, potential {prof(pi_pot)}. "
       f"Most are disclosed PoCs from the deep-research sources.")
@@ -874,7 +904,7 @@ def build_report(d, links, T) -> str:
       "Since CVSS and KEV are the fields readers triage by, the table is ordered by **CVSS** (the score as published by the CNA; versions are mixed "
       f"and shown), then KEV, then relation; the {n_nocvss} CVEs without a CVSS score follow at the end, ordered by KEV, then relation. "
       "`IBSS obs` / `IBSS pot` are the incident-based severity scores over in-play links, blank for CVEs that are only "
-      "`discovered`/`related`/`toolkit` (see *IBSS vs CVSS* below).")
+      "`related`/`toolkit` (see *IBSS vs CVSS* below).")
     A("")
     rows = []
     for r in T["cve_incidents"][1]:
@@ -889,7 +919,7 @@ def build_report(d, links, T) -> str:
     A("## CVSS of the CVE vs observed severity of its incident (all links)")
     A("")
     A("Each cell counts incident–CVE links. The vulnerability's CVSS and the incident's realized harm are different things — "
-      "this table is the empirical form of the methodology's argument (§6.3). It covers all 333 links, whatever their relation; "
+      f"this table is the empirical form of the methodology's argument (§6.3). It covers all {len(links)} links, whatever their relation; "
       "the next section refines the comparison to in-play CVEs and scores them with IBSS.")
     A("")
     h, rows = T["cvss"]
@@ -913,9 +943,10 @@ def build_report(d, links, T) -> str:
     A("")
     A(f"- A Spearman rank correlation between CVSS and IBSS is computed by the build script but **not reported at this stage**: "
       f"{s['n_036']} of the {s['n_scored']} scored in-play CVEs share one severity value (DR-2026-036), and the remaining n = {s['n_no036_scored']} "
-      f"yields confidence intervals that span zero to a moderate correlation — the coefficient would carry no information either way and would "
-      f"invite the reading \"CVSS is unrelated to harm\". The corpus is planned to grow (further sources, later years), and the correlation will be "
-      f"reported once the in-play CVE population is large and varied enough for the interval to be informative. Until then the band table below "
+      f"come from only {s['n_no036_clusters']} incidents or incident sets ({', '.join(s['top_cluster'][0])} alone holds {s['top_cluster'][1]}). "
+      f"The CVEs of one incident share its IBSS, so they are not independent observations, and an interval computed as if they were would "
+      f"overstate the precision. The corpus is planned to grow (further sources, later years), and the correlation will be "
+      f"reported once the in-play CVEs spread over enough incidents for the interval to be informative. Until then the band table below "
       f"carries the comparison.")
     A("- Potential is the fairer comparison — CVSS and potential both describe what *could* happen; observed shows what did.")
     A("")
@@ -925,7 +956,8 @@ def build_report(d, links, T) -> str:
     A("")
     A("Share of in-play CVEs with at least one **potential-Critical** incident, per CVSS band: "
       + "; ".join(f"{b}: {X['band_share'][b][0]}/{X['band_share'][b][1]} ({X['band_share'][b][2]:.0%})" for b in CVSS_BANDS if X['band_share'][b][1])
-      + ". The top band stands out; the middle bands do not differ — and the unscored band is the MCP STDIO cluster.")
+      + f". The top band stands out; the middle bands do not differ. The unscored band holds the {s['n_unscored']} in-play CVEs without a CVSS score, "
+      f"from {len(s['unscored_incidents'])} incidents ({', '.join(s['unscored_incidents'])}).")
     A("")
     def cve_rows(items):
         return [[link(c), f"{fmt(v['cvss'])} (v{v['cvss_version']})" if v["cvss"] is not None else "—", "**KEV**" if v["kev"] else "",
@@ -947,8 +979,11 @@ def build_report(d, links, T) -> str:
     A("")
     A(f"### Disclosed, not exploited: CVSS ≥ 9.0 but observed ≤ Low ({len(X['high_cvss_low_obs'])} CVEs)")
     A("")
-    A("These are mostly `self (vulnerability)` disclosures of AI-product vulnerabilities: severe on paper, no realized harm recorded — the gap the observed/potential split is designed to show.")
-    A("")
+    if X["high_cvss_low_obs"]:
+        hl_rel = Counter(max(set(v["relations"]), key=RELATION_WEIGHT.get) for _, v in X["high_cvss_low_obs"])
+        A("By strongest in-play relation: " + ", ".join(f"{n} `{lab(r)}`" for r, n in sorted(hl_rel.items(), key=lambda kv: -RELATION_WEIGHT[kv[0]]))
+          + ". Severe on paper, no realized harm recorded — the gap the observed/potential split is designed to show.")
+        A("")
     A(md_table(H, cve_rows(X["high_cvss_low_obs"])) if X["high_cvss_low_obs"] else "none")
     A("")
 
@@ -959,16 +994,22 @@ def build_report(d, links, T) -> str:
     A("## Action list — patch · remove · watch")
     A("")
     A("One row per identifier, derived from the relation vocabulary and the CNA CWE. **patch** = a vulnerability that was exploited, attempted, carried "
-      "in an attacker's toolkit, or is the disclosed subject of an incident (`self (vulnerability)`); **remove** = a malicious release "
+      "in an attacker's toolkit, is the disclosed subject of an incident (`self (vulnerability)`), or was found by the AI system the incident is about "
+      "(`discovered`); **remove** = a malicious release "
       "(`self (malicious release)`, CNA CWE-506, or a malware-type GHSA / MAL / PYSEC advisory) — purge the listed versions and rotate every credential "
       "they could reach; **watch** = KEV-listed CVEs recorded as `related` context of a campaign, not shown to be used in an incident. "
       f"Version data comes from the cached upstream records (`vulnerabilities/upstream/`, {n_fetched} of {len(AL)} rows; records fetched "
       f"{', '.join(fetch_dates) or 'n/a'}); CVSS is the CNA's, or the CISA-ADP score where the CNA gives none (`cvss_source`). Full table: `action_list.csv`.")
     A("")
+    A("Rows are in triage order: KEV-listed first; then by the strongest evidence (exploited > exploited-unconfirmed > attempted > toolkit > "
+      "disclosure, where `self (vulnerability)` and `discovered` rank alike, because who found a flaw is no triage signal); then by **IBSS potential** "
+      "(`IBSS pot`: the potential severity of the incidents in which the identifier is in play, Negligible 1 … Critical 16); then by CVSS. "
+      "A CVE takes the potential of its whole incident, which a different flaw of the same incident may set; the CVSS column shows the CVE's own score.")
+    A("")
     def act_rows(items):
         return [[link(r[1]) if r[2] == "CVE" else r[1], lab(r[4]) if r[2] == "CVE" else r[4], SEP.join(r[5]).replace(SEP, "<br>"), r[6], "**KEV**" if r[7] else "",
-                 (r[8] + (f" ({r[9]})" if r[9] and r[9] != "CNA" else "")), r[10], r[11], r[12], r[13]] for r in items]
-    AH = ["ID", "Evidence", "Incidents", "Max observed", "KEV", "CVSS", "Product / package", "Ecosystem", "Affected versions", "Fixed / unaffected"]
+                 fmt(r[19]), (r[8] + (f" ({r[9]})" if r[9] and r[9] != "CNA" else "")), r[10], r[11], r[12], r[13]] for r in items]
+    AH = ["ID", "Evidence", "Incidents", "Max observed", "KEV", "IBSS pot", "CVSS", "Product / package", "Ecosystem", "Affected versions", "Fixed / unaffected"]
     patch = [r for r in AL if r[0] == "patch"]
     agg = [r for r in patch if "aggregate" in r[14]]
     A(f"### patch ({len(patch)} CVEs; {len(patch) - len(agg)} shown, {len(agg)} of the AI-written aggregate corpus DR-2026-036 in the CSV only)")
@@ -1067,7 +1108,7 @@ def build_report(d, links, T) -> str:
     A("How to read the per-segment rows: **CVE links** = number of incident–CVE pairs in the segment whose CVE record carries this CWE "
       "(a CVE that occurs in two incidents counts twice); **Distinct CVEs** = the same without double-counting recurring CVEs; "
       "**Incidents** = distinct incidents among those links; **Share** = CVE links with this CWE ÷ links in the segment that carry any CNA CWE "
-      "(the *Links with CNA CWE* column above); **IBSS obs / pot** = incident-based severity score over those incidents, each counted once (Negligible 1 · Low 2 · Medium 4 · High 8 · Critical 16, observed and potential separately) — for `related` and `ai-discovered` this attributes an incident's harm to the CWE of a *sibling* or *found* CVE, shown as context weight for comparison with the CWE thread (whose Rule 1 excludes those relations), not as the weakness's risk. Shares within a segment add up to more than 100 % because one CVE record can carry several CWEs. "
+      "(the *Links with CNA CWE* column above); **IBSS obs / pot** = incident-based severity score over those incidents, each counted once (Negligible 1 · Low 2 · Medium 4 · High 8 · Critical 16, observed and potential separately) — for `related` this attributes an incident's harm to the CWE of a *sibling* CVE, shown as context weight for comparison with the CWE thread (whose Rule 1 excludes `related`), not as the weakness's risk. Shares within a segment add up to more than 100 % because one CVE record can carry several CWEs. "
       "Example: `ai-exploited` / CWE-306 = 4 links (Langflow CVE-2026-33017 and CVE-2025-3248, marimo CVE-2026-39987 in two incidents), "
       "3 distinct CVEs, 4 incidents, 4 ÷ 14 = 29 %. CWEs that the incident record assigns directly (`report.weaknesses`) are **not** counted "
       "here; they appear beside the CNA CWEs in the preceding per-incident table and feed the incident-level CWE ranking of the CWE thread.")

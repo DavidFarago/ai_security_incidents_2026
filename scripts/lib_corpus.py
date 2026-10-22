@@ -19,6 +19,19 @@ RELATION_LABEL = {"self-vulnerability": "self (vulnerability)", "self-malicious-
 SEVERITIES = ["Critical", "High", "Medium", "Low", "Negligible"]
 STATUSES = ["Confirmed", "Suspected", "Near miss", "False positive"]
 LOW_OR_HIGHER = {"Critical", "High", "Medium", "Low"}
+# IBSS (incident-based severity score): the weight of a record's severity doubles per tier (decided 2026-08-28).
+SEV_WEIGHT = {"Negligible": 1, "Low": 2, "Medium": 4, "High": 8, "Critical": 16}
+
+# Methodology §3.3 "Scores": a CVE link is in play when the CVE's flaw is part of what happened in the event; only
+# in-play links count in IBSS. One row per reason: (in play?, relations, why). Every relation occurs exactly once.
+IN_PLAY_TABLE = [
+    (True, ("exploited", "exploited-unconfirmed", "attempted"), "The attack used, probably used, or tried to use the flaw."),
+    (True, ("self-vulnerability", "discovered"), "The event made the flaw known."),
+    (True, ("self-malicious-release",), "The event is the release of the malware that the CVE identifies."),
+    (False, ("toolkit",), "The exploit only lay in the attacker's tools; no source shows its use against the victim."),
+    (False, ("related",), "The CVE is context only: same product, disclosure batch or campaign."),
+]
+IN_PLAY = {r for in_play, rels, _ in IN_PLAY_TABLE if in_play for r in rels}
 
 # Methodology §3.3: a record with validated CVEs is a vulnerability disclosure when it has a disclosure relation and
 # otherwise only `related` (neutral); every other relation makes it an attack or a malicious release.
