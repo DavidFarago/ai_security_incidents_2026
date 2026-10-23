@@ -17828,9 +17828,7 @@
         }
       },
       "report": {
-        "ai_role": [
-          "AI system/harness attacked"
-        ],
+        "ai_role": [],
         "ai_component": [
           "AI smart glasses + human-review pipeline"
         ],
@@ -18702,9 +18700,7 @@
         }
       },
       "report": {
-        "ai_role": [
-          "AI security control"
-        ],
+        "ai_role": [],
         "ai_component": [
           "facial-recognition system (Mobile Fortify)"
         ],
@@ -18817,9 +18813,7 @@
         }
       },
       "report": {
-        "ai_role": [
-          "AI security control"
-        ],
+        "ai_role": [],
         "ai_component": [
           "facial recognition / ALPR surveillance"
         ],
@@ -18932,9 +18926,7 @@
         }
       },
       "report": {
-        "ai_role": [
-          "AI-generated weakness"
-        ],
+        "ai_role": [],
         "ai_component": [
           "chatbot (Grok)"
         ],
@@ -19047,9 +19039,7 @@
         }
       },
       "report": {
-        "ai_role": [
-          "AI-generated weakness"
-        ],
+        "ai_role": [],
         "ai_component": [
           "voice-generation model (NotebookLM)"
         ],

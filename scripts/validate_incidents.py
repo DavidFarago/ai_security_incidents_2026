@@ -384,6 +384,9 @@ def check_class_b(d, up, r: Result):
         elif v["security_incident"] == "False positive" and has_effect(v.get("attribute") or {}):
             r.add("B", "status-effect", "False positive with an effect in veris.attribute (methodology §4.3): a false "
                   "positive affects no asset, so data_disclosure is No and no integrity or availability variety is set", iid)
+        if v.get("security_incident") == "False positive" and rep.get("ai_role"):
+            r.add("B", "false-positive-role", f"False positive with report.ai_role {rep['ai_role']}: the roles describe AI's "
+                  "part in a security incident (methodology §5.1); record AI's involvement in ai_component and ai_involvement_note", iid)
         if "misuse" in (v.get("action") or {}) and not {"internal", "partner"} & set(v.get("actor") or {}):
             r.add("B", "misuse-actor", "veris.action.misuse needs an internal or partner actor: VERIS reserves misuse for "
                   "parties the organization trusts; an outsider's abuse of a service is hacking (methodology §4.3)", iid)

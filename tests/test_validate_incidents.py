@@ -200,6 +200,14 @@ class Mutations(unittest.TestCase):
         incident(self.d, "DB-2026-096")["veris"]["attribute"]["confidentiality"]["data_disclosure"] = "Potentially"
         self.assertTrue(has(self.run_v(), "status-effect", msg="False positive", incident="DB-2026-096"))
 
+    def test_false_positive_with_ai_role(self):
+        # Methodology §5.1: the roles describe AI's part in a security incident, and a false positive is none.
+        incident(self.d, "DB-2026-096")["report"]["ai_role"] = ["AI security control"]
+        self.assertTrue(has(self.run_v(), "false-positive-role", incident="DB-2026-096"))
+
+    def test_false_positives_have_no_ai_role(self):
+        self.assertFalse(has(self.run_v(), "false-positive-role"))
+
     # ---- methodology §4.3, §4.6: event chains and the actor of a misuse
     def add_malware(self, iid):
         """Give a record with only a hacking action a second action category."""

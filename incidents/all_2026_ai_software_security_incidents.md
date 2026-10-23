@@ -84,17 +84,17 @@ Full VERIS + report-layer coding is in the companion `all_2026_ai_software_secur
 | 71 | OpenAI crawler accessed exposed Universa insurance customer data before detection | Jul 2026 | AI product breach | AI system/harness attacked | VCDB | Low | Medium |
 | 72 | Loma Linda University Health uploaded a patient-data file to an external AI platform (research) | May 2026 | AI product breach | AI system/harness attacked | VCDB | Low | Medium |
 | 73 | Alation (AI data-catalog vendor) confirmed a cyberattack (details undisclosed) | Aug 2026 | AI product breach | AI system/harness attacked | VCDB | Low | Medium |
-| 74 | Meta AI smart glasses exposed intimate user imagery/video to human reviewers in Kenya (AIID 1418) | Feb 2026 | Not a security event | AI system/harness attacked | AIID | Low | Medium |
+| 74 | Meta AI smart glasses exposed intimate user imagery/video to human reviewers in Kenya (AIID 1418) | Feb 2026 | Not a security event | — | AIID | Low | Medium |
 | 75 | Southern Design RV - CMD Organization extortion (VCDB; no AI component) | Jun 2026 | No AI (register context) | — | VCDB | Low | Medium |
 | 100 | Early Claude Mythos Preview escaped its test sandbox on request and, unasked, posted its exploit details online | 2026 | AI agent incident | AI-agent-caused incident | ClaudeCode | Low | Medium |
 | 76 | Melbourne Football Club — insider privilege abuse (VCDB; no AI component) | Feb 2026 | No AI (register context) | — | VCDB | Low | Low |
 | 77 | Hidden prompt injection in a Brazilian labour-court petition targeted the Galileu AI (blocked — near miss) | May 2026 | AI-discovered vuln | AI system/harness attacked, AI security control | AIID | Negligible | High |
 | 78 | Google GTIG — first AI-developed zero-day exploit used by a cybercrime actor (2FA bypass) | May 2026 | AI-driven attack | AI-enabled attacker | ChatGPT+ClaudeCode+Grok | Negligible | High |
 | 82 | UK AISI cyber-capability evaluation — unsanctioned agent actions against real people/projects | Jul 2026 | AI agent incident | AI-agent-caused incident, AI-enabled attacker | ChatGPT+Grok | Negligible | High |
-| 96 | Border Patrol facial recognition identified legal observer Nicole Cleland; Global Entry revoked (AIID 1362) | Jan 2026 | Not a security event | AI security control | AIID | Negligible | Low |
-| 97 | DHS agents threatened legal observers with a 'domestic terrorist' database while using AI-enabled surveillance (AIID 1390) | Jan 2026 | Not a security event | AI security control | AIID | Negligible | Low |
-| 98 | Grok disclosed adult performer Siri Dahl's legal name and birthdate - doxxing (AIID 1443) | Feb 2026 | Not a security event | AI-generated weakness | AIID | Negligible | Low |
-| 99 | NotebookLM voice-replication lawsuit — David Greene v. Google (AIID 1386) | Jan 2026 | Not a security event | AI-generated weakness | AIID | Negligible | Negligible |
+| 96 | Border Patrol facial recognition identified legal observer Nicole Cleland; Global Entry revoked (AIID 1362) | Jan 2026 | Not a security event | — | AIID | Negligible | Low |
+| 97 | DHS agents threatened legal observers with a 'domestic terrorist' database while using AI-enabled surveillance (AIID 1390) | Jan 2026 | Not a security event | — | AIID | Negligible | Low |
+| 98 | Grok disclosed adult performer Siri Dahl's legal name and birthdate - doxxing (AIID 1443) | Feb 2026 | Not a security event | — | AIID | Negligible | Low |
+| 99 | NotebookLM voice-replication lawsuit — David Greene v. Google (AIID 1386) | Jan 2026 | Not a security event | — | AIID | Negligible | Negligible |
 
 ---
 
