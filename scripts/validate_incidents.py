@@ -659,20 +659,13 @@ def check_veris_schema(d, up, r):
 
 # ----------------------------------------------------------------------------- measurements (never fail)
 def measure(d, r):
-    fails, review = [], []
+    # Counted disclosures with a CVE that fail methodology §3.3 (a) and (c): each stays counted only through (b).
+    fails = []
     for i in d["incidents"]:
-        cves = (i.get("validated_cve_details") or {}).get("cves") or []
-        rels = lc.relations(i)
-        n = lc.incident_number(i["id"])
-        kev = any(c.get("cisa_kev") for c in cves)
-        # handover §4 / §10 decision 1: from incident 100 on, every incident whose validated CVEs are all
-        # self-vulnerability, with no KEV-listed CVE and observed Negligible, is listed for review of condition (b).
-        if n is not None and n >= 100 and rels == {"self-vulnerability"} and not kev and i["report"]["observed_severity"] == "Negligible":
-            review.append(i["id"])
+        kev = any(c.get("cisa_kev") for c in (i.get("validated_cve_details") or {}).get("cves") or [])
         if lc.is_cve_disclosure(i) and not (kev or lc.realized_harm(i)):
             fails.append(i["id"])
     r.measurements["disclosure_rule_fails"] = fails
-    r.measurements["decision1_review"] = review
     # The sub-threshold population, reported beside the counts (decision 14 item 5). A record can have several classes.
     sub = d.get("sub_threshold_incidents") or []
     r.measurements["sub_threshold_records"] = len(sub)
@@ -712,9 +705,6 @@ def report(r: Result, verbose: bool) -> str:
     f = r.measurements.get("disclosure_rule_fails") or []
     L.append(f"measurement — disclosure incidents failing methodology §3.3 conditions (a) and (c): {len(f)}"
              + (f" ({', '.join(f)})" if f else "") + "; condition (b) is judgment")
-    f = r.measurements.get("decision1_review") or []
-    L.append(f"measurement — incidents >= 100 with only self-vulnerability CVEs, no KEV, observed Negligible (review §3.3 condition (b)): {len(f)}"
-             + (f" ({', '.join(f)})" if f else ""))
     L.append(f"measurement — sub_threshold_incidents (disclosures failing §3.3; not counted): {r.measurements.get('sub_threshold_records', 0)} records"
              + (f", by class {r.measurements['sub_threshold_classes']}" if r.measurements.get("sub_threshold_classes") else "")
              + f"; retired_incidents: {r.measurements.get('retired_records', 0)}")

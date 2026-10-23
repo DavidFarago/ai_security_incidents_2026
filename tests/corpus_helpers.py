@@ -50,6 +50,23 @@ def move(d, iid):
     return rec
 
 
+def promote(d, iid):
+    """Put a live record into incidents (methodology §3.3 "Promotion"), keeping that array in ID order, and give it its
+    ranking_table row in ranking order (§9.3). The counts stay as they are; recount fixes them."""
+    rec = take(d, iid)
+    d["incidents"].append(rec)
+    d["incidents"].sort(key=by_number)
+    d["ranking_table"].append({
+        "id": iid, "incident": rec["title"], "date": rec["date"], "status": rec["veris"]["security_incident"],
+        "observed": rec["report"]["observed_severity"], "potential": rec["report"]["potential_severity"],
+        "sources": "; ".join(dict.fromkeys(lib_corpus.source_names(rec))),
+        "cve_cwe": "; ".join(v["cve"] for v in rec["report"].get("vulnerabilities") or []),
+        "validated_cve": "; ".join(rec.get("validated_cve") or [])})
+    order = {i["id"]: k for k, i in enumerate(sorted(d["incidents"], key=lib_corpus.ranking_key))}
+    d["ranking_table"].sort(key=lambda x: order[x["id"]])
+    return rec
+
+
 def retire(d, iid, into, reason="duplicate"):
     """Retire a live record (methodology §10.2): frozen, in a wrapper in retired_incidents, in ID order."""
     w = {"id": iid, "retired_on": "2026-10-03", "reason": reason, "into": into, "note": "test", "record": take(d, iid)}

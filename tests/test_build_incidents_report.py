@@ -15,7 +15,7 @@ sys.path.insert(0, str(ROOT / "tests"))
 
 import build_incidents_report as bir  # noqa: E402
 import lib_corpus  # noqa: E402
-from corpus_helpers import add_record, incident, move, next_id  # noqa: E402
+from corpus_helpers import add_record, incident, next_id  # noqa: E402
 
 BASE = ROOT / "incidents" / "all_2026_ai_software_security_incidents"
 CORPUS = lib_corpus.load_corpus(lib_corpus.JSON_PATH)
@@ -45,11 +45,9 @@ class ReportsUpToDate(unittest.TestCase):
 
 
 class SubThresholdReport(unittest.TestCase):
-    def test_moved_records_appear_only_in_the_sub_threshold_files(self):
+    def test_sub_threshold_records_appear_only_in_the_sub_threshold_files(self):
         # DR-2026-081 has a CVE; DR-2026-065 has none (its class comes from ai_role).
-        d = copy.deepcopy(CORPUS)
-        for iid in ("DR-2026-081", "DR-2026-065"):
-            move(d, iid)
+        d = CORPUS
         texts = bir.render(d)
         for iid in ("DR-2026-081", "DR-2026-065"):
             title = incident(d, iid)["title"]

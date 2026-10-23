@@ -803,8 +803,9 @@ def build_report(d, links, T) -> str:
     A("")
     A(f"- **{ser_without} of the {ser_total} in-scope High/Critical incidents have no CVE.** What identifies them instead: stolen credentials, "
       "misconfiguration, malicious package releases (GHSA/MAL/PYSEC advisories — see the non-CVE identifiers table), prompt injection, agent misuse.")
-    A(f"- The CVE-bearing set is disclosure-heavy: {neg_with} of {n_with} incidents with a CVE are observed *Negligible* — the incident is the "
-      "disclosure of a vulnerability, nothing has happened yet. Low observed harm in the CVE-side statistics is therefore partly by construction.")
+    A(f"- {neg_with} of the {n_with} counted incidents with a CVE are observed *Negligible*. A disclosure without a KEV listing, an exploitation "
+      f"report or realized harm is a sub-threshold record (methodology §3.3): {n_sub_with} of them carry a CVE and enter the CVE-side statistics "
+      "beside the counted incidents, marked †.")
     A(f"- {len(only_non)} incidents are identified only by non-CVE identifiers: {', '.join(only_non)}.")
     A("")
     class_rows = []
@@ -896,13 +897,16 @@ def build_report(d, links, T) -> str:
     for seg, _ in SEGMENTS:
         rs = [r for r in named(T["cwe_profile"][0], T["cwe_profile"][1]) if r["segment"] == seg][:3]
         top3[seg] = ", ".join(f"{r['cwe']} ({r['cve_links'] + r['sub_threshold_cve_links']})" for r in rs)
-    pi = [i for i in inc if "Prompt injection" in (i["veris"].get("action", {}).get("hacking", {}).get("variety") or [])]
+    is_pi = lambda i: "Prompt injection" in (i["veris"].get("action", {}).get("hacking", {}).get("variety") or [])
+    pi, pi_sub = [i for i in inc if is_pi(i)], [i for i in subs if is_pi(i)]
     pi_obs = Counter(i["report"]["observed_severity"] for i in pi); pi_pot = Counter(i["report"]["potential_severity"] for i in pi)
+    pi_sub_obs = Counter(i["report"]["observed_severity"] for i in pi_sub); pi_sub_pot = Counter(i["report"]["potential_severity"] for i in pi_sub)
     prof = lambda c: " ".join(f"{s[0]}{c[s]}" for s in SEVERITIES if c[s])
     A("## Findings")
     A("")
     A(f"1. **CVE covers the disclosures, not the breaches.** {ser_without} of the {ser_total} in-scope High/Critical incidents have no CVE; "
-      f"{neg_with} of the {n_with} CVE-bearing incidents are observed Negligible (see *Coverage*). The CVE-side tables describe the third of the corpus that is easiest to identify, not the third that hurt most.")
+      f"{n_with} of the {len(inc)} counted incidents carry a CVE, against {n_sub_with} of the {len(subs)} sub-threshold disclosures (see *Coverage*). "
+      "The CVE-side tables describe the part of the corpus that is easiest to identify, not the part that hurt most.")
     A(f"2. **The CVE side is deep-research-sourced.** {dr_share} of the {n_live_with} live records with a validated CVE"
       + (f" ({n_with} counted, {n_sub_with} sub-threshold)" if n_sub_with else "") + f" come from the deep-research reports (DR ids), "
       f"{n_live_with - dr_share} from the registers — registers record breaches, not vulnerability disclosures. The CVEs are validated at CVE.org; the *sample* of CVE-bearing incidents is not representative of AI-related incidents.")
@@ -920,8 +924,11 @@ def build_report(d, links, T) -> str:
       f"AI-discovered: {top3['ai-discovered']}; AI-stack products: {top3['ai-stack-vulnerability']} (CVE links of all live records). The AI-written profile is one external corpus (Radar) and needs a baseline before any \"AI writes X\" claim.")
     A(f"6. **The CVE ecosystem is not yet fit for AI-stack components.** {adp_rows} `self (vulnerability)` CVEs (flaws in AI products and AI-written code) carry no CNA CVSS — the score used here comes from CISA-ADP; "
       f"the MCP STDIO cluster (DR-2026-059) has no CNA CVSS, no CWE and product `n/a` in its records.")
-    A(f"7. **Prompt injection: highest potential, least realized harm so far.** {len(pi)} incidents carry VERIS `hacking.variety = Prompt injection`; observed {prof(pi_obs)}, potential {prof(pi_pot)}. "
-      f"Most are disclosed PoCs from the deep-research sources.")
+    pi_harm = sum(1 for i in pi if lc.realized_harm(i))
+    A(f"7. **Prompt injection: disclosed {'more' if len(pi_sub) > pi_harm else 'no more'} often than realized.** {len(pi_sub)} sub-threshold records carry VERIS "
+      f"`hacking.variety = Prompt injection` (observed {prof(pi_sub_obs)}, potential {prof(pi_sub_pot)}): disclosed proofs of concept without "
+      f"known exploitation. {len(pi)} counted incidents carry it (observed {prof(pi_obs)}, potential {prof(pi_pot)}), {pi_harm} of them with "
+      "realized harm (`Confirmed`, observed Low or higher).")
     A(f"8. **Malicious releases need removal, not patching.** {sum(1 for r in AL0n if r['action'] == 'remove' and r['scheme'] == 'CVE')} CVEs and {rem_pk} package releases are malware by design "
       f"(CNA CWE-506 / malware advisories); they are separated from the weakness profiles and listed under *remove* in the action list.")
     A("")
@@ -1022,7 +1029,8 @@ def build_report(d, links, T) -> str:
     h, rows = T["cvss"]
     A(md_table(["CVSS band of CVE"] + SEVERITIES + ["Total", "Sub-threshold links"], rows))
     A("")
-    A("Read together with the *Coverage* table at the top: the CVE-bearing incidents are disclosure-heavy, so the Negligible/Low columns are populated partly by construction.")
+    A("Read together with the *Coverage* table at the top: a disclosure without a KEV listing, an exploitation report or realized harm is a "
+      "sub-threshold record, so its links are counted in the last column, not under Negligible.")
     A("")
 
     # ---- IBSS vs CVSS experiment

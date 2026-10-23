@@ -17,7 +17,7 @@ sys.path.insert(0, str(ROOT / "tests"))
 
 import lib_corpus  # noqa: E402
 import validate_incidents as vi  # noqa: E402
-from corpus_helpers import add_record, by_number, incident, link, move, next_id, recount, retire, sub, take  # noqa: E402
+from corpus_helpers import add_record, by_number, incident, link, move, next_id, promote, recount, retire, sub, take  # noqa: E402
 
 CORPUS = lib_corpus.load_corpus(lib_corpus.JSON_PATH)
 UPSTREAM = lib_corpus.load_upstream(lib_corpus.UPSTREAM_DIR)
@@ -43,10 +43,8 @@ class RealCorpus(unittest.TestCase):
         self.assertEqual(self.r.errors, [], "\n".join(map(str, self.r.errors[:20])))
 
     def test_disclosure_rule_measurement(self):
-        self.assertEqual(
-            sorted(self.r.measurements["disclosure_rule_fails"]),
-            ["DR-2026-%03d" % n for n in (56, 58, 60, 62, 79, 80, 81, 83, 84, 85, 87, 88, 89, 91, 93, 94, 95)],
-        )
+        # Every counted disclosure meets methodology §3.3 (a) or (c); the ones that failed are sub-threshold records.
+        self.assertEqual(self.r.measurements["disclosure_rule_fails"], [])
 
     def test_core_checks_pass(self):
         self.assertEqual(vi.core_checks(CORPUS), [])
@@ -320,13 +318,6 @@ class Mutations(unittest.TestCase):
         incident(self.d, "DR-2026-025")["report"]["observed_severity"] = "Negligible"
         self.assertNotIn("DR-2026-025", self.run_v().measurements["disclosure_rule_fails"])
 
-    def test_review_list_from_incident_100(self):
-        new = copy.deepcopy(incident(self.d, "DR-2026-081"))   # self-vulnerability only, no KEV, Negligible
-        iid = new["id"] = new["veris"]["incident_id"] = next_id(self.d)
-        self.d["incidents"].append(new)
-        review = self.run_v().measurements["decision1_review"]
-        self.assertIn(iid, review)
-        self.assertNotIn("DR-2026-081", review, "the list starts at incident 100")
 
 
 class Numbering(unittest.TestCase):
@@ -369,7 +360,7 @@ class Numbering(unittest.TestCase):
         self.assertTrue(any("id_scheme.highest_assigned" in f.message for f in self.numbering()))
 
     def test_number_in_two_arrays_is_doubled(self):
-        self.d["sub_threshold_incidents"] = [copy.deepcopy(incident(self.d, "DR-2026-081"))]
+        self.d["incidents"].append(copy.deepcopy(sub(self.d, "DR-2026-081")))
         self.assertTrue(any("doubled 081" in f.message for f in self.numbering()))
 
     def test_stale_folded_array_shows_as_missing(self):
@@ -378,8 +369,6 @@ class Numbering(unittest.TestCase):
         self.assertTrue(any("missing 081" in f.message for f in self.numbering()))
 
     def test_sub_threshold_in_ascending_order(self):
-        move(self.d, "DR-2026-081")
-        move(self.d, "DR-2026-083")
         self.d["sub_threshold_incidents"].reverse()
         self.assertTrue(any("sub_threshold_incidents is not in ascending" in f.message for f in self.numbering()))
 
@@ -395,40 +384,43 @@ class SubThreshold(unittest.TestCase):
         return vi.validate(self.d, up)
 
     def test_move_keeps_numbering(self):
+        promote(self.d, "DR-2026-081")
+        self.assertEqual(vi.core_checks(self.d), [])
         move(self.d, "DR-2026-081")
         self.assertEqual(vi.core_checks(self.d), [])
 
     # ---- sub-threshold records are verified like counted ones
     def test_class_a(self):
-        move(self.d, "DR-2026-085")
         c = next(c for c in sub(self.d, "DR-2026-085")["validated_cve_details"]["cves"] if c["cve"] == "CVE-2026-55803")
         c["credits"][0]["type"] = "coordinator"
         self.assertTrue(has(self.run_v(), "credits", incident="DR-2026-085", cve="CVE-2026-55803"))
 
     def test_veris_schema(self):
-        move(self.d, "DR-2026-081")["veris"]["confidence"] = "Martian"
+        sub(self.d, "DR-2026-081")["veris"]["confidence"] = "Martian"
         self.assertTrue(has(self.run_v(), "veris-schema", incident="DR-2026-081"))
 
     def test_status_effect(self):
-        move(self.d, "DR-2026-081")["veris"]["security_incident"] = "Confirmed"
+        sub(self.d, "DR-2026-081")["veris"]["security_incident"] = "Confirmed"
         self.assertTrue(has(self.run_v(), "status-effect", incident="DR-2026-081"))
 
     def test_validated_cve_set(self):
-        move(self.d, "DR-2026-081")["validated_cve"].append("CVE-2000-0001")
+        sub(self.d, "DR-2026-081")["validated_cve"].append("CVE-2000-0001")
         self.assertTrue(has(self.run_v(), "validated-cve-set", incident="DR-2026-081"))
 
     def test_id_format(self):
-        move(self.d, "DR-2026-081")["id"] = "DR-2026-08x"
+        sub(self.d, "DR-2026-081")["id"] = "DR-2026-08x"
         self.assertTrue(has(self.run_v(), "id-format", incident="DR-2026-08x"))
 
     # ---- counts cover incidents; cve_validation covers every live record
     def test_counts_cover_incidents_only(self):
-        move(self.d, "DR-2026-081")
+        promote(self.d, "DR-2026-081")
         self.assertTrue(has(self.run_v(), "counts", msg="counts.total_incidents"))
 
     def test_cve_validation_covers_sub_threshold_records(self):
-        move(self.d, "DR-2026-062")
-        move(self.d, "DR-2026-089")
+        # A move changes no cve_validation value, because it covers both live arrays.
+        promote(self.d, "DR-2026-062")
+        promote(self.d, "DR-2026-089")
+        recount(self.d)
         bad = [f for f in self.run_v().errors if f.check == "counts" and f.message.startswith("cve_validation.")]
         self.assertEqual(bad, [], "\n".join(map(str, bad)))
 
@@ -440,7 +432,7 @@ class SubThreshold(unittest.TestCase):
 
     def test_kev_listed_cve_must_be_promoted(self):
         up = self.kev_listed("CVE-2026-42824")
-        c = move(self.d, "DR-2026-081")["validated_cve_details"]["cves"][0]
+        c = sub(self.d, "DR-2026-081")["validated_cve_details"]["cves"][0]
         c["cisa_kev"], c["kev_date_added"] = True, "2026-10-01"
         r = self.run_v(up)
         self.assertTrue(has(r, "sub-threshold", msg="(a)", incident="DR-2026-081"))
@@ -449,11 +441,10 @@ class SubThreshold(unittest.TestCase):
     def test_kev_flag_cannot_dodge_promotion(self):
         # Class A forces the copied flag: leaving cisa_kev false after a KEV refresh is an error of its own.
         up = self.kev_listed("CVE-2026-42824")
-        move(self.d, "DR-2026-081")
         self.assertTrue(has(self.run_v(up), "cisa_kev", incident="DR-2026-081", cve="CVE-2026-42824"))
 
     def test_realized_harm_must_be_promoted(self):
-        rec = move(self.d, "DR-2026-081")
+        rec = sub(self.d, "DR-2026-081")
         rec["veris"]["security_incident"], rec["report"]["observed_severity"] = "Confirmed", "Low"
         rec["veris"]["attribute"]["confidentiality"]["data_disclosure"] = "Yes"
         r = self.run_v()
@@ -461,13 +452,11 @@ class SubThreshold(unittest.TestCase):
         self.assertFalse(has(r, "status-effect", incident="DR-2026-081"))
 
     def test_negligible_near_miss_disclosure_stays(self):
-        move(self.d, "DR-2026-081")
-        move(self.d, "DR-2026-079")
         self.assertFalse(has(self.run_v(), "sub-threshold"))
 
     # ---- only disclosures (methodology §3.3 definition)
     def test_attack_relation_is_no_disclosure(self):
-        move(self.d, "DR-2026-062")["validated_cve_details"]["cves"][0]["relation"] = "exploited"
+        sub(self.d, "DR-2026-062")["validated_cve_details"]["cves"][0]["relation"] = "exploited"
         self.assertTrue(has(self.run_v(), "sub-threshold", msg="not a vulnerability disclosure", incident="DR-2026-062"))
 
     def test_related_only_is_no_disclosure(self):
@@ -475,18 +464,15 @@ class SubThreshold(unittest.TestCase):
         self.assertTrue(has(self.run_v(), "sub-threshold", msg="not a vulnerability disclosure", incident="DR-2026-025"))
 
     def test_record_without_cve_passes(self):
-        # Whether a record without a CVE is a disclosure is judgment (Class C).
-        move(self.d, "DR-2026-065")
+        # Whether a record without a CVE is a disclosure is judgment (Class C). DR-2026-065 has no CVE.
         self.assertFalse(has(self.run_v(), "sub-threshold", incident="DR-2026-065"))
 
     # ---- measurement
     def test_population_per_class(self):
-        move(self.d, "DR-2026-079")
-        move(self.d, "DR-2026-081")
-        move(self.d, "DR-2026-083")
+        # The 21 disclosures that fail methodology §3.3 (a)-(c): 17 with a CVE and DR-2026-065, 086, 090, 092 without.
         m = self.run_v().measurements
-        self.assertEqual(m["sub_threshold_classes"], {"AI-discovered": 1, "AI-stack": 2})
-        self.assertEqual(m["sub_threshold_records"], 3)
+        self.assertEqual(m["sub_threshold_classes"], {"AI-discovered": 9, "AI-stack": 12})
+        self.assertEqual(m["sub_threshold_records"], 21)
         self.assertNotIn("DR-2026-081", m["disclosure_rule_fails"], "the measurement covers incidents only")
 
 
@@ -569,10 +555,10 @@ class Sources(unittest.TestCase):
     # ---- at least one entry
     def test_counted_record_without_sources(self):
         # Counts and the ranking row are fixed by hand, so only the sources check can catch it.
-        incident(self.d, "DR-2026-081")["sources"] = []
+        incident(self.d, "DR-2026-078")["sources"] = []
         recount(self.d)
-        self.row("DR-2026-081")["sources"] = ""
-        self.assert_only_sources_finding("DR-2026-081")
+        self.row("DR-2026-078")["sources"] = ""
+        self.assert_only_sources_finding("DR-2026-078")
 
     def test_counted_db_record_without_sources(self):
         # The id-prefix error also fires (no register source is left), but the sources check names the cause.
@@ -582,14 +568,10 @@ class Sources(unittest.TestCase):
         self.assertTrue(has(self.run_v(), "sources", incident="DB-2026-016"))
 
     def test_sub_threshold_record_without_sources(self):
-        move(self.d, "DR-2026-081")
-        recount(self.d)
         sub(self.d, "DR-2026-081")["sources"] = []
         self.assert_only_sources_finding("DR-2026-081")
 
     def test_sub_threshold_record_with_sources_missing(self):
-        move(self.d, "DR-2026-081")
-        recount(self.d)
         del sub(self.d, "DR-2026-081")["sources"]
         self.assert_only_sources_finding("DR-2026-081")
 

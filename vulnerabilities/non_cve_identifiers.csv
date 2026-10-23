@@ -127,17 +127,17 @@ DR-2026-046,GHSA-28hc-2275-h287,GHSA,GHSA (malware),@redhat-cloud-services/entit
 DR-2026-046,GHSA-2p99-xvqh-j893,GHSA,GHSA (malware),@redhat-cloud-services/rbac-client 9.0.3/9.0.4/9.0.6,incidents
 DR-2026-046,GHSA-942v-f47r-w9c3,GHSA,GHSA (malware),@redhat-cloud-services/chrome 2.3.1/2.3.2/2.3.4,incidents
 DR-2026-046,GHSA-c3mv-fjj4-2542,GHSA,GHSA (malware),@redhat-cloud-services/eslint-config-redhat-cloud-services 3.2.1,incidents
-DR-2026-058,OpenBSD 7.8 errata 025,OpenBSD,vendor errata,27-year TCP SACK kernel crash found by Mythos; no CVE,incidents
-DR-2026-058,FreeBSD-SA-26:08.rpcsec_gss,FreeBSD,vendor advisory,= CVE-2026-4747,incidents
-DR-2026-058,GHSA-f89h-2fjh-2r9q,GHSA,GHSA,gitoxide (= CVE-2026-44471),incidents
+DR-2026-058,OpenBSD 7.8 errata 025,OpenBSD,vendor errata,27-year TCP SACK kernel crash found by Mythos; no CVE,sub_threshold_incidents
+DR-2026-058,FreeBSD-SA-26:08.rpcsec_gss,FreeBSD,vendor advisory,= CVE-2026-4747,sub_threshold_incidents
+DR-2026-058,GHSA-f89h-2fjh-2r9q,GHSA,GHSA,gitoxide (= CVE-2026-44471),sub_threshold_incidents
 DR-2026-059,OX Security MCP-STDIO advisory (15 Apr 2026),OX,vendor research advisory,"umbrella advisory for the wave; LangFlow, LettaAI and three undisclosed products listed without any ID",incidents
 DR-2026-063,HackerOne #3819931,HackerOne,bug-bounty report,"Wiz Red Agent report to Snowflake, 23 Jun 2026 (no CVE/GHSA assigned)",incidents
-DR-2026-084,EXIM-Security-2026-05-01.1,EXIM,vendor advisory,= CVE-2026-45185,incidents
-DR-2026-085,SA-CONTRIB-2026-062,SA,Drupal advisory,= CVE-2026-13242,incidents
-DR-2026-085,SA-CORE-2026-005,SA,Drupal advisory,= CVE-2026-55803,incidents
-DR-2026-085,SA-CORE-2026-006,SA,Drupal advisory,= CVE-2026-55804,incidents
-DR-2026-091,Chromium issue 531503216,Chromium,vendor bug,= CVE-2026-15903,incidents
-DR-2026-093,Chromium issue 541854084,Chromium,vendor bug,= CVE-2026-76021,incidents
-DR-2026-094,MFSA 2026-13,MFSA,Mozilla advisory,Firefox 148 - the 22 Anthropic-credited CVEs,incidents
-DR-2026-094,MFSA 2026-20,MFSA,Mozilla advisory,Firefox 149 - 6 further Anthropic-credited CVEs,incidents
-DR-2026-095,MFSA 2026-30,MFSA,Mozilla advisory,Firefox 150 (43 CVEs incl. the three rollups carrying the Mythos findings),incidents
+DR-2026-084,EXIM-Security-2026-05-01.1,EXIM,vendor advisory,= CVE-2026-45185,sub_threshold_incidents
+DR-2026-085,SA-CONTRIB-2026-062,SA,Drupal advisory,= CVE-2026-13242,sub_threshold_incidents
+DR-2026-085,SA-CORE-2026-005,SA,Drupal advisory,= CVE-2026-55803,sub_threshold_incidents
+DR-2026-085,SA-CORE-2026-006,SA,Drupal advisory,= CVE-2026-55804,sub_threshold_incidents
+DR-2026-091,Chromium issue 531503216,Chromium,vendor bug,= CVE-2026-15903,sub_threshold_incidents
+DR-2026-093,Chromium issue 541854084,Chromium,vendor bug,= CVE-2026-76021,sub_threshold_incidents
+DR-2026-094,MFSA 2026-13,MFSA,Mozilla advisory,Firefox 148 - the 22 Anthropic-credited CVEs,sub_threshold_incidents
+DR-2026-094,MFSA 2026-20,MFSA,Mozilla advisory,Firefox 149 - 6 further Anthropic-credited CVEs,sub_threshold_incidents
+DR-2026-095,MFSA 2026-30,MFSA,Mozilla advisory,Firefox 150 (43 CVEs incl. the three rollups carrying the Mythos findings),sub_threshold_incidents

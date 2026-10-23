@@ -4,7 +4,6 @@ Run: python3 -m unittest discover tests
 """
 from __future__ import annotations
 
-import copy
 import csv
 import json
 import sys
@@ -19,7 +18,6 @@ sys.path.insert(0, str(ROOT / "tests"))
 import build_vulnerabilities as bv  # noqa: E402
 import fetch_upstream as fu  # noqa: E402
 import lib_corpus as lc  # noqa: E402
-from corpus_helpers import move  # noqa: E402
 
 CORPUS = lc.load_corpus(lc.JSON_PATH)
 CREDITS = [{"value": "A", "type": "finder"}, {"value": "B", "type": "coordinator"},
@@ -128,8 +126,7 @@ class Ibss(unittest.TestCase):
 
     def test_related_link_does_not_count(self):
         # CVE-2026-30623: DR-2026-059 (counted, self-vulnerability) and DR-2026-080 (sub-threshold, related).
-        d = copy.deepcopy(CORPUS)
-        move(d, "DR-2026-080")
+        d = CORPUS
         rec = next(i for i in d["incidents"] if i["id"] == "DR-2026-059")
         want = (lc.SEV_WEIGHT[rec["report"]["observed_severity"]], lc.SEV_WEIGHT[rec["report"]["potential_severity"]])
         got = bv.ibss_per_cve(bv.build_links(d))["CVE-2026-30623"]
@@ -137,9 +134,7 @@ class Ibss(unittest.TestCase):
 
     def test_class_cap_on_real_records(self):
         # CVE-2026-54316 is in DR-2026-056 (potential Critical) and DR-2026-062 (High), both AI-stack disclosures.
-        d = copy.deepcopy(CORPUS)
-        move(d, "DR-2026-056")
-        move(d, "DR-2026-062")
+        d = CORPUS
         self.assertEqual(bv.ibss_per_cve(bv.build_links(d))["CVE-2026-54316"]["pot"], 16)
 
 
@@ -151,8 +146,7 @@ class BothArrays(unittest.TestCase):
         return [dict(zip(h, r)) for r in rows]
 
     def test_sub_threshold_cve_is_listed(self):
-        d = copy.deepcopy(CORPUS)
-        move(d, "DR-2026-081")
+        d = CORPUS
         row = next(r for r in self.rows(bv.table_cve_incidents(bv.build_links(d))) if r["cve"] == "CVE-2026-42824")
         self.assertEqual((row["incident_count"], row["sub_threshold_incident_count"], row["sub_threshold_incidents"]),
                          (0, 1, ["DR-2026-081"]))
@@ -169,10 +163,9 @@ class BothArrays(unittest.TestCase):
         return cves, cwes, non
 
     def test_coverage_in_memory(self):
-        # DR-2026-088 alone carries CWE-121 and other CWEs of its AI-discovered CVEs.
-        d = copy.deepcopy(CORPUS)
-        for iid in ("DR-2026-081", "DR-2026-088"):
-            move(d, iid)
+        # Sub-threshold records such as DR-2026-081 and DR-2026-088 (which alone carries CWE-121 and other CWEs of its
+        # AI-discovered CVEs) must reach every table.
+        d = CORPUS
         links = bv.build_links(d)
         cves, cwes, non = self.expected(d)
         self.assertEqual(cves - {r["cve"] for r in self.rows(bv.table_cve_incidents(links))}, set())
@@ -213,9 +206,7 @@ class Fetch(unittest.TestCase):
     def test_ids_include_sub_threshold_records(self):
         # Class A checks sub-threshold records too, so the fetcher must cache their CVEs (methodology §10.2).
         d = json.loads(fu.JSON_PATH.read_text(encoding="utf-8"))
-        rec = next(i for i in d["incidents"] if i["id"] == "DR-2026-081")
-        d["incidents"].remove(rec)
-        d["sub_threshold_incidents"] = [rec]
+        self.assertIn("DR-2026-081", [i["id"] for i in d["sub_threshold_incidents"]])
         self.assertIn("CVE-2026-42824", fu.ids_from_json(d)[0])
 
     def test_titleless_cves_from_cache(self):

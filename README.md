@@ -25,7 +25,7 @@ Rather than invent a bespoke AI-incident score, this project adopts **VERIS** �
 
 ## The dataset
 
-**`incidents/all_2026_ai_software_security_incidents.{json,csv,md}`** — the same 100 incidents in three forms:
+**`incidents/all_2026_ai_software_security_incidents.{json,csv,md}`** — the 79 counted incidents in three forms (the JSON also holds the 21 sub-threshold records):
 
 | File | What it is |
 |---|---|
@@ -36,11 +36,11 @@ Rather than invent a bespoke AI-incident score, this project adopts **VERIS** �
 
 The per-CVE validated layer (each CVE's relation to the incident, CVSS, KEV flag, CNA CWE, credits) exists in full only in the `.json`; the `.md` shows it condensed as a relation-grouped "Validated CVEs" line per entry, and the `.csv` lists only the CVE and CWE ids (`cve` as cited, `validated_cve`, `cwe`) — so a change to relations alters the `.json` and `.md` but not the `.csv`. The `.csv` and `.md` files, the sub-threshold ones included, are generated from the JSON by `scripts/build_incidents_report.py`, and everything under `vulnerabilities/` by `scripts/build_vulnerabilities.py` (see *Verifying and rebuilding*); edit only the JSON.
 
-**100 incidents**, severity-ranked by *observed* (realized) harm:
+**79 counted incidents**, severity-ranked by *observed* (realized) harm:
 
-- **2 Critical · 22 High · 31 Medium · 17 Low · 28 Negligible**
-- Status: 72 Confirmed · 23 Near miss · 5 False positive
-- IDs: `DB-2026-nnn` (*database*: at least one register source — AIID or VCDB; 50 incidents) and `DR-2026-nnn` (*direct report*: no register source, found through a deep-research or primary report; 50 incidents, all of them so far from the three deep-research reports); for 001–099, `nnn` is the position in the priority ranking of 2026-08-27. New records continue from 100 (`id_scheme.highest_assigned` + 1, the highest number assigned plus one). No number is renumbered, deleted or reused; the current ranking is `ranking_table` (observed severity, then potential severity, then ID).
+- **2 Critical · 22 High · 31 Medium · 17 Low · 7 Negligible**
+- Status: 72 Confirmed · 2 Near miss · 5 False positive
+- IDs: `DB-2026-nnn` (*database*: at least one register source — AIID or VCDB; 50 incidents) and `DR-2026-nnn` (*direct report*: no register source, found through a deep-research or primary report; 29 counted incidents and the 21 sub-threshold records, all of them so far from the three deep-research reports); for 001–099, `nnn` is the position in the priority ranking of 2026-08-27. New records continue from 100 (`id_scheme.highest_assigned` + 1, the highest number assigned plus one). No number is renumbered, deleted or reused; the current ranking is `ranking_table` (observed severity, then potential severity, then ID).
 
 ### Counted incidents and sub-threshold disclosures
 
@@ -50,7 +50,7 @@ So a disclosure is a counted incident (array `incidents`) only with known exploi
 
 The records in `incidents` and `sub_threshold_incidents` are the **live records**. A live record that stops being relevant, for example a duplicate, is never deleted: it moves, unchanged, into a wrapper in `retired_incidents` (methodology §10.2).
 
-All 100 records are still in `incidents`. The disclosures among them that fail the threshold (17 with a CVE, which `scripts/validate_incidents.py` lists, and 4 without) move to `sub_threshold_incidents` in a coming update, which changes the counts above.
+The 21 disclosures that fail the threshold are in `sub_threshold_incidents`: 12 AI-stack and 9 AI-discovered records, 17 of them with a CVE (DR-2026-056, 058, 060, 062, 065, 079–081, 083–095). They moved there on 2026-10-23 with their IDs and contents unchanged; the counts above cover the 79 counted incidents.
 
 ### How each incident is coded
 
@@ -86,7 +86,7 @@ README.md
 LICENSE                                            # licence split + MIT text (code)
 LICENSE-CC-BY-SA-4.0.txt · LICENSE-CC-BY-4.0.txt   # data · methodology
 incidents/
-├─ all_2026_ai_software_security_incidents.json   # 100 incidents — source of truth
+├─ all_2026_ai_software_security_incidents.json   # 79 counted incidents + 21 sub-threshold records — source of truth
 ├─ all_2026_ai_software_security_incidents.csv    # flattened, one row per incident
 ├─ all_2026_ai_software_security_incidents.md     # severity-ranked field guide
 ├─ all_2026_ai_software_security_incidents_sub_threshold.{csv,md}  # the sub-threshold records (methodology §3.3)
