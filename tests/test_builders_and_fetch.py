@@ -70,6 +70,11 @@ class InPlay(unittest.TestCase):
     def test_toolkit_and_related_never_count(self):
         self.assertFalse({"toolkit", "related"} & lc.IN_PLAY)
 
+    def test_firefox_rollups_are_ai_discovered(self):
+        # DR-2026-095 is a discovery campaign: Mozilla shipped the Claude Mythos Preview finds in three rollup CVEs.
+        rec = next(i for i in lc.records(CORPUS) if i["id"] == "DR-2026-095")
+        self.assertEqual(lc.disclosure_classes(rec), {"AI-discovered"})
+
 
 COUNTED, SUB = "incidents", "sub_threshold_incidents"
 

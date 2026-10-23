@@ -45,7 +45,7 @@ CVSS_BANDS = ["9.0-10.0", "7.0-8.9", "4.0-6.9", "0.1-3.9", "no CVSS"]
 SEGMENTS = [
     ("ai-exploited", "CVEs used, attempted or carried by the AI-enabled attacker / agent (relation exploited, exploited-unconfirmed, attempted, toolkit)"),
     ("ai-written", "self (vulnerability) CVEs of incidents whose AI role includes 'AI-generated weakness' — vulnerabilities in AI-authored code (Vibe Security Radar corpus)"),
-    ("ai-stack-vulnerability", "self (vulnerability) CVEs of all other incidents — disclosed flaws in the affected products, mostly AI-stack components (gateways, coding agents, MCP SDKs, assistants); also the Trivy VS Code extension and DR-2026-095's Firefox rollups"),
+    ("ai-stack-vulnerability", "self (vulnerability) CVEs of all other incidents — disclosed flaws in the affected products, mostly AI-stack components (gateways, coding agents, MCP SDKs, assistants); also the Trivy VS Code extension"),
     ("malicious-release", "self (malicious release) CVEs — package or extension versions that are malware by design (CNA CWE-506): a supply-chain artefact to remove, not a weakness of the product's code"),
     ("ai-discovered", "CVEs credited to the AI system or AI-assisted team the incident is about (relation discovered)"),
     ("related", "CVEs recorded as related context only (relation related)"),

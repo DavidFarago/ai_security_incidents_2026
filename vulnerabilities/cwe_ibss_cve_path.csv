@@ -10,21 +10,21 @@ CWE-77,6,0,11,0,11,0,10,56,8,2,DR-2026-036; DR-2026-059; DR-2026-079; DR-2026-08
 CWE-78,5,0,15,0,14,0,10,56,9,3,DR-2026-036; DR-2026-057; DR-2026-059; DR-2026-062; DR-2026-079,,ai-written; ai-stack-vulnerability; ai-discovered
 CWE-287,2,0,2,0,2,0,9,24,10,14,DB-2026-006; DR-2026-088,,ai-exploited; ai-discovered
 CWE-22,5,0,23,0,23,0,8,48,11,5,DR-2026-036; DR-2026-060; DR-2026-062; DR-2026-080; DR-2026-088,,ai-written; ai-stack-vulnerability; ai-discovered
-CWE-95,1,0,1,0,1,0,8,16,12,20,DR-2026-008,,ai-exploited
-CWE-502,1,0,1,0,1,0,8,16,13,21,DB-2026-006,,ai-exploited
-CWE-416,4,0,5,0,5,0,7,28,14,10,DR-2026-036; DR-2026-084; DR-2026-088; DR-2026-093,,ai-written; ai-discovered
-CWE-59,3,0,5,0,5,0,6,40,15,8,DR-2026-036; DR-2026-058; DR-2026-060,,ai-written; ai-stack-vulnerability; ai-discovered
-CWE-200,3,0,11,0,10,0,6,32,16,9,DR-2026-036; DR-2026-056; DR-2026-062,,ai-written; ai-stack-vulnerability
+CWE-95,1,0,1,0,1,0,8,16,12,18,DR-2026-008,,ai-exploited
+CWE-502,1,0,1,0,1,0,8,16,13,19,DB-2026-006,,ai-exploited
+CWE-416,4,0,5,0,5,0,7,32,14,8,DR-2026-036; DR-2026-084; DR-2026-088; DR-2026-093,,ai-written; ai-discovered
+CWE-59,3,0,5,0,5,0,6,32,15,9,DR-2026-036; DR-2026-058; DR-2026-060,,ai-written; ai-stack-vulnerability; ai-discovered
+CWE-200,3,0,11,0,10,0,6,32,16,10,DR-2026-036; DR-2026-056; DR-2026-062,,ai-written; ai-stack-vulnerability
 CWE-942,2,0,3,0,2,0,6,24,17,15,DR-2026-036; DR-2026-057,,ai-written; ai-stack-vulnerability
-CWE-74,2,0,5,0,5,0,5,16,18,22,DR-2026-036; DR-2026-087,,ai-written; ai-stack-vulnerability
-CWE-79,2,0,5,0,5,0,5,16,19,23,DR-2026-036; DR-2026-087,,ai-written; ai-stack-vulnerability
-CWE-89,2,0,3,0,3,0,5,16,20,24,DR-2026-036; DR-2026-085,,ai-written; ai-discovered
-CWE-269,2,0,3,0,3,0,5,16,21,25,DR-2026-036; DR-2026-089,,ai-written; ai-stack-vulnerability
-CWE-400,2,0,2,0,2,0,5,16,22,26,DR-2026-036; DR-2026-088,,ai-written; ai-discovered
-CWE-522,2,0,2,0,2,0,5,16,23,27,DR-2026-036; DR-2026-062,,ai-written; ai-stack-vulnerability
-CWE-693,2,0,2,0,2,0,5,16,24,28,DR-2026-036; DR-2026-089,,ai-written; ai-stack-vulnerability
-CWE-862,2,0,11,0,11,0,5,16,25,29,DR-2026-036; DR-2026-088,,ai-written; ai-discovered
-CWE-915,2,0,3,0,3,0,5,16,26,30,DR-2026-036; DR-2026-085,,ai-written; ai-discovered
+CWE-74,2,0,5,0,5,0,5,16,18,20,DR-2026-036; DR-2026-087,,ai-written; ai-stack-vulnerability
+CWE-79,2,0,5,0,5,0,5,16,19,21,DR-2026-036; DR-2026-087,,ai-written; ai-stack-vulnerability
+CWE-269,2,0,3,0,3,0,5,16,20,22,DR-2026-036; DR-2026-089,,ai-written; ai-stack-vulnerability
+CWE-400,2,0,2,0,2,0,5,16,21,23,DR-2026-036; DR-2026-088,,ai-written; ai-discovered
+CWE-522,2,0,2,0,2,0,5,16,22,24,DR-2026-036; DR-2026-062,,ai-written; ai-stack-vulnerability
+CWE-693,2,0,2,0,2,0,5,16,23,25,DR-2026-036; DR-2026-089,,ai-written; ai-stack-vulnerability
+CWE-862,2,0,11,0,11,0,5,16,24,26,DR-2026-036; DR-2026-088,,ai-written; ai-discovered
+CWE-89,2,0,3,0,3,0,5,12,25,29,DR-2026-036; DR-2026-085,,ai-written; ai-discovered
+CWE-915,2,0,3,0,3,0,5,12,26,30,DR-2026-036; DR-2026-085,,ai-written; ai-discovered
 CWE-15,1,0,2,0,2,0,4,8,27,31,DR-2026-036,,ai-written
 CWE-41,1,0,2,0,2,0,4,8,28,32,DR-2026-036,,ai-written
 CWE-62,1,0,1,0,1,0,4,8,29,33,DR-2026-036,,ai-written
@@ -81,10 +81,10 @@ CWE-1295,1,0,1,0,1,0,4,8,79,83,DR-2026-036,,ai-written
 CWE-1321,1,0,2,0,2,0,4,8,80,84,DR-2026-036,,ai-written
 CWE-1333,1,0,1,0,1,0,4,8,81,85,DR-2026-036,,ai-written
 CWE-1336,1,0,1,0,1,0,4,8,82,86,DR-2026-036,,ai-written
-CWE-121,2,0,3,0,3,0,2,24,83,16,DR-2026-058; DR-2026-088,,ai-discovered
-CWE-183,2,0,2,0,1,0,2,24,84,17,DR-2026-056; DR-2026-062,,ai-stack-vulnerability
-CWE-295,2,0,3,0,3,0,2,24,85,18,DR-2026-058; DR-2026-088,,ai-discovered
-CWE-515,2,0,2,0,1,0,2,24,86,19,DR-2026-056; DR-2026-062,,ai-stack-vulnerability
+CWE-183,2,0,2,0,1,0,2,24,83,16,DR-2026-056; DR-2026-062,,ai-stack-vulnerability
+CWE-515,2,0,2,0,1,0,2,24,84,17,DR-2026-056; DR-2026-062,,ai-stack-vulnerability
+CWE-121,2,0,3,0,3,0,2,16,85,27,DR-2026-058; DR-2026-088,,ai-discovered
+CWE-295,2,0,3,0,3,0,2,16,86,28,DR-2026-058; DR-2026-088,,ai-discovered
 CWE-61,1,0,1,0,1,0,1,8,87,87,DR-2026-062,,ai-stack-vulnerability
 CWE-90,1,0,1,0,1,0,1,8,88,88,DR-2026-088,,ai-discovered
 CWE-248,1,0,1,0,1,0,1,8,89,89,DR-2026-088,,ai-discovered

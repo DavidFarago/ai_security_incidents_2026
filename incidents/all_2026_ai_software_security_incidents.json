@@ -882,17 +882,6 @@
       "validated_cve": "CVE-2026-12537; CVE-2026-54316"
     },
     {
-      "id": "DR-2026-058",
-      "incident": "Project Glasswing / Claude Mythos Preview mass zero-day discovery (WolfSSL CVE-2026-5194, FreeBSD CVE-2026-4747)",
-      "date": "Apr - Jun 2026",
-      "status": "Near miss",
-      "observed": "Negligible",
-      "potential": "Critical",
-      "sources": "ClaudeCode_DeepResearch_ai_incidents_2026.md",
-      "cve_cwe": "CVE-2026-5194; CVE-2026-4747",
-      "validated_cve": "CVE-2026-5194; CVE-2026-4747; CVE-2026-44471; CVE-2026-5398; CVE-2026-6386; CVE-2026-5588; CVE-2026-31402; CVE-2026-31554; CVE-2026-43185; CVE-2026-64015; CVE-2026-32316; CVE-2026-33721; CVE-2026-5199; CVE-2024-47711"
-    },
-    {
       "id": "DR-2026-060",
       "incident": "Cursor 'DuneSlide' zero-click prompt-injection RCE (CVE-2026-50548 / CVE-2026-50549)",
       "date": "reported Feb 2026, fixed 2 Apr, disclosed Jul 2026",
@@ -902,6 +891,17 @@
       "sources": "ClaudeCode_DeepResearch_ai_incidents_2026.md",
       "cve_cwe": "CVE-2026-50548; CVE-2026-50549",
       "validated_cve": "CVE-2026-50548; CVE-2026-50549"
+    },
+    {
+      "id": "DR-2026-058",
+      "incident": "Project Glasswing / Claude Mythos Preview mass zero-day discovery (WolfSSL CVE-2026-5194, FreeBSD CVE-2026-4747)",
+      "date": "Apr - Jun 2026",
+      "status": "Near miss",
+      "observed": "Negligible",
+      "potential": "High",
+      "sources": "ClaudeCode_DeepResearch_ai_incidents_2026.md",
+      "cve_cwe": "CVE-2026-5194; CVE-2026-4747",
+      "validated_cve": "CVE-2026-5194; CVE-2026-4747; CVE-2026-44471; CVE-2026-5398; CVE-2026-6386; CVE-2026-5588; CVE-2026-31402; CVE-2026-31554; CVE-2026-43185; CVE-2026-64015; CVE-2026-32316; CVE-2026-33721; CVE-2026-5199; CVE-2024-47711"
     },
     {
       "id": "DR-2026-062",
@@ -1014,17 +1014,6 @@
       "validated_cve": "CVE-2026-45185"
     },
     {
-      "id": "DR-2026-085",
-      "incident": "Google Mandiant Agentic Vulnerability Discovery Harness (AVDH) — 100+ criticals in two days, 12+ CVEs",
-      "date": "2026",
-      "status": "Near miss",
-      "observed": "Negligible",
-      "potential": "High",
-      "sources": "Grok_DeepResearch_ai_incidents_2026.md",
-      "cve_cwe": "CVE-2026-13242; CVE-2026-55803",
-      "validated_cve": "CVE-2026-13242; CVE-2026-55803; CVE-2026-55804"
-    },
-    {
       "id": "DR-2026-086",
       "incident": "Gemini calendar-invite prompt injection, ChatGPT hidden DNS exfiltration, Codex branch-name command injection (vendor fixes)",
       "date": "Jan – Mar 2026",
@@ -1091,23 +1080,12 @@
       "validated_cve": "CVE-2026-15903"
     },
     {
-      "id": "DR-2026-092",
-      "incident": "Microsoft Copilot 'Reprompt' — link-seeded indirect prompt injection exfiltrating consumer Copilot data",
-      "date": "14 Jan 2026 (disclosure)",
-      "status": "Near miss",
-      "observed": "Negligible",
-      "potential": "Medium",
-      "sources": "ChatGPT_DeepResearch_ai_incidents_2026.md; ClaudeCode_DeepResearch_ai_incidents_2026.md",
-      "cve_cwe": "CWE-77",
-      "validated_cve": ""
-    },
-    {
       "id": "DR-2026-093",
       "incident": "Google AI-assisted Chrome bug hunting found more issues in a short window than many prior cycles",
       "date": "2026",
       "status": "Near miss",
       "observed": "Negligible",
-      "potential": "Medium",
+      "potential": "High",
       "sources": "Grok_DeepResearch_ai_incidents_2026.md",
       "cve_cwe": "CWE-noinfo",
       "validated_cve": "CVE-2026-76021"
@@ -1118,7 +1096,7 @@
       "date": "6 Mar 2026 (disclosure)",
       "status": "Near miss",
       "observed": "Negligible",
-      "potential": "Medium",
+      "potential": "High",
       "sources": "ChatGPT_DeepResearch_ai_incidents_2026.md",
       "cve_cwe": "CWE-noinfo",
       "validated_cve": "CVE-2026-2763; CVE-2026-2764; CVE-2026-2796; CVE-2026-2797; CVE-2026-2765; CVE-2026-2766; CVE-2026-2769; CVE-2026-2799; CVE-2026-2770; CVE-2026-2771; CVE-2026-2772; CVE-2026-2773; CVE-2026-2774; CVE-2026-2775; CVE-2026-2785; CVE-2026-2804; CVE-2026-2786; CVE-2026-2805; CVE-2026-2787; CVE-2026-2788; CVE-2026-2789; CVE-2026-2791; CVE-2026-4702; CVE-2026-4723; CVE-2026-4724; CVE-2026-4704; CVE-2026-4705; CVE-2026-4718"
@@ -1129,10 +1107,32 @@
       "date": "21 Apr 2026 (disclosure)",
       "status": "Near miss",
       "observed": "Negligible",
-      "potential": "Medium",
+      "potential": "High",
       "sources": "ChatGPT_DeepResearch_ai_incidents_2026.md",
       "cve_cwe": "CWE-noinfo",
       "validated_cve": "CVE-2026-6784; CVE-2026-6785; CVE-2026-6786; CVE-2026-6746; CVE-2026-6757; CVE-2026-6758"
+    },
+    {
+      "id": "DR-2026-085",
+      "incident": "Google Mandiant Agentic Vulnerability Discovery Harness (AVDH) — 100+ criticals in two days, 12+ CVEs",
+      "date": "2026",
+      "status": "Near miss",
+      "observed": "Negligible",
+      "potential": "Medium",
+      "sources": "Grok_DeepResearch_ai_incidents_2026.md",
+      "cve_cwe": "CVE-2026-13242; CVE-2026-55803",
+      "validated_cve": "CVE-2026-13242; CVE-2026-55803; CVE-2026-55804"
+    },
+    {
+      "id": "DR-2026-092",
+      "incident": "Microsoft Copilot 'Reprompt' — link-seeded indirect prompt injection exfiltrating consumer Copilot data",
+      "date": "14 Jan 2026 (disclosure)",
+      "status": "Near miss",
+      "observed": "Negligible",
+      "potential": "Medium",
+      "sources": "ChatGPT_DeepResearch_ai_incidents_2026.md; ClaudeCode_DeepResearch_ai_incidents_2026.md",
+      "cve_cwe": "CWE-77",
+      "validated_cve": ""
     },
     {
       "id": "DB-2026-096",
@@ -16229,9 +16229,9 @@
         ],
         "observed_severity": "Negligible",
         "observed_severity_rationale": "Massive defensive discovery (incl. a ~5B-device WolfSSL flaw), reported to maintainers; no source reports exploitation of the found flaws, so no asset of a victim was affected (a near miss, methodology §8.2). The >99% unpatched findings are a risk, not a realized effect.",
-        "potential_severity": "Critical",
-        "potential_severity_rationale": "A model that autonomously finds/exploits 0-days at this scale is dual-use with critical offensive potential.",
-        "potential_severity_confidence": "High",
+        "potential_severity": "High",
+        "potential_severity_rationale": "Found-flaw potential: exploited, the found flaws give remote code execution in the kernel of FreeBSD NFS servers that load kgssapi.ko (CVE-2026-4747), forged ECDSA certificate signatures in wolfSSL builds that also enable EdDSA or ML-DSA, if the CA public key is known (CVE-2026-5194), file writes outside the worktree when a user checks out a malicious repository with gitoxide (CVE-2026-44471), and a remote crash of OpenBSD hosts (errata 025). Each flaw is bounded by its configuration, so the harm is a major compromise of the affected systems, not a systemic one.",
+        "potential_severity_confidence": "Medium",
         "vulnerabilities": [
           {
             "cve": "CVE-2026-5194"
@@ -21215,7 +21215,7 @@
         "observed_severity": "Negligible",
         "observed_severity_rationale": "AI found and helped fix a critical MTA RCE with no reported exploitation.",
         "potential_severity": "High",
-        "potential_severity_rationale": "An unauthenticated RCE in a ubiquitous internet-facing mail server has very large blast radius if weaponised.",
+        "potential_severity_rationale": "An unauthenticated RCE in a ubiquitous internet-facing mail server has a very large blast radius if weaponised; the CNA limits it to Exim 'in certain GnuTLS configurations', which bounds the reach below Critical.",
         "potential_severity_confidence": "Medium",
         "vulnerabilities": [
           {
@@ -21378,8 +21378,8 @@
         ],
         "observed_severity": "Negligible",
         "observed_severity_rationale": "AI removed risk at scale: 100+ verified critical vulns in two days and 12+ CVEs, all defensively via human-validated disclosure.",
-        "potential_severity": "High",
-        "potential_severity_rationale": "The same discovery velocity, if turned offensive, compresses the window between a vulnerable release and a working exploit for defenders everywhere.",
+        "potential_severity": "Medium",
+        "potential_severity_rationale": "Found-flaw potential: exploited, the found flaws give an unauthenticated SQL injection with limited confidentiality and integrity impact in sites that use the contrib module Geolocation Field (CVE-2026-13242, CNA CVSS 6.5) and a PHP object injection in Drupal core that needs high privileges and high attack complexity (CVE-2026-55803, CVSS 5.9). Drupal rates both 'Critical' on its own scale, but the CNA vectors bound the harm: material but contained.",
         "potential_severity_confidence": "Medium",
         "vulnerabilities": [
           {
@@ -22989,7 +22989,7 @@
         "observed_severity": "Negligible",
         "observed_severity_rationale": "AI defensively found and helped fix a V8 memory-corruption/sandbox chain with no exploitation.",
         "potential_severity": "High",
-        "potential_severity_rationale": "AI reasoning about memory-corruption and sandbox boundaries in a hardened runtime signals shrinking discovery-to-exploit windows for everyone.",
+        "potential_severity_rationale": "Found-flaw potential: exploited, the V8 out-of-bounds read and write lets a crafted HTML page run code inside Chrome's renderer sandbox (CVE-2026-15903, Chromium severity High: code in the context of other origins, cross-origin data); the chained escape from V8's heap sandbox stays inside the renderer. A drive-by page could compromise cross-site data of many Chrome users; the browser sandbox bounds the harm below Critical.",
         "potential_severity_confidence": "Medium",
         "vulnerabilities": [
           {
@@ -23275,9 +23275,9 @@
         ],
         "observed_severity": "Negligible",
         "observed_severity_rationale": "AI accelerated defensive discovery in Chrome; bugs fixed, no exploitation.",
-        "potential_severity": "Medium",
-        "potential_severity_rationale": "Higher discovery throughput shortens patch windows but also signals attacker capability against hardened browsers.",
-        "potential_severity_confidence": "Low",
+        "potential_severity": "High",
+        "potential_severity_rationale": "Found-flaw potential: exploited, the DOM use-after-free lets a crafted HTML page run code inside Chrome's renderer sandbox (CVE-2026-76021, Chromium severity High: code in the context of other origins, cross-origin data). A drive-by page could compromise cross-site data of many Chrome users; the browser sandbox bounds the harm below Critical.",
+        "potential_severity_confidence": "Medium",
         "weaknesses": [
           {
             "cwe": "CWE-noinfo",
@@ -23434,8 +23434,8 @@
         ],
         "observed_severity": "Negligible",
         "observed_severity_rationale": "AI removed latent risk: 22 Firefox bugs found and fixed with no exploitation.",
-        "potential_severity": "Medium",
-        "potential_severity_rationale": "Higher autonomous audit throughput shortens patch windows; the same capability aids attackers.",
+        "potential_severity": "High",
+        "potential_severity_rationale": "Found-flaw potential: 14 of the 22 found Firefox flaws are rated high by Mozilla (MFSA 2026-13); most of the 22 are use-after-free bugs, many in the JavaScript engine and the DOM. Mozilla's sec-high means 'exploitable vulnerabilities which can lead to the widespread compromise of many users requiring no more than normal browsing actions'. Exploited, a drive-by page could compromise many Firefox users; the content-process sandbox bounds the harm below Critical.",
         "potential_severity_confidence": "Medium",
         "weaknesses": [
           {
@@ -24162,8 +24162,8 @@
         ],
         "observed_severity": "Negligible",
         "observed_severity_rationale": "Large-scale defensive discovery (271 fixes) with no reported exploitation.",
-        "potential_severity": "Medium",
-        "potential_severity_rationale": "Scale/efficiency of AI discovery shortens patch windows; dual-use signal.",
+        "potential_severity": "High",
+        "potential_severity_rationale": "Found-flaw potential: Mozilla shipped the 271 bugs found with Claude Mythos Preview (180 high, 80 moderate, 11 low) in the memory-safety rollups CVE-2026-6784, 6785 and 6786, of which it says 'we presume that with enough effort some of these could have been exploited to run arbitrary code'. Exploited, a drive-by page could compromise many Firefox users (Mozilla sec-high); the content-process sandbox bounds the harm below Critical. Confidence is Low: the rollups mix these bugs with others, and their exploitability is presumed.",
         "potential_severity_confidence": "Low",
         "weaknesses": [
           {
@@ -24197,7 +24197,7 @@
         "cves": [
           {
             "cve": "CVE-2026-6784",
-            "relation": "self-vulnerability",
+            "relation": "discovered",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "mozilla",
@@ -24216,7 +24216,7 @@
           },
           {
             "cve": "CVE-2026-6785",
-            "relation": "self-vulnerability",
+            "relation": "discovered",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "mozilla",
@@ -24235,7 +24235,7 @@
           },
           {
             "cve": "CVE-2026-6786",
-            "relation": "self-vulnerability",
+            "relation": "discovered",
             "in_original": false,
             "state": "PUBLISHED",
             "cna": "mozilla",
