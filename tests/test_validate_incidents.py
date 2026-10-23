@@ -340,13 +340,16 @@ class Numbering(unittest.TestCase):
         return [f for f in vi.core_checks(self.d) if f.check == "numbering"]
 
     def test_deleted_top_record_is_missing(self):
-        # DB-2026-099 has no CVE, so no cve_validation value changes; with the counts fixed by hand, only the
-        # high-water mark shows the deletion.
-        take(self.d, "DB-2026-099")
+        # The record numbered highest_assigned has no CVE, so no cve_validation value changes; with the counts fixed
+        # by hand, only the high-water mark shows the deletion.
+        n = self.d["id_scheme"]["highest_assigned"]
+        top = next(i for i in lib_corpus.records(self.d) if lib_corpus.incident_number(i["id"]) == n)
+        self.assertFalse(top.get("validated_cve"), f"{top['id']} has CVEs; the test needs a record without")
+        take(self.d, top["id"])
         recount(self.d)
         r = vi.validate(self.d, UPSTREAM)
         self.assertEqual([f.check for f in r.errors], ["numbering"], "\n".join(map(str, r.errors)))
-        self.assertTrue(has(r, "numbering", msg="missing 099"))
+        self.assertTrue(has(r, "numbering", msg=f"missing {n:03d}"))
 
     def test_new_record_above_highest_assigned(self):
         iid = next_id(self.d)

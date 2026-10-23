@@ -15,7 +15,7 @@ sys.path.insert(0, str(ROOT / "tests"))
 
 import build_incidents_report as bir  # noqa: E402
 import lib_corpus  # noqa: E402
-from corpus_helpers import incident, move  # noqa: E402
+from corpus_helpers import add_record, incident, move, next_id  # noqa: E402
 
 BASE = ROOT / "incidents" / "all_2026_ai_software_security_incidents"
 CORPUS = lib_corpus.load_corpus(lib_corpus.JSON_PATH)
@@ -58,6 +58,17 @@ class SubThresholdReport(unittest.TestCase):
                 self.assertIn(iid, texts["_sub_threshold.csv"])
                 self.assertNotIn(title, texts[".md"])
                 self.assertNotIn(iid, texts[".csv"])
+
+
+class ScopeLine(unittest.TestCase):
+    def test_later_records_are_counted(self):
+        # Records numbered 100 or higher are not part of the 2026-08-26 consolidation (methodology §4.1).
+        d = copy.deepcopy(CORPUS)
+        add_record(d, "DR-2026-081", next_id(d), "sub_threshold_incidents")
+        later = sum(1 for _, x in lib_corpus.numbered_ids(d) if lib_corpus.incident_number(x) >= 100)
+        line = next(x for x in bir.render(d)[".md"].splitlines() if x.startswith("- **Scope & union.**"))
+        self.assertIn(f"{later} record{'' if later == 1 else 's'} numbered 100 or higher", line)
+        self.assertIn(f"lists the {len(d['incidents'])} counted incidents", line)
 
 
 class VerisCategories(unittest.TestCase):

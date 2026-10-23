@@ -11,12 +11,12 @@ Everything below is built from the live records that have a validated CVE: the c
 | Critical | 2 | 1 | 1 | 0 |
 | High | 22 | 8 | 13 | 1 |
 | Medium | 31 | 4 | 20 | 7 |
-| Low | 17 | 3 | 11 | 3 |
-| Negligible | 27 | 16 | 7 | 4 |
-| total | 99 | 32 | 52 | 15 |
+| Low | 17 | 2 | 12 | 3 |
+| Negligible | 28 | 17 | 7 | 4 |
+| total | 100 | 32 | 53 | 15 |
 
 - **14 of the 23 in-scope High/Critical incidents have no CVE.** What identifies them instead: stolen credentials, misconfiguration, malicious package releases (GHSA/MAL/PYSEC advisories — see the non-CVE identifiers table), prompt injection, agent misuse.
-- The CVE-bearing set is disclosure-heavy: 16 of 32 incidents with a CVE are observed *Negligible* — the incident is the disclosure of a vulnerability, nothing has happened yet. Low observed harm in the CVE-side statistics is therefore partly by construction.
+- The CVE-bearing set is disclosure-heavy: 17 of 32 incidents with a CVE are observed *Negligible* — the incident is the disclosure of a vulnerability, nothing has happened yet. Low observed harm in the CVE-side statistics is therefore partly by construction.
 - 6 incidents are identified only by non-CVE identifiers: DB-2026-005, DR-2026-012, DR-2026-035, DR-2026-045, DR-2026-046, DR-2026-063.
 
 **Sub-threshold records per class** (0 records, not counted above). A sub-threshold record is a vulnerability disclosure without a KEV listing, an exploitation report or realized harm (methodology §3.3). A record can have several classes. *CVE links* are the links whose relation (`validated_cve_details.cves[].relation`) gives the class: `self (vulnerability)` or `discovered`; a record without a CVE takes its class from `report.ai_role`.
@@ -67,7 +67,7 @@ Everything below is built from the live records that have a validated CVE: the c
 
 ## Summary
 
-- **99 incidents**; **32** carry validated CVEs, 67 do not (6 of those have only non-CVE identifiers: DB-2026-005, DR-2026-012, DR-2026-035, DR-2026-045, DR-2026-046, DR-2026-063). Beside them **0 sub-threshold records** (†), 0 of them with validated CVEs.
+- **100 incidents**; **32** carry validated CVEs, 68 do not (6 of those have only non-CVE identifiers: DB-2026-005, DR-2026-012, DR-2026-035, DR-2026-045, DR-2026-046, DR-2026-063). Beside them **0 sub-threshold records** (†), 0 of them with validated CVEs.
 - **322 distinct CVEs**, 333 record–CVE links (333 of counted incidents, 0 of sub-threshold records). Only 11 CVEs occur in more than one record (all in exactly two): [CVE-2025-3248](https://www.cve.org/CVERecord?id=CVE-2025-3248), [CVE-2025-65720](https://www.cve.org/CVERecord?id=CVE-2025-65720), [CVE-2026-15903](https://www.cve.org/CVERecord?id=CVE-2026-15903), [CVE-2026-28472](https://www.cve.org/CVERecord?id=CVE-2026-28472), [CVE-2026-30623](https://www.cve.org/CVERecord?id=CVE-2026-30623), [CVE-2026-33634](https://www.cve.org/CVERecord?id=CVE-2026-33634), [CVE-2026-39987](https://www.cve.org/CVERecord?id=CVE-2026-39987), [CVE-2026-54316](https://www.cve.org/CVERecord?id=CVE-2026-54316), [CVE-2026-54769](https://www.cve.org/CVERecord?id=CVE-2026-54769), [CVE-2026-59726](https://www.cve.org/CVERecord?id=CVE-2026-59726), [CVE-2026-76021](https://www.cve.org/CVERecord?id=CVE-2026-76021).
 - Links by relation (all live records): `exploited` 5, `self (malicious release)` 4, `exploited-unconfirmed` 5, `attempted` 3, `toolkit` 7, `self (vulnerability)` 196, `discovered` 52, `related` 61.
 - **16 distinct CVEs on CISA KEV**; 20 CVE links in the exploited family (exploited 5, exploited-unconfirmed 5, attempted 3, toolkit 7).
@@ -77,7 +77,7 @@ Everything below is built from the live records that have a validated CVE: the c
 
 ## Findings
 
-1. **CVE covers the disclosures, not the breaches.** 14 of the 23 in-scope High/Critical incidents have no CVE; 16 of the 32 CVE-bearing incidents are observed Negligible (see *Coverage*). The CVE-side tables describe the third of the corpus that is easiest to identify, not the third that hurt most.
+1. **CVE covers the disclosures, not the breaches.** 14 of the 23 in-scope High/Critical incidents have no CVE; 17 of the 32 CVE-bearing incidents are observed Negligible (see *Coverage*). The CVE-side tables describe the third of the corpus that is easiest to identify, not the third that hurt most.
 2. **The CVE side is deep-research-sourced.** 29 of the 32 live records with a validated CVE come from the deep-research reports (DR ids), 3 from the registers — registers record breaches, not vulnerability disclosures. The CVEs are validated at CVE.org; the *sample* of CVE-bearing incidents is not representative of AI-related incidents.
 3. **Exploitation evidence tracked harm; the base score did not.** Every confirmed-`exploited` CVE is on CISA KEV, and the exploited family spans CVSS 6.5–10 — the same range as unexploited disclosures.
 4. **Medium CVSS ≠ safe.** 4 CVEs rated CVSS < 7.0 sit in potential-Critical incidents (jfrog/artifactory 3, anthropics/claude-code 1; incidents DB-2026-006, DR-2026-056). Per CVSS band, the share of CVEs in a potential-Critical incident is 33% for 9.0–10.0 against 6% / 5% for 7.0–8.9 / 4.0–6.9 — CVSS separates the top band, not the middle. 2 incidents; a case, not a statistic.
@@ -171,7 +171,7 @@ ID order; † marks a sub-threshold record. Records with more than 10 CVEs are l
 | DB-2026-055 | Southern California University of Health Sciences - hacking / exfiltration of 2,206 records (VCDB; no AI component) | Medium | Medium | 0 | — |
 | DR-2026-056 | 'Comment & Control' (Black Hat USA 2026) — GitHub-issue prompt injection drives RCE/credential theft in Claude Code, Gemini CLI, Codex, Copilot | Negligible | Critical | 2 | *self (vulnerability):* [CVE-2026-12537](https://www.cve.org/CVERecord?id=CVE-2026-12537), [CVE-2026-54316](https://www.cve.org/CVERecord?id=CVE-2026-54316) |
 | DR-2026-057 | RufRoot (CVE-2026-59726, CVSS 10.0) in Ruflo/Claude Flow + max-severity agent-harness CVEs (Langroid, LiteLLM) | Low | Critical | 6 | *self (vulnerability):* [CVE-2026-59726](https://www.cve.org/CVERecord?id=CVE-2026-59726); *related:* [CVE-2026-42208](https://www.cve.org/CVERecord?id=CVE-2026-42208), [CVE-2026-49468](https://www.cve.org/CVERecord?id=CVE-2026-49468), [CVE-2026-54760](https://www.cve.org/CVERecord?id=CVE-2026-54760), [CVE-2026-54769](https://www.cve.org/CVERecord?id=CVE-2026-54769), [CVE-2026-55615](https://www.cve.org/CVERecord?id=CVE-2026-55615) |
-| DR-2026-058 | Project Glasswing / Claude Mythos Preview mass zero-day discovery (WolfSSL CVE-2026-5194, FreeBSD CVE-2026-4747; early Mythos sandbox escape) | Low | Critical | 14 | **14 CVEs** — see [full list](#dr-2026-058) below |
+| DR-2026-058 | Project Glasswing / Claude Mythos Preview mass zero-day discovery (WolfSSL CVE-2026-5194, FreeBSD CVE-2026-4747) | Negligible | Critical | 14 | **14 CVEs** — see [full list](#dr-2026-058) below |
 | DR-2026-059 | Anthropic MCP STDIO transport design RCE in official SDKs (~200k deployments, 14 CVEs) | Low | Critical | 17 | **17 CVEs** — see [full list](#dr-2026-059) below |
 | DR-2026-060 | Cursor 'DuneSlide' zero-click prompt-injection RCE (CVE-2026-50548 / CVE-2026-50549) | Negligible | Critical | 2 | *self (vulnerability):* [CVE-2026-50548](https://www.cve.org/CVERecord?id=CVE-2026-50548), [CVE-2026-50549](https://www.cve.org/CVERecord?id=CVE-2026-50549) |
 | DB-2026-061 | DJI Romo robot-vacuum cloud authorization flaw exposed ~7,000 homes' camera/mic/maps | Low | High | 0 | — |
@@ -213,6 +213,7 @@ ID order; † marks a sub-threshold record. Records with more than 10 CVEs are l
 | DB-2026-097 | DHS agents threatened legal observers with a 'domestic terrorist' database while using AI-enabled surveillance (AIID 1390) | Negligible | Low | 0 | — |
 | DB-2026-098 | Grok disclosed adult performer Siri Dahl's legal name and birthdate - doxxing (AIID 1443) | Negligible | Low | 0 | — |
 | DB-2026-099 | NotebookLM voice-replication lawsuit — David Greene v. Google (AIID 1386) | Negligible | Negligible | 0 | — |
+| DR-2026-100 | Early Claude Mythos Preview escaped its test sandbox on request and, unasked, posted its exploit details online | Low | Medium | 0 | — |
 
 ### Full CVE lists of the aggregate records
 
@@ -222,7 +223,7 @@ ID order; † marks a sub-threshold record. Records with more than 10 CVEs are l
 - *self (vulnerability)* (161): [CVE-2025-46724](https://www.cve.org/CVERecord?id=CVE-2025-46724), [CVE-2025-62615](https://www.cve.org/CVERecord?id=CVE-2025-62615), [CVE-2025-70040](https://www.cve.org/CVERecord?id=CVE-2025-70040), [CVE-2026-1979](https://www.cve.org/CVERecord?id=CVE-2026-1979), [CVE-2026-2393](https://www.cve.org/CVERecord?id=CVE-2026-2393), [CVE-2026-5802](https://www.cve.org/CVERecord?id=CVE-2026-5802), [CVE-2026-6830](https://www.cve.org/CVERecord?id=CVE-2026-6830), [CVE-2026-7147](https://www.cve.org/CVERecord?id=CVE-2026-7147), [CVE-2026-7235](https://www.cve.org/CVERecord?id=CVE-2026-7235), [CVE-2026-7386](https://www.cve.org/CVERecord?id=CVE-2026-7386), [CVE-2026-7445](https://www.cve.org/CVERecord?id=CVE-2026-7445), [CVE-2026-7589](https://www.cve.org/CVERecord?id=CVE-2026-7589), [CVE-2026-7590](https://www.cve.org/CVERecord?id=CVE-2026-7590), [CVE-2026-7600](https://www.cve.org/CVERecord?id=CVE-2026-7600), [CVE-2026-8147](https://www.cve.org/CVERecord?id=CVE-2026-8147), [CVE-2026-9366](https://www.cve.org/CVERecord?id=CVE-2026-9366), [CVE-2026-9806](https://www.cve.org/CVERecord?id=CVE-2026-9806), [CVE-2026-10108](https://www.cve.org/CVERecord?id=CVE-2026-10108), [CVE-2026-10291](https://www.cve.org/CVERecord?id=CVE-2026-10291), [CVE-2026-10855](https://www.cve.org/CVERecord?id=CVE-2026-10855), [CVE-2026-11330](https://www.cve.org/CVERecord?id=CVE-2026-11330), [CVE-2026-13591](https://www.cve.org/CVERecord?id=CVE-2026-13591), [CVE-2026-14611](https://www.cve.org/CVERecord?id=CVE-2026-14611), [CVE-2026-14869](https://www.cve.org/CVERecord?id=CVE-2026-14869), [CVE-2026-16326](https://www.cve.org/CVERecord?id=CVE-2026-16326), [CVE-2026-18446](https://www.cve.org/CVERecord?id=CVE-2026-18446), [CVE-2026-18980](https://www.cve.org/CVERecord?id=CVE-2026-18980), [CVE-2026-19282](https://www.cve.org/CVERecord?id=CVE-2026-19282), [CVE-2026-22171](https://www.cve.org/CVERecord?id=CVE-2026-22171), [CVE-2026-25481](https://www.cve.org/CVERecord?id=CVE-2026-25481), [CVE-2026-25505](https://www.cve.org/CVERecord?id=CVE-2026-25505), [CVE-2026-26321](https://www.cve.org/CVERecord?id=CVE-2026-26321), [CVE-2026-27203](https://www.cve.org/CVERecord?id=CVE-2026-27203), [CVE-2026-27486](https://www.cve.org/CVERecord?id=CVE-2026-27486), [CVE-2026-27487](https://www.cve.org/CVERecord?id=CVE-2026-27487), [CVE-2026-27695](https://www.cve.org/CVERecord?id=CVE-2026-27695), [CVE-2026-27795](https://www.cve.org/CVERecord?id=CVE-2026-27795), [CVE-2026-28451](https://www.cve.org/CVERecord?id=CVE-2026-28451), [CVE-2026-28472](https://www.cve.org/CVERecord?id=CVE-2026-28472), [CVE-2026-28473](https://www.cve.org/CVERecord?id=CVE-2026-28473), [CVE-2026-28478](https://www.cve.org/CVERecord?id=CVE-2026-28478), [CVE-2026-29612](https://www.cve.org/CVERecord?id=CVE-2026-29612), [CVE-2026-30635](https://www.cve.org/CVERecord?id=CVE-2026-30635), [CVE-2026-32001](https://www.cve.org/CVERecord?id=CVE-2026-32001), [CVE-2026-32002](https://www.cve.org/CVERecord?id=CVE-2026-32002), [CVE-2026-32021](https://www.cve.org/CVERecord?id=CVE-2026-32021), [CVE-2026-32034](https://www.cve.org/CVERecord?id=CVE-2026-32034), [CVE-2026-32045](https://www.cve.org/CVERecord?id=CVE-2026-32045), [CVE-2026-32049](https://www.cve.org/CVERecord?id=CVE-2026-32049), [CVE-2026-32057](https://www.cve.org/CVERecord?id=CVE-2026-32057), [CVE-2026-32111](https://www.cve.org/CVERecord?id=CVE-2026-32111), [CVE-2026-32231](https://www.cve.org/CVERecord?id=CVE-2026-32231), [CVE-2026-32232](https://www.cve.org/CVERecord?id=CVE-2026-32232), [CVE-2026-32247](https://www.cve.org/CVERecord?id=CVE-2026-32247), [CVE-2026-32718](https://www.cve.org/CVERecord?id=CVE-2026-32718), [CVE-2026-32885](https://www.cve.org/CVERecord?id=CVE-2026-32885), [CVE-2026-32890](https://www.cve.org/CVERecord?id=CVE-2026-32890), [CVE-2026-32891](https://www.cve.org/CVERecord?id=CVE-2026-32891), [CVE-2026-32974](https://www.cve.org/CVERecord?id=CVE-2026-32974), [CVE-2026-33331](https://www.cve.org/CVERecord?id=CVE-2026-33331), [CVE-2026-33637](https://www.cve.org/CVERecord?id=CVE-2026-33637), [CVE-2026-33890](https://www.cve.org/CVERecord?id=CVE-2026-33890), [CVE-2026-33994](https://www.cve.org/CVERecord?id=CVE-2026-33994), [CVE-2026-34050](https://www.cve.org/CVERecord?id=CVE-2026-34050), [CVE-2026-34076](https://www.cve.org/CVERecord?id=CVE-2026-34076), [CVE-2026-34218](https://www.cve.org/CVERecord?id=CVE-2026-34218), [CVE-2026-34599](https://www.cve.org/CVERecord?id=CVE-2026-34599), [CVE-2026-35570](https://www.cve.org/CVERecord?id=CVE-2026-35570), [CVE-2026-35646](https://www.cve.org/CVERecord?id=CVE-2026-35646), [CVE-2026-35670](https://www.cve.org/CVERecord?id=CVE-2026-35670), [CVE-2026-39888](https://www.cve.org/CVERecord?id=CVE-2026-39888), [CVE-2026-39974](https://www.cve.org/CVERecord?id=CVE-2026-39974), [CVE-2026-40069](https://www.cve.org/CVERecord?id=CVE-2026-40069), [CVE-2026-40070](https://www.cve.org/CVERecord?id=CVE-2026-40070), [CVE-2026-40113](https://www.cve.org/CVERecord?id=CVE-2026-40113), [CVE-2026-40159](https://www.cve.org/CVERecord?id=CVE-2026-40159), [CVE-2026-40162](https://www.cve.org/CVERecord?id=CVE-2026-40162), [CVE-2026-40583](https://www.cve.org/CVERecord?id=CVE-2026-40583), [CVE-2026-40599](https://www.cve.org/CVERecord?id=CVE-2026-40599), [CVE-2026-41329](https://www.cve.org/CVERecord?id=CVE-2026-41329), [CVE-2026-41334](https://www.cve.org/CVERecord?id=CVE-2026-41334), [CVE-2026-41345](https://www.cve.org/CVERecord?id=CVE-2026-41345), [CVE-2026-41365](https://www.cve.org/CVERecord?id=CVE-2026-41365), [CVE-2026-41376](https://www.cve.org/CVERecord?id=CVE-2026-41376), [CVE-2026-41406](https://www.cve.org/CVERecord?id=CVE-2026-41406), [CVE-2026-41495](https://www.cve.org/CVERecord?id=CVE-2026-41495), [CVE-2026-42148](https://www.cve.org/CVERecord?id=CVE-2026-42148), [CVE-2026-42278](https://www.cve.org/CVERecord?id=CVE-2026-42278), [CVE-2026-42282](https://www.cve.org/CVERecord?id=CVE-2026-42282), [CVE-2026-42333](https://www.cve.org/CVERecord?id=CVE-2026-42333), [CVE-2026-42860](https://www.cve.org/CVERecord?id=CVE-2026-42860), [CVE-2026-43576](https://www.cve.org/CVERecord?id=CVE-2026-43576), [CVE-2026-43582](https://www.cve.org/CVERecord?id=CVE-2026-43582), [CVE-2026-44219](https://www.cve.org/CVERecord?id=CVE-2026-44219), [CVE-2026-44220](https://www.cve.org/CVERecord?id=CVE-2026-44220), [CVE-2026-44335](https://www.cve.org/CVERecord?id=CVE-2026-44335), [CVE-2026-44427](https://www.cve.org/CVERecord?id=CVE-2026-44427), [CVE-2026-44430](https://www.cve.org/CVERecord?id=CVE-2026-44430), [CVE-2026-44653](https://www.cve.org/CVERecord?id=CVE-2026-44653), [CVE-2026-44788](https://www.cve.org/CVERecord?id=CVE-2026-44788), [CVE-2026-44791](https://www.cve.org/CVERecord?id=CVE-2026-44791), [CVE-2026-45001](https://www.cve.org/CVERecord?id=CVE-2026-45001), [CVE-2026-45136](https://www.cve.org/CVERecord?id=CVE-2026-45136), [CVE-2026-45288](https://www.cve.org/CVERecord?id=CVE-2026-45288), [CVE-2026-45555](https://www.cve.org/CVERecord?id=CVE-2026-45555), [CVE-2026-45582](https://www.cve.org/CVERecord?id=CVE-2026-45582), [CVE-2026-45707](https://www.cve.org/CVERecord?id=CVE-2026-45707), [CVE-2026-45792](https://www.cve.org/CVERecord?id=CVE-2026-45792), [CVE-2026-46383](https://www.cve.org/CVERecord?id=CVE-2026-46383), [CVE-2026-46672](https://www.cve.org/CVERecord?id=CVE-2026-46672), [CVE-2026-47091](https://www.cve.org/CVERecord?id=CVE-2026-47091), [CVE-2026-47133](https://www.cve.org/CVERecord?id=CVE-2026-47133), [CVE-2026-47137](https://www.cve.org/CVERecord?id=CVE-2026-47137), [CVE-2026-47211](https://www.cve.org/CVERecord?id=CVE-2026-47211), [CVE-2026-47390](https://www.cve.org/CVERecord?id=CVE-2026-47390), [CVE-2026-47396](https://www.cve.org/CVERecord?id=CVE-2026-47396), [CVE-2026-48527](https://www.cve.org/CVERecord?id=CVE-2026-48527), [CVE-2026-48797](https://www.cve.org/CVERecord?id=CVE-2026-48797), [CVE-2026-48989](https://www.cve.org/CVERecord?id=CVE-2026-48989), [CVE-2026-49291](https://www.cve.org/CVERecord?id=CVE-2026-49291), [CVE-2026-49401](https://www.cve.org/CVERecord?id=CVE-2026-49401), [CVE-2026-49956](https://www.cve.org/CVERecord?id=CVE-2026-49956), [CVE-2026-50180](https://www.cve.org/CVERecord?id=CVE-2026-50180), [CVE-2026-50568](https://www.cve.org/CVERecord?id=CVE-2026-50568), [CVE-2026-50569](https://www.cve.org/CVERecord?id=CVE-2026-50569), [CVE-2026-50570](https://www.cve.org/CVERecord?id=CVE-2026-50570), [CVE-2026-52812](https://www.cve.org/CVERecord?id=CVE-2026-52812), [CVE-2026-53598](https://www.cve.org/CVERecord?id=CVE-2026-53598), [CVE-2026-53633](https://www.cve.org/CVERecord?id=CVE-2026-53633), [CVE-2026-53812](https://www.cve.org/CVERecord?id=CVE-2026-53812), [CVE-2026-54052](https://www.cve.org/CVERecord?id=CVE-2026-54052), [CVE-2026-54249](https://www.cve.org/CVERecord?id=CVE-2026-54249), [CVE-2026-54362](https://www.cve.org/CVERecord?id=CVE-2026-54362), [CVE-2026-54769](https://www.cve.org/CVERecord?id=CVE-2026-54769), [CVE-2026-55197](https://www.cve.org/CVERecord?id=CVE-2026-55197), [CVE-2026-55389](https://www.cve.org/CVERecord?id=CVE-2026-55389), [CVE-2026-55448](https://www.cve.org/CVERecord?id=CVE-2026-55448), [CVE-2026-55668](https://www.cve.org/CVERecord?id=CVE-2026-55668), [CVE-2026-56443](https://www.cve.org/CVERecord?id=CVE-2026-56443), [CVE-2026-56676](https://www.cve.org/CVERecord?id=CVE-2026-56676), [CVE-2026-56678](https://www.cve.org/CVERecord?id=CVE-2026-56678), [CVE-2026-56679](https://www.cve.org/CVERecord?id=CVE-2026-56679), [CVE-2026-58138](https://www.cve.org/CVERecord?id=CVE-2026-58138), [CVE-2026-58195](https://www.cve.org/CVERecord?id=CVE-2026-58195), [CVE-2026-58432](https://www.cve.org/CVERecord?id=CVE-2026-58432), [CVE-2026-59101](https://www.cve.org/CVERecord?id=CVE-2026-59101), [CVE-2026-59221](https://www.cve.org/CVERecord?id=CVE-2026-59221), [CVE-2026-59233](https://www.cve.org/CVERecord?id=CVE-2026-59233), [CVE-2026-59259](https://www.cve.org/CVERecord?id=CVE-2026-59259), [CVE-2026-59726](https://www.cve.org/CVERecord?id=CVE-2026-59726), [CVE-2026-61462](https://www.cve.org/CVERecord?id=CVE-2026-61462), [CVE-2026-63102](https://www.cve.org/CVERecord?id=CVE-2026-63102), [CVE-2026-65598](https://www.cve.org/CVERecord?id=CVE-2026-65598), [CVE-2026-66065](https://www.cve.org/CVERecord?id=CVE-2026-66065), [CVE-2026-70485](https://www.cve.org/CVERecord?id=CVE-2026-70485), [CVE-2026-71556](https://www.cve.org/CVERecord?id=CVE-2026-71556), [CVE-2026-72770](https://www.cve.org/CVERecord?id=CVE-2026-72770), [CVE-2026-72774](https://www.cve.org/CVERecord?id=CVE-2026-72774), [CVE-2026-73299](https://www.cve.org/CVERecord?id=CVE-2026-73299), [CVE-2026-73308](https://www.cve.org/CVERecord?id=CVE-2026-73308), [CVE-2026-74881](https://www.cve.org/CVERecord?id=CVE-2026-74881)
 
 <a id="dr-2026-058"></a>
-**DR-2026-058 — Project Glasswing / Claude Mythos Preview mass zero-day discovery (WolfSSL CVE-2026-5194, FreeBSD CVE-2026-4747; early Mythos sandbox escape)** (14 CVEs; observed Low, potential Critical)
+**DR-2026-058 — Project Glasswing / Claude Mythos Preview mass zero-day discovery (WolfSSL CVE-2026-5194, FreeBSD CVE-2026-4747)** (14 CVEs; observed Negligible, potential Critical)
 
 - *discovered* (3): [CVE-2026-4747](https://www.cve.org/CVERecord?id=CVE-2026-4747), [CVE-2026-5194](https://www.cve.org/CVERecord?id=CVE-2026-5194), [CVE-2026-44471](https://www.cve.org/CVERecord?id=CVE-2026-44471)
 - *related* (11): [CVE-2024-47711](https://www.cve.org/CVERecord?id=CVE-2024-47711), [CVE-2026-5199](https://www.cve.org/CVERecord?id=CVE-2026-5199), [CVE-2026-5398](https://www.cve.org/CVERecord?id=CVE-2026-5398), [CVE-2026-5588](https://www.cve.org/CVERecord?id=CVE-2026-5588), [CVE-2026-6386](https://www.cve.org/CVERecord?id=CVE-2026-6386), [CVE-2026-31402](https://www.cve.org/CVERecord?id=CVE-2026-31402), [CVE-2026-31554](https://www.cve.org/CVERecord?id=CVE-2026-31554), [CVE-2026-32316](https://www.cve.org/CVERecord?id=CVE-2026-32316), [CVE-2026-33721](https://www.cve.org/CVERecord?id=CVE-2026-33721), [CVE-2026-43185](https://www.cve.org/CVERecord?id=CVE-2026-43185), [CVE-2026-64015](https://www.cve.org/CVERecord?id=CVE-2026-64015)
@@ -307,7 +308,7 @@ Only 11 CVEs recur, all of them twice: [CVE-2025-3248](https://www.cve.org/CVERe
 | [CVE-2026-48797](https://www.cve.org/CVERecord?id=CVE-2026-48797) | 1 | DR-2026-036:self (vulnerability) |  | 9.3 (v4.0) | 4 | 8 | GitHub_M | 2026-06-16 | mcp-tool-shop-org/@mcptoolshop/backpropagate; mcp-tool-shop-org/backpropagate | CWE-358, CWE-862, CWE-1295 | Backpropagate: backprop ui --auth and backprop ui --share do not enforce authentication |
 | [CVE-2026-50548](https://www.cve.org/CVERecord?id=CVE-2026-50548) | 1 | DR-2026-060:self (vulnerability) |  | 9.3 (v4.0) | 1 | 16 | GitHub_M | 2026-06-25 | cursor/cursor | CWE-22 | Cursor Desktop sandbox escape via agent-controlled working directory |
 | [CVE-2026-50549](https://www.cve.org/CVERecord?id=CVE-2026-50549) | 1 | DR-2026-060:self (vulnerability) |  | 9.3 (v4.0) | 1 | 16 | GitHub_M | 2026-06-25 | cursor/cursor | CWE-59 | Cursor Desktop sandbox escape via symlink and failed path canonicalization |
-| [CVE-2026-5194](https://www.cve.org/CVERecord?id=CVE-2026-5194) | 1 | DR-2026-058:discovered |  | 9.3 (v4.0) | 2 | 16 | wolfSSL | 2026-04-09 | wolfSSL/wolfSSL | CWE-295 | wolfSSL ECDSA Certificate Verification |
+| [CVE-2026-5194](https://www.cve.org/CVERecord?id=CVE-2026-5194) | 1 | DR-2026-058:discovered |  | 9.3 (v4.0) | 1 | 16 | wolfSSL | 2026-04-09 | wolfSSL/wolfSSL | CWE-295 | wolfSSL ECDSA Certificate Verification |
 | [CVE-2025-54994](https://www.cve.org/CVERecord?id=CVE-2025-54994) | 1 | DR-2026-059:related |  | 9.3 (v4.0) |  |  | GitHub_M | 2025-09-08 | akoskm/create-mcp-server-stdio | CWE-78 | @akoskm/create-mcp-server-stdio has Command Injection in MCP Server due to unsafe `exec` API |
 | [CVE-2026-54760](https://www.cve.org/CVERecord?id=CVE-2026-54760) | 1 | DR-2026-057:related |  | 9.3 (v4.0) |  |  | GitHub_M | 2026-07-09 | langroid/langroid | CWE-22, CWE-89 | Langroid: SQLChatAgent dangerous-function blocklist can be bypassed with quoted or schema-qualified pg_read_file calls |
 | [CVE-2026-55615](https://www.cve.org/CVERecord?id=CVE-2026-55615) | 1 | DR-2026-057:related |  | 9.2 (v4.0) |  |  | GitHub_M | 2026-07-09 | langroid/langroid | CWE-74 | Langroid: Neo4jChatAgent executes LLM-generated Cypher without validation (prompt-to-Cypher injection; config-conditional RCE), mirroring the SQLChatAgent bug fixed in CVE-2026-25879 |
@@ -374,7 +375,7 @@ Only 11 CVEs recur, all of them twice: [CVE-2025-3248](https://www.cve.org/CVERe
 | [CVE-2026-31431](https://www.cve.org/CVERecord?id=CVE-2026-31431) | 1 | DB-2026-018:toolkit | **KEV** | 7.8 (v3.1) |  |  | Linux | 2026-04-22 | Linux/Linux |  | crypto: algif_aead - Revert to operating out-of-place |
 | [CVE-2026-43500](https://www.cve.org/CVERecord?id=CVE-2026-43500) | 1 | DB-2026-018:toolkit |  | 7.8 (v3.1) |  |  | Linux | 2026-05-11 | Linux/Linux |  | rxrpc: Also unshare DATA/RESPONSE packets when paged frags are present |
 | [CVE-2026-45555](https://www.cve.org/CVERecord?id=CVE-2026-45555) | 1 | DR-2026-036:self (vulnerability) |  | 7.8 (v3.1) | 4 | 8 | GitHub_M | 2026-05-29 | MarcelRoozekrans/roslyn-codelens-mcp | CWE-94 | Roslyn CodeLens MCP Server: Untrusted Roslyn Analyzer Execution via get_diagnostics Leads to Arbitrary Code Execution |
-| [CVE-2026-44471](https://www.cve.org/CVERecord?id=CVE-2026-44471) | 1 | DR-2026-058:discovered |  | 7.8 (v3.1) | 2 | 16 | GitHub_M | 2026-05-13 | GitoxideLabs/gitoxide | CWE-59 | gitoxide: Symlink prefix-reuse allows worktree escape during checkout |
+| [CVE-2026-44471](https://www.cve.org/CVERecord?id=CVE-2026-44471) | 1 | DR-2026-058:discovered |  | 7.8 (v3.1) | 1 | 16 | GitHub_M | 2026-05-13 | GitoxideLabs/gitoxide | CWE-59 | gitoxide: Symlink prefix-reuse allows worktree escape during checkout |
 | [CVE-2024-47711](https://www.cve.org/CVERecord?id=CVE-2024-47711) | 1 | DR-2026-058:related |  | 7.8 (v3.1) |  |  | Linux | 2024-10-21 | Linux/Linux |  | af_unix: Don't return OOB skb in manage_oob(). |
 | [CVE-2026-25157](https://www.cve.org/CVERecord?id=CVE-2026-25157) | 1 | DR-2026-039:related |  | 7.8 (v3.1) |  |  | GitHub_M | 2026-02-04 | openclaw/openclaw | CWE-78 | OpenClaw/Clawdbot has OS Command Injection via Project Root Path in sshNodeCommand |
 | [CVE-2026-31554](https://www.cve.org/CVERecord?id=CVE-2026-31554) | 1 | DR-2026-058:related |  | 7.8 (v3.1) |  |  | Linux | 2026-04-24 | Linux/Linux |  | futex: Require sys_futex_requeue() to have identical flags |
@@ -557,7 +558,7 @@ Only 11 CVEs recur, all of them twice: [CVE-2025-3248](https://www.cve.org/CVERe
 | [CVE-2026-2799](https://www.cve.org/CVERecord?id=CVE-2026-2799) | 1 | DR-2026-094:discovered |  |  | 1 | 4 | mozilla | 2026-02-24 | Mozilla/Firefox; Mozilla/Thunderbird |  | Use-after-free in the DOM: Core & HTML component |
 | [CVE-2026-2804](https://www.cve.org/CVERecord?id=CVE-2026-2804) | 1 | DR-2026-094:discovered |  |  | 1 | 4 | mozilla | 2026-02-24 | Mozilla/Firefox; Mozilla/Thunderbird |  | Use-after-free in the JavaScript: WebAssembly component |
 | [CVE-2026-2805](https://www.cve.org/CVERecord?id=CVE-2026-2805) | 1 | DR-2026-094:discovered |  |  | 1 | 4 | mozilla | 2026-02-24 | Mozilla/Firefox; Mozilla/Thunderbird |  | Invalid pointer in the DOM: Core & HTML component |
-| [CVE-2026-4747](https://www.cve.org/CVERecord?id=CVE-2026-4747) | 1 | DR-2026-058:discovered |  |  | 2 | 16 | freebsd | 2026-03-26 | FreeBSD/FreeBSD | CWE-121 | Remote code execution via RPCSEC_GSS packet validation |
+| [CVE-2026-4747](https://www.cve.org/CVERecord?id=CVE-2026-4747) | 1 | DR-2026-058:discovered |  |  | 1 | 16 | freebsd | 2026-03-26 | FreeBSD/FreeBSD | CWE-121 | Remote code execution via RPCSEC_GSS packet validation |
 | [CVE-2026-13242](https://www.cve.org/CVERecord?id=CVE-2026-13242) | 1 | DR-2026-085:discovered |  |  | 1 | 8 | drupal | 2026-07-10 | Drupal/Geolocation Field | CWE-89 | Geolocation Field - Critical - SQL Injection - SA-CONTRIB-2026-062 |
 | [CVE-2026-14431](https://www.cve.org/CVERecord?id=CVE-2026-14431) | 1 | DR-2026-088:discovered |  |  | 1 | 8 | Chrome | 2026-07-01 | Google/Chrome | CWE-843 | Type Confusion in V8 in Google Chrome prior to 150.0.7871.46 allowed a remote attacker to execute arbitrary code inside a sandbox via a crafted HTML page. |
 | [CVE-2026-15903](https://www.cve.org/CVERecord?id=CVE-2026-15903) | **2** | DR-2026-088:discovered<br>DR-2026-091:discovered |  |  | 2 | 16 | Chrome | 2026-07-20 | Google/Chrome |  | Out of bounds read and write in V8 in Google Chrome prior to 150.0.7871.128 allowed a remote attacker to execute arbitrary code inside a sandbox via a crafted HTML page. |
@@ -586,11 +587,11 @@ Each severity cell counts the links of counted incidents by the incident's obser
 
 | CVSS band of CVE | Critical | High | Medium | Low | Negligible | Total | Sub-threshold links |
 |---|---|---|---|---|---|---|---|
-| Critical 9.0-10.0 | 1 | 14 | 21 | 15 | 10 | 61 | 0 |
-| High 7.0-8.9 | 0 | 10 | 74 | 8 | 20 | 112 | 0 |
-| Medium 4.0-6.9 | 0 | 4 | 60 | 2 | 15 | 81 | 0 |
-| Low 0.1-3.9 | 0 | 0 | 9 | 1 | 3 | 13 | 0 |
-| no CVSS | 0 | 3 | 5 | 11 | 47 | 66 | 0 |
+| Critical 9.0-10.0 | 1 | 14 | 21 | 12 | 13 | 61 | 0 |
+| High 7.0-8.9 | 0 | 10 | 74 | 3 | 25 | 112 | 0 |
+| Medium 4.0-6.9 | 0 | 4 | 60 | 0 | 17 | 81 | 0 |
+| Low 0.1-3.9 | 0 | 0 | 9 | 0 | 4 | 13 | 0 |
+| no CVSS | 0 | 3 | 5 | 8 | 50 | 66 | 0 |
 
 Read together with the *Coverage* table at the top: the CVE-bearing incidents are disclosure-heavy, so the Negligible/Low columns are populated partly by construction.
 
@@ -628,7 +629,7 @@ Share of in-play CVEs with at least one **potential-Critical** incident, per CVS
 | [CVE-2026-40933](https://www.cve.org/CVERecord?id=CVE-2026-40933) | 10 (v3.1) |  | 2 | 16 | DR-2026-059:self (vulnerability) |
 | [CVE-2025-3248](https://www.cve.org/CVERecord?id=CVE-2025-3248) | 9.8 (v3.1) | **KEV** | 8 | 16 | DR-2026-011:exploited |
 | [CVE-2026-9198](https://www.cve.org/CVERecord?id=CVE-2026-9198) | 9.8 (v3.1) | **KEV** | 8 | 16 | DR-2026-008:exploited |
-| [CVE-2026-5194](https://www.cve.org/CVERecord?id=CVE-2026-5194) | 9.3 (v4.0) |  | 2 | 16 | DR-2026-058:discovered |
+| [CVE-2026-5194](https://www.cve.org/CVERecord?id=CVE-2026-5194) | 9.3 (v4.0) |  | 1 | 16 | DR-2026-058:discovered |
 | [CVE-2026-33017](https://www.cve.org/CVERecord?id=CVE-2026-33017) | 9.3 (v4.0) | **KEV** | 8 | 16 | DR-2026-008:exploited |
 | [CVE-2026-39987](https://www.cve.org/CVERecord?id=CVE-2026-39987) | 9.3 (v4.0) | **KEV** | 16 | 16 | DR-2026-020:exploited; DR-2026-023:exploited |
 | [CVE-2026-50548](https://www.cve.org/CVERecord?id=CVE-2026-50548) | 9.3 (v4.0) |  | 1 | 16 | DR-2026-060:self (vulnerability) |
@@ -637,12 +638,12 @@ Share of in-play CVEs with at least one **potential-Critical** incident, per CVS
 | [CVE-2026-65617](https://www.cve.org/CVERecord?id=CVE-2026-65617) | 8.8 (v3.1) |  | 8 | 16 | DB-2026-006:exploited-unconfirmed |
 | [CVE-2026-66014](https://www.cve.org/CVERecord?id=CVE-2026-66014) | 8.8 (v3.1) |  | 8 | 16 | DB-2026-006:exploited-unconfirmed |
 | [CVE-2021-29441](https://www.cve.org/CVERecord?id=CVE-2021-29441) | 8.6 (v3.1) |  | 8 | 16 | DR-2026-011:attempted |
-| [CVE-2026-44471](https://www.cve.org/CVERecord?id=CVE-2026-44471) | 7.8 (v3.1) |  | 2 | 16 | DR-2026-058:discovered |
+| [CVE-2026-44471](https://www.cve.org/CVERecord?id=CVE-2026-44471) | 7.8 (v3.1) |  | 1 | 16 | DR-2026-058:discovered |
 | [CVE-2026-65923](https://www.cve.org/CVERecord?id=CVE-2026-65923) | 6.8 (v3.1) |  | 8 | 16 | DB-2026-006:exploited-unconfirmed |
 | [CVE-2026-65924](https://www.cve.org/CVERecord?id=CVE-2026-65924) | 6.5 (v3.1) |  | 8 | 16 | DB-2026-006:exploited-unconfirmed |
 | [CVE-2026-65925](https://www.cve.org/CVERecord?id=CVE-2026-65925) | 6.5 (v3.1) |  | 8 | 16 | DB-2026-006:exploited-unconfirmed |
 | [CVE-2025-65720](https://www.cve.org/CVERecord?id=CVE-2025-65720) | — |  | 2 | 16 | DR-2026-059:self (vulnerability) |
-| [CVE-2026-4747](https://www.cve.org/CVERecord?id=CVE-2026-4747) | — |  | 2 | 16 | DR-2026-058:discovered |
+| [CVE-2026-4747](https://www.cve.org/CVERecord?id=CVE-2026-4747) | — |  | 1 | 16 | DR-2026-058:discovered |
 | [CVE-2026-15903](https://www.cve.org/CVERecord?id=CVE-2026-15903) | — |  | 2 | 16 | DR-2026-088:discovered; DR-2026-091:discovered |
 | [CVE-2026-30615](https://www.cve.org/CVERecord?id=CVE-2026-30615) | — |  | 2 | 16 | DR-2026-059:self (vulnerability) |
 | [CVE-2026-30616](https://www.cve.org/CVERecord?id=CVE-2026-30616) | — |  | 2 | 16 | DR-2026-059:self (vulnerability) |
@@ -676,7 +677,7 @@ By strongest in-play relation: 8 `self (vulnerability)`, 5 `discovered`. Severe 
 | [CVE-2026-12537](https://www.cve.org/CVERecord?id=CVE-2026-12537) | 10 (v4.0) |  | 1 | 16 | DR-2026-056:self (vulnerability) |
 | [CVE-2026-26015](https://www.cve.org/CVERecord?id=CVE-2026-26015) | 10 (v4.0) |  | 2 | 16 | DR-2026-059:self (vulnerability) |
 | [CVE-2026-40933](https://www.cve.org/CVERecord?id=CVE-2026-40933) | 10 (v3.1) |  | 2 | 16 | DR-2026-059:self (vulnerability) |
-| [CVE-2026-5194](https://www.cve.org/CVERecord?id=CVE-2026-5194) | 9.3 (v4.0) |  | 2 | 16 | DR-2026-058:discovered |
+| [CVE-2026-5194](https://www.cve.org/CVERecord?id=CVE-2026-5194) | 9.3 (v4.0) |  | 1 | 16 | DR-2026-058:discovered |
 | [CVE-2026-50548](https://www.cve.org/CVERecord?id=CVE-2026-50548) | 9.3 (v4.0) |  | 1 | 16 | DR-2026-060:self (vulnerability) |
 | [CVE-2026-50549](https://www.cve.org/CVERecord?id=CVE-2026-50549) | 9.3 (v4.0) |  | 1 | 16 | DR-2026-060:self (vulnerability) |
 | [CVE-2026-25592](https://www.cve.org/CVERecord?id=CVE-2026-25592) | 10 (v3.1) |  | 1 | 8 | DR-2026-080:self (vulnerability) |
@@ -727,14 +728,14 @@ Rows are in triage order: KEV-listed first; then by the strongest evidence (expl
 | [CVE-2026-30625](https://www.cve.org/CVERecord?id=CVE-2026-30625) | self (vulnerability) | DR-2026-059 | Low |  | 16 | 9.8 (v3.1) (CISA-ADP) | n/a/n/a |  | not structured in the CVE record |  |
 | [CVE-2026-50548](https://www.cve.org/CVERecord?id=CVE-2026-50548) | self (vulnerability) | DR-2026-060 | Negligible |  | 16 | 9.3 (v4.0) | cursor/cursor |  | cursor/cursor: < 3.0 | cursor/cursor 3.0 |
 | [CVE-2026-50549](https://www.cve.org/CVERecord?id=CVE-2026-50549) | self (vulnerability) | DR-2026-060 | Negligible |  | 16 | 9.3 (v4.0) | cursor/cursor |  | cursor/cursor: < 3.0 | cursor/cursor 3.0 |
-| [CVE-2026-5194](https://www.cve.org/CVERecord?id=CVE-2026-5194) | discovered | DR-2026-058 | Low |  | 16 | 9.3 (v4.0) | wolfSSL/wolfSSL |  | wolfSSL/wolfSSL: >= 3.12.0, < 5.9.1 | wolfSSL/wolfSSL 5.9.1 |
+| [CVE-2026-5194](https://www.cve.org/CVERecord?id=CVE-2026-5194) | discovered | DR-2026-058 | Negligible |  | 16 | 9.3 (v4.0) | wolfSSL/wolfSSL |  | wolfSSL/wolfSSL: >= 3.12.0, < 5.9.1 | wolfSSL/wolfSSL 5.9.1 |
 | [CVE-2026-15903](https://www.cve.org/CVERecord?id=CVE-2026-15903) | discovered | DR-2026-088<br>DR-2026-091 | Negligible |  | 16 | 8.8 (v3.1) (CISA-ADP) | Google/Chrome |  | Google/Chrome: >= 150.0.7871.128, < 150.0.7871.128 | Google/Chrome 150.0.7871.128 |
-| [CVE-2026-4747](https://www.cve.org/CVERecord?id=CVE-2026-4747) | discovered | DR-2026-058 | Low |  | 16 | 8.8 (v3.1) (CISA-ADP) | FreeBSD/FreeBSD |  | FreeBSD/FreeBSD: >= 15.0-RELEASE, < p5; >= 14.4-RELEASE, < p1; >= 14.3-RELEASE, < p10; >= 13.5-RELEASE, < p11 | FreeBSD/FreeBSD p5; FreeBSD/FreeBSD p1; FreeBSD/FreeBSD p10; FreeBSD/FreeBSD p11 |
+| [CVE-2026-4747](https://www.cve.org/CVERecord?id=CVE-2026-4747) | discovered | DR-2026-058 | Negligible |  | 16 | 8.8 (v3.1) (CISA-ADP) | FreeBSD/FreeBSD |  | FreeBSD/FreeBSD: >= 15.0-RELEASE, < p5; >= 14.4-RELEASE, < p1; >= 14.3-RELEASE, < p10; >= 13.5-RELEASE, < p11 | FreeBSD/FreeBSD p5; FreeBSD/FreeBSD p1; FreeBSD/FreeBSD p10; FreeBSD/FreeBSD p11 |
 | [CVE-2026-54449](https://www.cve.org/CVERecord?id=CVE-2026-54449) | self (vulnerability) | DR-2026-059 | Low |  | 16 | 8.8 (v3.1) | langbot-app/LangBot |  | langbot-app/LangBot: <= 4.10.7 |  |
 | [CVE-2026-30617](https://www.cve.org/CVERecord?id=CVE-2026-30617) | self (vulnerability) | DR-2026-059 | Low |  | 16 | 8.6 (v3.1) (CISA-ADP) | n/a/n/a |  | not structured in the CVE record |  |
 | [CVE-2026-30624](https://www.cve.org/CVERecord?id=CVE-2026-30624) | self (vulnerability) | DR-2026-059 | Low |  | 16 | 8.6 (v3.1) (CISA-ADP) | n/a/n/a |  | not structured in the CVE record |  |
 | [CVE-2026-30615](https://www.cve.org/CVERecord?id=CVE-2026-30615) | self (vulnerability) | DR-2026-059 | Low |  | 16 | 8 (v3.1) (CISA-ADP) | n/a/n/a |  | not structured in the CVE record |  |
-| [CVE-2026-44471](https://www.cve.org/CVERecord?id=CVE-2026-44471) | discovered | DR-2026-058 | Low |  | 16 | 7.8 (v3.1) | GitoxideLabs/gitoxide |  | GitoxideLabs/gitoxide: < 0.21.1 | GitoxideLabs/gitoxide 0.21.1 |
+| [CVE-2026-44471](https://www.cve.org/CVERecord?id=CVE-2026-44471) | discovered | DR-2026-058 | Negligible |  | 16 | 7.8 (v3.1) | GitoxideLabs/gitoxide |  | GitoxideLabs/gitoxide: < 0.21.1 | GitoxideLabs/gitoxide 0.21.1 |
 | [CVE-2026-30616](https://www.cve.org/CVERecord?id=CVE-2026-30616) | self (vulnerability) | DR-2026-059 | Low |  | 16 | 7.3 (v3.1) (CISA-ADP) | n/a/n/a |  | not structured in the CVE record |  |
 | [CVE-2026-25592](https://www.cve.org/CVERecord?id=CVE-2026-25592) | self (vulnerability) | DR-2026-080 | Negligible |  | 8 | 10 (v3.1) | microsoft/semantic-kernel |  | microsoft/semantic-kernel: < 1.71.0 | microsoft/semantic-kernel 1.71.0 |
 | [CVE-2026-26030](https://www.cve.org/CVERecord?id=CVE-2026-26030) | self (vulnerability) | DR-2026-080 | Negligible |  | 8 | 10 (v3.1) | microsoft/semantic-kernel |  | microsoft/semantic-kernel: < 1.39.4 | microsoft/semantic-kernel 1.39.4 |
@@ -1184,8 +1185,8 @@ Descriptive CVE statistics: the unit is the **CVE link**, not the incident, and 
 | ai-written | 161 | 161 | 1 | 4 | 8 | 158 | 76 |
 | ai-stack-vulnerability | 35 | 34 | 13 | 21 | 132 | 24 | 20 |
 | malicious-release | 4 | 3 | 3 | 32 | 40 | 4 | 1 |
-| ai-discovered | 52 | 51 | 8 | 9 | 64 | 28 | 20 |
-| related | 61 | 61 | 15 | 48 | 160 | 44 | 33 |
+| ai-discovered | 52 | 51 | 8 | 8 | 64 | 28 | 20 |
+| related | 61 | 61 | 15 | 47 | 160 | 44 | 33 |
 
 How to read the per-segment rows: **CVE links** = number of record–CVE pairs in the segment whose CVE record carries this CWE (a CVE that occurs in two records counts twice); **Distinct CVEs** = the same without double-counting recurring CVEs; **Records** = distinct records among those links; `n + m†` = n of counted incidents, m of sub-threshold records; **Share** = CVE links with this CWE ÷ links in the segment that carry any CNA CWE (the *Links with CNA CWE* column above), per array; **IBSS obs / pot** = incident-based severity score over those records (Negligible 1 · Low 2 · Medium 4 · High 8 · Critical 16, observed and potential separately; each counted incident once, the sub-threshold records once per class) — for `related` this attributes an incident's harm to the CWE of a *sibling* CVE, shown as context weight for comparison with the CWE thread (whose Rule 1 excludes `related`), not as the weakness's risk. Shares within a segment add up to more than 100 % because one CVE record can carry several CWEs. Example: `ai-exploited` / CWE-306 = 4 links (Langflow CVE-2026-33017 and CVE-2025-3248, marimo CVE-2026-39987 in two incidents), 3 distinct CVEs, 4 incidents, 4 ÷ 14 = 29 %. CWEs that the incident record assigns directly (`report.weaknesses`) are **not** counted here; they appear beside the CNA CWEs in the preceding per-incident table and feed the incident-level CWE ranking of the CWE thread.
 
@@ -1270,11 +1271,11 @@ Radar's `contribution` type says how the AI tool was involved in the flawed code
 | CWE | CVE links | Distinct CVEs | Records | IBSS obs | IBSS pot | Share |
 |---|---|---|---|---|---|---|
 | CWE-416 | 4 | 4 | 3 | 3 | 20 | 14% |
-| CWE-121 | 3 | 3 | 2 | 3 | 24 | 11% |
-| CWE-295 | 3 | 3 | 2 | 3 | 24 | 11% |
+| CWE-121 | 3 | 3 | 2 | 2 | 24 | 11% |
+| CWE-295 | 3 | 3 | 2 | 2 | 24 | 11% |
 | CWE-77 | 2 | 2 | 2 | 2 | 16 | 7% |
 | CWE-22 | 1 | 1 | 1 | 1 | 8 | 4% |
-| CWE-59 | 1 | 1 | 1 | 2 | 16 | 4% |
+| CWE-59 | 1 | 1 | 1 | 1 | 16 | 4% |
 | CWE-78 | 1 | 1 | 1 | 1 | 8 | 4% |
 | CWE-89 | 1 | 1 | 1 | 1 | 8 | 4% |
 | CWE-90 | 1 | 1 | 1 | 1 | 8 | 4% |
@@ -1293,11 +1294,11 @@ Radar's `contribution` type says how the AI tool was involved in the flawed code
 | CWE-77 | 3 | 3 | 2 | 3 | 24 | 7% |
 | CWE-59 | 2 | 2 | 1 | 1 | 8 | 4% |
 | CWE-89 | 2 | 2 | 1 | 2 | 16 | 4% |
-| CWE-122 | 2 | 2 | 2 | 3 | 24 | 4% |
+| CWE-122 | 2 | 2 | 2 | 2 | 24 | 4% |
 | CWE-200 | 2 | 2 | 2 | 9 | 24 | 4% |
-| CWE-269 | 2 | 2 | 2 | 10 | 32 | 4% |
+| CWE-269 | 2 | 2 | 2 | 9 | 32 | 4% |
 | CWE-285 | 2 | 2 | 2 | 3 | 24 | 4% |
-| CWE-416 | 2 | 2 | 2 | 3 | 24 | 4% |
+| CWE-416 | 2 | 2 | 2 | 2 | 24 | 4% |
 
 ## CNA-CWE IBSS via in-play CVEs — the CVE-path baseline for the CWE ranking
 
@@ -1318,8 +1319,8 @@ For every CNA-assigned CWE of an in-play CVE: the records it reaches through tho
 | CWE-22 | 5 | 23 | 8 | 48 | 5 | DR-2026-036, DR-2026-060, DR-2026-062, DR-2026-080, DR-2026-088 | ai-written, ai-stack-vulnerability, ai-discovered |
 | CWE-95 | 1 | 1 | 8 | 16 | 20 | DR-2026-008 | ai-exploited |
 | CWE-502 | 1 | 1 | 8 | 16 | 21 | DB-2026-006 | ai-exploited |
-| CWE-59 | 3 | 5 | 7 | 40 | 8 | DR-2026-036, DR-2026-058, DR-2026-060 | ai-written, ai-stack-vulnerability, ai-discovered |
 | CWE-416 | 4 | 5 | 7 | 28 | 10 | DR-2026-036, DR-2026-084, DR-2026-088, DR-2026-093 | ai-written, ai-discovered |
+| CWE-59 | 3 | 5 | 6 | 40 | 8 | DR-2026-036, DR-2026-058, DR-2026-060 | ai-written, ai-stack-vulnerability, ai-discovered |
 | CWE-200 | 3 | 10 | 6 | 32 | 9 | DR-2026-036, DR-2026-056, DR-2026-062 | ai-written, ai-stack-vulnerability |
 | CWE-942 | 2 | 2 | 6 | 24 | 15 | DR-2026-036, DR-2026-057 | ai-written, ai-stack-vulnerability |
 | CWE-74 | 2 | 5 | 5 | 16 | 22 | DR-2026-036, DR-2026-087 | ai-written, ai-stack-vulnerability |
@@ -1387,9 +1388,9 @@ For every CNA-assigned CWE of an in-play CVE: the records it reaches through tho
 | CWE-1321 | 1 | 2 | 4 | 8 | 84 | DR-2026-036 | ai-written |
 | CWE-1333 | 1 | 1 | 4 | 8 | 85 | DR-2026-036 | ai-written |
 | CWE-1336 | 1 | 1 | 4 | 8 | 86 | DR-2026-036 | ai-written |
-| CWE-121 | 2 | 3 | 3 | 24 | 16 | DR-2026-058, DR-2026-088 | ai-discovered |
-| CWE-295 | 2 | 3 | 3 | 24 | 17 | DR-2026-058, DR-2026-088 | ai-discovered |
-| CWE-183 | 2 | 1 | 2 | 24 | 18 | DR-2026-056, DR-2026-062 | ai-stack-vulnerability |
+| CWE-121 | 2 | 3 | 2 | 24 | 16 | DR-2026-058, DR-2026-088 | ai-discovered |
+| CWE-183 | 2 | 1 | 2 | 24 | 17 | DR-2026-056, DR-2026-062 | ai-stack-vulnerability |
+| CWE-295 | 2 | 3 | 2 | 24 | 18 | DR-2026-058, DR-2026-088 | ai-discovered |
 | CWE-515 | 2 | 1 | 2 | 24 | 19 | DR-2026-056, DR-2026-062 | ai-stack-vulnerability |
 | CWE-61 | 1 | 1 | 1 | 8 | 87 | DR-2026-062 | ai-stack-vulnerability |
 | CWE-90 | 1 | 1 | 1 | 8 | 88 | DR-2026-088 | ai-discovered |

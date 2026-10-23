@@ -49,7 +49,7 @@ CVE-2025-62615,1,0,DR-2026-036,,DR-2026-036:self-vulnerability,self-vulnerabilit
 CVE-2026-48797,1,0,DR-2026-036,,DR-2026-036:self-vulnerability,self-vulnerability,no,9.3,4.0,4,8,GitHub_M,2026-06-16,mcp-tool-shop-org/@mcptoolshop/backpropagate; mcp-tool-shop-org/backpropagate,CWE-358; CWE-862; CWE-1295,Backpropagate: backprop ui --auth and backprop ui --share do not enforce authentication
 CVE-2026-50548,1,0,DR-2026-060,,DR-2026-060:self-vulnerability,self-vulnerability,no,9.3,4.0,1,16,GitHub_M,2026-06-25,cursor/cursor,CWE-22,Cursor Desktop sandbox escape via agent-controlled working directory
 CVE-2026-50549,1,0,DR-2026-060,,DR-2026-060:self-vulnerability,self-vulnerability,no,9.3,4.0,1,16,GitHub_M,2026-06-25,cursor/cursor,CWE-59,Cursor Desktop sandbox escape via symlink and failed path canonicalization
-CVE-2026-5194,1,0,DR-2026-058,,DR-2026-058:discovered,discovered,no,9.3,4.0,2,16,wolfSSL,2026-04-09,wolfSSL/wolfSSL,CWE-295,wolfSSL ECDSA Certificate Verification
+CVE-2026-5194,1,0,DR-2026-058,,DR-2026-058:discovered,discovered,no,9.3,4.0,1,16,wolfSSL,2026-04-09,wolfSSL/wolfSSL,CWE-295,wolfSSL ECDSA Certificate Verification
 CVE-2025-54994,1,0,DR-2026-059,,DR-2026-059:related,related,no,9.3,4.0,,,GitHub_M,2025-09-08,akoskm/create-mcp-server-stdio,CWE-78,@akoskm/create-mcp-server-stdio has Command Injection in MCP Server due to unsafe `exec` API
 CVE-2026-54760,1,0,DR-2026-057,,DR-2026-057:related,related,no,9.3,4.0,,,GitHub_M,2026-07-09,langroid/langroid,CWE-22; CWE-89,Langroid: SQLChatAgent dangerous-function blocklist can be bypassed with quoted or schema-qualified pg_read_file calls
 CVE-2026-55615,1,0,DR-2026-057,,DR-2026-057:related,related,no,9.2,4.0,,,GitHub_M,2026-07-09,langroid/langroid,CWE-74,"Langroid: Neo4jChatAgent executes LLM-generated Cypher without validation (prompt-to-Cypher injection; config-conditional RCE), mirroring the SQLChatAgent bug fixed in CVE-2026-25879"
@@ -116,7 +116,7 @@ CVE-2026-24881,1,0,DR-2026-088,,DR-2026-088:discovered,discovered,no,8.1,3.1,1,8
 CVE-2026-31431,1,0,DB-2026-018,,DB-2026-018:toolkit,toolkit,yes,7.8,3.1,,,Linux,2026-04-22,Linux/Linux,,crypto: algif_aead - Revert to operating out-of-place
 CVE-2026-43500,1,0,DB-2026-018,,DB-2026-018:toolkit,toolkit,no,7.8,3.1,,,Linux,2026-05-11,Linux/Linux,,rxrpc: Also unshare DATA/RESPONSE packets when paged frags are present
 CVE-2026-45555,1,0,DR-2026-036,,DR-2026-036:self-vulnerability,self-vulnerability,no,7.8,3.1,4,8,GitHub_M,2026-05-29,MarcelRoozekrans/roslyn-codelens-mcp,CWE-94,Roslyn CodeLens MCP Server: Untrusted Roslyn Analyzer Execution via get_diagnostics Leads to Arbitrary Code Execution
-CVE-2026-44471,1,0,DR-2026-058,,DR-2026-058:discovered,discovered,no,7.8,3.1,2,16,GitHub_M,2026-05-13,GitoxideLabs/gitoxide,CWE-59,gitoxide: Symlink prefix-reuse allows worktree escape during checkout
+CVE-2026-44471,1,0,DR-2026-058,,DR-2026-058:discovered,discovered,no,7.8,3.1,1,16,GitHub_M,2026-05-13,GitoxideLabs/gitoxide,CWE-59,gitoxide: Symlink prefix-reuse allows worktree escape during checkout
 CVE-2024-47711,1,0,DR-2026-058,,DR-2026-058:related,related,no,7.8,3.1,,,Linux,2024-10-21,Linux/Linux,,af_unix: Don't return OOB skb in manage_oob().
 CVE-2026-25157,1,0,DR-2026-039,,DR-2026-039:related,related,no,7.8,3.1,,,GitHub_M,2026-02-04,openclaw/openclaw,CWE-78,OpenClaw/Clawdbot has OS Command Injection via Project Root Path in sshNodeCommand
 CVE-2026-31554,1,0,DR-2026-058,,DR-2026-058:related,related,no,7.8,3.1,,,Linux,2026-04-24,Linux/Linux,,futex: Require sys_futex_requeue() to have identical flags
@@ -299,7 +299,7 @@ CVE-2026-2797,1,0,DR-2026-094,,DR-2026-094:discovered,discovered,no,,,1,4,mozill
 CVE-2026-2799,1,0,DR-2026-094,,DR-2026-094:discovered,discovered,no,,,1,4,mozilla,2026-02-24,Mozilla/Firefox; Mozilla/Thunderbird,,Use-after-free in the DOM: Core & HTML component
 CVE-2026-2804,1,0,DR-2026-094,,DR-2026-094:discovered,discovered,no,,,1,4,mozilla,2026-02-24,Mozilla/Firefox; Mozilla/Thunderbird,,Use-after-free in the JavaScript: WebAssembly component
 CVE-2026-2805,1,0,DR-2026-094,,DR-2026-094:discovered,discovered,no,,,1,4,mozilla,2026-02-24,Mozilla/Firefox; Mozilla/Thunderbird,,Invalid pointer in the DOM: Core & HTML component
-CVE-2026-4747,1,0,DR-2026-058,,DR-2026-058:discovered,discovered,no,,,2,16,freebsd,2026-03-26,FreeBSD/FreeBSD,CWE-121,Remote code execution via RPCSEC_GSS packet validation
+CVE-2026-4747,1,0,DR-2026-058,,DR-2026-058:discovered,discovered,no,,,1,16,freebsd,2026-03-26,FreeBSD/FreeBSD,CWE-121,Remote code execution via RPCSEC_GSS packet validation
 CVE-2026-13242,1,0,DR-2026-085,,DR-2026-085:discovered,discovered,no,,,1,8,drupal,2026-07-10,Drupal/Geolocation Field,CWE-89,Geolocation Field - Critical - SQL Injection - SA-CONTRIB-2026-062
 CVE-2026-14431,1,0,DR-2026-088,,DR-2026-088:discovered,discovered,no,,,1,8,Chrome,2026-07-01,Google/Chrome,CWE-843,Type Confusion in V8 in Google Chrome prior to 150.0.7871.46 allowed a remote attacker to execute arbitrary code inside a sandbox via a crafted HTML page.
 CVE-2026-15903,2,0,DR-2026-088; DR-2026-091,,DR-2026-088:discovered; DR-2026-091:discovered,discovered,no,,,2,16,Chrome,2026-07-20,Google/Chrome,,Out of bounds read and write in V8 in Google Chrome prior to 150.0.7871.128 allowed a remote attacker to execute arbitrary code inside a sandbox via a crafted HTML page.
