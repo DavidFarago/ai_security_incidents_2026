@@ -1,7 +1,7 @@
 {
  "$schema": "http://json-schema.org/draft-04/schema#",
  "additionalProperties": false,
- "description": "VERIS VCDB Schema 1.4.1.",
+ "description": "VERIS VCDB Schema 1.4.2.",
  "properties": {
   "action": {
    "additionalProperties": false,
@@ -74,6 +74,7 @@
          "Data entry error",
          "Disposal error",
          "Gaffe",
+         "Inadequate containment",
          "Loss",
          "Maintenance error",
          "Malfunction",
@@ -960,6 +961,7 @@
          "Fun",
          "Grudge",
          "Ideology",
+         "Misalignment",
          "NA",
          "Secondary",
          "Other",
@@ -1002,6 +1004,7 @@
          "Acquaintance",
          "Activist",
          "Auditor",
+         "Agentic system",
          "Competitor",
          "Customer",
          "Force majeure",
@@ -1064,6 +1067,7 @@
          "Fun",
          "Grudge",
          "Ideology",
+         "Misalignment",
          "Secondary",
          "NA",
          "Other",
@@ -1084,6 +1088,7 @@
        "items": {
         "enum": [
          "Auditor",
+         "Agentic system",
          "Call center",
          "Cashier",
          "Developer",

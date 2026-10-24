@@ -391,6 +391,7 @@ def check_class_b(d, up, r: Result):
             r.add("B", "misuse-actor", "veris.action.misuse needs an internal or partner actor: VERIS reserves misuse for "
                   "parties the organization trusts; an outsider's abuse of a service is hacking (methodology §4.3)", iid)
         check_event_chain(i, r)
+        check_veris_142(i, r)
         deliberate = sorted(set(v.get("action") or {}) & DELIBERATE_ACTIONS)
         motives = [m for a in (v.get("actor") or {}).values() if isinstance(a, dict) for m in a.get("motive") or []]
         if deliberate and not [m for m in motives if m != "NA"]:
@@ -460,6 +461,32 @@ def check_event_chain(i, r):
         for missing in sorted(have[key] - used):
             r.add("B", "event-chain", f"{key} {missing} appears in no step of veris.plus.event_chain", iid)
 
+
+def check_veris_142(i, r):
+    """Methodology §5.2: every live record states the VERIS schema version that the verifier checks it against, and the
+    agentic values of VERIS 1.4.2 follow the validity rules of VERIS's bin/checkValidity.py: `Agentic system` is never
+    the only variety of its actor branch; `Misalignment` as a motive needs `Agentic system` in the same branch; the error
+    variety `Inadequate containment` needs `Agentic system` in the internal or the external branch."""
+    v, iid = i["veris"], i["id"]
+    if v.get("schema_version") != lc.VERIS_SCHEMA_VERSION:
+        r.add("B", "schema-version", f"veris.schema_version {v.get('schema_version')!r} != {lc.VERIS_SCHEMA_VERSION!r}, "
+              "the version of the cached VERIS schema (methodology §5.2)", iid)
+    agentic = set()
+    for name, branch in (v.get("actor") or {}).items():
+        if not isinstance(branch, dict):
+            continue
+        variety = branch.get("variety") or []
+        if "Agentic system" in variety:
+            agentic.add(name)
+            if len(variety) == 1:
+                r.add("B", "agentic", f"actor.{name}.variety has 'Agentic system' as its only variety; VERIS requires the "
+                      "party it acted for beside it", iid)
+        if "Misalignment" in (branch.get("motive") or []) and "Agentic system" not in variety:
+            r.add("B", "agentic", f"actor.{name}.motive 'Misalignment' needs 'Agentic system' in actor.{name}.variety", iid)
+    error = ((v.get("action") or {}).get("error") or {}).get("variety") or []
+    if "Inadequate containment" in error and not agentic & {"internal", "external"}:
+        r.add("B", "agentic", "action.error.variety 'Inadequate containment' needs 'Agentic system' in actor.internal or "
+              "actor.external", iid)
 
 VCDB_PINNED = r"https://github\.com/vz-risk/VCDB/blob/[0-9a-f]{40}/"
 

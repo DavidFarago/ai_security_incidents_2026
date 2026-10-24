@@ -6,7 +6,7 @@ Sources (raw records stored verbatim, never edited):
   ghsa     https://api.github.com/advisories/<GHSA>        -> upstream/ghsa/<GHSA>.json     (GitHub Advisory Database)
   osv      https://api.osv.dev/v1/vulns/<MAL|PYSEC id>     -> upstream/osv/<id>.json        (OSV; malicious-package entries)
   cisa-kev CISA KEV catalog (whole feed)                    -> upstream/cisa-kev/known_exploited_vulnerabilities.json
-  veris    vz-risk/VCDB vcdb-merged.json (VERIS JSON schema) -> upstream/veris/vcdb-merged.json
+  veris    vz-risk/VCDB vcdb-merged.json (VERIS JSON schema 1.4.2, pinned commit) -> upstream/veris/vcdb-merged.json
 For CVEs whose cached CVE record has no CNA title (title fallback chain, methodology §10.2), two alias lookups:
   ghsa-by-cve  https://api.github.com/advisories?cve_id=<CVE> -> upstream/ghsa-by-cve/<CVE>.json (list, may be empty)
   osv-by-cve   https://api.osv.dev/v1/vulns/<CVE>             -> upstream/osv-by-cve/<CVE>.json  (404 = no record)
@@ -30,7 +30,8 @@ JSON_PATH = ROOT / "incidents" / "all_2026_ai_software_security_incidents.json"
 UP = ROOT / "vulnerabilities" / "upstream"
 UA = "ai_security_incidents_2026/fetch_upstream (https://github.com/) python-urllib"
 KEV_URL = "https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json"
-VERIS_URL = "https://raw.githubusercontent.com/vz-risk/VCDB/master/vcdb-merged.json"
+# VERIS 1.4.2 as VCDB codes it: branch 1_4_2, not yet merged into master (master is still 1.4.1). Re-pin on the merge.
+VERIS_URL = "https://raw.githubusercontent.com/vz-risk/VCDB/1adb272404b5ccac15e1dc1ff420661ac2ee3752/vcdb-merged.json"
 SOURCES = ["cve.org", "ghsa", "osv", "cisa-kev", "veris", "ghsa-by-cve", "osv-by-cve"]
 
 

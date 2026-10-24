@@ -47,6 +47,10 @@ LIVE_ARRAYS = ("incidents", "sub_threshold_incidents")
 RETIRED_ARRAY = "retired_incidents"
 RETIREMENT_REASONS = ["duplicate", "merged"]
 
+# The VERIS schema version of every live record (methodology §5.2): VCDB's 1.4.2 schema, which scripts/fetch_upstream.py
+# caches from a pinned commit of VCDB's branch 1_4_2.
+VERIS_SCHEMA_VERSION = "1.4.2"
+
 # Incident registers (methodology §4.1: prefix DB when at least one source is one). Replaced by
 # sources_catalog[...].source_class once that field exists (automate_sourcing_handover.md §10, decision 2).
 REGISTER_SOURCES = {"incidentdatabase.ai_20260824_ai_incidents_2026.xlsx", "incidentdatabase.ai", "vz-risk/VCDB"}

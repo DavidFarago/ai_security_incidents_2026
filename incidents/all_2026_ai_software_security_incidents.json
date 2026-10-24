@@ -1017,7 +1017,7 @@
         }
       ],
       "veris": {
-        "schema_version": "1.4.1",
+        "schema_version": "1.4.2",
         "schema_name": "vcdb",
         "source_id": "vcdb",
         "incident_id": "DB-2026-001",
@@ -1254,7 +1254,7 @@
         }
       ],
       "veris": {
-        "schema_version": "1.4.1",
+        "schema_version": "1.4.2",
         "schema_name": "vcdb",
         "source_id": "vcdb",
         "incident_id": "DR-2026-002",
@@ -1403,7 +1403,7 @@
         }
       ],
       "veris": {
-        "schema_version": "1.4.1",
+        "schema_version": "1.4.2",
         "schema_name": "vcdb",
         "source_id": "vcdb",
         "incident_id": "DB-2026-003",
@@ -1598,7 +1598,7 @@
         }
       ],
       "veris": {
-        "schema_version": "1.4.1",
+        "schema_version": "1.4.2",
         "schema_name": "vcdb",
         "source_id": "vcdb",
         "incident_id": "DB-2026-004",
@@ -1829,7 +1829,7 @@
         }
       ],
       "veris": {
-        "schema_version": "1.4.1",
+        "schema_version": "1.4.2",
         "schema_name": "vcdb",
         "source_id": "vcdb",
         "incident_id": "DB-2026-005",
@@ -2068,7 +2068,7 @@
         }
       ],
       "veris": {
-        "schema_version": "1.4.1",
+        "schema_version": "1.4.2",
         "schema_name": "vcdb",
         "source_id": "vcdb",
         "incident_id": "DB-2026-006",
@@ -2502,7 +2502,7 @@
         }
       ],
       "veris": {
-        "schema_version": "1.4.1",
+        "schema_version": "1.4.2",
         "schema_name": "vcdb",
         "source_id": "vcdb",
         "incident_id": "DR-2026-007",
@@ -2654,7 +2654,7 @@
         }
       ],
       "veris": {
-        "schema_version": "1.4.1",
+        "schema_version": "1.4.2",
         "schema_name": "vcdb",
         "source_id": "vcdb",
         "incident_id": "DR-2026-008",
@@ -2996,7 +2996,7 @@
         }
       ],
       "veris": {
-        "schema_version": "1.4.1",
+        "schema_version": "1.4.2",
         "schema_name": "vcdb",
         "source_id": "vcdb",
         "incident_id": "DR-2026-009",
@@ -3139,7 +3139,7 @@
         }
       ],
       "veris": {
-        "schema_version": "1.4.1",
+        "schema_version": "1.4.2",
         "schema_name": "vcdb",
         "source_id": "vcdb",
         "incident_id": "DR-2026-010",
@@ -3432,7 +3432,7 @@
         }
       ],
       "veris": {
-        "schema_version": "1.4.1",
+        "schema_version": "1.4.2",
         "schema_name": "vcdb",
         "source_id": "vcdb",
         "incident_id": "DR-2026-011",
@@ -3678,7 +3678,7 @@
         }
       ],
       "veris": {
-        "schema_version": "1.4.1",
+        "schema_version": "1.4.2",
         "schema_name": "vcdb",
         "source_id": "vcdb",
         "incident_id": "DR-2026-012",
@@ -3928,7 +3928,7 @@
         }
       ],
       "veris": {
-        "schema_version": "1.4.1",
+        "schema_version": "1.4.2",
         "schema_name": "vcdb",
         "source_id": "vcdb",
         "incident_id": "DB-2026-013",
@@ -4133,7 +4133,7 @@
         }
       ],
       "veris": {
-        "schema_version": "1.4.1",
+        "schema_version": "1.4.2",
         "schema_name": "vcdb",
         "source_id": "vcdb",
         "incident_id": "DB-2026-014",
@@ -4315,7 +4315,7 @@
         }
       ],
       "veris": {
-        "schema_version": "1.4.1",
+        "schema_version": "1.4.2",
         "schema_name": "vcdb",
         "source_id": "vcdb",
         "incident_id": "DB-2026-015",
@@ -4506,7 +4506,7 @@
         }
       ],
       "veris": {
-        "schema_version": "1.4.1",
+        "schema_version": "1.4.2",
         "schema_name": "vcdb",
         "source_id": "vcdb",
         "incident_id": "DB-2026-016",
@@ -4675,7 +4675,7 @@
         }
       ],
       "veris": {
-        "schema_version": "1.4.1",
+        "schema_version": "1.4.2",
         "schema_name": "vcdb",
         "source_id": "vcdb",
         "incident_id": "DB-2026-017",
@@ -4878,7 +4878,7 @@
         }
       ],
       "veris": {
-        "schema_version": "1.4.1",
+        "schema_version": "1.4.2",
         "schema_name": "vcdb",
         "source_id": "vcdb",
         "incident_id": "DB-2026-018",
@@ -5201,7 +5201,7 @@
         }
       ],
       "veris": {
-        "schema_version": "1.4.1",
+        "schema_version": "1.4.2",
         "schema_name": "vcdb",
         "source_id": "vcdb",
         "incident_id": "DB-2026-019",
@@ -5383,7 +5383,7 @@
         }
       ],
       "veris": {
-        "schema_version": "1.4.1",
+        "schema_version": "1.4.2",
         "schema_name": "vcdb",
         "source_id": "vcdb",
         "incident_id": "DR-2026-020",
@@ -5566,7 +5566,7 @@
         }
       ],
       "veris": {
-        "schema_version": "1.4.1",
+        "schema_version": "1.4.2",
         "schema_name": "vcdb",
         "source_id": "vcdb",
         "incident_id": "DR-2026-021",
@@ -5710,7 +5710,7 @@
         }
       ],
       "veris": {
-        "schema_version": "1.4.1",
+        "schema_version": "1.4.2",
         "schema_name": "vcdb",
         "source_id": "vcdb",
         "incident_id": "DR-2026-022",
@@ -5967,7 +5967,7 @@
         }
       ],
       "veris": {
-        "schema_version": "1.4.1",
+        "schema_version": "1.4.2",
         "schema_name": "vcdb",
         "source_id": "vcdb",
         "incident_id": "DR-2026-023",
@@ -6157,7 +6157,7 @@
         }
       ],
       "veris": {
-        "schema_version": "1.4.1",
+        "schema_version": "1.4.2",
         "schema_name": "vcdb",
         "source_id": "vcdb",
         "incident_id": "DB-2026-024",
@@ -6283,7 +6283,7 @@
         }
       ],
       "veris": {
-        "schema_version": "1.4.1",
+        "schema_version": "1.4.2",
         "schema_name": "vcdb",
         "source_id": "vcdb",
         "incident_id": "DR-2026-025",
@@ -6485,7 +6485,7 @@
         }
       ],
       "veris": {
-        "schema_version": "1.4.1",
+        "schema_version": "1.4.2",
         "schema_name": "vcdb",
         "source_id": "vcdb",
         "incident_id": "DB-2026-026",
@@ -6648,7 +6648,7 @@
         }
       ],
       "veris": {
-        "schema_version": "1.4.1",
+        "schema_version": "1.4.2",
         "schema_name": "vcdb",
         "source_id": "vcdb",
         "incident_id": "DB-2026-027",
@@ -6791,7 +6791,7 @@
         }
       ],
       "veris": {
-        "schema_version": "1.4.1",
+        "schema_version": "1.4.2",
         "schema_name": "vcdb",
         "source_id": "vcdb",
         "incident_id": "DB-2026-028",
@@ -6958,7 +6958,7 @@
         }
       ],
       "veris": {
-        "schema_version": "1.4.1",
+        "schema_version": "1.4.2",
         "schema_name": "vcdb",
         "source_id": "vcdb",
         "incident_id": "DB-2026-029",
@@ -7104,7 +7104,7 @@
         }
       ],
       "veris": {
-        "schema_version": "1.4.1",
+        "schema_version": "1.4.2",
         "schema_name": "vcdb",
         "source_id": "vcdb",
         "incident_id": "DB-2026-030",
@@ -7295,7 +7295,7 @@
         }
       ],
       "veris": {
-        "schema_version": "1.4.1",
+        "schema_version": "1.4.2",
         "schema_name": "vcdb",
         "source_id": "vcdb",
         "incident_id": "DB-2026-031",
@@ -7439,7 +7439,7 @@
         }
       ],
       "veris": {
-        "schema_version": "1.4.1",
+        "schema_version": "1.4.2",
         "schema_name": "vcdb",
         "source_id": "vcdb",
         "incident_id": "DB-2026-032",
@@ -7623,7 +7623,7 @@
         }
       ],
       "veris": {
-        "schema_version": "1.4.1",
+        "schema_version": "1.4.2",
         "schema_name": "vcdb",
         "source_id": "vcdb",
         "incident_id": "DB-2026-033",
@@ -7760,7 +7760,7 @@
         }
       ],
       "veris": {
-        "schema_version": "1.4.1",
+        "schema_version": "1.4.2",
         "schema_name": "vcdb",
         "source_id": "vcdb",
         "incident_id": "DB-2026-034",
@@ -7900,7 +7900,7 @@
         }
       ],
       "veris": {
-        "schema_version": "1.4.1",
+        "schema_version": "1.4.2",
         "schema_name": "vcdb",
         "source_id": "vcdb",
         "incident_id": "DR-2026-035",
@@ -8122,7 +8122,7 @@
         }
       ],
       "veris": {
-        "schema_version": "1.4.1",
+        "schema_version": "1.4.2",
         "schema_name": "vcdb",
         "source_id": "vcdb",
         "incident_id": "DR-2026-037",
@@ -8319,7 +8319,7 @@
         }
       ],
       "veris": {
-        "schema_version": "1.4.1",
+        "schema_version": "1.4.2",
         "schema_name": "vcdb",
         "source_id": "vcdb",
         "incident_id": "DR-2026-038",
@@ -8447,7 +8447,7 @@
         }
       ],
       "veris": {
-        "schema_version": "1.4.1",
+        "schema_version": "1.4.2",
         "schema_name": "vcdb",
         "source_id": "vcdb",
         "incident_id": "DR-2026-039",
@@ -8707,7 +8707,7 @@
         }
       ],
       "veris": {
-        "schema_version": "1.4.1",
+        "schema_version": "1.4.2",
         "schema_name": "vcdb",
         "source_id": "vcdb",
         "incident_id": "DR-2026-040",
@@ -8848,7 +8848,7 @@
         }
       ],
       "veris": {
-        "schema_version": "1.4.1",
+        "schema_version": "1.4.2",
         "schema_name": "vcdb",
         "source_id": "vcdb",
         "incident_id": "DB-2026-041",
@@ -8984,7 +8984,7 @@
         }
       ],
       "veris": {
-        "schema_version": "1.4.1",
+        "schema_version": "1.4.2",
         "schema_name": "vcdb",
         "source_id": "vcdb",
         "incident_id": "DR-2026-042",
@@ -9127,7 +9127,7 @@
         }
       ],
       "veris": {
-        "schema_version": "1.4.1",
+        "schema_version": "1.4.2",
         "schema_name": "vcdb",
         "source_id": "vcdb",
         "incident_id": "DB-2026-043",
@@ -9313,7 +9313,7 @@
         }
       ],
       "veris": {
-        "schema_version": "1.4.1",
+        "schema_version": "1.4.2",
         "schema_name": "vcdb",
         "source_id": "vcdb",
         "incident_id": "DR-2026-044",
@@ -9459,7 +9459,7 @@
         }
       ],
       "veris": {
-        "schema_version": "1.4.1",
+        "schema_version": "1.4.2",
         "schema_name": "vcdb",
         "source_id": "vcdb",
         "incident_id": "DR-2026-045",
@@ -9620,7 +9620,7 @@
         }
       ],
       "veris": {
-        "schema_version": "1.4.1",
+        "schema_version": "1.4.2",
         "schema_name": "vcdb",
         "source_id": "vcdb",
         "incident_id": "DR-2026-046",
@@ -9916,7 +9916,7 @@
         }
       ],
       "veris": {
-        "schema_version": "1.4.1",
+        "schema_version": "1.4.2",
         "schema_name": "vcdb",
         "source_id": "vcdb",
         "incident_id": "DB-2026-047",
@@ -10060,7 +10060,7 @@
         }
       ],
       "veris": {
-        "schema_version": "1.4.1",
+        "schema_version": "1.4.2",
         "schema_name": "vcdb",
         "source_id": "vcdb",
         "incident_id": "DB-2026-048",
@@ -10254,7 +10254,7 @@
         }
       ],
       "veris": {
-        "schema_version": "1.4.1",
+        "schema_version": "1.4.2",
         "schema_name": "vcdb",
         "source_id": "vcdb",
         "incident_id": "DB-2026-049",
@@ -10458,7 +10458,7 @@
         }
       ],
       "veris": {
-        "schema_version": "1.4.1",
+        "schema_version": "1.4.2",
         "schema_name": "vcdb",
         "source_id": "vcdb",
         "incident_id": "DB-2026-050",
@@ -10601,7 +10601,7 @@
         }
       ],
       "veris": {
-        "schema_version": "1.4.1",
+        "schema_version": "1.4.2",
         "schema_name": "vcdb",
         "source_id": "vcdb",
         "incident_id": "DB-2026-051",
@@ -10744,7 +10744,7 @@
         }
       ],
       "veris": {
-        "schema_version": "1.4.1",
+        "schema_version": "1.4.2",
         "schema_name": "vcdb",
         "source_id": "vcdb",
         "incident_id": "DB-2026-052",
@@ -10896,7 +10896,7 @@
         }
       ],
       "veris": {
-        "schema_version": "1.4.1",
+        "schema_version": "1.4.2",
         "schema_name": "vcdb",
         "source_id": "vcdb",
         "incident_id": "DB-2026-053",
@@ -11039,7 +11039,7 @@
         }
       ],
       "veris": {
-        "schema_version": "1.4.1",
+        "schema_version": "1.4.2",
         "schema_name": "vcdb",
         "source_id": "vcdb",
         "incident_id": "DB-2026-054",
@@ -11170,7 +11170,7 @@
         }
       ],
       "veris": {
-        "schema_version": "1.4.1",
+        "schema_version": "1.4.2",
         "schema_name": "vcdb",
         "source_id": "vcdb",
         "incident_id": "DB-2026-055",
@@ -11307,7 +11307,7 @@
         }
       ],
       "veris": {
-        "schema_version": "1.4.1",
+        "schema_version": "1.4.2",
         "schema_name": "vcdb",
         "source_id": "vcdb",
         "incident_id": "DR-2026-057",
@@ -11577,7 +11577,7 @@
         }
       ],
       "veris": {
-        "schema_version": "1.4.1",
+        "schema_version": "1.4.2",
         "schema_name": "vcdb",
         "source_id": "vcdb",
         "incident_id": "DR-2026-059",
@@ -12030,7 +12030,7 @@
         }
       ],
       "veris": {
-        "schema_version": "1.4.1",
+        "schema_version": "1.4.2",
         "schema_name": "vcdb",
         "source_id": "vcdb",
         "incident_id": "DB-2026-061",
@@ -12190,7 +12190,7 @@
         }
       ],
       "veris": {
-        "schema_version": "1.4.1",
+        "schema_version": "1.4.2",
         "schema_name": "vcdb",
         "source_id": "vcdb",
         "incident_id": "DR-2026-063",
@@ -12346,7 +12346,7 @@
         }
       ],
       "veris": {
-        "schema_version": "1.4.1",
+        "schema_version": "1.4.2",
         "schema_name": "vcdb",
         "source_id": "vcdb",
         "incident_id": "DB-2026-066",
@@ -12475,7 +12475,7 @@
         }
       ],
       "veris": {
-        "schema_version": "1.4.1",
+        "schema_version": "1.4.2",
         "schema_name": "vcdb",
         "source_id": "vcdb",
         "incident_id": "DB-2026-067",
@@ -12620,7 +12620,7 @@
         }
       ],
       "veris": {
-        "schema_version": "1.4.1",
+        "schema_version": "1.4.2",
         "schema_name": "vcdb",
         "source_id": "vcdb",
         "incident_id": "DB-2026-068",
@@ -12757,7 +12757,7 @@
         }
       ],
       "veris": {
-        "schema_version": "1.4.1",
+        "schema_version": "1.4.2",
         "schema_name": "vcdb",
         "source_id": "vcdb",
         "incident_id": "DB-2026-069",
@@ -12896,7 +12896,7 @@
         }
       ],
       "veris": {
-        "schema_version": "1.4.1",
+        "schema_version": "1.4.2",
         "schema_name": "vcdb",
         "source_id": "vcdb",
         "incident_id": "DB-2026-070",
@@ -13041,7 +13041,7 @@
         }
       ],
       "veris": {
-        "schema_version": "1.4.1",
+        "schema_version": "1.4.2",
         "schema_name": "vcdb",
         "source_id": "vcdb",
         "incident_id": "DB-2026-071",
@@ -13177,7 +13177,7 @@
         }
       ],
       "veris": {
-        "schema_version": "1.4.1",
+        "schema_version": "1.4.2",
         "schema_name": "vcdb",
         "source_id": "vcdb",
         "incident_id": "DB-2026-072",
@@ -13312,7 +13312,7 @@
         }
       ],
       "veris": {
-        "schema_version": "1.4.1",
+        "schema_version": "1.4.2",
         "schema_name": "vcdb",
         "source_id": "vcdb",
         "incident_id": "DB-2026-073",
@@ -13457,7 +13457,7 @@
         }
       ],
       "veris": {
-        "schema_version": "1.4.1",
+        "schema_version": "1.4.2",
         "schema_name": "vcdb",
         "source_id": "vcdb",
         "incident_id": "DB-2026-074",
@@ -13582,7 +13582,7 @@
         }
       ],
       "veris": {
-        "schema_version": "1.4.1",
+        "schema_version": "1.4.2",
         "schema_name": "vcdb",
         "source_id": "vcdb",
         "incident_id": "DB-2026-075",
@@ -13761,7 +13761,7 @@
         }
       ],
       "veris": {
-        "schema_version": "1.4.1",
+        "schema_version": "1.4.2",
         "schema_name": "vcdb",
         "source_id": "vcdb",
         "incident_id": "DB-2026-076",
@@ -13885,7 +13885,7 @@
         }
       ],
       "veris": {
-        "schema_version": "1.4.1",
+        "schema_version": "1.4.2",
         "schema_name": "vcdb",
         "source_id": "vcdb",
         "incident_id": "DB-2026-077",
@@ -14030,7 +14030,7 @@
         }
       ],
       "veris": {
-        "schema_version": "1.4.1",
+        "schema_version": "1.4.2",
         "schema_name": "vcdb",
         "source_id": "vcdb",
         "incident_id": "DR-2026-078",
@@ -14163,7 +14163,7 @@
         }
       ],
       "veris": {
-        "schema_version": "1.4.1",
+        "schema_version": "1.4.2",
         "schema_name": "vcdb",
         "source_id": "vcdb",
         "incident_id": "DR-2026-082",
@@ -14340,7 +14340,7 @@
         }
       ],
       "veris": {
-        "schema_version": "1.4.1",
+        "schema_version": "1.4.2",
         "schema_name": "vcdb",
         "source_id": "vcdb",
         "incident_id": "DB-2026-096",
@@ -14453,7 +14453,7 @@
         }
       ],
       "veris": {
-        "schema_version": "1.4.1",
+        "schema_version": "1.4.2",
         "schema_name": "vcdb",
         "source_id": "vcdb",
         "incident_id": "DB-2026-097",
@@ -14566,7 +14566,7 @@
         }
       ],
       "veris": {
-        "schema_version": "1.4.1",
+        "schema_version": "1.4.2",
         "schema_name": "vcdb",
         "source_id": "vcdb",
         "incident_id": "DB-2026-098",
@@ -14679,7 +14679,7 @@
         }
       ],
       "veris": {
-        "schema_version": "1.4.1",
+        "schema_version": "1.4.2",
         "schema_name": "vcdb",
         "source_id": "vcdb",
         "incident_id": "DB-2026-099",
@@ -14792,7 +14792,7 @@
         }
       ],
       "veris": {
-        "schema_version": "1.4.1",
+        "schema_version": "1.4.2",
         "schema_name": "vcdb",
         "source_id": "vcdb",
         "incident_id": "DR-2026-100",
@@ -14949,7 +14949,7 @@
         }
       ],
       "veris": {
-        "schema_version": "1.4.1",
+        "schema_version": "1.4.2",
         "schema_name": "vcdb",
         "source_id": "vcdb",
         "incident_id": "DB-2026-101",
@@ -15143,7 +15143,7 @@
         }
       ],
       "veris": {
-        "schema_version": "1.4.1",
+        "schema_version": "1.4.2",
         "schema_name": "vcdb",
         "source_id": "vcdb",
         "incident_id": "DB-2026-102",
@@ -15328,7 +15328,7 @@
         }
       ],
       "veris": {
-        "schema_version": "1.4.1",
+        "schema_version": "1.4.2",
         "schema_name": "vcdb",
         "source_id": "vcdb",
         "incident_id": "DB-2026-103",
@@ -15493,7 +15493,7 @@
         }
       ],
       "veris": {
-        "schema_version": "1.4.1",
+        "schema_version": "1.4.2",
         "schema_name": "vcdb",
         "source_id": "vcdb",
         "incident_id": "DR-2026-105",
@@ -15639,7 +15639,7 @@
         }
       ],
       "veris": {
-        "schema_version": "1.4.1",
+        "schema_version": "1.4.2",
         "schema_name": "vcdb",
         "source_id": "vcdb",
         "incident_id": "DB-2026-106",
@@ -15799,7 +15799,7 @@
         }
       ],
       "veris": {
-        "schema_version": "1.4.1",
+        "schema_version": "1.4.2",
         "schema_name": "vcdb",
         "source_id": "vcdb",
         "incident_id": "DR-2026-107",
@@ -15947,7 +15947,7 @@
         }
       ],
       "veris": {
-        "schema_version": "1.4.1",
+        "schema_version": "1.4.2",
         "schema_name": "vcdb",
         "source_id": "vcdb",
         "incident_id": "DR-2026-036",
@@ -20073,7 +20073,7 @@
         }
       ],
       "veris": {
-        "schema_version": "1.4.1",
+        "schema_version": "1.4.2",
         "schema_name": "vcdb",
         "source_id": "vcdb",
         "incident_id": "DR-2026-056",
@@ -20273,7 +20273,7 @@
         }
       ],
       "veris": {
-        "schema_version": "1.4.1",
+        "schema_version": "1.4.2",
         "schema_name": "vcdb",
         "source_id": "vcdb",
         "incident_id": "DR-2026-058",
@@ -20724,7 +20724,7 @@
         }
       ],
       "veris": {
-        "schema_version": "1.4.1",
+        "schema_version": "1.4.2",
         "schema_name": "vcdb",
         "source_id": "vcdb",
         "incident_id": "DR-2026-060",
@@ -20914,7 +20914,7 @@
         }
       ],
       "veris": {
-        "schema_version": "1.4.1",
+        "schema_version": "1.4.2",
         "schema_name": "vcdb",
         "source_id": "vcdb",
         "incident_id": "DR-2026-062",
@@ -21421,7 +21421,7 @@
         }
       ],
       "veris": {
-        "schema_version": "1.4.1",
+        "schema_version": "1.4.2",
         "schema_name": "vcdb",
         "source_id": "vcdb",
         "incident_id": "DR-2026-064",
@@ -21552,7 +21552,7 @@
         }
       ],
       "veris": {
-        "schema_version": "1.4.1",
+        "schema_version": "1.4.2",
         "schema_name": "vcdb",
         "source_id": "vcdb",
         "incident_id": "DR-2026-065",
@@ -21693,7 +21693,7 @@
         }
       ],
       "veris": {
-        "schema_version": "1.4.1",
+        "schema_version": "1.4.2",
         "schema_name": "vcdb",
         "source_id": "vcdb",
         "incident_id": "DR-2026-079",
@@ -21899,7 +21899,7 @@
         }
       ],
       "veris": {
-        "schema_version": "1.4.1",
+        "schema_version": "1.4.2",
         "schema_name": "vcdb",
         "source_id": "vcdb",
         "incident_id": "DR-2026-080",
@@ -22140,7 +22140,7 @@
         }
       ],
       "veris": {
-        "schema_version": "1.4.1",
+        "schema_version": "1.4.2",
         "schema_name": "vcdb",
         "source_id": "vcdb",
         "incident_id": "DR-2026-081",
@@ -22303,7 +22303,7 @@
         }
       ],
       "veris": {
-        "schema_version": "1.4.1",
+        "schema_version": "1.4.2",
         "schema_name": "vcdb",
         "source_id": "vcdb",
         "incident_id": "DR-2026-083",
@@ -22456,7 +22456,7 @@
         }
       ],
       "veris": {
-        "schema_version": "1.4.1",
+        "schema_version": "1.4.2",
         "schema_name": "vcdb",
         "source_id": "vcdb",
         "incident_id": "DR-2026-084",
@@ -22618,7 +22618,7 @@
         }
       ],
       "veris": {
-        "schema_version": "1.4.1",
+        "schema_version": "1.4.2",
         "schema_name": "vcdb",
         "source_id": "vcdb",
         "incident_id": "DR-2026-085",
@@ -22996,7 +22996,7 @@
         }
       ],
       "veris": {
-        "schema_version": "1.4.1",
+        "schema_version": "1.4.2",
         "schema_name": "vcdb",
         "source_id": "vcdb",
         "incident_id": "DR-2026-086",
@@ -23127,7 +23127,7 @@
         }
       ],
       "veris": {
-        "schema_version": "1.4.1",
+        "schema_version": "1.4.2",
         "schema_name": "vcdb",
         "source_id": "vcdb",
         "incident_id": "DR-2026-087",
@@ -23307,7 +23307,7 @@
         }
       ],
       "veris": {
-        "schema_version": "1.4.1",
+        "schema_version": "1.4.2",
         "schema_name": "vcdb",
         "source_id": "vcdb",
         "incident_id": "DR-2026-088",
@@ -23899,7 +23899,7 @@
         }
       ],
       "veris": {
-        "schema_version": "1.4.1",
+        "schema_version": "1.4.2",
         "schema_name": "vcdb",
         "source_id": "vcdb",
         "incident_id": "DR-2026-089",
@@ -24101,7 +24101,7 @@
         }
       ],
       "veris": {
-        "schema_version": "1.4.1",
+        "schema_version": "1.4.2",
         "schema_name": "vcdb",
         "source_id": "vcdb",
         "incident_id": "DR-2026-090",
@@ -24226,7 +24226,7 @@
         }
       ],
       "veris": {
-        "schema_version": "1.4.1",
+        "schema_version": "1.4.2",
         "schema_name": "vcdb",
         "source_id": "vcdb",
         "incident_id": "DR-2026-091",
@@ -24392,7 +24392,7 @@
         }
       ],
       "veris": {
-        "schema_version": "1.4.1",
+        "schema_version": "1.4.2",
         "schema_name": "vcdb",
         "source_id": "vcdb",
         "incident_id": "DR-2026-092",
@@ -24521,7 +24521,7 @@
         }
       ],
       "veris": {
-        "schema_version": "1.4.1",
+        "schema_version": "1.4.2",
         "schema_name": "vcdb",
         "source_id": "vcdb",
         "incident_id": "DR-2026-093",
@@ -24672,7 +24672,7 @@
         }
       ],
       "veris": {
-        "schema_version": "1.4.1",
+        "schema_version": "1.4.2",
         "schema_name": "vcdb",
         "source_id": "vcdb",
         "incident_id": "DR-2026-094",
@@ -25406,7 +25406,7 @@
         }
       ],
       "veris": {
-        "schema_version": "1.4.1",
+        "schema_version": "1.4.2",
         "schema_name": "vcdb",
         "source_id": "vcdb",
         "incident_id": "DR-2026-095",
@@ -25667,7 +25667,7 @@
         }
       ],
       "veris": {
-        "schema_version": "1.4.1",
+        "schema_version": "1.4.2",
         "schema_name": "vcdb",
         "source_id": "vcdb",
         "incident_id": "DR-2026-104",

@@ -679,6 +679,42 @@ class Locate(unittest.TestCase):
         self.assertIn("2", self.loc("Alpha"), "ambiguous: two matches")
 
 
+class Veris142(unittest.TestCase):
+    """VERIS 1.4.2 (VCDB branch 1_4_2): the validity rules of VERIS's bin/checkValidity.py for the agentic values, and one
+    schema version for every live record (methodology §5.2)."""
+
+    def setUp(self):
+        self.d = copy.deepcopy(CORPUS)
+
+    def run_v(self):
+        return vi.validate(self.d, UPSTREAM)
+
+    def ext(self, iid="DB-2026-019"):
+        return incident(self.d, iid)["veris"]["actor"]["external"]
+
+    def test_agentic_system_alone_in_its_branch(self):
+        self.ext()["variety"] = ["Agentic system"]
+        self.assertTrue(has(self.run_v(), "agentic", msg="only variety", incident="DB-2026-019"))
+
+    def test_misalignment_without_agentic_system_in_its_branch(self):
+        self.ext()["motive"] = ["Misalignment"]
+        self.assertTrue(has(self.run_v(), "agentic", msg="Misalignment", incident="DB-2026-019"))
+
+    def test_inadequate_containment_without_agentic_system(self):
+        incident(self.d, "DB-2026-019")["veris"]["action"]["error"] = {"variety": ["Inadequate containment"], "vector": ["Unknown"]}
+        self.assertTrue(has(self.run_v(), "agentic", msg="Inadequate containment", incident="DB-2026-019"))
+
+    def test_valid_agentic_coding_passes(self):
+        e = self.ext()
+        e["variety"], e["motive"] = ["Agentic system", "Other"], ["Misalignment", "NA"]
+        incident(self.d, "DB-2026-019")["veris"]["action"]["error"] = {"variety": ["Inadequate containment"], "vector": ["Unknown"]}
+        self.assertFalse(has(self.run_v(), "agentic", incident="DB-2026-019"))
+
+    def test_every_record_has_the_schema_version(self):
+        incident(self.d, "DB-2026-019")["veris"]["schema_version"] = "1.4.0"
+        self.assertTrue(has(self.run_v(), "schema-version", incident="DB-2026-019"))
+
+
 class SourceLocators(unittest.TestCase):
     """Methodology §10.2: every sources entry has a locator and a url. A report held in this repo is cited by a
     permalink pinned to a commit, with a line range inside the passage that the locator names; a register url ends
