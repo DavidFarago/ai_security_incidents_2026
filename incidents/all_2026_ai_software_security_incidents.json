@@ -67,8 +67,8 @@
       "Negligible": 7
     },
     "by_status": {
-      "Confirmed": 75,
-      "Suspected": 0,
+      "Confirmed": 74,
+      "Suspected": 1,
       "Near miss": 2,
       "False positive": 5
     }
@@ -78,7 +78,7 @@
     "prefix_rule": "DB (database) = at least one source is an incident register (AI Incident Database export or vz-risk/VCDB); DR (direct report) = no source is a register: the incident was found through a report, deep-research (ChatGPT / Claude Code / Grok) or primary. The prefix records the discovery channel only, not source quality. No incident had both kinds of source.",
     "number_rule": "001-099: the position in the priority ranking of 2026-08-27 (observed severity desc, potential severity as tiebreaker, order within ties as in the ranking of that day). From 100 on: highest_assigned + 1, whatever the rank. The number is unique across both prefixes and is the '#' of the Markdown report; ranking_table holds the current ranking (methodology §9.3).",
     "stability": "Frozen: IDs are never renumbered. Later re-ranking is reflected in ranking_table only; new incidents continue from 100. A new record gets highest_assigned + 1 in whichever array it enters; no number is deleted or reused (methodology §4.1).",
-    "highest_assigned": 103,
+    "highest_assigned": 105,
     "counts": {
       "DB": 53,
       "DR": 29
@@ -768,17 +768,6 @@
       "validated_cve": ""
     },
     {
-      "id": "DR-2026-064",
-      "incident": "'Emerging techniques & AI-slop reckoning' — Ghostcommit image prompt injection, fake Claude Code lures, mouse5212 stealer, Mozilla 0DIN, curl bug-bounty pause",
-      "date": "Jan – Jul 2026",
-      "status": "Confirmed",
-      "observed": "Low",
-      "potential": "High",
-      "sources": "ClaudeCode_DeepResearch_ai_incidents_2026.md",
-      "cve_cwe": "CWE-77 / CWE-506",
-      "validated_cve": ""
-    },
-    {
       "id": "DB-2026-066",
       "incident": "Claude Cowork agent deleted ~15 years of family photos via terminal (bypassed Trash)",
       "date": "2026-02-07",
@@ -897,6 +886,17 @@
       "potential": "Medium",
       "sources": "ClaudeCode_DeepResearch_ai_incidents_2026.md",
       "cve_cwe": "CWE-noinfo",
+      "validated_cve": ""
+    },
+    {
+      "id": "DR-2026-105",
+      "incident": "Malicious npm package mouse5212-super-formatter uploaded the files of Claude's /mnt/user-data directory to an attacker's GitHub account",
+      "date": "26–27 May 2026",
+      "status": "Suspected",
+      "observed": "Low",
+      "potential": "Medium",
+      "sources": "ClaudeCode_DeepResearch_ai_incidents_2026.md",
+      "cve_cwe": "CWE-506",
       "validated_cve": ""
     },
     {
@@ -16461,178 +16461,6 @@
       }
     },
     {
-      "id": "DR-2026-064",
-      "title": "'Emerging techniques & AI-slop reckoning' — Ghostcommit image prompt injection, fake Claude Code lures, mouse5212 stealer, Mozilla 0DIN, curl bug-bounty pause",
-      "date": "Jan – Jul 2026",
-      "sources": [
-        {
-          "source": "ClaudeCode_DeepResearch_ai_incidents_2026.md",
-          "locator": "item 38",
-          "url": "https://github.com/DavidFarago/ai_security_incidents_2026/blob/ecb3ccd52e17931f30fb6887020458a922a945d9/incidents/sources/ClaudeCode_DeepResearch_ai_incidents_2026.md?plain=1#L175-L176"
-        }
-      ],
-      "veris": {
-        "schema_version": "1.4.1",
-        "schema_name": "vcdb",
-        "source_id": "vcdb",
-        "incident_id": "DR-2026-064",
-        "security_incident": "Confirmed",
-        "confidence": "Medium",
-        "reference": "https://www.bleepingcomputer.com/news/security/ghostcommit-hides-prompt-injection-in-images-to-fool-ai-agents-steal-secrets/; https://www.theregister.com/security/2026/01/21/curl_shutters_bug_bounty_program_to_stop_ai_slop/5063039; https://www.helpnetsecurity.com/2026/06/29/mozilla-warns-of-indirect-prompt-injection-risk-in-ai-coding-agents/",
-        "summary": "A cluster of emerging-technique items: 'Ghostcommit' (11 Jul) hid prompt injection inside PNGs that AI reviewers (CodeRabbit, Bugbot) never open, tricking agents (Cursor, Antigravity) into encoding .env secrets into committed code; Trend Micro documented malware lures impersonating 'leaked' Claude Code downloads spreading Vidar/GhostSocks; an AI-generated stealer (mouse5212-super-formatter) targeted Claude's /mnt/user-data; Mozilla 0DIN warned a repo with no malicious code could compromise a machine via indirect prompt injection; and curl briefly ended its bug bounty (31 Jan) over AI-'slop' reports before returning in March.",
-        "actor": {
-          "external": {
-            "variety": [
-              "Unknown"
-            ],
-            "motive": [
-              "Financial"
-            ],
-            "country": [
-              "Unknown"
-            ],
-            "region": [
-              "000000"
-            ]
-          }
-        },
-        "action": {
-          "hacking": {
-            "variety": [
-              "Prompt injection"
-            ],
-            "vector": [
-              "Web application"
-            ],
-            "notes": "Prompt injection hidden in images/repos to steer AI reviewers/agents into leaking secrets."
-          },
-          "malware": {
-            "variety": [
-              "Capture stored data",
-              "Trojan"
-            ],
-            "vector": [
-              "Web application"
-            ],
-            "notes": "Fake Claude Code download lures (Vidar/GhostSocks); AI-generated stealer."
-          }
-        },
-        "asset": {
-          "assets": [
-            {
-              "variety": "S - LLM application"
-            },
-            {
-              "variety": "U - Desktop or laptop"
-            },
-            {
-              "variety": "S - Code repository"
-            }
-          ],
-          "cloud": [
-            "External Cloud Asset(s)"
-          ]
-        },
-        "attribute": {
-          "confidentiality": {
-            "data_disclosure": "Potentially",
-            "data": [
-              {
-                "variety": "Secrets"
-              },
-              {
-                "variety": "Credentials"
-              }
-            ],
-            "data_victim": [
-              "Victim organization"
-            ],
-            "notes": "Techniques + lures demonstrated/observed; aggregate, victim counts not quantified."
-          }
-        },
-        "discovery_method": {
-          "external": {
-            "variety": [
-              "Security researcher"
-            ]
-          }
-        },
-        "timeline": {
-          "incident": {
-            "year": 2026,
-            "month": 7
-          }
-        },
-        "victim": {
-          "victim_id": "AI-tool users / developers (various)",
-          "country": [
-            "Unknown"
-          ],
-          "employee_count": "Unknown",
-          "industry": "511210",
-          "government": [
-            "NA"
-          ]
-        },
-        "plus": {
-          "master_id": "40f4a35c-0864-480e-acb9-d3c4b99f1265",
-          "event_chain": [
-            {
-              "actor": "ext",
-              "action": "hak",
-              "asset": "srv",
-              "attribute": "cp",
-              "summary": "Ghostcommit: prompt injection hidden in PNG images steered AI coding agents into encoding .env secrets into commits."
-            },
-            {
-              "actor": "ext",
-              "action": "mal",
-              "asset": "usr",
-              "attribute": "cp",
-              "summary": "Fake 'leaked Claude Code' downloads spread Vidar and GhostSocks; an AI-generated stealer targeted Claude's /mnt/user-data."
-            }
-          ]
-        }
-      },
-      "report": {
-        "ai_role": [
-          "AI system/harness attacked",
-          "AI-enabled attacker"
-        ],
-        "ai_component": [
-          "AI code reviewers/agents",
-          "AI coding agents"
-        ],
-        "ai_security_mechanism": [
-          "image-embedded prompt injection",
-          "malware lures impersonating AI tools",
-          "AI-slop report flooding"
-        ],
-        "observed_severity": "Low",
-        "observed_severity_rationale": "A basket of demonstrated/observed emerging techniques abusing AI reviewers, agents and tool trust, plus AI-slop straining OSS triage; realized harm largely unquantified.",
-        "potential_severity": "High",
-        "potential_severity_rationale": "Image/repo-embedded prompt injection that reviewers never see, and convincing AI-tool malware lures, scale credential theft and supply-chain risk.",
-        "potential_severity_confidence": "Medium",
-        "weaknesses": [
-          {
-            "cwe": "CWE-77 / CWE-506",
-            "mapping_basis": "Analyst inference (prompt injection; malicious lures)",
-            "confidence": "Medium"
-          }
-        ]
-      },
-      "validated_cve": [],
-      "validated_cve_details": {
-        "validated_on": "2026-08-26",
-        "method_ref": "see top-level cve_validation.method",
-        "original_cve_mentions": [],
-        "added": [],
-        "removed": [],
-        "cves": [],
-        "note": "No CVE for Ghostcommit (CodeRabbit, Bugbot, Cursor, Antigravity paid bounties/patched without advisories), the fake Claude Code lures, the mouse5212 stealer, the Mozilla 0DIN warning or the curl bug-bounty pause."
-      }
-    },
-    {
       "id": "DB-2026-066",
       "title": "Claude Cowork agent deleted ~15 years of family photos via terminal (bypassed Trash)",
       "date": "2026-02-07",
@@ -19778,6 +19606,147 @@
         "cves": [],
         "note": "No CVE: a password stored in a file; Anthropic names no flaw."
       }
+    },
+    {
+      "id": "DR-2026-105",
+      "title": "Malicious npm package mouse5212-super-formatter uploaded the files of Claude's /mnt/user-data directory to an attacker's GitHub account",
+      "date": "26–27 May 2026",
+      "sources": [
+        {
+          "source": "ClaudeCode_DeepResearch_ai_incidents_2026.md",
+          "locator": "item 38",
+          "url": "https://github.com/DavidFarago/ai_security_incidents_2026/blob/ecb3ccd52e17931f30fb6887020458a922a945d9/incidents/sources/ClaudeCode_DeepResearch_ai_incidents_2026.md?plain=1#L175-L176"
+        }
+      ],
+      "veris": {
+        "schema_version": "1.4.1",
+        "schema_name": "vcdb",
+        "source_id": "vcdb",
+        "incident_id": "DR-2026-105",
+        "security_incident": "Suspected",
+        "confidence": "Medium",
+        "reference": "https://www.ox.security/blog/malware-slop-new-malicious-npm-package-leaks-its-own-github-private-token/; https://thehackernews.com/2026/05/malicious-npm-package-stole-files-from.html",
+        "summary": "On 26 May 2026 an unknown actor published five versions of the npm package mouse5212-super-formatter (npm registry). On install, its script authenticated to GitHub, with a GitHub token from the victim's environment or a hard-coded one, and recursively uploaded the files of '/mnt/user-data' — 'a dedicated directory used by Anthropic's Claude artificial intelligence (AI) tool to handle uploads and outputs in the background' (The Hacker News) — to a GitHub account of the actor, while writing a fake 'network connections' log. OX Security found it through the actor's own leaked GitHub token and reported it on 27 May; it observed 'around 7 active exfiltration' runs in the actor's repository, 'most of them are probably tests conducted by the threat actor itself'. The package reached 676 downloads; all versions were unpublished on 27 May 2026. No source names a victim. The source item calls the stealer AI-generated; OX Security's name for it, 'Malware-Slop', alludes to that, but no source states it.",
+        "actor": {
+          "external": {
+            "variety": [
+              "Unknown"
+            ],
+            "motive": [
+              "Unknown"
+            ],
+            "country": [
+              "Unknown"
+            ],
+            "region": [
+              "000000"
+            ],
+            "notes": "Unknown actor behind the npm account; OX Security traced the exfiltration through the actor's leaked GitHub token."
+          }
+        },
+        "action": {
+          "malware": {
+            "variety": [
+              "Capture stored data",
+              "Export data"
+            ],
+            "vector": [
+              "Software update"
+            ],
+            "notes": "A postinstall script uploads every file of /mnt/user-data to the actor's GitHub account and writes a fake 'network connections' log."
+          }
+        },
+        "asset": {
+          "assets": [
+            {
+              "variety": "S - LLM application"
+            },
+            {
+              "variety": "U - Desktop or laptop"
+            }
+          ],
+          "cloud": [
+            "Unknown"
+          ],
+          "notes": "Wherever the package is installed: an environment with Claude's /mnt/user-data directory or a developer's machine."
+        },
+        "attribute": {
+          "confidentiality": {
+            "data_disclosure": "Potentially",
+            "data": [
+              {
+                "variety": "Unknown"
+              }
+            ],
+            "data_victim": [
+              "Unknown"
+            ],
+            "notes": "About 7 exfiltration runs, 'most of them … probably tests' by the actor; 676 downloads; no victim named."
+          }
+        },
+        "discovery_method": {
+          "external": {
+            "variety": [
+              "Security researcher"
+            ]
+          }
+        },
+        "timeline": {
+          "incident": {
+            "year": 2026,
+            "month": 5,
+            "day": 26
+          }
+        },
+        "victim": {
+          "victim_id": "Users who installed mouse5212-super-formatter (676 downloads)",
+          "country": [
+            "Unknown"
+          ],
+          "employee_count": "Unknown",
+          "industry": "000",
+          "government": [
+            "NA"
+          ]
+        },
+        "plus": {
+          "master_id": "ab9eb137-b58e-4e23-806c-c1412de3c5f8"
+        }
+      },
+      "report": {
+        "ai_role": [
+          "AI system/harness attacked"
+        ],
+        "ai_component": [
+          "Claude's file directory /mnt/user-data (uploads and outputs)"
+        ],
+        "ai_security_mechanism": [
+          "malicious npm package (postinstall script)",
+          "exfiltration of an AI tool's user files to GitHub"
+        ],
+        "observed_severity": "Low",
+        "observed_severity_rationale": "Suspected theft of files: about 7 exfiltration runs, most probably the actor's own tests; 676 downloads, no victim named; the package was live for about a day.",
+        "potential_severity": "Medium",
+        "potential_severity_rationale": "Every installation would upload the files that users had given Claude or that Claude produced; bounded to one directory and to a package that was live for about a day.",
+        "potential_severity_confidence": "Medium",
+        "weaknesses": [
+          {
+            "cwe": "CWE-506",
+            "mapping_basis": "Analyst inference (embedded malicious code)",
+            "confidence": "High"
+          }
+        ]
+      },
+      "validated_cve": [],
+      "validated_cve_details": {
+        "validated_on": "2026-10-24",
+        "method_ref": "see top-level cve_validation.method",
+        "original_cve_mentions": [],
+        "added": [],
+        "removed": [],
+        "cves": [],
+        "note": "No CVE, GHSA or OSV MAL- entry (GitHub Advisory Database and OSV.dev checked 2026-10-23). Snyk lists the package as malicious (SNYK-JS-MOUSE5212SUPERFORMATTER-16895729, published 2026-05-27, citing OX Security)."
+      }
     }
   ],
   "sub_threshold_incidents": [
@@ -21132,6 +21101,137 @@
           }
         ],
         "note": "The summary's companion IDs CVE-2026-35021 and CVE-2026-35022 (Phoenix Security chain) were likewise REJECTED by VulnCheck on 2026-05-29 and are excluded. 15 Claude Code CVEs were published in 2026 (GitHub Advisory DB); the five the record names are kept as self (vulnerability) and the remaining eleven are listed as related cluster members."
+      }
+    },
+    {
+      "id": "DR-2026-064",
+      "title": "'Ghostcommit' — a prompt injection hidden in a PNG makes AI coding agents commit a repository's .env secrets past AI code reviewers",
+      "date": "Jun – Jul 2026 (write-up June, reported 11 Jul)",
+      "sources": [
+        {
+          "source": "ClaudeCode_DeepResearch_ai_incidents_2026.md",
+          "locator": "item 38",
+          "url": "https://github.com/DavidFarago/ai_security_incidents_2026/blob/ecb3ccd52e17931f30fb6887020458a922a945d9/incidents/sources/ClaudeCode_DeepResearch_ai_incidents_2026.md?plain=1#L175-L176"
+        }
+      ],
+      "veris": {
+        "schema_version": "1.4.1",
+        "schema_name": "vcdb",
+        "source_id": "vcdb",
+        "incident_id": "DR-2026-064",
+        "security_incident": "Near miss",
+        "confidence": "High",
+        "reference": "https://asset-group.github.io/disclosures/ghostcommit/; https://www.bleepingcomputer.com/news/security/ghostcommit-hides-prompt-injection-in-images-to-fool-ai-agents-steal-secrets/",
+        "summary": "Researchers of the University of Missouri-Kansas City's ASSET Research Group (Sudipta Chattopadhyay, Murali Ediga) built 'Ghostcommit', a pull request whose malicious instruction is a picture: text-based AI code reviewers (Cursor Bugbot, CodeRabbit) never open the PNG and wave the change through, and a coding agent that later reads the image follows it and writes the repository's whole .env into the source code as a list of numbers. Across ten runs each, Cursor and Google's Antigravity coding tool followed the image and leaked the .env under Sonnet, Gemini and GPT-5.5, among others; Claude Code, running the same Sonnet weights, refused. 'All testing used a seeded, non-production credential in repositories we control; no real secrets were used or exposed.' The findings were disclosed to the affected vendors, and a proof of concept was published on GitHub (ASSET Research Group, June 2026; BleepingComputer, 11 Jul 2026). The source item of this record also reports Mozilla 0DIN's malicious-repository demonstration (DR-2026-104) and the malicious npm package mouse5212-super-formatter (DR-2026-105).",
+        "actor": {
+          "external": {
+            "variety": [
+              "Unaffiliated"
+            ],
+            "motive": [
+              "Other"
+            ],
+            "country": [
+              "US"
+            ],
+            "region": [
+              "019021"
+            ],
+            "notes": "Security researchers of UMKC's ASSET Research Group demonstrating the attack on repositories they control; findings disclosed to the vendors."
+          }
+        },
+        "action": {
+          "hacking": {
+            "variety": [
+              "Prompt injection"
+            ],
+            "vector": [
+              "Web application"
+            ]
+          }
+        },
+        "asset": {
+          "assets": [
+            {
+              "variety": "S - LLM application"
+            },
+            {
+              "variety": "S - Code repository"
+            }
+          ],
+          "cloud": [
+            "External Cloud Asset(s)"
+          ]
+        },
+        "attribute": {
+          "confidentiality": {
+            "data_disclosure": "No",
+            "notes": "Demonstration with a seeded, non-production credential in the researchers' own repositories; no real secret was used or exposed, and no source reports use against a victim."
+          }
+        },
+        "discovery_method": {
+          "external": {
+            "variety": [
+              "Security researcher"
+            ]
+          }
+        },
+        "timeline": {
+          "incident": {
+            "year": 2026,
+            "month": 6
+          }
+        },
+        "victim": {
+          "victim_id": "Users of AI coding agents (Cursor, Google Antigravity) behind AI code reviewers (Cursor Bugbot, CodeRabbit)",
+          "country": [
+            "Unknown"
+          ],
+          "employee_count": "Unknown",
+          "industry": "511210",
+          "government": [
+            "NA"
+          ]
+        },
+        "plus": {
+          "master_id": "40f4a35c-0864-480e-acb9-d3c4b99f1265"
+        }
+      },
+      "report": {
+        "ai_role": [
+          "AI system/harness attacked"
+        ],
+        "ai_component": [
+          "AI coding agents (Cursor, Google Antigravity)",
+          "AI code reviewers (Cursor Bugbot, CodeRabbit)"
+        ],
+        "ai_security_mechanism": [
+          "prompt injection hidden in an image",
+          "AI code reviewers that skip images",
+          "secret exfiltration through committed code"
+        ],
+        "observed_severity": "Negligible",
+        "observed_severity_rationale": "A demonstration on the researchers' own repositories with a seeded, non-production credential; no real secret was exposed and no source reports use against a victim.",
+        "potential_severity": "High",
+        "potential_severity_rationale": "The demonstrated path: a pull request that passes AI review and later makes a coding agent commit the repository's .env secrets in encoded form. Used before the vendors react, it would leak the secrets of any repository whose maintainers work with such agents — many organisations, bounded to the secrets those repositories hold.",
+        "potential_severity_confidence": "Medium",
+        "weaknesses": [
+          {
+            "cwe": "CWE-77",
+            "mapping_basis": "Analyst inference (prompt injection)",
+            "confidence": "Medium"
+          }
+        ]
+      },
+      "validated_cve": [],
+      "validated_cve_details": {
+        "validated_on": "2026-08-26",
+        "method_ref": "see top-level cve_validation.method",
+        "original_cve_mentions": [],
+        "added": [],
+        "removed": [],
+        "cves": [],
+        "note": "No CVE or advisory: the write-up and BleepingComputer report a disclosure to the vendors but name no CVE, advisory, fix or bounty."
       }
     },
     {
@@ -25247,6 +25347,137 @@
           }
         ],
         "note": "Original record had no CVE. Mozilla did NOT assign 271 individual CVEs: MFSA 2026-30 lists 43 CVEs and never mentions Mythos; the 271 Mythos findings (180 high/80 moderate/11 low) went into the rollup CVEs CVE-2026-6784/6785/6786 together with non-Mythos bugs (423 internal bugs in April), so they cannot be isolated by CVE ID."
+      }
+    },
+    {
+      "id": "DR-2026-104",
+      "title": "Mozilla 0DIN: a repository without malicious code makes Claude Code open a reverse shell through indirect prompt injection",
+      "date": "2026-06-25",
+      "sources": [
+        {
+          "source": "ClaudeCode_DeepResearch_ai_incidents_2026.md",
+          "locator": "item 38",
+          "url": "https://github.com/DavidFarago/ai_security_incidents_2026/blob/ecb3ccd52e17931f30fb6887020458a922a945d9/incidents/sources/ClaudeCode_DeepResearch_ai_incidents_2026.md?plain=1#L175-L176"
+        }
+      ],
+      "veris": {
+        "schema_version": "1.4.1",
+        "schema_name": "vcdb",
+        "source_id": "vcdb",
+        "incident_id": "DR-2026-104",
+        "security_incident": "Near miss",
+        "confidence": "High",
+        "reference": "https://0din.ai/blog/clone-this-repo-and-i-own-your-machine; https://www.helpnetsecurity.com/2026/06/29/mozilla-warns-of-indirect-prompt-injection-risk-in-ai-coding-agents/",
+        "summary": "Researchers of Mozilla's 0DIN (Andre Hall, Miller Engelbrecht) showed that a GitHub repository without a single line of malicious code can compromise a developer's machine through Claude Code. In their proof of concept, the project fails on first use with a setup error; Claude Code runs the suggested setup script to fix it; the script fetches a DNS TXT record whose value decodes to a reverse shell. The shell runs 'as the developer's own user, exposing credentials, API keys, and allowing persistence'. The payload is never in the repository, so code review, static scanners and the agent itself cannot see it: 'Claude Code never decided to open a shell. It decided to fix an error.' (0DIN, 25 Jun 2026; Help Net Security, 29 Jun 2026). No source reports use against a victim, a vendor fix, a CVE or a bounty.",
+        "actor": {
+          "external": {
+            "variety": [
+              "Unaffiliated"
+            ],
+            "motive": [
+              "Other"
+            ],
+            "country": [
+              "US"
+            ],
+            "region": [
+              "019021"
+            ],
+            "notes": "Security researchers of Mozilla's 0DIN demonstrating the attack with their own repository and DNS record."
+          }
+        },
+        "action": {
+          "hacking": {
+            "variety": [
+              "Prompt injection"
+            ],
+            "vector": [
+              "Web application"
+            ]
+          }
+        },
+        "asset": {
+          "assets": [
+            {
+              "variety": "S - LLM application"
+            },
+            {
+              "variety": "U - Desktop or laptop"
+            }
+          ],
+          "cloud": [
+            "Unknown"
+          ]
+        },
+        "attribute": {
+          "confidentiality": {
+            "data_disclosure": "No",
+            "notes": "Proof of concept on the researchers' own setup; no victim."
+          }
+        },
+        "discovery_method": {
+          "external": {
+            "variety": [
+              "Security researcher"
+            ]
+          }
+        },
+        "timeline": {
+          "incident": {
+            "year": 2026,
+            "month": 6,
+            "day": 25
+          }
+        },
+        "victim": {
+          "victim_id": "Claude Code users",
+          "country": [
+            "Unknown"
+          ],
+          "employee_count": "Unknown",
+          "industry": "511210",
+          "government": [
+            "NA"
+          ]
+        },
+        "plus": {
+          "master_id": "bfce3455-dac6-4f7f-9797-2bbd1f04360d"
+        }
+      },
+      "report": {
+        "ai_role": [
+          "AI system/harness attacked"
+        ],
+        "ai_component": [
+          "AI coding agent (Claude Code)"
+        ],
+        "ai_security_mechanism": [
+          "indirect prompt injection through a setup error",
+          "payload fetched at run time from a DNS TXT record",
+          "reverse shell"
+        ],
+        "observed_severity": "Negligible",
+        "observed_severity_rationale": "A proof of concept on the researchers' own setup; no source reports use against a victim.",
+        "potential_severity": "High",
+        "potential_severity_rationale": "The demonstrated path ends in a reverse shell with the developer's rights, 'exposing credentials, API keys, and allowing persistence'. It needs a developer who lets the agent set up a malicious repository: a compromise of developers' machines one at a time, not a mass compromise.",
+        "potential_severity_confidence": "Medium",
+        "weaknesses": [
+          {
+            "cwe": "CWE-77",
+            "mapping_basis": "Analyst inference (indirect prompt injection)",
+            "confidence": "Medium"
+          }
+        ]
+      },
+      "validated_cve": [],
+      "validated_cve_details": {
+        "validated_on": "2026-10-24",
+        "method_ref": "see top-level cve_validation.method",
+        "original_cve_mentions": [],
+        "added": [],
+        "removed": [],
+        "cves": [],
+        "note": "No CVE, advisory or bounty: 0DIN and Help Net Security name none."
       }
     }
   ],

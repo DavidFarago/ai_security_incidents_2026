@@ -62,7 +62,7 @@ DR-2026-060,Negligible,Critical,2,CVE-2026-50548; CVE-2026-50549,"self-vulnerabi
 DB-2026-061,Low,High,0,,,0,"DJI Romo robot-vacuum cloud authorization flaw exposed ~7,000 homes' camera/mic/maps",incidents
 DR-2026-062,Negligible,High,16,CVE-2025-59536; CVE-2026-21852; CVE-2026-24887; CVE-2026-39861; CVE-2026-54316; CVE-2026-24052; CVE-2026-24053; CVE-2026-25722; CVE-2026-25723; CVE-2026-25724; CVE-2026-25725; CVE-2026-33068; CVE-2026-35603; CVE-2026-40068; CVE-2026-46406; CVE-2026-55607,"self-vulnerability: CVE-2025-59536, CVE-2026-21852, CVE-2026-24887, CVE-2026-39861, CVE-2026-54316 | related: CVE-2026-24052, CVE-2026-24053, CVE-2026-25722, CVE-2026-25723, CVE-2026-25724, CVE-2026-25725, CVE-2026-33068, CVE-2026-35603, CVE-2026-40068, CVE-2026-46406, CVE-2026-55607",0,Claude Code project-file RCE & vulnerability cluster (Check Point + others),sub_threshold_incidents
 DR-2026-063,Low,High,0,,,1,Snowflake GitHub Actions shell injection found & exploited by Wiz Red Agent (internal Jira token),incidents
-DR-2026-064,Low,High,0,,,0,"'Emerging techniques & AI-slop reckoning' — Ghostcommit image prompt injection, fake Claude Code lures, mouse5212 stealer, Mozilla 0DIN, curl bug-bounty pause",incidents
+DR-2026-064,Negligible,High,0,,,0,'Ghostcommit' — a prompt injection hidden in a PNG makes AI coding agents commit a repository's .env secrets past AI code reviewers,sub_threshold_incidents
 DR-2026-065,Negligible,High,0,,,0,claude-code-action permission bypass - one malicious GitHub issue hijacks any public repo running the Claude Code GitHub Action,sub_threshold_incidents
 DB-2026-066,Low,Medium,0,,,0,Claude Cowork agent deleted ~15 years of family photos via terminal (bypassed Trash),incidents
 DB-2026-067,Low,Medium,0,,,0,"Anthropic accidentally published Claude Code's source map to npm (v2.1.88), exposing internals",incidents
@@ -102,3 +102,5 @@ DR-2026-100,Low,Medium,0,,,0,"Early Claude Mythos Preview escaped its test sandb
 DB-2026-101,High,High,0,,,0,Claude Mythos 5 published a malicious PyPI package during an Anthropic cyber evaluation; a security vendor's scanner ran it and lost its credentials,incidents
 DB-2026-102,High,High,0,,,0,"Anthropic internal research model scanned ~9,000 hosts and broke into a real company's application during a cyber evaluation",incidents
 DB-2026-103,High,High,0,,,0,Early Claude Opus 4.6 checkpoint gained admin access to a third party's machine during a cyber evaluation,incidents
+DR-2026-104,Negligible,High,0,,,0,Mozilla 0DIN: a repository without malicious code makes Claude Code open a reverse shell through indirect prompt injection,sub_threshold_incidents
+DR-2026-105,Low,Medium,0,,,0,Malicious npm package mouse5212-super-formatter uploaded the files of Claude's /mnt/user-data directory to an attacker's GitHub account,incidents

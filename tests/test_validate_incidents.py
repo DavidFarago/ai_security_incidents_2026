@@ -339,8 +339,8 @@ class Numbering(unittest.TestCase):
         return [f for f in vi.core_checks(self.d) if f.check == "numbering"]
 
     def test_deleted_top_record_is_missing(self):
-        # The record numbered highest_assigned has no CVE, so no cve_validation value changes; with the counts fixed
-        # by hand, only the high-water mark shows the deletion.
+        # The record numbered highest_assigned has no CVE, so no CVE count of cve_validation changes; with the counts
+        # fixed by hand (recount), only the high-water mark shows the deletion.
         n = self.d["id_scheme"]["highest_assigned"]
         top = next(i for i in lib_corpus.records(self.d) if lib_corpus.incident_number(i["id"]) == n)
         self.assertFalse(top.get("validated_cve"), f"{top['id']} has CVEs; the test needs a record without")
@@ -477,10 +477,11 @@ class SubThreshold(unittest.TestCase):
 
     # ---- measurement
     def test_population_per_class(self):
-        # The 21 disclosures that fail methodology §3.3 (a)-(c): 17 with a CVE and DR-2026-065, 086, 090, 092 without.
+        # The 23 disclosures that fail methodology §3.3 (a)-(c): 17 with a CVE and DR-2026-064, 065, 086, 090, 092, 104
+        # without.
         m = self.run_v().measurements
-        self.assertEqual(m["sub_threshold_classes"], {"AI-discovered": 9, "AI-stack": 12})
-        self.assertEqual(m["sub_threshold_records"], 21)
+        self.assertEqual(m["sub_threshold_classes"], {"AI-discovered": 9, "AI-stack": 14})
+        self.assertEqual(m["sub_threshold_records"], 23)
         self.assertNotIn("DR-2026-081", m["disclosure_rule_fails"], "the measurement covers incidents only")
 
 

@@ -19,12 +19,12 @@ Everything below is built from the live records that have a validated CVE: the c
 - 0 of the 15 counted incidents with a CVE are observed *Negligible*. A disclosure without a KEV listing, an exploitation report or realized harm is a sub-threshold record (methodology §3.3): 17 of them carry a CVE and enter the CVE-side statistics beside the counted incidents, marked †.
 - 6 incidents are identified only by non-CVE identifiers: DB-2026-005, DR-2026-012, DR-2026-035, DR-2026-045, DR-2026-046, DR-2026-063.
 
-**Sub-threshold records per class** (21 records, not counted above). A sub-threshold record is a vulnerability disclosure without a KEV listing, an exploitation report or realized harm (methodology §3.3). A record can have several classes. *CVE links* are the links whose relation (`validated_cve_details.cves[].relation`) gives the class: `self (vulnerability)` or `discovered`; a record without a CVE takes its class from `report.ai_role`.
+**Sub-threshold records per class** (23 records, not counted above). A sub-threshold record is a vulnerability disclosure without a KEV listing, an exploitation report or realized harm (methodology §3.3). A record can have several classes. *CVE links* are the links whose relation (`validated_cve_details.cves[].relation`) gives the class: `self (vulnerability)` or `discovered`; a record without a CVE takes its class from `report.ai_role`.
 
 | Class | Records | Records with a CVE | CVE links | Distinct CVEs |
 |---|---|---|---|---|
 | AI-written | 0 | 0 | 0 | 0 |
-| AI-stack | 12 | 8 | 18 | 17 |
+| AI-stack | 14 | 8 | 18 | 17 |
 | AI-discovered | 9 | 9 | 55 | 54 |
 
 ## Conventions
@@ -67,7 +67,7 @@ Everything below is built from the live records that have a validated CVE: the c
 
 ## Summary
 
-- **82 incidents**; **15** carry validated CVEs, 67 do not (6 of those have only non-CVE identifiers: DB-2026-005, DR-2026-012, DR-2026-035, DR-2026-045, DR-2026-046, DR-2026-063). Beside them **21 sub-threshold records** (†), 17 of them with validated CVEs.
+- **82 incidents**; **15** carry validated CVEs, 67 do not (6 of those have only non-CVE identifiers: DB-2026-005, DR-2026-012, DR-2026-035, DR-2026-045, DR-2026-046, DR-2026-063). Beside them **23 sub-threshold records** (†), 17 of them with validated CVEs.
 - **322 distinct CVEs**, 333 record–CVE links (224 of counted incidents, 109 of sub-threshold records). Only 11 CVEs occur in more than one record (all in exactly two): [CVE-2025-3248](https://www.cve.org/CVERecord?id=CVE-2025-3248), [CVE-2025-65720](https://www.cve.org/CVERecord?id=CVE-2025-65720), [CVE-2026-15903](https://www.cve.org/CVERecord?id=CVE-2026-15903), [CVE-2026-28472](https://www.cve.org/CVERecord?id=CVE-2026-28472), [CVE-2026-30623](https://www.cve.org/CVERecord?id=CVE-2026-30623), [CVE-2026-33634](https://www.cve.org/CVERecord?id=CVE-2026-33634), [CVE-2026-39987](https://www.cve.org/CVERecord?id=CVE-2026-39987), [CVE-2026-54316](https://www.cve.org/CVERecord?id=CVE-2026-54316), [CVE-2026-54769](https://www.cve.org/CVERecord?id=CVE-2026-54769), [CVE-2026-59726](https://www.cve.org/CVERecord?id=CVE-2026-59726), [CVE-2026-76021](https://www.cve.org/CVERecord?id=CVE-2026-76021).
 - Links by relation (all live records): `exploited` 5, `self (malicious release)` 4, `exploited-unconfirmed` 5, `attempted` 3, `toolkit` 7, `self (vulnerability)` 193, `discovered` 55, `related` 61.
 - **16 distinct CVEs on CISA KEV**; 20 CVE links in the exploited family (exploited 5, exploited-unconfirmed 5, attempted 3, toolkit 7).
@@ -77,13 +77,13 @@ Everything below is built from the live records that have a validated CVE: the c
 
 ## Findings
 
-1. **CVE covers the disclosures, not the breaches.** 17 of the 26 in-scope High/Critical incidents have no CVE; 15 of the 82 counted incidents carry a CVE, against 17 of the 21 sub-threshold disclosures (see *Coverage*). The CVE-side tables describe the part of the corpus that is easiest to identify, not the part that hurt most.
+1. **CVE covers the disclosures, not the breaches.** 17 of the 26 in-scope High/Critical incidents have no CVE; 15 of the 82 counted incidents carry a CVE, against 17 of the 23 sub-threshold disclosures (see *Coverage*). The CVE-side tables describe the part of the corpus that is easiest to identify, not the part that hurt most.
 2. **The CVE side is deep-research-sourced.** 29 of the 32 live records with a validated CVE (15 counted, 17 sub-threshold) come from the deep-research reports (DR ids), 3 from the registers — registers record breaches, not vulnerability disclosures. The CVEs are validated at CVE.org; the *sample* of CVE-bearing incidents is not representative of AI-related incidents.
 3. **Exploitation evidence tracked harm; the base score did not.** Every confirmed-`exploited` CVE is on CISA KEV, and the exploited family spans CVSS 6.5–10 — the same range as unexploited disclosures.
 4. **Medium CVSS ≠ safe.** 4 CVEs rated CVSS < 7.0 sit in potential-Critical incidents (jfrog/artifactory 3, anthropics/claude-code 1; incidents DB-2026-006, DR-2026-056). Per CVSS band, the share of CVEs in a potential-Critical incident is 31% for 9.0–10.0 against 5% / 5% for 7.0–8.9 / 4.0–6.9 — CVSS separates the top band, not the middle. 2 incidents; a case, not a statistic.
 5. **Three populations, three countermeasure programmes.** Top CNA CWEs — AI-written code: CWE-918 (21), CWE-22 (19), CWE-78 (11); AI-exploited: CWE-306 (4), CWE-918 (3), CWE-94 (2); AI-discovered: CWE-416 (4), CWE-121 (3), CWE-295 (3); AI-stack products: CWE-77 (4), CWE-94 (4), CWE-22 (3) (CVE links of all live records). The AI-written profile is one external corpus (Radar) and needs a baseline before any "AI writes X" claim.
 6. **The CVE ecosystem is not yet fit for AI-stack components.** 12 `self (vulnerability)` CVEs (flaws in AI products and AI-written code) carry no CNA CVSS — the score used here comes from CISA-ADP; the MCP STDIO cluster (DR-2026-059) has no CNA CVSS, no CWE and product `n/a` in its records.
-7. **Prompt injection: disclosed more often than realized.** 11 sub-threshold records carry VERIS `hacking.variety = Prompt injection` (observed N11, potential C2 H8 M1): disclosed proofs of concept without known exploitation. 7 counted incidents carry it (observed H3 M1 L1 N2, potential C2 H5), 5 of them with realized harm (`Confirmed`, observed Low or higher).
+7. **Prompt injection: disclosed more often than realized.** 13 sub-threshold records carry VERIS `hacking.variety = Prompt injection` (observed N13, potential C2 H10 M1): disclosed proofs of concept without known exploitation. 6 counted incidents carry it (observed H3 M1 N2, potential C2 H4), 4 of them with realized harm (`Confirmed`, observed Low or higher).
 8. **Malicious releases need removal, not patching.** 5 CVEs and 48 package releases are malware by design (CNA CWE-506 / malware advisories); they are separated from the weakness profiles and listed under *remove* in the action list.
 
 Who should read what: vulnerability management → *Action list* and *KEV CVEs*; developers of AI systems → *CNA-assigned CWE profile* (`ai-stack-vulnerability`, `ai-exploited`) and the incident-level CWE ranking of the CWE thread; researchers → *Coverage*, *CVSS vs observed*, *IBSS vs CVSS*; the CWE validation → *Per-incident CNA CWEs*.
@@ -177,7 +177,7 @@ ID order; † marks a sub-threshold record. Records with more than 10 CVEs are l
 | DB-2026-061 | DJI Romo robot-vacuum cloud authorization flaw exposed ~7,000 homes' camera/mic/maps | Low | High | 0 | — |
 | DR-2026-062† | Claude Code project-file RCE & vulnerability cluster (Check Point + others) | Negligible | High | 16 | **16 CVEs** — see [full list](#dr-2026-062) below |
 | DR-2026-063 | Snowflake GitHub Actions shell injection found & exploited by Wiz Red Agent (internal Jira token) | Low | High | 0 | — (1 non-CVE ids) |
-| DR-2026-064 | 'Emerging techniques & AI-slop reckoning' — Ghostcommit image prompt injection, fake Claude Code lures, mouse5212 stealer, Mozilla 0DIN, curl bug-bounty pause | Low | High | 0 | — |
+| DR-2026-064† | 'Ghostcommit' — a prompt injection hidden in a PNG makes AI coding agents commit a repository's .env secrets past AI code reviewers | Negligible | High | 0 | — |
 | DR-2026-065† | claude-code-action permission bypass - one malicious GitHub issue hijacks any public repo running the Claude Code GitHub Action | Negligible | High | 0 | — |
 | DB-2026-066 | Claude Cowork agent deleted ~15 years of family photos via terminal (bypassed Trash) | Low | Medium | 0 | — |
 | DB-2026-067 | Anthropic accidentally published Claude Code's source map to npm (v2.1.88), exposing internals | Low | Medium | 0 | — |
@@ -217,6 +217,8 @@ ID order; † marks a sub-threshold record. Records with more than 10 CVEs are l
 | DB-2026-101 | Claude Mythos 5 published a malicious PyPI package during an Anthropic cyber evaluation; a security vendor's scanner ran it and lost its credentials | High | High | 0 | — |
 | DB-2026-102 | Anthropic internal research model scanned ~9,000 hosts and broke into a real company's application during a cyber evaluation | High | High | 0 | — |
 | DB-2026-103 | Early Claude Opus 4.6 checkpoint gained admin access to a third party's machine during a cyber evaluation | High | High | 0 | — |
+| DR-2026-104† | Mozilla 0DIN: a repository without malicious code makes Claude Code open a reverse shell through indirect prompt injection | Negligible | High | 0 | — |
+| DR-2026-105 | Malicious npm package mouse5212-super-formatter uploaded the files of Claude's /mnt/user-data directory to an attacker's GitHub account | Low | Medium | 0 | — |
 
 ### Full CVE lists of the aggregate records
 

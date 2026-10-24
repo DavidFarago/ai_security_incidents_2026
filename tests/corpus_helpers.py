@@ -91,10 +91,15 @@ def add_record(d, like, iid, array="incidents", bump=True):
 
 
 def recount(d):
-    """Recompute counts.* and id_scheme.counts over incidents, as an analyst fixing them by hand would."""
+    """Recompute counts.* and id_scheme.counts over incidents, and the record count of
+    cve_validation.incidents_with_non_cve_identifiers_only over every live record, as an analyst fixing them by hand
+    would."""
     inc, cnt = d["incidents"], d["counts"]
     cnt["total_incidents"] = len(inc)
     cnt["by_observed_severity"] = {s: sum(1 for i in inc if i["report"]["observed_severity"] == s) for s in lib_corpus.SEVERITIES}
     cnt["by_status"] = {s: sum(1 for i in inc if i["veris"]["security_incident"] == s) for s in lib_corpus.STATUSES}
     cnt["citations_by_source"] = dict(Counter(s["source"] for i in inc for s in i["sources"]))
     d["id_scheme"]["counts"] = {p: sum(1 for i in inc if i["id"].startswith(p + "-")) for p in ("DB", "DR")}
+    d["cve_validation"]["incidents_with_non_cve_identifiers_only"] = sum(
+        1 for i in lib_corpus.records(d)
+        if not i.get("validated_cve") and (i.get("validated_cve_details") or {}).get("non_cve_identifiers"))
