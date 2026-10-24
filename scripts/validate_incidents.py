@@ -712,7 +712,7 @@ def report(r: Result, verbose: bool) -> str:
              + (f", by class {r.measurements['sub_threshold_classes']}" if r.measurements.get("sub_threshold_classes") else "")
              + f"; retired_incidents: {r.measurements.get('retired_records', 0)}")
     L.append("Class C (judgment) is not checked: relation, CVE membership, notes, severities, ai_role, inclusion, "
-             "§3.3 (b), and whether a record without a CVE is a disclosure.")
+             "§3.3 (b), whether a record without a CVE is a disclosure, and whether the events of one record need the same values.")
     return "\n".join(L)
 
 

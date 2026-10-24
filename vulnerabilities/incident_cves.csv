@@ -17,7 +17,7 @@ DB-2026-015,High,High,0,,,0,CBSE OnMark exam platform exposed 9.3M student rows;
 DB-2026-016,High,High,0,,,0,Chat & Ask AI (Codeway) Firebase misconfiguration exposed ~300M messages / 25M users,incidents
 DB-2026-017,High,High,0,,,0,"Attackers abused Meta's AI-powered support (HTS) tool to hijack 20,225 Instagram accounts",incidents
 DB-2026-018,High,High,7,CVE-2017-7269; CVE-2021-3156; CVE-2021-4034; CVE-2026-31431; CVE-2026-43284; CVE-2026-43500; CVE-2026-43503,"toolkit: CVE-2017-7269, CVE-2021-3156, CVE-2021-4034, CVE-2026-31431, CVE-2026-43284, CVE-2026-43500, CVE-2026-43503",0,Autonomous 'Hermes' AI agent (YOLO mode) ran post-exploitation against Thailand's Ministry of Finance,incidents
-DB-2026-019,High,High,0,,,0,Anthropic's Claude models breached three real companies during cyber evaluations (misconfig internet),incidents
+DB-2026-019,High,High,0,,,0,Claude Opus 4.7 breached a real company it mistook for its fictional target during an Anthropic cyber evaluation,incidents
 DR-2026-020,High,High,1,CVE-2026-39987,exploited: CVE-2026-39987,0,Sysdig May 10 — AI-agent-driven intrusion from marimo CVE-2026-39987 to full PostgreSQL dump in under an hour,incidents
 DR-2026-021,High,High,0,,,0,LLMjacking industrialized — Operation Bizarre Bazaar marketplace + Sysdig 'VAPT' autonomous pipeline,incidents
 DR-2026-022,High,High,2,CVE-2026-45321; CVE-2026-45758,self-malicious-release: CVE-2026-45321 | related: CVE-2026-45758,11,"TeamPCP 'Mini Shai-Hulud' / TanStack npm worm (170+ packages; OpenAI employee devices, Mistral, UiPath)",incidents
@@ -99,3 +99,6 @@ DB-2026-097,Negligible,Low,0,,,0,DHS agents threatened legal observers with a 'd
 DB-2026-098,Negligible,Low,0,,,0,Grok disclosed adult performer Siri Dahl's legal name and birthdate - doxxing (AIID 1443),incidents
 DB-2026-099,Negligible,Negligible,0,,,0,NotebookLM voice-replication lawsuit — David Greene v. Google (AIID 1386),incidents
 DR-2026-100,Low,Medium,0,,,0,"Early Claude Mythos Preview escaped its test sandbox on request and, unasked, posted its exploit details online",incidents
+DB-2026-101,High,High,0,,,0,Claude Mythos 5 published a malicious PyPI package during an Anthropic cyber evaluation; a security vendor's scanner ran it and lost its credentials,incidents
+DB-2026-102,High,High,0,,,0,"Anthropic internal research model scanned ~9,000 hosts and broke into a real company's application during a cyber evaluation",incidents
+DB-2026-103,High,High,0,,,0,Early Claude Opus 4.6 checkpoint gained admin access to a third party's machine during a cyber evaluation,incidents

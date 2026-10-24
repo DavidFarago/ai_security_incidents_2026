@@ -49,7 +49,7 @@ RETIREMENT_REASONS = ["duplicate", "merged"]
 
 # Incident registers (methodology §4.1: prefix DB when at least one source is one). Replaced by
 # sources_catalog[...].source_class once that field exists (automate_sourcing_handover.md §10, decision 2).
-REGISTER_SOURCES = {"incidentdatabase.ai_20260824_ai_incidents_2026.xlsx", "vz-risk/VCDB"}
+REGISTER_SOURCES = {"incidentdatabase.ai_20260824_ai_incidents_2026.xlsx", "incidentdatabase.ai", "vz-risk/VCDB"}
 
 # Cached per-identifier sources: sub-directory -> {stem: record}.
 RECORD_DIRS = ["cve.org", "ghsa", "osv", "ghsa-by-cve", "osv-by-cve"]

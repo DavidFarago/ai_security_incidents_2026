@@ -69,6 +69,19 @@ class ScopeLine(unittest.TestCase):
         self.assertIn(f"lists the {len(d['incidents'])} counted incidents", line)
 
 
+class SourceLine(unittest.TestCase):
+    def test_live_aiid_is_counted(self):
+        # Incidents added to AIID after the export of 2026-08-24 cite the live AIID (`incidentdatabase.ai`).
+        n = sum(1 for i in CORPUS["incidents"] for s in i["sources"] if s["source"] == "incidentdatabase.ai")
+        self.assertGreater(n, 0)
+        line = next(x for x in bir.render(CORPUS)[".md"].splitlines() if x.startswith("- **Original sources cited**"))
+        self.assertIn(f"AIID (live) {n}", line)
+
+    def test_live_aiid_link_is_labelled_like_the_export(self):
+        url = "https://incidentdatabase.ai/cite/1627"
+        self.assertEqual(bir.cite_md({"source": "incidentdatabase.ai", "locator": "AIID 1627", "url": url}), f"[AIID 1627]({url})")
+
+
 class VerisCategories(unittest.TestCase):
     def test_block_without_variety_has_no_colon(self):
         # VERIS actor.partner and action.unknown have no variety.

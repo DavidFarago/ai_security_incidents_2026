@@ -740,6 +740,22 @@ class SourceLocators(unittest.TestCase):
         e["url"] = e["url"].rsplit("/", 1)[0] + "/99999"
         self.assertTrue(self.flagged("DB-2026-001"))
 
+    # The live AIID (incidents added after the export of 2026-08-24) is a register like VCDB.
+    LIVE_AIID = {"kind": "AI Incident Database (AIID), live site", "home": "https://incidentdatabase.ai/",
+                 "per_incident_locator": "AIID <id> + cite URL"}
+
+    def cite_live_aiid(self, iid, url="https://incidentdatabase.ai/cite/1627"):
+        self.d["sources_catalog"]["incidentdatabase.ai"] = self.LIVE_AIID
+        incident(self.d, iid)["sources"].append({"source": "incidentdatabase.ai", "locator": "AIID 1627", "url": url})
+
+    def test_live_aiid_source_needs_db_prefix(self):
+        self.cite_live_aiid("DR-2026-081")
+        self.assertTrue(has(self.run_v(), "id-prefix", incident="DR-2026-081"))
+
+    def test_live_aiid_url_names_another_item(self):
+        self.cite_live_aiid("DB-2026-001", url="https://incidentdatabase.ai/cite/9999")
+        self.assertTrue(self.flagged("DB-2026-001"))
+
     def test_locator_and_url_are_required(self):
         e = self.entry()
         e["locator"] = ""

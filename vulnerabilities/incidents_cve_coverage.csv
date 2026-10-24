@@ -1,7 +1,7 @@
 observed_severity,incidents,with_validated_cve,without_cve_in_scope,without_cve_out_of_scope
 Critical,2,1,1,0
-High,22,8,13,1
+High,25,8,16,1
 Medium,31,4,20,7
 Low,17,2,12,3
 Negligible,7,0,3,4
-total,79,15,49,15
+total,82,15,52,15

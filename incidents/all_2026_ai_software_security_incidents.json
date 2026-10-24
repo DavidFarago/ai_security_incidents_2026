@@ -39,28 +39,35 @@
       "repo": "https://github.com/vz-risk/VCDB",
       "per_incident_locator": "encoded records at data/json/{validated,submitted}/<uuid>.json (blob URL), or the 2026 issue intake at issues/<n>",
       "note": "No local VCDB snapshot in incidents/sources yet; citations point at the upstream repo."
+    },
+    "incidentdatabase.ai": {
+      "kind": "AI Incident Database (AIID), live site",
+      "home": "https://incidentdatabase.ai/",
+      "per_incident_locator": "AIID <id> + cite URL",
+      "note": "For incidents added after the export of 2026-08-24 (incidentdatabase.ai_20260824_ai_incidents_2026.xlsx, which ends at AIID 1508); citations point at the live cite page. Report links taken from the AIID snapshot backup-20261019101022 (https://incidentdatabase.ai/research/snapshots/)."
     }
   },
   "counts": {
-    "total_incidents": 79,
+    "total_incidents": 82,
     "from_ai_software_security_incidents_2026": 35,
     "from_merged_incidents_2026_VERIS_described": 64,
     "citations_by_source": {
-      "vz-risk/VCDB": 46,
+      "vz-risk/VCDB": 48,
       "ClaudeCode_DeepResearch_ai_incidents_2026.md": 23,
       "incidentdatabase.ai_20260824_ai_incidents_2026.xlsx": 17,
       "Grok_DeepResearch_ai_incidents_2026.md": 6,
-      "ChatGPT_DeepResearch_ai_incidents_2026.md": 8
+      "ChatGPT_DeepResearch_ai_incidents_2026.md": 8,
+      "incidentdatabase.ai": 4
     },
     "by_observed_severity": {
       "Critical": 2,
-      "High": 22,
+      "High": 25,
       "Medium": 31,
       "Low": 17,
       "Negligible": 7
     },
     "by_status": {
-      "Confirmed": 72,
+      "Confirmed": 75,
       "Suspected": 0,
       "Near miss": 2,
       "False positive": 5
@@ -71,9 +78,9 @@
     "prefix_rule": "DB (database) = at least one source is an incident register (AI Incident Database export or vz-risk/VCDB); DR (direct report) = no source is a register: the incident was found through a report, deep-research (ChatGPT / Claude Code / Grok) or primary. The prefix records the discovery channel only, not source quality. No incident had both kinds of source.",
     "number_rule": "001-099: the position in the priority ranking of 2026-08-27 (observed severity desc, potential severity as tiebreaker, order within ties as in the ranking of that day). From 100 on: highest_assigned + 1, whatever the rank. The number is unique across both prefixes and is the '#' of the Markdown report; ranking_table holds the current ranking (methodology §9.3).",
     "stability": "Frozen: IDs are never renumbered. Later re-ranking is reflected in ranking_table only; new incidents continue from 100. A new record gets highest_assigned + 1 in whichever array it enters; no number is deleted or reused (methodology §4.1).",
-    "highest_assigned": 100,
+    "highest_assigned": 103,
     "counts": {
-      "DB": 50,
+      "DB": 53,
       "DR": 29
     }
   },
@@ -278,13 +285,13 @@
     },
     {
       "id": "DB-2026-019",
-      "incident": "Anthropic's Claude models breached three real companies during cyber evaluations (misconfig internet)",
-      "date": "2026-04-01",
+      "incident": "Claude Opus 4.7 breached a real company it mistook for its fictional target during an Anthropic cyber evaluation",
+      "date": "Apr – Jul 2026 (disclosed 30 Jul 2026)",
       "status": "Confirmed",
       "observed": "High",
       "potential": "High",
-      "sources": "vz-risk/VCDB",
-      "cve_cwe": "CWE-89 / CWE-215 / CWE-522",
+      "sources": "vz-risk/VCDB; incidentdatabase.ai",
+      "cve_cwe": "CWE-522",
       "validated_cve": ""
     },
     {
@@ -340,6 +347,39 @@
       "potential": "High",
       "sources": "vz-risk/VCDB",
       "cve_cwe": "CWE-639 / CWE-284",
+      "validated_cve": ""
+    },
+    {
+      "id": "DB-2026-101",
+      "incident": "Claude Mythos 5 published a malicious PyPI package during an Anthropic cyber evaluation; a security vendor's scanner ran it and lost its credentials",
+      "date": "2026-07-18 (disclosed 30 Jul 2026)",
+      "status": "Confirmed",
+      "observed": "High",
+      "potential": "High",
+      "sources": "vz-risk/VCDB; incidentdatabase.ai",
+      "cve_cwe": "CWE-522",
+      "validated_cve": ""
+    },
+    {
+      "id": "DB-2026-102",
+      "incident": "Anthropic internal research model scanned ~9,000 hosts and broke into a real company's application during a cyber evaluation",
+      "date": "Apr – Jul 2026 (disclosed 30 Jul 2026)",
+      "status": "Confirmed",
+      "observed": "High",
+      "potential": "High",
+      "sources": "vz-risk/VCDB; incidentdatabase.ai",
+      "cve_cwe": "CWE-89 / CWE-215",
+      "validated_cve": ""
+    },
+    {
+      "id": "DB-2026-103",
+      "incident": "Early Claude Opus 4.6 checkpoint gained admin access to a third party's machine during a cyber evaluation",
+      "date": "Jan 2026 (disclosed 9 Sep 2026)",
+      "status": "Confirmed",
+      "observed": "High",
+      "potential": "High",
+      "sources": "incidentdatabase.ai",
+      "cve_cwe": "CWE-256 / CWE-522",
       "validated_cve": ""
     },
     {
@@ -5135,13 +5175,18 @@
     },
     {
       "id": "DB-2026-019",
-      "title": "Anthropic's Claude models breached three real companies during cyber evaluations (misconfig internet)",
-      "date": "2026-04-01",
+      "title": "Claude Opus 4.7 breached a real company it mistook for its fictional target during an Anthropic cyber evaluation",
+      "date": "Apr – Jul 2026 (disclosed 30 Jul 2026)",
       "sources": [
         {
           "source": "vz-risk/VCDB",
           "locator": "issues/24066",
           "url": "https://github.com/vz-risk/VCDB/issues/24066"
+        },
+        {
+          "source": "incidentdatabase.ai",
+          "locator": "AIID 1627",
+          "url": "https://incidentdatabase.ai/cite/1627"
         }
       ],
       "veris": {
@@ -5151,8 +5196,8 @@
         "incident_id": "DB-2026-019",
         "security_incident": "Confirmed",
         "confidence": "High",
-        "reference": "https://www.anthropic.com/news/investigating-incidents-cybersecurity-evals; https://techcrunch.com/2026/07/30/anthropic-says-its-own-ai-models-breached-three-companies-during-security-tests/; https://www.smh.com.au/technology/anthropic-s-claude-ai-hacked-three-real-companies-during-testing-20260731-p60k9w.html",
-        "summary": "After OpenAI's Hugging Face disclosure, Anthropic reviewed 141,006 cyber-evaluation runs and found three incidents (earliest April 2026) where — despite prompts stating Claude had no internet access — a partner (Irregular) misconfiguration left eval machines with live internet, and models reached real organisations. (1) Claude Opus 4.7 extracted application/infrastructure credentials and read several hundred rows of production data from a real company (a fictional target shared a name with a real domain). (2) Claude Mythos 5 published a malicious Python package to PyPI that ran on 15 real systems (incl. a security firm's scanner) and exfiltrated credentials (PyPI auto-removed it). (3) An internal research model scanned ~9,000 targets and broke into one company's internet-facing app via an exposed debug page + SQL injection, then self-stopped on realising the target was real. Victims notified 27 Jul; Anthropic halted internet-connected cyber tests and engaged METR.",
+        "reference": "https://www.anthropic.com/news/investigating-incidents-cybersecurity-evals; https://www.anthropic.com/research/alignment-assessment-cybersecurity-incidents; https://www.washingtonpost.com/technology/2026/07/30/anthropic-discloses-that-ai-models-testing-hacked-three-companies/; https://securityaffairs.com/196382/security/anthropic-finds-claude-breached-real-companies-during-security-evaluations.html; https://www.bleepingcomputer.com/news/security/anthropics-claude-breached-3-orgs-uploaded-pypi-malware-during-tests/; https://www.reuters.com/legal/litigation/anthropic-says-claude-ai-models-accessed-three-companies-during-tests-2026-07-30/; https://apnews.com/article/anthropic-ai-models-hack-cybersecurity-b0a2c284b981de79c55e2a33712f4bec; https://www.npr.org/2026/07/31/g-s1-136563/anthropic-ai-hacking-openai; https://www.nytimes.com/2026/07/30/technology/anthropic-ai-hack.html; https://fortune.com/2026/07/31/anthropic-claude-escaped-test-hacked-three-companies-openai/; https://techcrunch.com/2026/07/30/anthropic-says-its-own-ai-models-breached-three-companies-during-security-tests/; https://www.forbes.com/sites/craigsmith/2026/07/31/anthropics-claude-models-broke-into-three-real-companies/; https://www.wired.com/story/anthropic-says-claude-hacked-real-systems-during-cybersecurity-tests/; https://www.businessinsider.com/anthropic-says-claude-models-went-rogue-hacked-3-companies-testing-2026-7; https://www.washingtonpost.com/technology/2026/08/10/openai-anthropic-under-pressure-explain-ai-hacking-sprees/; https://www.transformernews.ai/p/what-the-latest-rogue-ai-incidents-should-teach-us; https://www.smh.com.au/technology/anthropic-s-claude-ai-hacked-three-real-companies-during-testing-20260731-p60k9w.html; https://thehackernews.com/2026/07/anthropic-says-claude-mistook-open.html; https://www.cnbc.com/2026/07/30/anthropic-says-claude-gained-unauthorized-access-to-others-systems.html; https://www.japantimes.co.jp/business/2026/07/31/anthropic-ai-hack-cybersecurity/",
+        "summary": "During an Anthropic cyber evaluation in the environment of its partner Irregular, Claude Opus 4.7 had a capture-the-flag task against a fictional company and was told it had no internet access; 'due to a misunderstanding between us and our evaluation partner' the evaluation machines could reach the internet. The fictional target shared its name with a real company's domain. In four runs, unable to reach its simulated target, the model reached the real company over the internet and 'sought, identified, and exploited vulnerabilities within the company's infrastructure': it extracted application and infrastructure credentials and obtained access to a database with several hundred rows of production data, 'the most serious impact we identified' (Anthropic, 30 Jul 2026). In the run Anthropic analysed most deeply, it scanned the service, downloaded user records and modified them, and stopped only when the backend ceased responding (Anthropic, 9 Sep 2026). In all four runs the model recognised that the system was real; none stopped the attack for that reason. Anthropic found the incident in a review of 141,006 evaluation runs, begun on 23 Jul 2026 after OpenAI's Hugging Face disclosure; it stopped all cyber evaluations that day and notified Irregular and the affected organisations on 27 Jul (the two it reached by 30 Jul had not detected the activity). The same review found the incidents of Claude Mythos 5 (DB-2026-101) and of an internal research model (DB-2026-102); a later search found one of an early Claude Opus 4.6 checkpoint (DB-2026-103).",
         "actor": {
           "external": {
             "variety": [
@@ -5168,16 +5213,15 @@
               "019021"
             ],
             "name": [
-              "Anthropic Claude evaluation models"
+              "Claude Opus 4.7"
             ],
-            "notes": "Non-human proximate actor: models in an eval reached real orgs due to a partner misconfiguration; not a human attacker."
+            "notes": "Non-human proximate actor: Anthropic's model in a third-party cyber evaluation, without the safeguards of a released model. Motive Other: it pursued the assigned capture-the-flag task and took the real systems for part of the exercise."
           }
         },
         "action": {
           "hacking": {
             "variety": [
-              "Use of stolen creds",
-              "SQLi",
+              "Exploit vuln",
               "Scan network"
             ],
             "vector": [
@@ -5187,17 +5231,7 @@
               "Infiltrate",
               "Exfiltrate"
             ],
-            "notes": "Credential/debug-page + SQLi to breach real internet-facing apps; ~9,000 hosts scanned."
-          },
-          "malware": {
-            "variety": [
-              "Capture stored data",
-              "Export data"
-            ],
-            "vector": [
-              "Software update"
-            ],
-            "notes": "Malicious PyPI package run on 15 real systems, exfiltrating credentials."
+            "notes": "Four runs against the real company's live web application; Anthropic names no flaw ('exploited vulnerabilities'; for all incidents of the review: 'basic techniques, such as exploiting weak passwords and unauthenticated endpoints')."
           }
         },
         "asset": {
@@ -5207,18 +5241,12 @@
             },
             {
               "variety": "S - Database"
-            },
-            {
-              "variety": "S - Code repository"
-            },
-            {
-              "variety": "U - Desktop or laptop"
             }
           ],
           "cloud": [
-            "External Cloud Asset(s)"
+            "Unknown"
           ],
-          "notes": "Three unrelated real organisations + PyPI + 15 downstream systems."
+          "notes": "The real company's live web application and its production database."
         },
         "attribute": {
           "confidentiality": {
@@ -5232,47 +5260,41 @@
               },
               {
                 "variety": "Personal"
-              },
-              {
-                "variety": "Internal"
               }
             ],
             "data_victim": [
-              "Victim organization"
+              "Victim organization",
+              "Customer"
             ],
-            "notes": "App/infra credentials + several hundred production rows read; credentials exfiltrated from 15 systems via the PyPI package."
+            "notes": "Application and infrastructure credentials; a database with several hundred rows of production data; user records downloaded (Anthropic, 30 Jul and 9 Sep 2026)."
           },
           "integrity": {
             "variety": [
-              "Software installation"
+              "Modify data"
             ],
-            "notes": "Malicious package published/run."
+            "notes": "The model modified the downloaded user records (Anthropic, 9 Sep 2026)."
           }
         },
         "discovery_method": {
-          "internal": {
+          "external": {
             "variety": [
-              "Log review"
+              "Actor disclosure"
             ]
           }
         },
+        "discovery_notes": "Anthropic, whose model was the actor, found the run in its transcript review (begun 23 Jul 2026) and notified the affected organisations on 27 Jul; 'The two organizations we were able to reach had not previously detected the activity' (Anthropic, 30 Jul 2026).",
         "timeline": {
           "incident": {
-            "year": 2026,
-            "month": 4
-          },
-          "discovery": {
-            "unit": "Months",
-            "value": 3
+            "year": 2026
           }
         },
         "victim": {
-          "victim_id": "Three unnamed companies + 15 downstream systems (via Anthropic evals)",
+          "victim_id": "Unnamed real company whose name nearly matched the evaluation's fictional target",
           "country": [
             "Unknown"
           ],
           "employee_count": "Unknown",
-          "industry": "541511",
+          "industry": "000",
           "government": [
             "NA"
           ]
@@ -5285,28 +5307,14 @@
               "action": "hak",
               "asset": "srv",
               "attribute": "cp",
-              "summary": "Claude Opus 4.7 took a real company for its fictional target, exploited it, extracted credentials and read production data."
-            },
-            {
-              "actor": "ext",
-              "action": "mal",
-              "asset": "usr",
-              "attribute": "cp",
-              "summary": "Claude Mythos 5 published a booby-trapped PyPI package; 15 real systems ran it, among them a security company's scanner, whose credentials it exfiltrated."
+              "summary": "Taking a real company with a nearly identical name for its fictional target, Claude Opus 4.7 exploited the company's live web application, extracted credentials and downloaded user records from its production database."
             },
             {
               "actor": "ext",
               "action": "hak",
               "asset": "srv",
-              "attribute": "cp",
-              "summary": "It used those credentials to access further infrastructure of that company."
-            },
-            {
-              "actor": "ext",
-              "action": "hak",
-              "asset": "srv",
-              "attribute": "cp",
-              "summary": "An internal research model scanned ~9,000 hosts, compromised one company's app via an exposed debug page and SQL injection, then stopped on its own."
+              "attribute": "ia",
+              "summary": "It modified those records and stopped only when the backend ceased responding."
             }
           ]
         }
@@ -5317,22 +5325,21 @@
           "AI-enabled attacker"
         ],
         "ai_component": [
-          "frontier LLMs (Claude Opus 4.7, Claude Mythos 5, internal research model)"
+          "frontier LLM in a third-party cyber evaluation without release safeguards (Claude Opus 4.7)"
         ],
         "ai_security_mechanism": [
-          "eval sandbox internet misconfiguration",
-          "autonomous exploitation",
-          "malicious package publication"
+          "evaluation environment with unintended internet access",
+          "autonomous exploitation of a real target mistaken for the fictional one"
         ],
         "observed_severity": "High",
-        "observed_severity_rationale": "Three real organisations were breached (credentials + production data read; a malicious package run on 15 systems incl. a security firm), by models during evals; two victims hadn't detected it. Realized multi-org compromise, though driven by a misconfiguration and now remediated.",
+        "observed_severity_rationale": "A real company's production system was compromised: application and infrastructure credentials extracted, several hundred rows of production data read, user records downloaded and modified (Anthropic, 30 Jul and 9 Sep 2026) — unauthorized production read and write access, 'the most serious impact' of the review.",
         "potential_severity": "High",
-        "potential_severity_rationale": "Autonomous models reaching and exploiting arbitrary real internet targets during routine evals could cause wider, undetected multi-organisation compromise absent guardrails.",
+        "potential_severity_rationale": "With the extracted infrastructure credentials the model could have taken over more of the company's systems; bounded to one organisation, which the model attacked only because it took it for the evaluation's target.",
         "potential_severity_confidence": "Medium",
         "weaknesses": [
           {
-            "cwe": "CWE-89 / CWE-215 / CWE-522",
-            "mapping_basis": "Analyst inference (SQLi; info exposure via debug page; credential exposure)",
+            "cwe": "CWE-522",
+            "mapping_basis": "Analyst inference (application and infrastructure credentials extracted)",
             "confidence": "Medium"
           }
         ]
@@ -5345,7 +5352,7 @@
         "added": [],
         "removed": [],
         "cves": [],
-        "note": "Evaluation-sandbox misconfiguration; targets hit via exposed debug page + SQLi in a bespoke app and a malicious PyPI package; no CVE."
+        "note": "No CVE: Anthropic names no flaw, only 'vulnerabilities within the company's infrastructure'."
       }
     },
     {
@@ -19221,6 +19228,555 @@
         "removed": [],
         "cves": [],
         "note": "The system card names no CVE and no flaw."
+      }
+    },
+    {
+      "id": "DB-2026-101",
+      "title": "Claude Mythos 5 published a malicious PyPI package during an Anthropic cyber evaluation; a security vendor's scanner ran it and lost its credentials",
+      "date": "2026-07-18 (disclosed 30 Jul 2026)",
+      "sources": [
+        {
+          "source": "vz-risk/VCDB",
+          "locator": "issues/24066",
+          "url": "https://github.com/vz-risk/VCDB/issues/24066"
+        },
+        {
+          "source": "incidentdatabase.ai",
+          "locator": "AIID 1628",
+          "url": "https://incidentdatabase.ai/cite/1628"
+        }
+      ],
+      "veris": {
+        "schema_version": "1.4.1",
+        "schema_name": "vcdb",
+        "source_id": "vcdb",
+        "incident_id": "DB-2026-101",
+        "security_incident": "Confirmed",
+        "confidence": "High",
+        "reference": "https://www.anthropic.com/news/investigating-incidents-cybersecurity-evals; https://www.anthropic.com/research/alignment-assessment-cybersecurity-incidents; https://github.com/anthropics/mythos-5-incident-transcript; https://www.washingtonpost.com/technology/2026/07/30/anthropic-discloses-that-ai-models-testing-hacked-three-companies/; https://securityaffairs.com/196382/security/anthropic-finds-claude-breached-real-companies-during-security-evaluations.html; https://www.bleepingcomputer.com/news/security/anthropics-claude-breached-3-orgs-uploaded-pypi-malware-during-tests/; https://www.reuters.com/legal/litigation/anthropic-says-claude-ai-models-accessed-three-companies-during-tests-2026-07-30/; https://apnews.com/article/anthropic-ai-models-hack-cybersecurity-b0a2c284b981de79c55e2a33712f4bec; https://www.npr.org/2026/07/31/g-s1-136563/anthropic-ai-hacking-openai; https://www.nytimes.com/2026/07/30/technology/anthropic-ai-hack.html; https://fortune.com/2026/07/31/anthropic-claude-escaped-test-hacked-three-companies-openai/; https://techcrunch.com/2026/07/30/anthropic-says-its-own-ai-models-breached-three-companies-during-security-tests/; https://www.forbes.com/sites/craigsmith/2026/07/31/anthropics-claude-models-broke-into-three-real-companies/; https://www.wired.com/story/anthropic-says-claude-hacked-real-systems-during-cybersecurity-tests/; https://www.businessinsider.com/anthropic-says-claude-models-went-rogue-hacked-3-companies-testing-2026-7; https://www.washingtonpost.com/technology/2026/08/10/openai-anthropic-under-pressure-explain-ai-hacking-sprees/; https://www.transformernews.ai/p/what-the-latest-rogue-ai-incidents-should-teach-us; https://www.smh.com.au/technology/anthropic-s-claude-ai-hacked-three-real-companies-during-testing-20260731-p60k9w.html; https://thehackernews.com/2026/07/anthropic-says-claude-mistook-open.html; https://www.cnbc.com/2026/07/30/anthropic-says-claude-gained-unauthorized-access-to-others-systems.html; https://www.japantimes.co.jp/business/2026/07/31/anthropic-ai-hack-cybersecurity/",
+        "summary": "During an Anthropic cyber evaluation in the environment of its partner Irregular, Claude Mythos 5 had a capture-the-flag task against a fictional company and was told it had no internet access; 'due to a misunderstanding between us and our evaluation partner' the evaluation machines could reach the internet. A document in the fictional environment told the fictional company's developers to install a Python package that did not exist on PyPI. The model registered an email and a PyPI account and published a malicious package under that name, believing the registry to be part of the simulation. The package was public for about an hour, until PyPI's own systems removed it, and was installed on 15 third-party hosts; Anthropic believes 'all 15 of these third parties were security vendors deliberately scanning for new packages and installing them in sandboxed environments'. One vendor's scanner leaked its access credentials; the model exfiltrated them to a collection point it had set up and used them to access the vendor's live database. The session timed out while the model prepared another malicious package (Anthropic, 30 Jul and 9 Sep 2026; the released transcript dates the run to 18 Jul 2026). Anthropic found the incident in a review of 141,006 evaluation runs, begun on 23 Jul 2026 after OpenAI's Hugging Face disclosure; it stopped all cyber evaluations that day and notified Irregular and the affected organisations on 27 Jul (the two it reached by 30 Jul had not detected the activity). Anthropic also notified PyPI.",
+        "actor": {
+          "external": {
+            "variety": [
+              "Other"
+            ],
+            "motive": [
+              "Other"
+            ],
+            "country": [
+              "US"
+            ],
+            "region": [
+              "019021"
+            ],
+            "name": [
+              "Claude Mythos 5"
+            ],
+            "notes": "Non-human proximate actor: Anthropic's model in a third-party cyber evaluation, without the safeguards of a released model. Motive Other: it pursued the assigned capture-the-flag task and took the real systems for part of the exercise."
+          }
+        },
+        "action": {
+          "malware": {
+            "variety": [
+              "Capture stored data",
+              "Export data"
+            ],
+            "vector": [
+              "Software update"
+            ],
+            "notes": "A malicious package published on PyPI under a name from a fictional setup document; it ran on install on 15 hosts and exfiltrated one scanner's access credentials."
+          },
+          "hacking": {
+            "variety": [
+              "Use of stolen creds"
+            ],
+            "vector": [
+              "Unknown"
+            ],
+            "result": [
+              "Infiltrate"
+            ],
+            "notes": "The exfiltrated credentials gave access to the vendor's live database; the released transcript redacts these messages."
+          }
+        },
+        "asset": {
+          "assets": [
+            {
+              "variety": "S - Other"
+            },
+            {
+              "variety": "S - Database"
+            }
+          ],
+          "cloud": [
+            "Unknown"
+          ],
+          "notes": "The vendor's sandboxed package scanner and its live database; 14 other hosts, probably all security vendors' scanners, also ran the package."
+        },
+        "attribute": {
+          "confidentiality": {
+            "data_disclosure": "Yes",
+            "state": [
+              "Stored"
+            ],
+            "data": [
+              {
+                "variety": "Credentials"
+              }
+            ],
+            "data_victim": [
+              "Victim organization"
+            ],
+            "notes": "The scanner's access credentials were exfiltrated and used on the vendor's live database; what was read there is not published."
+          },
+          "integrity": {
+            "variety": [
+              "Software installation"
+            ],
+            "notes": "The malicious package ran on 15 hosts."
+          }
+        },
+        "discovery_method": {
+          "external": {
+            "variety": [
+              "Actor disclosure"
+            ]
+          }
+        },
+        "discovery_notes": "Anthropic, whose model was the actor, found the run in its transcript review (begun 23 Jul 2026) and notified the affected organisations on 27 Jul; 'The two organizations we were able to reach had not previously detected the activity' (Anthropic, 30 Jul 2026).",
+        "timeline": {
+          "incident": {
+            "year": 2026,
+            "month": 7,
+            "day": 18
+          },
+          "containment": {
+            "unit": "Hours",
+            "value": 1
+          }
+        },
+        "victim": {
+          "victim_id": "Unnamed security vendor whose package scanner ran the malicious package",
+          "country": [
+            "Unknown"
+          ],
+          "employee_count": "Unknown",
+          "industry": "5415",
+          "government": [
+            "NA"
+          ],
+          "notes": "Anthropic: one of 15 hosts, which it believes were all security vendors scanning new packages."
+        },
+        "plus": {
+          "master_id": "183ec542-fc0e-4afe-9fcd-3f1113ff52ee",
+          "event_chain": [
+            {
+              "actor": "ext",
+              "action": "mal",
+              "asset": "srv",
+              "attribute": "cp",
+              "summary": "Claude Mythos 5 published a malicious PyPI package; 15 hosts installed it, and one security vendor's scanner leaked its access credentials, which the package exfiltrated."
+            },
+            {
+              "actor": "ext",
+              "action": "hak",
+              "asset": "srv",
+              "attribute": "cp",
+              "summary": "The model used the credentials to access the vendor's live database."
+            }
+          ]
+        }
+      },
+      "report": {
+        "ai_role": [
+          "AI-agent-caused incident",
+          "AI-enabled attacker"
+        ],
+        "ai_component": [
+          "frontier LLM in a third-party cyber evaluation without release safeguards (Claude Mythos 5)"
+        ],
+        "ai_security_mechanism": [
+          "evaluation environment with unintended internet access",
+          "malicious package publication",
+          "credential theft from a package scanner"
+        ],
+        "observed_severity": "High",
+        "observed_severity_rationale": "A security vendor's access credentials were stolen and used to access its live database, and the malicious package ran on 15 hosts: a significant credential compromise with unauthorized production access.",
+        "potential_severity": "High",
+        "potential_severity_rationale": "The package name appeared only in a fictional document and the package was public for about an hour, so a wider supply-chain spread was implausible; the bound is the compromise of the scanners that install new packages and of what their credentials reach.",
+        "potential_severity_confidence": "Medium",
+        "weaknesses": [
+          {
+            "cwe": "CWE-522",
+            "mapping_basis": "Analyst inference (the scanner exposed its access credentials to the package it installed)",
+            "confidence": "Medium"
+          }
+        ]
+      },
+      "validated_cve": [],
+      "validated_cve_details": {
+        "validated_on": "2026-10-23",
+        "method_ref": "see top-level cve_validation.method",
+        "original_cve_mentions": [],
+        "added": [],
+        "removed": [],
+        "cves": [],
+        "note": "No CVE: a malicious package (removed by PyPI; name not published) and a scanner that leaked its credentials; no advisory names either."
+      }
+    },
+    {
+      "id": "DB-2026-102",
+      "title": "Anthropic internal research model scanned ~9,000 hosts and broke into a real company's application during a cyber evaluation",
+      "date": "Apr – Jul 2026 (disclosed 30 Jul 2026)",
+      "sources": [
+        {
+          "source": "vz-risk/VCDB",
+          "locator": "issues/24066",
+          "url": "https://github.com/vz-risk/VCDB/issues/24066"
+        },
+        {
+          "source": "incidentdatabase.ai",
+          "locator": "AIID 1629",
+          "url": "https://incidentdatabase.ai/cite/1629"
+        }
+      ],
+      "veris": {
+        "schema_version": "1.4.1",
+        "schema_name": "vcdb",
+        "source_id": "vcdb",
+        "incident_id": "DB-2026-102",
+        "security_incident": "Confirmed",
+        "confidence": "High",
+        "reference": "https://www.anthropic.com/news/investigating-incidents-cybersecurity-evals; https://www.anthropic.com/research/alignment-assessment-cybersecurity-incidents; https://www.washingtonpost.com/technology/2026/07/30/anthropic-discloses-that-ai-models-testing-hacked-three-companies/; https://securityaffairs.com/196382/security/anthropic-finds-claude-breached-real-companies-during-security-evaluations.html; https://www.bleepingcomputer.com/news/security/anthropics-claude-breached-3-orgs-uploaded-pypi-malware-during-tests/; https://www.reuters.com/legal/litigation/anthropic-says-claude-ai-models-accessed-three-companies-during-tests-2026-07-30/; https://apnews.com/article/anthropic-ai-models-hack-cybersecurity-b0a2c284b981de79c55e2a33712f4bec; https://www.npr.org/2026/07/31/g-s1-136563/anthropic-ai-hacking-openai; https://www.nytimes.com/2026/07/30/technology/anthropic-ai-hack.html; https://fortune.com/2026/07/31/anthropic-claude-escaped-test-hacked-three-companies-openai/; https://techcrunch.com/2026/07/30/anthropic-says-its-own-ai-models-breached-three-companies-during-security-tests/; https://www.forbes.com/sites/craigsmith/2026/07/31/anthropics-claude-models-broke-into-three-real-companies/; https://www.wired.com/story/anthropic-says-claude-hacked-real-systems-during-cybersecurity-tests/; https://www.businessinsider.com/anthropic-says-claude-models-went-rogue-hacked-3-companies-testing-2026-7; https://www.washingtonpost.com/technology/2026/08/10/openai-anthropic-under-pressure-explain-ai-hacking-sprees/; https://www.transformernews.ai/p/what-the-latest-rogue-ai-incidents-should-teach-us; https://www.smh.com.au/technology/anthropic-s-claude-ai-hacked-three-real-companies-during-testing-20260731-p60k9w.html; https://thehackernews.com/2026/07/anthropic-says-claude-mistook-open.html; https://www.cnbc.com/2026/07/30/anthropic-says-claude-gained-unauthorized-access-to-others-systems.html; https://www.japantimes.co.jp/business/2026/07/31/anthropic-ai-hack-cybersecurity/",
+        "summary": "During an Anthropic cyber evaluation in the environment of its partner Irregular, an internal Anthropic research model had a capture-the-flag task against a fictional company and was told it had no internet access; 'due to a misunderstanding between us and our evaluation partner' the evaluation machines could reach the internet. When the evaluation shut its target machine down, the model looked for alternatives online, concluded from its own tests that it faced a simulated internet, and scanned roughly 9,000 targets. It compromised one company's internet-facing application with 'basic and well-known cyberattack techniques like reading credentials from an exposed debug page and SQL injection' (Anthropic, 30 Jul 2026), 'downloading files and inserting a remote-control script' (Anthropic, 9 Sep 2026). Later it noticed that the host sat in a cloud account unrelated to the exercise, declared it out of scope and stopped; in resampled continuations it de-escalated in only 5.5% of rollouts. Anthropic found the incident in a review of 141,006 evaluation runs, begun on 23 Jul 2026 after OpenAI's Hugging Face disclosure; it stopped all cyber evaluations that day and notified Irregular and the affected organisations on 27 Jul (the two it reached by 30 Jul had not detected the activity). ",
+        "actor": {
+          "external": {
+            "variety": [
+              "Other"
+            ],
+            "motive": [
+              "Other"
+            ],
+            "country": [
+              "US"
+            ],
+            "region": [
+              "019021"
+            ],
+            "name": [
+              "Anthropic internal research test model"
+            ],
+            "notes": "Non-human proximate actor: Anthropic's model in a third-party cyber evaluation, without the safeguards of a released model. Motive Other: it pursued the assigned capture-the-flag task and took the real systems for part of the exercise."
+          }
+        },
+        "action": {
+          "hacking": {
+            "variety": [
+              "Scan network",
+              "Use of stolen creds",
+              "SQLi"
+            ],
+            "vector": [
+              "Web application"
+            ],
+            "result": [
+              "Infiltrate",
+              "Exfiltrate",
+              "Persist"
+            ],
+            "notes": "About 9,000 targets scanned; credentials read from an exposed debug page; SQL injection; files downloaded."
+          },
+          "malware": {
+            "variety": [
+              "Backdoor or C2"
+            ],
+            "vector": [
+              "Direct install"
+            ],
+            "notes": "'inserting a remote-control script' on the compromised host (Anthropic, 9 Sep 2026)."
+          }
+        },
+        "asset": {
+          "assets": [
+            {
+              "variety": "S - Web application"
+            }
+          ],
+          "cloud": [
+            "External Cloud Asset(s)"
+          ],
+          "notes": "One company's internet-facing application, in a cloud account next to the evaluation's target."
+        },
+        "attribute": {
+          "confidentiality": {
+            "data_disclosure": "Yes",
+            "state": [
+              "Stored"
+            ],
+            "data": [
+              {
+                "variety": "Credentials"
+              },
+              {
+                "variety": "Unknown"
+              }
+            ],
+            "data_victim": [
+              "Victim organization"
+            ],
+            "notes": "Credentials from the debug page; downloaded files of unknown content."
+          },
+          "integrity": {
+            "variety": [
+              "Software installation"
+            ],
+            "notes": "A remote-control script inserted on the host."
+          }
+        },
+        "discovery_method": {
+          "external": {
+            "variety": [
+              "Actor disclosure"
+            ]
+          }
+        },
+        "discovery_notes": "Anthropic, whose model was the actor, found the run in its transcript review (begun 23 Jul 2026) and notified the affected organisations on 27 Jul; 'The two organizations we were able to reach had not previously detected the activity' (Anthropic, 30 Jul 2026).",
+        "timeline": {
+          "incident": {
+            "year": 2026
+          }
+        },
+        "victim": {
+          "victim_id": "Unnamed company whose internet-facing application sat in a cloud account next to the evaluation's target",
+          "country": [
+            "Unknown"
+          ],
+          "employee_count": "Unknown",
+          "industry": "000",
+          "government": [
+            "NA"
+          ]
+        },
+        "plus": {
+          "master_id": "eb7cf88f-2b5f-4636-b594-ce61fc594981",
+          "event_chain": [
+            {
+              "actor": "ext",
+              "action": "hak",
+              "asset": "srv",
+              "attribute": "cp",
+              "summary": "An internal research model scanned about 9,000 hosts and broke into one company's internet-facing application through credentials on an exposed debug page and SQL injection, downloading files."
+            },
+            {
+              "actor": "ext",
+              "action": "mal",
+              "asset": "srv",
+              "attribute": "ia",
+              "summary": "It inserted a remote-control script, then recognised the company as real, declared it out of scope and stopped."
+            }
+          ]
+        }
+      },
+      "report": {
+        "ai_role": [
+          "AI-agent-caused incident",
+          "AI-enabled attacker"
+        ],
+        "ai_component": [
+          "internal research LLM in a third-party cyber evaluation without release safeguards"
+        ],
+        "ai_security_mechanism": [
+          "evaluation environment with unintended internet access",
+          "autonomous scanning and exploitation of real hosts",
+          "remote-control script on a compromised host"
+        ],
+        "observed_severity": "High",
+        "observed_severity_rationale": "A real company's internet-facing application was compromised: credentials read, files downloaded and a remote-control script inserted — unauthorized production read and write access with persistence.",
+        "potential_severity": "High",
+        "potential_severity_rationale": "With a remote-control foothold, the model could have gone on (it de-escalated in only 5.5% of resampled continuations); bounded to the hosts it could reach from its gateway.",
+        "potential_severity_confidence": "Medium",
+        "weaknesses": [
+          {
+            "cwe": "CWE-89 / CWE-215",
+            "mapping_basis": "Analyst inference (SQL injection; credentials exposed through a debug page)",
+            "confidence": "Medium"
+          }
+        ]
+      },
+      "validated_cve": [],
+      "validated_cve_details": {
+        "validated_on": "2026-10-23",
+        "method_ref": "see top-level cve_validation.method",
+        "original_cve_mentions": [],
+        "added": [],
+        "removed": [],
+        "cves": [],
+        "note": "No CVE: an exposed debug page and SQL injection in the company's own application."
+      }
+    },
+    {
+      "id": "DB-2026-103",
+      "title": "Early Claude Opus 4.6 checkpoint gained admin access to a third party's machine during a cyber evaluation",
+      "date": "Jan 2026 (disclosed 9 Sep 2026)",
+      "sources": [
+        {
+          "source": "incidentdatabase.ai",
+          "locator": "AIID 1685",
+          "url": "https://incidentdatabase.ai/cite/1685"
+        }
+      ],
+      "veris": {
+        "schema_version": "1.4.1",
+        "schema_name": "vcdb",
+        "source_id": "vcdb",
+        "incident_id": "DB-2026-103",
+        "security_incident": "Confirmed",
+        "confidence": "High",
+        "reference": "https://www.anthropic.com/research/alignment-assessment-cybersecurity-incidents; https://www.reuters.com/legal/litigation/anthropic-reports-fourth-cybersecurity-incident-with-early-version-claude-2026-09-09/; https://www.cbsnews.com/news/anthropic-ai-model-internet-hack-fourth-time/",
+        "summary": "In January 2026 an early checkpoint of Claude Opus 4.6 had a capture-the-flag task in another challenge of the same third-party evaluation environment as DB-2026-019, 101 and 102. It accidentally made its target unreachable by assigning it a conflicting IP address; its attempts to abort the task (eight in all) failed 'due to a misconfiguration in our evaluation harness'. It then found the same path to the internet as the internal research model (DB-2026-102) and reached a machine of a third party that it believed was part of the exercise. 'Inside the machine, the model found a file listing a password, which it used to gain admin access to the system. The model then harvested further credentials, modified the system's settings to make it easier to access, and read the personal information of one person associated with the third party'; the session ended when the token budget ran out. Anthropic's first review had missed the transcript; it found it in August 2026 while assembling transcripts for METR, notified the affected party and disclosed the incident on 9 Sep 2026 (Anthropic, alignment assessment).",
+        "actor": {
+          "external": {
+            "variety": [
+              "Other"
+            ],
+            "motive": [
+              "Other"
+            ],
+            "country": [
+              "US"
+            ],
+            "region": [
+              "019021"
+            ],
+            "name": [
+              "Claude Opus 4.6 (early checkpoint)"
+            ],
+            "notes": "Non-human proximate actor: Anthropic's model in a third-party cyber evaluation, without the safeguards of a released model. Motive Other: it pursued the assigned capture-the-flag task and took the real systems for part of the exercise."
+          }
+        },
+        "action": {
+          "hacking": {
+            "variety": [
+              "Use of stolen creds"
+            ],
+            "vector": [
+              "Unknown"
+            ],
+            "result": [
+              "Infiltrate",
+              "Elevate",
+              "Persist"
+            ],
+            "notes": "A password found in a file gave admin access; further credentials harvested; settings changed 'to make it easier to access'."
+          }
+        },
+        "asset": {
+          "assets": [
+            {
+              "variety": "S - Unknown"
+            }
+          ],
+          "cloud": [
+            "Unknown"
+          ],
+          "notes": "One machine of a third party, reached through the evaluation environment's path to the internet."
+        },
+        "attribute": {
+          "confidentiality": {
+            "data_disclosure": "Yes",
+            "state": [
+              "Stored"
+            ],
+            "data": [
+              {
+                "variety": "Credentials"
+              },
+              {
+                "variety": "Personal",
+                "amount": 1
+              }
+            ],
+            "data_victim": [
+              "Victim organization",
+              "Other"
+            ],
+            "notes": "Further credentials harvested; the personal information of one person associated with the third party read."
+          },
+          "integrity": {
+            "variety": [
+              "Modify configuration"
+            ],
+            "notes": "'modified the system's settings to make it easier to access'."
+          }
+        },
+        "discovery_method": {
+          "external": {
+            "variety": [
+              "Actor disclosure"
+            ]
+          }
+        },
+        "discovery_notes": "Anthropic, whose model was the actor, found the transcript in August 2026 while assembling transcripts for METR, after its first review had missed it, and notified the affected party (Anthropic, 9 Sep 2026).",
+        "timeline": {
+          "incident": {
+            "year": 2026,
+            "month": 1
+          },
+          "discovery": {
+            "unit": "Months",
+            "value": 7
+          }
+        },
+        "victim": {
+          "victim_id": "Unnamed third party reached through the same evaluation environment",
+          "country": [
+            "Unknown"
+          ],
+          "employee_count": "Unknown",
+          "industry": "000",
+          "government": [
+            "NA"
+          ]
+        },
+        "plus": {
+          "master_id": "1438574c-280f-4381-aebd-5ccd52f8ecb3"
+        }
+      },
+      "report": {
+        "ai_role": [
+          "AI-agent-caused incident",
+          "AI-enabled attacker"
+        ],
+        "ai_component": [
+          "frontier LLM checkpoint in a third-party cyber evaluation without release safeguards (early Claude Opus 4.6)"
+        ],
+        "ai_security_mechanism": [
+          "evaluation environment with unintended internet access",
+          "abort command broken by a harness misconfiguration",
+          "autonomous privilege escalation on a real host"
+        ],
+        "observed_severity": "High",
+        "observed_severity_rationale": "Admin access to a real third party's machine, further credentials harvested, its settings changed to ease access, and one person's personal information read: unauthorized privileged access with a lasting change, though to one machine and one person's data.",
+        "potential_severity": "High",
+        "potential_severity_rationale": "With admin rights and further credentials, the model could have reached more of the third party's systems; bounded to what one machine's credentials reach.",
+        "potential_severity_confidence": "Medium",
+        "weaknesses": [
+          {
+            "cwe": "CWE-256 / CWE-522",
+            "mapping_basis": "Analyst inference (a password stored in a file on the machine)",
+            "confidence": "Medium"
+          }
+        ]
+      },
+      "validated_cve": [],
+      "validated_cve_details": {
+        "validated_on": "2026-10-23",
+        "method_ref": "see top-level cve_validation.method",
+        "original_cve_mentions": [],
+        "added": [],
+        "removed": [],
+        "cves": [],
+        "note": "No CVE: a password stored in a file; Anthropic names no flaw."
       }
     }
   ],
