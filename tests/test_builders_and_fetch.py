@@ -138,6 +138,21 @@ class Ibss(unittest.TestCase):
         self.assertEqual(bv.ibss_per_cve(bv.build_links(d))["CVE-2026-54316"]["pot"], 16)
 
 
+class LargestRecord(unittest.TestCase):
+    """The IBSS-vs-CVSS text names the weights that DR-2026-036's CVEs share, read from the data, not assumed."""
+
+    def test_shared_pair_follows_the_record(self):
+        d = json.loads(json.dumps(CORPUS))
+        arr = next(a for a in lc.LIVE_ARRAYS if any(i["id"] == "DR-2026-036" for i in d[a]))
+        rec = next(i for i in d[arr] if i["id"] == "DR-2026-036")
+        d[arr].remove(rec)
+        rec["veris"]["security_incident"], rec["report"]["observed_severity"] = "Near miss", "Negligible"
+        d["sub_threshold_incidents"].append(rec)
+        obs, pot, n = bv.table_ibss_vs_cvss(bv.build_links(d))["stats"]["pair_036"]
+        # CVE-2026-59726 is also in play in the counted DR-2026-057, so its weights differ from the shared pair.
+        self.assertEqual((obs, pot, n), (1, 8, 160))
+
+
 class BothArrays(unittest.TestCase):
     """The CVE-side tables read both live arrays; every CVE, in-play CNA CWE and non-CVE identifier appears there."""
 

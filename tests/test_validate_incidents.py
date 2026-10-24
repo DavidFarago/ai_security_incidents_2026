@@ -80,7 +80,7 @@ class Mutations(unittest.TestCase):
 
     def test_cvss_version_and_score_from_different_entries(self):
         # CVE-2026-1979 has CNA scores 4.0/4.8 and 2.0/4.3: the pair 4.0/4.3 exists nowhere.
-        iid = next(i["id"] for i in self.d["incidents"] if "CVE-2026-1979" in (i.get("validated_cve") or []))
+        iid = next(i["id"] for i in lib_corpus.records(self.d) if "CVE-2026-1979" in (i.get("validated_cve") or []))
         c = link(self.d, iid, "CVE-2026-1979")
         c["cvss_version"], c["cvss_score"] = "4.0", 4.3
         self.assertTrue(has(self.run_v(), "cvss", cve="CVE-2026-1979"))
@@ -477,11 +477,11 @@ class SubThreshold(unittest.TestCase):
 
     # ---- measurement
     def test_population_per_class(self):
-        # The 23 disclosures that fail methodology §3.3 (a)-(c): 17 with a CVE and DR-2026-064, 065, 086, 090, 092, 104
-        # without.
+        # The 24 disclosures that fail methodology §3.3 (a)-(c): 18 with a CVE (the wave DR-2026-036 among them) and
+        # DR-2026-064, 065, 086, 090, 092, 104 without.
         m = self.run_v().measurements
-        self.assertEqual(m["sub_threshold_classes"], {"AI-discovered": 9, "AI-stack": 14})
-        self.assertEqual(m["sub_threshold_records"], 23)
+        self.assertEqual(m["sub_threshold_classes"], {"AI-discovered": 9, "AI-stack": 14, "AI-written": 1})
+        self.assertEqual(m["sub_threshold_records"], 24)
         self.assertNotIn("DR-2026-081", m["disclosure_rule_fails"], "the measurement covers incidents only")
 
 

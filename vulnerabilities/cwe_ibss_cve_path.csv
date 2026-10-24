@@ -1,97 +1,97 @@
 cwe,incidents,sub_threshold_incidents,cve_links,sub_threshold_cve_links,distinct_cves,sub_threshold_distinct_cves,ibss_observed,ibss_potential,rank_observed,rank_potential,incident_ids,sub_threshold_incident_ids,segments
-CWE-306,6,0,11,0,9,0,38,72,1,1,DR-2026-008; DR-2026-011; DR-2026-020; DR-2026-023; DR-2026-036; DR-2026-057,,ai-exploited; ai-written; ai-stack-vulnerability
+CWE-306,5,1,5,6,4,6,35,72,1,1,DR-2026-008; DR-2026-011; DR-2026-020; DR-2026-023; DR-2026-057,DR-2026-036,ai-exploited; ai-written; ai-stack-vulnerability
 CWE-506,3,0,4,0,3,0,32,40,2,3,DB-2026-001; DR-2026-010; DR-2026-022,,malicious-release
-CWE-20,2,1,4,1,4,1,13,40,3,4,DR-2026-008; DR-2026-036,DR-2026-056,ai-exploited; ai-written; ai-stack-vulnerability
-CWE-94,2,3,10,4,10,4,13,32,4,6,DR-2026-008; DR-2026-036,DR-2026-062; DR-2026-080; DR-2026-089,ai-exploited; ai-written; ai-stack-vulnerability
-CWE-290,2,0,2,0,2,0,12,24,5,9,DR-2026-011; DR-2026-036,,ai-exploited; ai-written
-CWE-913,2,0,2,0,2,0,12,24,6,10,DR-2026-008; DR-2026-036,,ai-exploited; ai-written
-CWE-918,2,0,24,0,24,0,12,24,7,11,DB-2026-006; DR-2026-036,,ai-exploited; ai-written
-CWE-78,3,2,13,2,12,2,10,56,8,2,DR-2026-036; DR-2026-057; DR-2026-059,DR-2026-062; DR-2026-079,ai-written; ai-stack-vulnerability; ai-discovered
-CWE-287,1,1,1,1,1,1,9,24,9,12,DB-2026-006,DR-2026-088,ai-exploited; ai-discovered
-CWE-77,2,4,7,4,7,4,8,40,10,5,DR-2026-036; DR-2026-059,DR-2026-079; DR-2026-081; DR-2026-083; DR-2026-088,ai-written; ai-stack-vulnerability; ai-discovered
-CWE-95,1,0,1,0,1,0,8,16,11,15,DR-2026-008,,ai-exploited
-CWE-502,1,0,1,0,1,0,8,16,12,16,DB-2026-006,,ai-exploited
-CWE-22,1,4,19,4,19,4,6,32,13,7,DR-2026-036,DR-2026-060; DR-2026-062; DR-2026-080; DR-2026-088,ai-written; ai-stack-vulnerability; ai-discovered
-CWE-59,1,2,3,2,3,2,6,32,14,8,DR-2026-036,DR-2026-058; DR-2026-060,ai-written; ai-stack-vulnerability; ai-discovered
-CWE-942,2,0,3,0,2,0,6,24,15,13,DR-2026-036; DR-2026-057,,ai-written; ai-stack-vulnerability
-CWE-200,1,2,9,2,9,1,5,24,16,14,DR-2026-036,DR-2026-056; DR-2026-062,ai-written; ai-stack-vulnerability
-CWE-416,1,3,1,4,1,4,5,16,17,17,DR-2026-036,DR-2026-084; DR-2026-088; DR-2026-093,ai-written; ai-discovered
-CWE-74,1,1,4,1,4,1,5,16,18,18,DR-2026-036,DR-2026-087,ai-written; ai-stack-vulnerability
-CWE-79,1,1,4,1,4,1,5,16,19,19,DR-2026-036,DR-2026-087,ai-written; ai-stack-vulnerability
-CWE-269,1,1,2,1,2,1,5,16,20,20,DR-2026-036,DR-2026-089,ai-written; ai-stack-vulnerability
-CWE-400,1,1,1,1,1,1,5,16,21,21,DR-2026-036,DR-2026-088,ai-written; ai-discovered
-CWE-522,1,1,1,1,1,1,5,16,22,22,DR-2026-036,DR-2026-062,ai-written; ai-stack-vulnerability
-CWE-693,1,1,1,1,1,1,5,16,23,23,DR-2026-036,DR-2026-089,ai-written; ai-stack-vulnerability
-CWE-862,1,1,10,1,10,1,5,16,24,24,DR-2026-036,DR-2026-088,ai-written; ai-discovered
-CWE-89,1,1,2,1,2,1,5,12,25,27,DR-2026-036,DR-2026-085,ai-written; ai-discovered
-CWE-915,1,1,2,1,2,1,5,12,26,28,DR-2026-036,DR-2026-085,ai-written; ai-discovered
-CWE-15,1,0,2,0,2,0,4,8,27,29,DR-2026-036,,ai-written
-CWE-41,1,0,2,0,2,0,4,8,28,30,DR-2026-036,,ai-written
-CWE-62,1,0,1,0,1,0,4,8,29,31,DR-2026-036,,ai-written
-CWE-73,1,0,2,0,2,0,4,8,30,32,DR-2026-036,,ai-written
-CWE-80,1,0,1,0,1,0,4,8,31,33,DR-2026-036,,ai-written
-CWE-88,1,0,1,0,1,0,4,8,32,34,DR-2026-036,,ai-written
-CWE-119,1,0,1,0,1,0,4,8,33,35,DR-2026-036,,ai-written
-CWE-125,1,0,1,0,1,0,4,8,34,36,DR-2026-037,,ai-stack-vulnerability
-CWE-176,1,0,1,0,1,0,4,8,35,37,DR-2026-036,,ai-written
-CWE-201,1,0,2,0,2,0,4,8,36,38,DR-2026-036,,ai-written
-CWE-212,1,0,1,0,1,0,4,8,37,39,DR-2026-036,,ai-written
-CWE-214,1,0,1,0,1,0,4,8,38,40,DR-2026-036,,ai-written
-CWE-266,1,0,1,0,1,0,4,8,39,41,DR-2026-036,,ai-written
-CWE-283,1,0,1,0,1,0,4,8,40,42,DR-2026-036,,ai-written
-CWE-284,1,0,6,0,6,0,4,8,41,43,DR-2026-036,,ai-written
-CWE-285,1,0,1,0,1,0,4,8,42,44,DR-2026-036,,ai-written
-CWE-294,1,0,1,0,1,0,4,8,43,45,DR-2026-036,,ai-written
-CWE-307,1,0,1,0,1,0,4,8,44,46,DR-2026-036,,ai-written
-CWE-311,1,0,1,0,1,0,4,8,45,47,DR-2026-036,,ai-written
-CWE-321,1,0,1,0,1,0,4,8,46,48,DR-2026-036,,ai-written
-CWE-327,1,0,1,0,1,0,4,8,47,49,DR-2026-036,,ai-written
-CWE-328,1,0,1,0,1,0,4,8,48,50,DR-2026-036,,ai-written
-CWE-345,1,0,3,0,3,0,4,8,49,51,DR-2026-036,,ai-written
-CWE-346,1,0,1,0,1,0,4,8,50,52,DR-2026-036,,ai-written
-CWE-347,1,0,2,0,2,0,4,8,51,53,DR-2026-036,,ai-written
-CWE-358,1,0,1,0,1,0,4,8,52,54,DR-2026-036,,ai-written
-CWE-367,1,0,3,0,3,0,4,8,53,55,DR-2026-036,,ai-written
-CWE-426,1,0,2,0,2,0,4,8,54,56,DR-2026-036,,ai-written
-CWE-436,1,0,1,0,1,0,4,8,55,57,DR-2026-036,,ai-written
-CWE-441,1,0,1,0,1,0,4,8,56,58,DR-2026-036,,ai-written
-CWE-459,1,0,1,0,1,0,4,8,57,59,DR-2026-036,,ai-written
-CWE-460,1,0,1,0,1,0,4,8,58,60,DR-2026-036,,ai-written
-CWE-488,1,0,1,0,1,0,4,8,59,61,DR-2026-036,,ai-written
-CWE-532,1,0,2,0,2,0,4,8,60,62,DR-2026-036,,ai-written
-CWE-601,1,0,2,0,2,0,4,8,61,63,DR-2026-036,,ai-written
-CWE-610,1,0,1,0,1,0,4,8,62,64,DR-2026-036,,ai-written
-CWE-636,1,0,1,0,1,0,4,8,63,65,DR-2026-036,,ai-written
-CWE-639,1,0,9,0,9,0,4,8,64,66,DR-2026-036,,ai-written
-CWE-648,1,0,1,0,1,0,4,8,65,67,DR-2026-036,,ai-written
-CWE-657,1,0,1,0,1,0,4,8,66,68,DR-2026-036,,ai-written
-CWE-668,1,0,2,0,2,0,4,8,67,69,DR-2026-036,,ai-written
-CWE-669,1,0,1,0,1,0,4,8,68,70,DR-2026-039,,ai-stack-vulnerability
-CWE-696,1,0,1,0,1,0,4,8,69,71,DR-2026-036,,ai-written
-CWE-707,1,0,1,0,1,0,4,8,70,72,DR-2026-036,,ai-written
-CWE-732,1,0,2,0,2,0,4,8,71,73,DR-2026-036,,ai-written
-CWE-749,1,0,1,0,1,0,4,8,72,74,DR-2026-036,,ai-written
-CWE-754,1,0,1,0,1,0,4,8,73,75,DR-2026-036,,ai-written
-CWE-770,1,0,5,0,5,0,4,8,74,76,DR-2026-036,,ai-written
-CWE-807,1,0,2,0,2,0,4,8,75,77,DR-2026-036,,ai-written
-CWE-863,1,0,7,0,7,0,4,8,76,78,DR-2026-036,,ai-written
-CWE-943,1,0,1,0,1,0,4,8,77,79,DR-2026-036,,ai-written
-CWE-1236,1,0,1,0,1,0,4,8,78,80,DR-2026-036,,ai-written
-CWE-1295,1,0,1,0,1,0,4,8,79,81,DR-2026-036,,ai-written
-CWE-1321,1,0,2,0,2,0,4,8,80,82,DR-2026-036,,ai-written
-CWE-1333,1,0,1,0,1,0,4,8,81,83,DR-2026-036,,ai-written
-CWE-1336,1,0,1,0,1,0,4,8,82,84,DR-2026-036,,ai-written
-CWE-183,0,2,0,2,0,1,1,16,83,25,,DR-2026-056; DR-2026-062,ai-stack-vulnerability
-CWE-515,0,2,0,2,0,1,1,16,84,26,,DR-2026-056; DR-2026-062,ai-stack-vulnerability
-CWE-121,0,2,0,3,0,3,1,8,85,85,,DR-2026-058; DR-2026-088,ai-discovered
-CWE-295,0,2,0,3,0,3,1,8,86,86,,DR-2026-058; DR-2026-088,ai-discovered
-CWE-61,0,1,0,1,0,1,1,8,87,87,,DR-2026-062,ai-stack-vulnerability
-CWE-90,0,1,0,1,0,1,1,8,88,88,,DR-2026-088,ai-discovered
-CWE-248,0,1,0,1,0,1,1,8,89,89,,DR-2026-088,ai-discovered
-CWE-369,0,1,0,1,0,1,1,8,90,90,,DR-2026-088,ai-discovered
-CWE-415,0,1,0,1,0,1,1,8,91,91,,DR-2026-088,ai-discovered
-CWE-434,0,1,0,1,0,1,1,8,92,92,,DR-2026-079,ai-discovered
-CWE-613,0,1,0,1,0,1,1,8,93,93,,DR-2026-088,ai-discovered
-CWE-787,0,1,0,1,0,1,1,8,94,94,,DR-2026-088,ai-discovered
-CWE-829,0,1,0,1,0,1,1,8,95,95,,DR-2026-089,ai-stack-vulnerability
-CWE-843,0,1,0,1,0,1,1,8,96,96,,DR-2026-088,ai-discovered
+CWE-20,1,2,1,4,1,4,10,40,3,4,DR-2026-008,DR-2026-036; DR-2026-056,ai-exploited; ai-written; ai-stack-vulnerability
+CWE-94,1,4,2,12,2,12,10,32,4,6,DR-2026-008,DR-2026-036; DR-2026-062; DR-2026-080; DR-2026-089,ai-exploited; ai-written; ai-stack-vulnerability
+CWE-287,1,1,1,1,1,1,9,24,5,9,DB-2026-006,DR-2026-088,ai-exploited; ai-discovered
+CWE-290,1,1,1,1,1,1,9,24,6,10,DR-2026-011,DR-2026-036,ai-exploited; ai-written
+CWE-913,1,1,1,1,1,1,9,24,7,11,DR-2026-008,DR-2026-036,ai-exploited; ai-written
+CWE-918,1,1,3,21,3,21,9,24,8,12,DB-2026-006,DR-2026-036,ai-exploited; ai-written
+CWE-95,1,0,1,0,1,0,8,16,9,15,DR-2026-008,,ai-exploited
+CWE-502,1,0,1,0,1,0,8,16,10,16,DB-2026-006,,ai-exploited
+CWE-78,2,3,2,13,2,13,7,56,11,2,DR-2026-057; DR-2026-059,DR-2026-036; DR-2026-062; DR-2026-079,ai-written; ai-stack-vulnerability; ai-discovered
+CWE-77,1,5,2,9,2,9,5,40,12,5,DR-2026-059,DR-2026-036; DR-2026-079; DR-2026-081; DR-2026-083; DR-2026-088,ai-written; ai-stack-vulnerability; ai-discovered
+CWE-125,1,0,1,0,1,0,4,8,13,29,DR-2026-037,,ai-stack-vulnerability
+CWE-669,1,0,1,0,1,0,4,8,14,30,DR-2026-039,,ai-stack-vulnerability
+CWE-22,0,5,0,23,0,23,3,32,15,7,,DR-2026-036; DR-2026-060; DR-2026-062; DR-2026-080; DR-2026-088,ai-written; ai-stack-vulnerability; ai-discovered
+CWE-59,0,3,0,5,0,5,3,32,16,8,,DR-2026-036; DR-2026-058; DR-2026-060,ai-written; ai-stack-vulnerability; ai-discovered
+CWE-942,1,1,1,2,1,2,3,24,17,13,DR-2026-057,DR-2026-036,ai-written; ai-stack-vulnerability
+CWE-200,0,3,0,11,0,10,2,24,18,14,,DR-2026-036; DR-2026-056; DR-2026-062,ai-written; ai-stack-vulnerability
+CWE-416,0,4,0,5,0,5,2,16,19,17,,DR-2026-036; DR-2026-084; DR-2026-088; DR-2026-093,ai-written; ai-discovered
+CWE-74,0,2,0,5,0,5,2,16,20,18,,DR-2026-036; DR-2026-087,ai-written; ai-stack-vulnerability
+CWE-79,0,2,0,5,0,5,2,16,21,19,,DR-2026-036; DR-2026-087,ai-written; ai-stack-vulnerability
+CWE-269,0,2,0,3,0,3,2,16,22,20,,DR-2026-036; DR-2026-089,ai-written; ai-stack-vulnerability
+CWE-400,0,2,0,2,0,2,2,16,23,21,,DR-2026-036; DR-2026-088,ai-written; ai-discovered
+CWE-522,0,2,0,2,0,2,2,16,24,22,,DR-2026-036; DR-2026-062,ai-written; ai-stack-vulnerability
+CWE-693,0,2,0,2,0,2,2,16,25,23,,DR-2026-036; DR-2026-089,ai-written; ai-stack-vulnerability
+CWE-862,0,2,0,11,0,11,2,16,26,24,,DR-2026-036; DR-2026-088,ai-written; ai-discovered
+CWE-89,0,2,0,3,0,3,2,12,27,27,,DR-2026-036; DR-2026-085,ai-written; ai-discovered
+CWE-915,0,2,0,3,0,3,2,12,28,28,,DR-2026-036; DR-2026-085,ai-written; ai-discovered
+CWE-183,0,2,0,2,0,1,1,16,29,25,,DR-2026-056; DR-2026-062,ai-stack-vulnerability
+CWE-515,0,2,0,2,0,1,1,16,30,26,,DR-2026-056; DR-2026-062,ai-stack-vulnerability
+CWE-121,0,2,0,3,0,3,1,8,31,31,,DR-2026-058; DR-2026-088,ai-discovered
+CWE-295,0,2,0,3,0,3,1,8,32,32,,DR-2026-058; DR-2026-088,ai-discovered
+CWE-15,0,1,0,2,0,2,1,8,33,33,,DR-2026-036,ai-written
+CWE-41,0,1,0,2,0,2,1,8,34,34,,DR-2026-036,ai-written
+CWE-61,0,1,0,1,0,1,1,8,35,35,,DR-2026-062,ai-stack-vulnerability
+CWE-62,0,1,0,1,0,1,1,8,36,36,,DR-2026-036,ai-written
+CWE-73,0,1,0,2,0,2,1,8,37,37,,DR-2026-036,ai-written
+CWE-80,0,1,0,1,0,1,1,8,38,38,,DR-2026-036,ai-written
+CWE-88,0,1,0,1,0,1,1,8,39,39,,DR-2026-036,ai-written
+CWE-90,0,1,0,1,0,1,1,8,40,40,,DR-2026-088,ai-discovered
+CWE-119,0,1,0,1,0,1,1,8,41,41,,DR-2026-036,ai-written
+CWE-176,0,1,0,1,0,1,1,8,42,42,,DR-2026-036,ai-written
+CWE-201,0,1,0,2,0,2,1,8,43,43,,DR-2026-036,ai-written
+CWE-212,0,1,0,1,0,1,1,8,44,44,,DR-2026-036,ai-written
+CWE-214,0,1,0,1,0,1,1,8,45,45,,DR-2026-036,ai-written
+CWE-248,0,1,0,1,0,1,1,8,46,46,,DR-2026-088,ai-discovered
+CWE-266,0,1,0,1,0,1,1,8,47,47,,DR-2026-036,ai-written
+CWE-283,0,1,0,1,0,1,1,8,48,48,,DR-2026-036,ai-written
+CWE-284,0,1,0,6,0,6,1,8,49,49,,DR-2026-036,ai-written
+CWE-285,0,1,0,1,0,1,1,8,50,50,,DR-2026-036,ai-written
+CWE-294,0,1,0,1,0,1,1,8,51,51,,DR-2026-036,ai-written
+CWE-307,0,1,0,1,0,1,1,8,52,52,,DR-2026-036,ai-written
+CWE-311,0,1,0,1,0,1,1,8,53,53,,DR-2026-036,ai-written
+CWE-321,0,1,0,1,0,1,1,8,54,54,,DR-2026-036,ai-written
+CWE-327,0,1,0,1,0,1,1,8,55,55,,DR-2026-036,ai-written
+CWE-328,0,1,0,1,0,1,1,8,56,56,,DR-2026-036,ai-written
+CWE-345,0,1,0,3,0,3,1,8,57,57,,DR-2026-036,ai-written
+CWE-346,0,1,0,1,0,1,1,8,58,58,,DR-2026-036,ai-written
+CWE-347,0,1,0,2,0,2,1,8,59,59,,DR-2026-036,ai-written
+CWE-358,0,1,0,1,0,1,1,8,60,60,,DR-2026-036,ai-written
+CWE-367,0,1,0,3,0,3,1,8,61,61,,DR-2026-036,ai-written
+CWE-369,0,1,0,1,0,1,1,8,62,62,,DR-2026-088,ai-discovered
+CWE-415,0,1,0,1,0,1,1,8,63,63,,DR-2026-088,ai-discovered
+CWE-426,0,1,0,2,0,2,1,8,64,64,,DR-2026-036,ai-written
+CWE-434,0,1,0,1,0,1,1,8,65,65,,DR-2026-079,ai-discovered
+CWE-436,0,1,0,1,0,1,1,8,66,66,,DR-2026-036,ai-written
+CWE-441,0,1,0,1,0,1,1,8,67,67,,DR-2026-036,ai-written
+CWE-459,0,1,0,1,0,1,1,8,68,68,,DR-2026-036,ai-written
+CWE-460,0,1,0,1,0,1,1,8,69,69,,DR-2026-036,ai-written
+CWE-488,0,1,0,1,0,1,1,8,70,70,,DR-2026-036,ai-written
+CWE-532,0,1,0,2,0,2,1,8,71,71,,DR-2026-036,ai-written
+CWE-601,0,1,0,2,0,2,1,8,72,72,,DR-2026-036,ai-written
+CWE-610,0,1,0,1,0,1,1,8,73,73,,DR-2026-036,ai-written
+CWE-613,0,1,0,1,0,1,1,8,74,74,,DR-2026-088,ai-discovered
+CWE-636,0,1,0,1,0,1,1,8,75,75,,DR-2026-036,ai-written
+CWE-639,0,1,0,9,0,9,1,8,76,76,,DR-2026-036,ai-written
+CWE-648,0,1,0,1,0,1,1,8,77,77,,DR-2026-036,ai-written
+CWE-657,0,1,0,1,0,1,1,8,78,78,,DR-2026-036,ai-written
+CWE-668,0,1,0,2,0,2,1,8,79,79,,DR-2026-036,ai-written
+CWE-696,0,1,0,1,0,1,1,8,80,80,,DR-2026-036,ai-written
+CWE-707,0,1,0,1,0,1,1,8,81,81,,DR-2026-036,ai-written
+CWE-732,0,1,0,2,0,2,1,8,82,82,,DR-2026-036,ai-written
+CWE-749,0,1,0,1,0,1,1,8,83,83,,DR-2026-036,ai-written
+CWE-754,0,1,0,1,0,1,1,8,84,84,,DR-2026-036,ai-written
+CWE-770,0,1,0,5,0,5,1,8,85,85,,DR-2026-036,ai-written
+CWE-787,0,1,0,1,0,1,1,8,86,86,,DR-2026-088,ai-discovered
+CWE-807,0,1,0,2,0,2,1,8,87,87,,DR-2026-036,ai-written
+CWE-829,0,1,0,1,0,1,1,8,88,88,,DR-2026-089,ai-stack-vulnerability
+CWE-843,0,1,0,1,0,1,1,8,89,89,,DR-2026-088,ai-discovered
+CWE-863,0,1,0,7,0,7,1,8,90,90,,DR-2026-036,ai-written
+CWE-943,0,1,0,1,0,1,1,8,91,91,,DR-2026-036,ai-written
+CWE-1236,0,1,0,1,0,1,1,8,92,92,,DR-2026-036,ai-written
+CWE-1295,0,1,0,1,0,1,1,8,93,93,,DR-2026-036,ai-written
+CWE-1321,0,1,0,2,0,2,1,8,94,94,,DR-2026-036,ai-written
+CWE-1333,0,1,0,1,0,1,1,8,95,95,,DR-2026-036,ai-written
+CWE-1336,0,1,0,1,0,1,1,8,96,96,,DR-2026-036,ai-written

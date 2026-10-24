@@ -1,6 +1,6 @@
 segment,cve_links,sub_threshold_cve_links,distinct_cves,sub_threshold_distinct_cves,incidents,sub_threshold_incidents,ibss_observed,ibss_potential,links_with_cna_cwe,sub_threshold_links_with_cna_cwe,distinct_cwes,sub_threshold_distinct_cwes
 ai-exploited,20,0,19,0,6,0,48,72,14,0,10,0
-ai-written,161,0,161,0,1,0,4,8,158,0,76,0
+ai-written,0,161,0,161,0,1,1,8,0,158,0,76
 ai-stack-vulnerability,14,18,14,17,4,8,13,64,6,18,6,16
 malicious-release,4,0,3,0,3,0,32,40,4,0,1,0
 ai-discovered,0,55,0,54,0,9,1,8,0,28,0,20

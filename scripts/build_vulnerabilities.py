@@ -303,7 +303,8 @@ def table_ibss_vs_cvss(links):
         "n_036": sum(1 for v in per.values() if v["in_036"]), "n_no036_scored": len(no036),
         "n_no036_clusters": len(clusters), "top_cluster": clusters.most_common(1)[0] if clusters else ((), 0),
         "n_unscored": len(unscored), "unscored_incidents": sorted({i for v in unscored for i in v["incidents"]}),
-        "n_036_const": sum(1 for v in per.values() if v["in_036"] and v["obs"] == 4 and v["pot"] == 8),
+        # (observed, potential, CVEs): the weight pair that most of DR-2026-036's in-play CVEs share
+        "pair_036": next(((o, p, n) for (o, p), n in Counter((v["obs"], v["pot"]) for v in per.values() if v["in_036"]).most_common(1)), (0, 0, 0)),
         "rho_obs": spearman([v["cvss"] for v in scored], [v["obs"] for v in scored]),
         "rho_pot": spearman([v["cvss"] for v in scored], [v["pot"] for v in scored]),
         "rho_obs_no036": spearman([v["cvss"] for v in no036], [v["obs"] for v in no036]),
@@ -875,7 +876,7 @@ def build_report(d, links, T) -> str:
       f"({', '.join(f'{r} {sum(1 for x in expl if x[1] == r)}' for r in EXPLOITED_FAMILY)}).")
     big = sorted(((len(i['validated_cve']), i['id']) for i in lc.records(d) if len(i.get('validated_cve') or []) >= 10), reverse=True)
     A("- Aggregate records (≥10 CVEs): " + ", ".join(f"{mark(i)} ({n})" for n, i in big)
-      + ". DR-2026-036 alone holds " + f"{big[0][0]} of {len(distinct)} distinct CVEs — statistics that count CVEs are dominated by it; the segment split below isolates it as `ai-written`.")
+      + f". {mark(big[0][1])} alone holds {big[0][0]} of {len(distinct)} distinct CVEs — statistics that count CVEs are dominated by it; the segment split below isolates it as `ai-written`.")
     A(f"- {n_non} non-CVE identifiers across {n_non_inc} live records (GHSA, MAL, PYSEC, vendor advisories).")
     removed = cv.get("cves_removed", [])
     still = [c for c in removed if c in distinct]
@@ -1035,6 +1036,9 @@ def build_report(d, links, T) -> str:
 
     # ---- IBSS vs CVSS experiment
     X = T["ibss"]; s = X["stats"]
+    def tier(w):  # e.g. 8 -> "High = 8"; a sum of several records' weights has no single tier
+        name = {v: k for k, v in lc.SEV_WEIGHT.items()}.get(w)
+        return f"{name} = {w}" if name else str(w)
     A("## IBSS vs CVSS — a first experiment")
     A("")
     A(f"IBSS was designed for CWEs, where one weakness spans many incidents. Applying it to CVEs is a first check of two things only: "
@@ -1042,9 +1046,9 @@ def build_report(d, links, T) -> str:
       f"could have realized (potential). Three limits apply. **(1)** {s['n_single']} of the {s['n_inplay']} in-play CVEs have a single "
       f"in-play record, so their IBSS is just that record's weight — the summation is barely exercised. **(2)** Each in-play CVE receives the "
       f"*full* weight of every counted incident it is in play in, and per class that of the highest-weighted sub-threshold record (†); "
-      f"where several CVEs share an incident (e.g. the Artifactory CVEs of DB-2026-006) the score does not establish per-CVE causation. **(3)** {s['n_036']} of the {s['n_inplay']} in-play CVEs belong to DR-2026-036, and {s['n_036_const']} of those share one observed "
-      f"(Medium = 4) and one potential (High = 8) value, so aggregate statistics are dominated by that incident; figures are therefore also "
-      f"given without it.")
+      f"where several CVEs share an incident (e.g. the Artifactory CVEs of DB-2026-006) the score does not establish per-CVE causation. **(3)** {s['n_036']} of the {s['n_inplay']} in-play CVEs belong to DR-2026-036, and {s['pair_036'][2]} of those share one observed "
+      f"({tier(s['pair_036'][0])}) and one potential ({tier(s['pair_036'][1])}) value, so aggregate statistics are dominated by that "
+      f"record; figures are therefore also given without it.")
     A("")
     A(f"- A Spearman rank correlation between CVSS and IBSS is computed by the build script but **not reported at this stage**: "
       f"{s['n_036']} of the {s['n_scored']} scored in-play CVEs share one severity value (DR-2026-036), and the remaining n = {s['n_no036_scored']} "
