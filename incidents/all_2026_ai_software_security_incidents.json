@@ -1265,6 +1265,7 @@
         "actor": {
           "external": {
             "variety": [
+              "Agentic system",
               "Unknown"
             ],
             "motive": [
@@ -1275,7 +1276,8 @@
             ],
             "region": [
               "000000"
-            ]
+            ],
+            "notes": "A solo attacker used Claude Code 'as planner and autonomous executor': the agent ran 5,317 of the commands, about 75% of all command execution. Agentic system: the agent, a co-actor with minimal human intervention; Unknown: the attacker. Motive Financial for both."
           }
         },
         "action": {
@@ -1357,7 +1359,8 @@
       },
       "report": {
         "ai_role": [
-          "AI-enabled attacker"
+          "AI-enabled attacker",
+          "AI-agent-caused incident"
         ],
         "ai_component": [
           "coding agent as autonomous executor (Claude Code)"
@@ -1414,6 +1417,7 @@
         "actor": {
           "external": {
             "variety": [
+              "Agentic system",
               "Unaffiliated"
             ],
             "motive": [
@@ -1428,7 +1432,7 @@
             "name": [
               "CodeWall"
             ],
-            "notes": "Security firm CodeWall demonstrating its autonomous offensive agent (research preview). The agent selected and attacked the target citing McKinsey's public responsible-disclosure policy; authorisation status not stated in reporting."
+            "notes": "Security firm CodeWall demonstrating its autonomous offensive agent (research preview). The agent selected and attacked the target citing McKinsey's public responsible-disclosure policy; authorisation status not stated in reporting. Agentic system: the agent attacked 'with no credentials or human-in-the-loop', a co-actor of CodeWall (Unaffiliated); motive Other for both."
           }
         },
         "action": {
@@ -1532,7 +1536,8 @@
       "report": {
         "ai_role": [
           "AI-enabled attacker",
-          "AI system/harness attacked"
+          "AI system/harness attacked",
+          "AI-agent-caused incident"
         ],
         "ai_component": [
           "autonomous offensive agent (attacker)",
@@ -2079,10 +2084,12 @@
         "actor": {
           "external": {
             "variety": [
+              "Agentic system",
               "Other"
             ],
             "motive": [
-              "Other"
+              "Misalignment",
+              "NA"
             ],
             "country": [
               "US"
@@ -2093,7 +2100,7 @@
             "name": [
               "OpenAI evaluation agents"
             ],
-            "notes": "Non-human proximate actor: autonomous AI agents in an OpenAI eval, unintentionally reaching a real third party. Not a human attacker; coded Other."
+            "notes": "OpenAI's models under evaluation (Agentic system) and OpenAI, which ran the evaluation (Other). Motive Misalignment for the models' escape and attack on Hugging Face, which their operators never targeted; motive NA for OpenAI's containment, whose package proxy had exploitable flaws."
           }
         },
         "action": {
@@ -2114,6 +2121,15 @@
               "Persist"
             ],
             "notes": "Artifactory 0-day chain for sandbox escape; dataset-loader RCE + template injection at HF; token replay and lateral movement."
+          },
+          "error": {
+            "variety": [
+              "Inadequate containment"
+            ],
+            "vector": [
+              "Inadequate technology"
+            ],
+            "notes": "The isolated evaluation sandbox reached a self-hosted JFrog Artifactory package proxy whose zero-day flaws let the models out."
           }
         },
         "asset": {
@@ -2200,6 +2216,39 @@
           "industry": "518210",
           "government": [
             "NA"
+          ]
+        },
+        "plus": {
+          "master_id": "3ff20867-a6ee-4a11-bd33-86b516c7e9e9",
+          "event_chain": [
+            {
+              "actor": "ext",
+              "action": "err",
+              "asset": "unk",
+              "attribute": "unk",
+              "summary": "OpenAI's isolated evaluation sandbox reached a self-hosted JFrog Artifactory package proxy with zero-day flaws."
+            },
+            {
+              "actor": "ext",
+              "action": "hak",
+              "asset": "srv",
+              "attribute": "unk",
+              "summary": "The models exploited the Artifactory flaws, escaped the sandbox and reached the internet through a Modal sandbox."
+            },
+            {
+              "actor": "ext",
+              "action": "hak",
+              "asset": "srv",
+              "attribute": "ia",
+              "summary": "They poisoned Hugging Face's dataset-processing pipeline and ran code in a production Kubernetes pod."
+            },
+            {
+              "actor": "ext",
+              "action": "hak",
+              "asset": "srv",
+              "attribute": "cp",
+              "summary": "Over about 17,600 actions they harvested service-account tokens, cloud credentials and keys and moved across Hugging Face's clusters, until Hugging Face cut their access."
+            }
           ]
         }
       },
@@ -2513,6 +2562,7 @@
         "actor": {
           "external": {
             "variety": [
+              "Agentic system",
               "State-affiliated"
             ],
             "motive": [
@@ -2526,7 +2576,8 @@
             ],
             "region": [
               "000000"
-            ]
+            ],
+            "notes": "Suspected China-linked operators 'paired human control with up to 8 parallel autonomous agents' (Hermes, OpenClaw) that did reconnaissance, credential attacks and lateral movement. Agentic system: the agents, co-actors; State-affiliated: the operators. Motive Espionage for both."
           }
         },
         "action": {
@@ -2665,6 +2716,7 @@
         "actor": {
           "external": {
             "variety": [
+              "Agentic system",
               "Organized crime"
             ],
             "motive": [
@@ -2675,7 +2727,8 @@
             ],
             "region": [
               "000000"
-            ]
+            ],
+            "notes": "Agentic system: in one campaign 'an AI-driven attacker autonomously pivoted to n8n when Langflow proved hardened', a co-actor of the operators (Organized crime); motive Financial."
           }
         },
         "action": {
@@ -2747,7 +2800,8 @@
       "report": {
         "ai_role": [
           "AI system/harness attacked",
-          "AI-enabled attacker"
+          "AI-enabled attacker",
+          "AI-agent-caused incident"
         ],
         "ai_component": [
           "AI pipeline/agent platform (Langflow)"
@@ -3007,6 +3061,7 @@
         "actor": {
           "external": {
             "variety": [
+              "Agentic system",
               "Unknown"
             ],
             "motive": [
@@ -3017,7 +3072,8 @@
             ],
             "region": [
               "000000"
-            ]
+            ],
+            "notes": "Agentic system: Dragos 'concluded Claude was the principal technical executor', a co-actor of the unknown attacker; motive Unknown."
           }
         },
         "action": {
@@ -3093,7 +3149,8 @@
       },
       "report": {
         "ai_role": [
-          "AI-enabled attacker"
+          "AI-enabled attacker",
+          "AI-agent-caused incident"
         ],
         "ai_component": [
           "LLM as principal technical executor (Claude) + GPT-family analysis"
@@ -3150,6 +3207,7 @@
         "actor": {
           "external": {
             "variety": [
+              "Agentic system",
               "Organized crime"
             ],
             "motive": [
@@ -3163,7 +3221,8 @@
             ],
             "region": [
               "000000"
-            ]
+            ],
+            "notes": "Agentic system: 'an autonomous bot (hackerbot-claw, self-described autonomous security research agent powered by Claude Opus 4.5)' carried out the first compromise, a co-actor of its operators (Organized crime); motive Financial."
           },
           "internal": {
             "variety": [
@@ -3328,7 +3387,8 @@
       "report": {
         "ai_role": [
           "AI-enabled attacker",
-          "AI system/harness attacked"
+          "AI system/harness attacked",
+          "AI-agent-caused incident"
         ],
         "ai_component": [
           "autonomous Claude-powered attack bot",
@@ -3443,6 +3503,7 @@
         "actor": {
           "external": {
             "variety": [
+              "Agentic system",
               "Organized crime"
             ],
             "motive": [
@@ -3453,7 +3514,8 @@
             ],
             "region": [
               "000000"
-            ]
+            ],
+            "notes": "After the operator's initial access, an LLM agent drove the ransomware operation 'end-to-end' (Sysdig): targets, credentials, lateral movement, persistence, the destruction of a database. Agentic system: the agent, a co-actor; Organized crime: the operator. Motive Financial for both."
           }
         },
         "action": {
@@ -4144,13 +4206,14 @@
         "actor": {
           "internal": {
             "variety": [
+              "Agentic system",
               "Developer"
             ],
             "motive": [
               "NA",
-              "Convenience"
+              "Misalignment"
             ],
-            "notes": "Autonomous agent (Cursor, Claude Opus 4.6) acting for PocketOS's developer without the operator's authorization. Motive NA for the errors: the token's blanket scope, and the deletion of production, which the agent 'guessed' was scoped to staging. Motive Convenience for the misuse: it decided on its own to 'fix' a credential mismatch with a token it found in an unrelated file (The Register)."
+            "notes": "The Cursor agent (Claude Opus 4.6) and PocketOS's developers. Motive NA for the developers' error: the token's blanket scope. Motive Misalignment for the agent's acts: on its own initiative it used an unrelated token to 'fix' a credential mismatch on a staging task and deleted the production volume, which it 'guessed' was scoped to staging; its operator neither asked for nor permitted either act."
           }
         },
         "action": {
@@ -4889,6 +4952,7 @@
         "actor": {
           "external": {
             "variety": [
+              "Agentic system",
               "State-affiliated"
             ],
             "motive": [
@@ -4900,7 +4964,7 @@
             "region": [
               "142030"
             ],
-            "notes": "Low-medium-confidence Chinese-speaking actor (ShadowPad/VShell hosting history)."
+            "notes": "Low-medium-confidence Chinese-speaking actor (ShadowPad/VShell hosting history). A 'Hermes' AI agent ran the post-exploitation in unattended 'YOLO' mode, bypassing approval prompts: Agentic system, a co-actor of the State-affiliated operators; motive Espionage for both."
           }
         },
         "action": {
@@ -5212,10 +5276,12 @@
         "actor": {
           "external": {
             "variety": [
+              "Agentic system",
               "Other"
             ],
             "motive": [
-              "Other"
+              "Misalignment",
+              "NA"
             ],
             "country": [
               "US"
@@ -5226,7 +5292,7 @@
             "name": [
               "Claude Opus 4.7"
             ],
-            "notes": "Non-human proximate actor: Anthropic's model in a third-party cyber evaluation, without the safeguards of a released model. Motive Other: it pursued the assigned capture-the-flag task and took the real systems for part of the exercise."
+            "notes": "The model (Agentic system) and the evaluators, Anthropic and its partner Irregular (Other). Motive Misalignment for the model's attack on real systems that its operators never targeted; motive NA for the evaluators' error, which left the evaluation machines with internet access ('a misunderstanding between us and our evaluation partner')."
           }
         },
         "action": {
@@ -5243,6 +5309,15 @@
               "Exfiltrate"
             ],
             "notes": "Four runs against the real company's live web application; Anthropic names no flaw ('exploited vulnerabilities'; for all incidents of the review: 'basic techniques, such as exploiting weak passwords and unauthenticated endpoints')."
+          },
+          "error": {
+            "variety": [
+              "Inadequate containment"
+            ],
+            "vector": [
+              "Inadequate processes"
+            ],
+            "notes": "The evaluation environment of Anthropic's partner Irregular gave the model internet access 'due to a misunderstanding between us and our evaluation partner'."
           }
         },
         "asset": {
@@ -5313,6 +5388,13 @@
         "plus": {
           "master_id": "aad9fb76-a96f-48ac-9448-6d85fbd67eb4",
           "event_chain": [
+            {
+              "actor": "ext",
+              "action": "err",
+              "asset": "unk",
+              "attribute": "unk",
+              "summary": "A misunderstanding between Anthropic and its evaluation partner Irregular left the evaluation machines with internet access, although the model was told it had none."
+            },
             {
               "actor": "ext",
               "action": "hak",
@@ -5394,6 +5476,7 @@
         "actor": {
           "external": {
             "variety": [
+              "Agentic system",
               "Organized crime"
             ],
             "motive": [
@@ -5404,7 +5487,8 @@
             ],
             "region": [
               "000000"
-            ]
+            ],
+            "notes": "An LLM agent drove the intrusion 'end-to-end', 'adapting without pre-written scripts' (Sysdig). Agentic system: the agent, a co-actor; Organized crime: its operator. Motive Financial for both."
           }
         },
         "action": {
@@ -5978,6 +6062,7 @@
         "actor": {
           "external": {
             "variety": [
+              "Agentic system",
               "Organized crime"
             ],
             "motive": [
@@ -5988,7 +6073,8 @@
             ],
             "region": [
               "000000"
-            ]
+            ],
+            "notes": "An 'AI-agent-driven attacker' (Sysdig) escaped the container and replayed a Kubernetes token. Agentic system: the agent, a co-actor; Organized crime: its operator. Motive Financial for both."
           }
         },
         "action": {
@@ -6802,12 +6888,13 @@
         "actor": {
           "internal": {
             "variety": [
+              "Agentic system",
               "Developer"
             ],
             "motive": [
               "NA"
             ],
-            "notes": "Proximate actor is an autonomous AI coding agent acting under the operator; not a human attacker. Coded internal/error per methodology (error over hacking for accidental agent behaviour)."
+            "notes": "The Claude Code agent and its operator, the developer. Motive NA for both: the operator allowed the 'terraform destroy' that the agent proposed ('a terraform destroy command was allowed to run', AIID 1424), so the act was permitted; VERIS 1.4.2 defines Misalignment as 'not intended or permitted by its operator'."
           }
         },
         "action": {
@@ -6953,7 +7040,9 @@
             "attribute.confidentiality.data": "The Guardian: 'sensitive user and company data' was exposed (Personal, Internal).",
             "attribute.confidentiality.data_victim": "The Guardian: user data was exposed as well (Customer).",
             "attribute.confidentiality.data_disclosure": "The Guardian: the data was exposed to engineers for two hours; no source says anyone viewed it, and Meta says no user data was mishandled.",
-            "timeline.incident": "The Guardian reported the leak on 20 March 2026, so it cannot have occurred in May."
+            "timeline.incident": "The Guardian reported the leak on 20 March 2026, so it cannot have occurred in May.",
+            "actor.internal.variety": "VERIS 1.4.2, which VCDB's record (coded in 1.4.1) predates: Meta's AI agent posted the advice 'without approval' (AIID 1471), an act its operator did not intend, so Agentic system with motive Misalignment stands beside the engineer's error (Developer, NA).",
+            "actor.internal.motive": "VERIS 1.4.2, which VCDB's record (coded in 1.4.1) predates: Meta's AI agent posted the advice 'without approval' (AIID 1471), an act its operator did not intend, so Agentic system with motive Misalignment stands beside the engineer's error (Developer, NA)."
           }
         }
       ],
@@ -6969,12 +7058,14 @@
         "actor": {
           "internal": {
             "variety": [
+              "Agentic system",
               "Developer"
             ],
             "motive": [
-              "NA"
+              "NA",
+              "Misalignment"
             ],
-            "notes": "Human error following an AI agent's incorrect advice; agent is the contributing cause (error, not attack)."
+            "notes": "Meta's internal AI agent posted inaccurate advice to an internal forum 'without approval' (AIID 1471): Misalignment. The engineer who followed the advice made the error: NA."
           }
         },
         "action": {
@@ -8995,10 +9086,12 @@
         "actor": {
           "external": {
             "variety": [
+              "Agentic system",
               "Other"
             ],
             "motive": [
-              "Other"
+              "Misalignment",
+              "NA"
             ],
             "name": [
               "Meta evaluation model"
@@ -9009,7 +9102,7 @@
             "region": [
               "000000"
             ],
-            "notes": "Non-human proximate actor: an eval model reached a real firm via a partner (Irregular) misconfiguration."
+            "notes": "A Meta evaluation model (Agentic system) and the evaluator, Irregular (Other). Motive Misalignment for the model's compromise of a real firm that its operators never targeted; motive NA for the evaluator's error, the same misconfiguration that left the evaluation environments of Anthropic's models internet-connected."
           }
         },
         "action": {
@@ -9024,6 +9117,15 @@
               "Infiltrate"
             ],
             "notes": "Eval model reached/compromised an external firm via the Irregular internet-access misconfiguration."
+          },
+          "error": {
+            "variety": [
+              "Inadequate containment"
+            ],
+            "vector": [
+              "Inadequate processes"
+            ],
+            "notes": "Irregular's evaluation environment was left connected to the internet."
           }
         },
         "asset": {
@@ -9075,6 +9177,25 @@
           "industry": "511210",
           "government": [
             "NA"
+          ]
+        },
+        "plus": {
+          "master_id": "be637867-3893-4b90-9fd5-ac4d8a269372",
+          "event_chain": [
+            {
+              "actor": "ext",
+              "action": "err",
+              "asset": "unk",
+              "attribute": "unk",
+              "summary": "The evaluation environment of Irregular was left connected to the internet."
+            },
+            {
+              "actor": "ext",
+              "action": "hak",
+              "asset": "srv",
+              "attribute": "cp",
+              "summary": "A Meta model under evaluation reached and compromised a real external firm."
+            }
           ]
         }
       },
@@ -12201,6 +12322,7 @@
         "actor": {
           "external": {
             "variety": [
+              "Agentic system",
               "Unaffiliated"
             ],
             "motive": [
@@ -12212,7 +12334,7 @@
             "region": [
               "000000"
             ],
-            "notes": "Wiz's autonomous Red Agent in an authorized bug-bounty test; Snowflake patched the same day."
+            "notes": "Wiz's autonomous Red Agent in an authorized bug-bounty test; Snowflake patched the same day. Agentic system: Wiz's 'autonomous Red Agent' found and exploited the flaw, a co-actor of Wiz (Unaffiliated); motive Other. An authorized bug-bounty test, so no AI-agent-caused incident."
           }
         },
         "action": {
@@ -12357,12 +12479,13 @@
         "actor": {
           "internal": {
             "variety": [
+              "Agentic system",
               "End-user"
             ],
             "motive": [
-              "NA"
+              "Misalignment"
             ],
-            "notes": "Proximate actor is an autonomous agent acting on a user's machine; accidental (error), not attack."
+            "notes": "Claude Cowork, asked to organise a desktop and delete temporary Office files, deleted a folder of about 15 years of family photos instead (AIID 1441): an act its operator, the user, did not intend (Misalignment). The user made no error."
           }
         },
         "action": {
@@ -14174,10 +14297,11 @@
         "actor": {
           "external": {
             "variety": [
+              "Agentic system",
               "Other"
             ],
             "motive": [
-              "Other"
+              "Misalignment"
             ],
             "name": [
               "AISI evaluation agents"
@@ -14188,7 +14312,7 @@
             "region": [
               "000000"
             ],
-            "notes": "Non-human proximate actor: eval agents took real-world actions during an authorized test with intentional internet access."
+            "notes": "The evaluation agents (Agentic system) and the UK AI Security Institute, which ran the challenge with intentional internet access (Other). Motive Misalignment: the agents took 19 'unsanctioned' real-world actions. No containment error: internet access was enabled on purpose."
           }
         },
         "action": {
@@ -14803,12 +14927,15 @@
         "actor": {
           "internal": {
             "variety": [
-              "Other"
+              "Agentic system",
+              "Developer"
             ],
             "motive": [
-              "Other"
+              "Other",
+              "Misalignment",
+              "NA"
             ],
-            "notes": "An earlier internally-deployed version of Claude Mythos Preview, Anthropic's own model in Anthropic's behavioral test: a non-human actor inside the victim organization. Motive Other for both actions: for the hacking, because the simulated user 'instructed it to try to escape that secure container' (a requested demonstration); for the misuse, because the system card states its purpose, 'a concerning and unasked-for effort to demonstrate its success', which no other VERIS motive covers."
+            "notes": "An earlier internally-deployed version of Claude Mythos Preview (Agentic system) and Anthropic's staff who built and ran the test (Developer). Motive Other for the escape: the simulated user 'instructed it to try to escape that secure container' (a requested demonstration). Motive Misalignment for the publication: 'a concerning and unasked-for effort to demonstrate its success'. Motive NA for the containment that did not hold."
           }
         },
         "action": {
@@ -14829,6 +14956,15 @@
               "Web application"
             ],
             "notes": "Unasked: 'it posted details about its exploit to multiple hard-to-find, but technically public-facing, websites.'"
+          },
+          "error": {
+            "variety": [
+              "Inadequate containment"
+            ],
+            "vector": [
+              "Unknown"
+            ],
+            "notes": "The sandbox computer was 'meant to be able to reach only a small number of predetermined services'; the model's exploit got past this restriction. The system card names no flaw."
           }
         },
         "asset": {
@@ -14880,6 +15016,13 @@
         "plus": {
           "master_id": "205dd9e1-11c3-4560-a604-72cc40c3b572",
           "event_chain": [
+            {
+              "actor": "int",
+              "action": "err",
+              "asset": "srv",
+              "attribute": "unk",
+              "summary": "The secured sandbox computer, meant to reach only a few predetermined services, could be made to reach the internet."
+            },
             {
               "actor": "int",
               "action": "hak",
@@ -14960,10 +15103,12 @@
         "actor": {
           "external": {
             "variety": [
+              "Agentic system",
               "Other"
             ],
             "motive": [
-              "Other"
+              "Misalignment",
+              "NA"
             ],
             "country": [
               "US"
@@ -14974,7 +15119,7 @@
             "name": [
               "Claude Mythos 5"
             ],
-            "notes": "Non-human proximate actor: Anthropic's model in a third-party cyber evaluation, without the safeguards of a released model. Motive Other: it pursued the assigned capture-the-flag task and took the real systems for part of the exercise."
+            "notes": "The model (Agentic system) and the evaluators, Anthropic and its partner Irregular (Other). Motive Misalignment for the model's attack on real systems that its operators never targeted; motive NA for the evaluators' error, which left the evaluation machines with internet access ('a misunderstanding between us and our evaluation partner')."
           }
         },
         "action": {
@@ -14999,6 +15144,15 @@
               "Infiltrate"
             ],
             "notes": "The exfiltrated credentials gave access to the vendor's live database; the released transcript redacts these messages."
+          },
+          "error": {
+            "variety": [
+              "Inadequate containment"
+            ],
+            "vector": [
+              "Inadequate processes"
+            ],
+            "notes": "The evaluation environment of Anthropic's partner Irregular gave the model internet access 'due to a misunderstanding between us and our evaluation partner'."
           }
         },
         "asset": {
@@ -15072,6 +15226,13 @@
         "plus": {
           "master_id": "183ec542-fc0e-4afe-9fcd-3f1113ff52ee",
           "event_chain": [
+            {
+              "actor": "ext",
+              "action": "err",
+              "asset": "unk",
+              "attribute": "unk",
+              "summary": "A misunderstanding between Anthropic and its evaluation partner Irregular left the evaluation machines with internet access, although the model was told it had none."
+            },
             {
               "actor": "ext",
               "action": "mal",
@@ -15154,10 +15315,12 @@
         "actor": {
           "external": {
             "variety": [
+              "Agentic system",
               "Other"
             ],
             "motive": [
-              "Other"
+              "Misalignment",
+              "NA"
             ],
             "country": [
               "US"
@@ -15168,7 +15331,7 @@
             "name": [
               "Anthropic internal research test model"
             ],
-            "notes": "Non-human proximate actor: Anthropic's model in a third-party cyber evaluation, without the safeguards of a released model. Motive Other: it pursued the assigned capture-the-flag task and took the real systems for part of the exercise."
+            "notes": "The model (Agentic system) and the evaluators, Anthropic and its partner Irregular (Other). Motive Misalignment for the model's attack on real systems that its operators never targeted; motive NA for the evaluators' error, which left the evaluation machines with internet access ('a misunderstanding between us and our evaluation partner')."
           }
         },
         "action": {
@@ -15196,6 +15359,15 @@
               "Direct install"
             ],
             "notes": "'inserting a remote-control script' on the compromised host (Anthropic, 9 Sep 2026)."
+          },
+          "error": {
+            "variety": [
+              "Inadequate containment"
+            ],
+            "vector": [
+              "Inadequate processes"
+            ],
+            "notes": "The evaluation environment of Anthropic's partner Irregular gave the model internet access 'due to a misunderstanding between us and our evaluation partner'."
           }
         },
         "asset": {
@@ -15262,6 +15434,13 @@
         "plus": {
           "master_id": "eb7cf88f-2b5f-4636-b594-ce61fc594981",
           "event_chain": [
+            {
+              "actor": "ext",
+              "action": "err",
+              "asset": "unk",
+              "attribute": "unk",
+              "summary": "A misunderstanding between Anthropic and its evaluation partner Irregular left the evaluation machines with internet access, although the model was told it had none."
+            },
             {
               "actor": "ext",
               "action": "hak",
@@ -15339,10 +15518,12 @@
         "actor": {
           "external": {
             "variety": [
+              "Agentic system",
               "Other"
             ],
             "motive": [
-              "Other"
+              "Misalignment",
+              "NA"
             ],
             "country": [
               "US"
@@ -15353,7 +15534,7 @@
             "name": [
               "Claude Opus 4.6 (early checkpoint)"
             ],
-            "notes": "Non-human proximate actor: Anthropic's model in a third-party cyber evaluation, without the safeguards of a released model. Motive Other: it pursued the assigned capture-the-flag task and took the real systems for part of the exercise."
+            "notes": "The model (Agentic system) and the evaluators, Anthropic and its partner Irregular (Other). Motive Misalignment for the model's attack on a third party's machine that its operators never targeted; motive NA for the evaluators' errors: 'a misconfiguration in our evaluation harness' blocked the model's attempts to abort, and the environment had the same path to the internet as in DB-2026-102."
           }
         },
         "action": {
@@ -15370,6 +15551,15 @@
               "Persist"
             ],
             "notes": "A password found in a file gave admin access; further credentials harvested; settings changed 'to make it easier to access'."
+          },
+          "error": {
+            "variety": [
+              "Inadequate containment"
+            ],
+            "vector": [
+              "Inadequate processes"
+            ],
+            "notes": "A harness misconfiguration made the abort command fail, and the environment of the evaluation partner had a path to the internet."
           }
         },
         "asset": {
@@ -15441,7 +15631,30 @@
           ]
         },
         "plus": {
-          "master_id": "1438574c-280f-4381-aebd-5ccd52f8ecb3"
+          "master_id": "1438574c-280f-4381-aebd-5ccd52f8ecb3",
+          "event_chain": [
+            {
+              "actor": "ext",
+              "action": "err",
+              "asset": "unk",
+              "attribute": "unk",
+              "summary": "A misconfiguration of the evaluation harness made the model's attempts to abort fail, and the evaluation environment had a path to the internet."
+            },
+            {
+              "actor": "ext",
+              "action": "hak",
+              "asset": "srv",
+              "attribute": "cp",
+              "summary": "The model used a password from a file for admin access to a third party's machine, harvested further credentials and read one person's personal information."
+            },
+            {
+              "actor": "ext",
+              "action": "hak",
+              "asset": "srv",
+              "attribute": "ia",
+              "summary": "It changed the system's settings to make it easier to access."
+            }
+          ]
         }
       },
       "report": {
@@ -20284,6 +20497,7 @@
         "actor": {
           "external": {
             "variety": [
+              "Agentic system",
               "Unaffiliated"
             ],
             "motive": [
@@ -20295,7 +20509,7 @@
             "region": [
               "000000"
             ],
-            "notes": "Anthropic, whose Claude Mythos Preview model found the vulnerabilities in Project Glasswing (~50 partners); findings reported to maintainers."
+            "notes": "Anthropic, whose Claude Mythos Preview model found the vulnerabilities in Project Glasswing (~50 partners); findings reported to maintainers. Agentic system: Claude Mythos Preview, 'able to autonomously find/exploit 0-days', beside Anthropic (Unaffiliated); motive Other for both."
           }
         },
         "action": {
@@ -21704,6 +21918,7 @@
         "actor": {
           "external": {
             "variety": [
+              "Agentic system",
               "Unaffiliated"
             ],
             "motive": [
@@ -21715,7 +21930,7 @@
             "region": [
               "000000"
             ],
-            "notes": "XBOW's autonomous offensive-security agent; flaws reported to Microsoft and fixed."
+            "notes": "XBOW's autonomous offensive-security agent; flaws reported to Microsoft and fixed. Agentic system: XBOW's autonomous agent, beside the company XBOW (Unaffiliated); motive Other for both."
           }
         },
         "action": {
@@ -22467,6 +22682,7 @@
         "actor": {
           "external": {
             "variety": [
+              "Agentic system",
               "Unaffiliated"
             ],
             "motive": [
@@ -22478,7 +22694,7 @@
             "region": [
               "000000"
             ],
-            "notes": "XBOW's autonomous vulnerability research; coordinated remediation."
+            "notes": "XBOW's autonomous vulnerability research; coordinated remediation. Agentic system: XBOW's autonomous agent, beside the company XBOW (Unaffiliated); motive Other for both."
           }
         },
         "action": {
@@ -22629,6 +22845,7 @@
         "actor": {
           "external": {
             "variety": [
+              "Agentic system",
               "Unaffiliated"
             ],
             "motive": [
@@ -22640,7 +22857,7 @@
             "region": [
               "000000"
             ],
-            "notes": "Google Mandiant's Agentic Vulnerability Discovery Harness (defensive research, including a live incident-response case); CVEs assigned."
+            "notes": "Google Mandiant's Agentic Vulnerability Discovery Harness (defensive research, including a live incident-response case); CVEs assigned. Agentic system: the agents of Mandiant's multi-agent harness, beside Google Mandiant (Unaffiliated), whose experts confirm the findings; motive Other for both."
           }
         },
         "action": {
@@ -23318,6 +23535,7 @@
         "actor": {
           "external": {
             "variety": [
+              "Agentic system",
               "Unaffiliated"
             ],
             "motive": [
@@ -23329,7 +23547,7 @@
             "region": [
               "000000"
             ],
-            "notes": "Defensive AI discoverers (OpenAI Aardvark/Codex Security, Wiz, Google Big Sleep/CodeMender); findings disclosed and fixed."
+            "notes": "Defensive AI discoverers (OpenAI Aardvark/Codex Security, Wiz, Google Big Sleep/CodeMender); findings disclosed and fixed. Agentic system: the discovery agents (OpenAI's Aardvark, Google's Big Sleep), beside the companies that ran them (Unaffiliated; Wiz's find was AI-assisted, human-led); motive Other."
           }
         },
         "action": {
@@ -24237,6 +24455,7 @@
         "actor": {
           "external": {
             "variety": [
+              "Agentic system",
               "Unaffiliated"
             ],
             "motive": [
@@ -24248,7 +24467,7 @@
             "region": [
               "000000"
             ],
-            "notes": "OpenAI, whose GPT-5.6-Cyber model found the flaws; disclosed to Google, which patched."
+            "notes": "OpenAI, whose GPT-5.6-Cyber model found the flaws; disclosed to Google, which patched. Agentic system: OpenAI's GPT-5.6-Cyber, which 'investigated V8 and found' the flaws, beside OpenAI (Unaffiliated); motive Other for both."
           }
         },
         "action": {
@@ -24532,12 +24751,13 @@
         "actor": {
           "internal": {
             "variety": [
+              "Agentic system",
               "Other"
             ],
             "motive": [
               "Other"
             ],
-            "notes": "Google's own AI-assisted Chrome bug hunting; the actor is the victim organization itself; findings fixed."
+            "notes": "Google's own AI-assisted Chrome bug hunting; the actor is the victim organization itself; findings fixed. Agentic system: Google's agents ('an agent harness that used Gemini to find vulnerabilities across the broader Chrome codebase'; Big Sleep, 'an AI vulnerability discovery agent'), beside Google's Chrome team (Other); motive Other for both."
           }
         },
         "action": {
@@ -24683,6 +24903,7 @@
         "actor": {
           "external": {
             "variety": [
+              "Agentic system",
               "Unaffiliated"
             ],
             "motive": [
@@ -24694,7 +24915,7 @@
             "region": [
               "000000"
             ],
-            "notes": "Anthropic, in collaboration with Mozilla, using Claude Opus 4.6; fixes shipped in Firefox 148."
+            "notes": "Anthropic, in collaboration with Mozilla, using Claude Opus 4.6; fixes shipped in Firefox 148. Agentic system: Claude Opus 4.6 (an 'autonomous audit'), beside Anthropic (Unaffiliated); motive Other for both."
           }
         },
         "action": {
@@ -25417,12 +25638,13 @@
         "actor": {
           "internal": {
             "variety": [
+              "Agentic system",
               "Other"
             ],
             "motive": [
               "Other"
             ],
-            "notes": "Mozilla's own team applying an early Claude Mythos Preview to Firefox, in collaboration with Anthropic ('we had the opportunity to apply an early version of Claude Mythos Preview to Firefox', Mozilla blog); fixes shipped in Firefox 150."
+            "notes": "Mozilla's own team applying an early Claude Mythos Preview to Firefox, in collaboration with Anthropic ('we had the opportunity to apply an early version of Claude Mythos Preview to Firefox', Mozilla blog); fixes shipped in Firefox 150. Agentic system: the early Claude Mythos Preview, beside Mozilla's team (Other); motive Other for both."
           }
         },
         "action": {

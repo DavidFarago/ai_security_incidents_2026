@@ -697,10 +697,11 @@ class Veris142(unittest.TestCase):
         self.assertTrue(has(self.run_v(), "agentic", msg="only variety", incident="DB-2026-019"))
 
     def test_misalignment_without_agentic_system_in_its_branch(self):
-        self.ext()["motive"] = ["Misalignment"]
+        self.ext()["variety"], self.ext()["motive"] = ["Other"], ["Misalignment"]
         self.assertTrue(has(self.run_v(), "agentic", msg="Misalignment", incident="DB-2026-019"))
 
     def test_inadequate_containment_without_agentic_system(self):
+        self.ext()["variety"] = ["Other"]
         incident(self.d, "DB-2026-019")["veris"]["action"]["error"] = {"variety": ["Inadequate containment"], "vector": ["Unknown"]}
         self.assertTrue(has(self.run_v(), "agentic", msg="Inadequate containment", incident="DB-2026-019"))
 
@@ -709,6 +710,21 @@ class Veris142(unittest.TestCase):
         e["variety"], e["motive"] = ["Agentic system", "Other"], ["Misalignment", "NA"]
         incident(self.d, "DB-2026-019")["veris"]["action"]["error"] = {"variety": ["Inadequate containment"], "vector": ["Unknown"]}
         self.assertFalse(has(self.run_v(), "agentic", incident="DB-2026-019"))
+
+    def test_agentic_actor_without_the_agent_role_passes(self):
+        # Methodology §5.1: the rule is one-way. An agent that found flaws and did no harm (e.g. an AI discovery campaign)
+        # is an agentic actor without the role "AI-agent-caused incident".
+        rec = incident(self.d, "DB-2026-019")
+        rec["veris"]["actor"]["external"]["variety"] = ["Agentic system", "Other"]
+        rec["report"]["ai_role"] = ["AI-enabled attacker"]
+        self.assertFalse(has(self.run_v(), "agentic-role", incident="DB-2026-019"))
+
+    def test_agent_role_needs_an_agentic_actor(self):
+        # Methodology §5.1: "AI-agent-caused incident" => an Agentic system actor. DR-2026-035 (a prompt-injected agent,
+        # coded as the attacked asset) has neither the role nor the variety.
+        rec = incident(self.d, "DR-2026-035")
+        rec["report"]["ai_role"] = rec["report"]["ai_role"] + ["AI-agent-caused incident"]
+        self.assertTrue(has(self.run_v(), "agentic-role", incident="DR-2026-035"))
 
     def test_every_record_has_the_schema_version(self):
         incident(self.d, "DB-2026-019")["veris"]["schema_version"] = "1.4.0"

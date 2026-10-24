@@ -17,15 +17,15 @@ Full VERIS + report-layer coding is in the companion `all_2026_ai_software_secur
 | # | Incident | Date | Category | AI's role (VERIS) | Source(s) | Observed | Potential |
 |---|----------|------|----------|-------------------|-----------|----------|-----------|
 | 1 | LiteLLM AI-gateway PyPI supply-chain compromise (TeamPCP) — terabytes of credentials from 2,500+ orgs | Mar 2026 | AI supply chain | AI system/harness attacked, AI-enabled attacker | VCDB | **Critical** | Critical |
-| 2 | Mexican government mega-breach via jailbroken Claude Code | Dec 2025 | AI-driven attack | AI-enabled attacker | ClaudeCode | **Critical** | Critical |
-| 3 | Autonomous offensive agent (CodeWall) breached McKinsey's Lilli AI platform via SQLi in 2 hours | Feb 2026 | AI-driven attack | AI-enabled attacker, AI system/harness attacked | AIID | High | Critical |
+| 2 | Mexican government mega-breach via jailbroken Claude Code | Dec 2025 | AI agent incident | AI-enabled attacker, AI-agent-caused incident | ClaudeCode | **Critical** | Critical |
+| 3 | Autonomous offensive agent (CodeWall) breached McKinsey's Lilli AI platform via SQLi in 2 hours | Feb 2026 | AI agent incident | AI-enabled attacker, AI system/harness attacked, AI-agent-caused incident | AIID | High | Critical |
 | 4 | Novo Nordisk breach — clinical-trial data AND internal AI model assets stolen (FulcrumSec) | Mar 2026 | Model theft | AI model/capability theft | VCDB | High | Critical |
 | 5 | 'Miasma' worm targeted AI coding agents via poisoned Microsoft/Azure repos (73 repos disabled) | Jun 2026 | AI supply chain | AI system/harness attacked, AI-enabled attacker | VCDB | High | Critical |
 | 6 | OpenAI evaluation agents escaped their sandbox via Artifactory 0-days and breached Hugging Face | Jul 2026 | AI-discovered vuln | AI-agent-caused incident, AI-discovered vulnerability, AI-enabled attacker | VCDB | High | Critical |
 | 7 | Hermes + OpenClaw multi-agent campaign against Taiwanese government systems | Jul 2026 | AI agent incident | AI-enabled attacker, AI-agent-caused incident | ClaudeCode+Grok | High | Critical |
-| 8 | Langflow RCEs actively exploited (CVE-2026-33017, CVE-2026-9198; CISA KEV) with AI-driven exploitation | 2026 | AI-driven attack | AI system/harness attacked, AI-enabled attacker | ClaudeCode | High | Critical |
-| 9 | AI-assisted intrusion against a Mexican municipal water utility with attempted IT->OT movement (Dragos) | Jan 2026 | AI-driven attack | AI-enabled attacker | ChatGPT | High | Critical |
-| 10 | Trivy double compromise - 'hackerbot-claw' autonomous Claude-powered attack bot + TeamPCP re-poisoning | Mar 2026 | AI supply chain | AI-enabled attacker, AI system/harness attacked | ClaudeCode | High | Critical |
+| 8 | Langflow RCEs actively exploited (CVE-2026-33017, CVE-2026-9198; CISA KEV) with AI-driven exploitation | 2026 | AI agent incident | AI system/harness attacked, AI-enabled attacker, AI-agent-caused incident | ClaudeCode | High | Critical |
+| 9 | AI-assisted intrusion against a Mexican municipal water utility with attempted IT->OT movement (Dragos) | Jan 2026 | AI agent incident | AI-enabled attacker, AI-agent-caused incident | ChatGPT | High | Critical |
+| 10 | Trivy double compromise - 'hackerbot-claw' autonomous Claude-powered attack bot + TeamPCP re-poisoning | Mar 2026 | AI supply chain | AI-enabled attacker, AI system/harness attacked, AI-agent-caused incident | ClaudeCode | High | Critical |
 | 11 | JADEPUFFER - first documented agentic ransomware (Langflow CVE-2025-3248 entry; destroyed a production database) | Jul 2026 | Agent destructive | AI-enabled attacker, AI-agent-caused incident | ClaudeCode | High | Critical |
 | 12 | CHAINDROP (keyv/cacheable) npm worm - 452 packages; persistence hooks planted in .claude/settings.json and .vscode/tasks.json (CVE-2026-45321) | Aug 2026 | AI supply chain | AI system/harness attacked, AI-enabled attacker | ClaudeCode | High | Critical |
 | 13 | Malicious ClawHub 'skills' weaponise OpenClaw agents (ClawHavoc) — AMOS stealer / credential theft | Feb 2026 | AI supply chain | AI system/harness attacked, AI-enabled attacker | AIID | High | High |

@@ -466,7 +466,8 @@ def check_veris_142(i, r):
     """Methodology §5.2: every live record states the VERIS schema version that the verifier checks it against, and the
     agentic values of VERIS 1.4.2 follow the validity rules of VERIS's bin/checkValidity.py: `Agentic system` is never
     the only variety of its actor branch; `Misalignment` as a motive needs `Agentic system` in the same branch; the error
-    variety `Inadequate containment` needs `Agentic system` in the internal or the external branch."""
+    variety `Inadequate containment` needs `Agentic system` in the internal or the external branch. The role "AI-agent-caused
+    incident" (report.ai_role) needs `Agentic system` in an actor (methodology §5.1)."""
     v, iid = i["veris"], i["id"]
     if v.get("schema_version") != lc.VERIS_SCHEMA_VERSION:
         r.add("B", "schema-version", f"veris.schema_version {v.get('schema_version')!r} != {lc.VERIS_SCHEMA_VERSION!r}, "
@@ -487,6 +488,11 @@ def check_veris_142(i, r):
     if "Inadequate containment" in error and not agentic & {"internal", "external"}:
         r.add("B", "agentic", "action.error.variety 'Inadequate containment' needs 'Agentic system' in actor.internal or "
               "actor.external", iid)
+    # Methodology §5.1: the role "AI-agent-caused incident" needs an AI agent among the actors (not the converse: an agent
+    # that found flaws without harm is an actor without the role).
+    if "AI-agent-caused incident" in (i["report"].get("ai_role") or []) and not agentic:
+        r.add("B", "agentic-role", "report.ai_role 'AI-agent-caused incident' needs 'Agentic system' in veris.actor "
+              "(methodology §5.1)", iid)
 
 VCDB_PINNED = r"https://github\.com/vz-risk/VCDB/blob/[0-9a-f]{40}/"
 
