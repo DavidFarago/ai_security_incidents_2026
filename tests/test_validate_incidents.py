@@ -1020,7 +1020,7 @@ class AdoptedCoding(unittest.TestCase):
 
 
 class DisclosureClasses(unittest.TestCase):
-    """Decision 14 item 3 (methodology §3.3): classes are derived per CVE link, and from ai_role for a record
+    """Methodology §3.3: classes are derived per CVE link, and from ai_role for a record
     without a validated CVE."""
 
     @staticmethod

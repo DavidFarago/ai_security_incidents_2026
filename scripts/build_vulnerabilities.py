@@ -268,8 +268,8 @@ def table_cve_incidents(links):
     rows = []
     for cve, ls in by_cve.items():
         ls.sort(key=lambda l: l["incident_id"])
-        best = max(ls, key=lambda l: RELATION_WEIGHT[l["relation"]])   # relations of all live records (handover O5)
-        first = ls[0]  # intrinsic fields are identical across incidents (checked in the design review)
+        best = max(ls, key=lambda l: RELATION_WEIGHT[l["relation"]])   # the strongest relation over both live arrays
+        first = ls[0]  # intrinsic fields are identical across incidents (a core check: per-CVE agreement)
         ib = ibss.get(cve)
         inc_ids, sub_ids = ids_by_array(ls)
         rows.append([cve, len(inc_ids), len(sub_ids), inc_ids, sub_ids, SEP.join(f"{l['incident_id']}:{l['relation']}" for l in ls),
@@ -731,7 +731,7 @@ def table_kev(links, action_rows):
 
 
 def table_incident_cna_cwes(d, links):
-    """Thread B input: per incident, the CNA CWEs of its in-play CVEs (§4.2 Rule 1 of the CWE handover)."""
+    """Input for the forthcoming CWE validation: per incident, the CNA CWEs of its in-play CVEs."""
     by_inc = defaultdict(list)
     for l in links:
         by_inc[l["incident_id"]].append(l)
@@ -950,7 +950,7 @@ def build_report(d, links, T) -> str:
         ["`upstream/`", "Raw CVE.org / GitHub Advisory / OSV records cached by `scripts/fetch_upstream.py` (manifest.json, LICENSES.md); never edited"],
         ["`cves_ai_discovered.csv`", "CVEs credited to AI systems / AI-assisted teams, with the CVE record's credits"],
         ["`non_cve_identifiers.csv`", "GHSA / MAL / PYSEC / vendor identifiers per live record"],
-        ["`incident_cna_cwes.csv`", "Per live record: CNA CWEs of its in-play CVEs beside the as-cited CWE — input for the CWE validation (Thread B)"],
+        ["`incident_cna_cwes.csv`", "Per live record: CNA CWEs of its in-play CVEs beside the as-cited CWE — input for the forthcoming CWE validation"],
         ["`cve_cwe_profile_by_segment.csv`, `cve_cwe_segment_totals.csv`", "CNA-assigned CWE frequency of the validated CVEs per segment and array, with IBSS over the records; segment totals"],
         ["`cwe_ibss_cve_path.csv`", "CNA-CWE IBSS via in-play CVEs — the CVE-path baseline the CWE ranking will be compared against"],
         ["`ai_written_radar_profile.csv`", "Vibe Security Radar contribution / cause profile of the `ai-written` CVEs"],
@@ -1196,7 +1196,7 @@ def build_report(d, links, T) -> str:
     A(md_table(["Record", "Identifier", "Scheme", "Kind", "Note"], [[mark(r[0]), r[1], r[2], r[3], r[4]] for r in T["non_cve"][1]]))
     A("")
 
-    # ---- Thread B input
+    # ---- input for the forthcoming CWE validation
     A("## Per-record CNA CWEs of in-play CVEs (input for the CWE validation)")
     A("")
     A("For every live record with validated CVEs: the CWEs the CNAs assigned to its in-play CVEs, beside the as-cited incident CWE "
@@ -1281,7 +1281,7 @@ def build_report(d, links, T) -> str:
     A("- Incident dates are free text for many incidents (e.g. `2026`, `Jun - Jul`), so the exploitation lag is only computed where an ISO date exists.")
     A("- Product strings are as recorded by the CNA (e.g. `BerriAI/litellm` vs `BerriAI/LiteLLM`, `n/a/n/a`); they are not normalised here.")
     A("- CVSS scores come from one source per CVE (usually the CNA); NVD may score differently. No EPSS / SSVC enrichment in this build.")
-    A("- The as-cited CWE column is unvalidated and known to be inconsistent in places; see `CWE_validation_handover.md`.")
+    A("- The as-cited CWE column is unvalidated and known to be inconsistent in places; the forthcoming CWE validation checks it.")
     A("")
     A("*These tables and this report are licensed under [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/), as the incident dataset they derive from; "
       "the upstream records they quote keep their own licences (`upstream/LICENSES.md`). Attribution: `README.md` of the repository, section License.*")

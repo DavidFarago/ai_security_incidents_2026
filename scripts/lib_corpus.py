@@ -51,8 +51,8 @@ RETIREMENT_REASONS = ["duplicate", "merged"]
 # caches from a pinned commit of VCDB's branch 1_4_2.
 VERIS_SCHEMA_VERSION = "1.4.2"
 
-# Incident registers (methodology §4.1: prefix DB when at least one source is one). Replaced by
-# sources_catalog[...].source_class once that field exists (automate_sourcing_handover.md §10, decision 2).
+# Incident registers (methodology §4.1: prefix DB when at least one source is one). A planned field
+# sources_catalog[...].source_class will replace this set.
 REGISTER_SOURCES = {"incidentdatabase.ai_20260824_ai_incidents_2026.xlsx", "incidentdatabase.ai", "vz-risk/VCDB"}
 
 # Cached per-identifier sources: sub-directory -> {stem: record}.
@@ -224,7 +224,7 @@ def link_class(relation: str, ai_role) -> str | None:
 
 
 def disclosure_classes(rec: dict) -> set:
-    """The §3.3 classes of a record (decision 14): one per CVE link (link_class). A record without a validated CVE
+    """The classes of a record (methodology §3.3): one per CVE link (link_class). A record without a validated CVE
     takes them from ai_role: 'AI-generated weakness' gives AI-written, 'AI-discovered vulnerability' AI-discovered,
     and a record with neither gets AI-stack."""
     roles = rec["report"].get("ai_role") or []
@@ -239,7 +239,7 @@ def disclosure_classes(rec: dict) -> set:
 def link_classes(rec: dict, relation: str) -> set:
     """The classes through which one CVE link of a record enters a score: the link's own class (link_class), or, for a
     link without one, the record's classes (disclosure_classes). Only the descriptive segment profile counts such a
-    link, a `related` one (automate_sourcing_handover.md §5.6); scores count in-play links only."""
+    link, a `related` one; scores count in-play links only (methodology §3.3, "Scores")."""
     k = link_class(relation, rec["report"].get("ai_role"))
     return {k} if k else disclosure_classes(rec)
 
@@ -258,9 +258,9 @@ def ibss(contribs, weights: dict = SEV_WEIGHT) -> Score:
     A counted incident (array `incidents`) adds its weights once, however many of its contributions reach the entity.
     A sub-threshold record adds nothing on its own: per class, the entity gets the highest observed weight and,
     separately, the highest potential weight among the sub-threshold contributions of that class. A contribution enters
-    every class it names; one without a class raises ValueError. Thread B passes lc.disclosure_classes(rec) as the
-    classes of an analyst CWE (report.weaknesses[].cwe) and, for its linear sensitivity score, the weights 1 to 5 as
-    `weights`.
+    every class it names; one without a class raises ValueError. The planned CWE ranking passes
+    lc.disclosure_classes(rec) as the classes of an analyst CWE (report.weaknesses[].cwe) and, for its linear
+    sensitivity score, the weights 1 to 5 as `weights`.
     """
     counted, best = {}, {}
     for array, rid, observed, potential, classes in contribs:

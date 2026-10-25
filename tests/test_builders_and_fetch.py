@@ -78,7 +78,7 @@ COUNTED, SUB = "incidents", "sub_threshold_incidents"
 
 
 class Ibss(unittest.TestCase):
-    """lc.ibss, the per-entity score of methodology §3.3 "Scores"; adversarial examples of the step-2c plan."""
+    """lc.ibss, the per-entity score of methodology §3.3 "Scores", with adversarial examples."""
 
     def test_counted_record_adds_once(self):
         # One counted incident reaches a CWE through three CVEs.
@@ -106,7 +106,7 @@ class Ibss(unittest.TestCase):
         self.assertEqual((s.obs, s.pot), (4, 16))
 
     def test_analyst_path_and_cve_path(self):
-        # Thread B: an analyst CWE (report.weaknesses[].cwe) counts under all classes of its record.
+        # The planned CWE ranking: an analyst CWE (report.weaknesses[].cwe) counts under all classes of its record.
         counted = lc.ibss([(COUNTED, "DB-2026-001", "High", "High", {"AI-stack"}),
                            (COUNTED, "DB-2026-001", "High", "High", {"AI-stack", "AI-discovered"})])
         self.assertEqual((counted.obs, counted.pot), (8, 8))
@@ -208,7 +208,7 @@ class ActionList(unittest.TestCase):
 
     def test_order_by_ibss_potential_then_cvss(self):
         # The finder is no triage signal: a `discovered` CVE ranks with `self-vulnerability` ones, and IBSS potential
-        # orders before CVSS (automate_sourcing_handover.md §5.8 item 5).
+        # orders before CVSS (the triage order stated in the action list of vulnerabilities/README.md).
         d = {"incidents": [one_cve_record("DR-2026-001", "High", "CVE-2000-0002", "self-vulnerability", 9.8),
                            one_cve_record("DR-2026-002", "Critical", "CVE-2000-0001", "discovered", 5.0),
                            one_cve_record("DR-2026-003", "High", "CVE-2000-0003", "self-vulnerability", 7.0)]}

@@ -103,7 +103,7 @@ Who should read what: vulnerability management → *Action list* and *KEV CVEs*;
 | `upstream/` | Raw CVE.org / GitHub Advisory / OSV records cached by `scripts/fetch_upstream.py` (manifest.json, LICENSES.md); never edited |
 | `cves_ai_discovered.csv` | CVEs credited to AI systems / AI-assisted teams, with the CVE record's credits |
 | `non_cve_identifiers.csv` | GHSA / MAL / PYSEC / vendor identifiers per live record |
-| `incident_cna_cwes.csv` | Per live record: CNA CWEs of its in-play CVEs beside the as-cited CWE — input for the CWE validation (Thread B) |
+| `incident_cna_cwes.csv` | Per live record: CNA CWEs of its in-play CVEs beside the as-cited CWE — input for the forthcoming CWE validation |
 | `cve_cwe_profile_by_segment.csv`, `cve_cwe_segment_totals.csv` | CNA-assigned CWE frequency of the validated CVEs per segment and array, with IBSS over the records; segment totals |
 | `cwe_ibss_cve_path.csv` | CNA-CWE IBSS via in-play CVEs — the CVE-path baseline the CWE ranking will be compared against |
 | `ai_written_radar_profile.csv` | Vibe Security Radar contribution / cause profile of the `ai-written` CVEs |
@@ -1434,6 +1434,6 @@ For every CNA-assigned CWE of an in-play CVE: the records it reaches through tho
 - Incident dates are free text for many incidents (e.g. `2026`, `Jun - Jul`), so the exploitation lag is only computed where an ISO date exists.
 - Product strings are as recorded by the CNA (e.g. `BerriAI/litellm` vs `BerriAI/LiteLLM`, `n/a/n/a`); they are not normalised here.
 - CVSS scores come from one source per CVE (usually the CNA); NVD may score differently. No EPSS / SSVC enrichment in this build.
-- The as-cited CWE column is unvalidated and known to be inconsistent in places; see `CWE_validation_handover.md`.
+- The as-cited CWE column is unvalidated and known to be inconsistent in places; the forthcoming CWE validation checks it.
 
 *These tables and this report are licensed under [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/), as the incident dataset they derive from; the upstream records they quote keep their own licences (`upstream/LICENSES.md`). Attribution: `README.md` of the repository, section License.*

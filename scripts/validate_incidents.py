@@ -732,7 +732,7 @@ def measure(d, r):
         if lc.is_cve_disclosure(i) and not (kev or lc.realized_harm(i)):
             fails.append(i["id"])
     r.measurements["disclosure_rule_fails"] = fails
-    # The sub-threshold population, reported beside the counts (decision 14 item 5). A record can have several classes.
+    # The sub-threshold population, reported beside the counts (methodology §3.3). A record can have several classes.
     sub = d.get("sub_threshold_incidents") or []
     r.measurements["sub_threshold_records"] = len(sub)
     r.measurements["sub_threshold_classes"] = dict(sorted(Counter(k for i in sub for k in lc.disclosure_classes(i)).items()))
