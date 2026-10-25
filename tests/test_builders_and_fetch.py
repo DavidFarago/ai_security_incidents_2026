@@ -62,15 +62,15 @@ class InPlay(unittest.TestCase):
         self.assertEqual(sorted(rels), sorted(lc.RELATION_ORDER))
 
     def test_discovered_cve_gets_ibss(self):
-        # CVE-2026-5194 (wolfSSL) is linked only by `discovered` (DR-2026-058).
+        # CVE-2026-5194 (wolfSSL) is linked only by `discovered` (2026-058).
         self.assertIn("CVE-2026-5194", bv.ibss_per_cve(bv.build_links(CORPUS)))
 
     def test_toolkit_and_related_never_count(self):
         self.assertFalse({"toolkit", "related"} & lc.IN_PLAY)
 
     def test_firefox_rollups_are_ai_discovered(self):
-        # DR-2026-095 is a discovery campaign: Mozilla shipped the Claude Mythos Preview finds in three rollup CVEs.
-        rec = next(i for i in lc.records(CORPUS) if i["id"] == "DR-2026-095")
+        # 2026-095 is a discovery campaign: Mozilla shipped the Claude Mythos Preview finds in three rollup CVEs.
+        rec = next(i for i in lc.records(CORPUS) if i["id"] == "2026-095")
         self.assertEqual(lc.disclosure_classes(rec), {"AI-discovered"})
 
 
@@ -82,74 +82,74 @@ class Ibss(unittest.TestCase):
 
     def test_counted_record_adds_once(self):
         # One counted incident reaches a CWE through three CVEs.
-        s = lc.ibss([(COUNTED, "DR-2026-001", "High", "Critical", {"AI-stack"})] * 3)
+        s = lc.ibss([(COUNTED, "2026-001", "High", "Critical", {"AI-stack"})] * 3)
         self.assertEqual((s.obs, s.pot), (8, 16))
 
     def test_one_weight_per_class(self):
         # A counted High/High record, two AI-discovered and two AI-stack sub-threshold records.
-        s = lc.ibss([(COUNTED, "DB-2026-001", "High", "High", set()),
-                     (SUB, "DR-2026-101", "Negligible", "High", {"AI-discovered"}),
-                     (SUB, "DR-2026-102", "Negligible", "Medium", {"AI-discovered"}),
-                     (SUB, "DR-2026-103", "Low", "Medium", {"AI-stack"}),
-                     (SUB, "DR-2026-104", "Negligible", "High", {"AI-stack"})])
+        s = lc.ibss([(COUNTED, "2026-001", "High", "High", set()),
+                     (SUB, "2026-101", "Negligible", "High", {"AI-discovered"}),
+                     (SUB, "2026-102", "Negligible", "Medium", {"AI-discovered"}),
+                     (SUB, "2026-103", "Low", "Medium", {"AI-stack"}),
+                     (SUB, "2026-104", "Negligible", "High", {"AI-stack"})])
         self.assertEqual((s.obs, s.pot), (8 + 1 + 2, 8 + 8 + 8))
         self.assertEqual(s.pot_tiers, ("High", "High", "High"))
 
     def test_maxima_from_different_records(self):
-        s = lc.ibss([(SUB, "DR-2026-101", "Low", "Medium", {"AI-stack"}),
-                     (SUB, "DR-2026-102", "Negligible", "High", {"AI-stack"})])
+        s = lc.ibss([(SUB, "2026-101", "Low", "Medium", {"AI-stack"}),
+                     (SUB, "2026-102", "Negligible", "High", {"AI-stack"})])
         self.assertEqual((s.obs, s.pot), (2, 8))
 
     def test_record_with_two_classes_enters_both(self):
-        s = lc.ibss([(SUB, "DR-2026-101", "Low", "High", {"AI-stack"}),
-                     (SUB, "DR-2026-101", "Low", "High", {"AI-discovered"})])
+        s = lc.ibss([(SUB, "2026-101", "Low", "High", {"AI-stack"}),
+                     (SUB, "2026-101", "Low", "High", {"AI-discovered"})])
         self.assertEqual((s.obs, s.pot), (4, 16))
 
     def test_analyst_path_and_cve_path(self):
         # The planned CWE ranking: an analyst CWE (report.weaknesses[].cwe) counts under all classes of its record.
-        counted = lc.ibss([(COUNTED, "DB-2026-001", "High", "High", {"AI-stack"}),
-                           (COUNTED, "DB-2026-001", "High", "High", {"AI-stack", "AI-discovered"})])
+        counted = lc.ibss([(COUNTED, "2026-001", "High", "High", {"AI-stack"}),
+                           (COUNTED, "2026-001", "High", "High", {"AI-stack", "AI-discovered"})])
         self.assertEqual((counted.obs, counted.pot), (8, 8))
-        sub = lc.ibss([(SUB, "DR-2026-101", "Negligible", "High", {"AI-stack"}),
-                       (SUB, "DR-2026-101", "Negligible", "High", {"AI-stack", "AI-discovered"})])
+        sub = lc.ibss([(SUB, "2026-101", "Negligible", "High", {"AI-stack"}),
+                       (SUB, "2026-101", "Negligible", "High", {"AI-stack", "AI-discovered"})])
         self.assertEqual((sub.obs, sub.pot), (2, 16))
 
     def test_sub_threshold_contribution_needs_a_class(self):
         with self.assertRaises(ValueError):
-            lc.ibss([(SUB, "DR-2026-101", "Low", "High", set())])
+            lc.ibss([(SUB, "2026-101", "Low", "High", set())])
 
     def test_weights_are_a_parameter(self):
         linear = {"Critical": 5, "High": 4, "Medium": 3, "Low": 2, "Negligible": 1}
-        s = lc.ibss([(COUNTED, "DB-2026-001", "High", "Critical", set()),
-                     (SUB, "DR-2026-101", "Low", "Medium", {"AI-stack"})], weights=linear)
+        s = lc.ibss([(COUNTED, "2026-001", "High", "Critical", set()),
+                     (SUB, "2026-101", "Low", "Medium", {"AI-stack"})], weights=linear)
         self.assertEqual((s.obs, s.pot), (4 + 2, 5 + 3))
 
     def test_related_link_does_not_count(self):
-        # CVE-2026-30623: DR-2026-059 (counted, self-vulnerability) and DR-2026-080 (sub-threshold, related).
+        # CVE-2026-30623: 2026-059 (counted, self-vulnerability) and 2026-080 (sub-threshold, related).
         d = CORPUS
-        rec = next(i for i in d["incidents"] if i["id"] == "DR-2026-059")
+        rec = next(i for i in d["incidents"] if i["id"] == "2026-059")
         want = (lc.SEV_WEIGHT[rec["report"]["observed_severity"]], lc.SEV_WEIGHT[rec["report"]["potential_severity"]])
         got = bv.ibss_per_cve(bv.build_links(d))["CVE-2026-30623"]
         self.assertEqual((got["obs"], got["pot"]), want)
 
     def test_class_cap_on_real_records(self):
-        # CVE-2026-54316 is in DR-2026-056 (potential Critical) and DR-2026-062 (High), both AI-stack disclosures.
+        # CVE-2026-54316 is in 2026-056 (potential Critical) and 2026-062 (High), both AI-stack disclosures.
         d = CORPUS
         self.assertEqual(bv.ibss_per_cve(bv.build_links(d))["CVE-2026-54316"]["pot"], 16)
 
 
 class LargestRecord(unittest.TestCase):
-    """The IBSS-vs-CVSS text names the weights that DR-2026-036's CVEs share, read from the data, not assumed."""
+    """The IBSS-vs-CVSS text names the weights that 2026-036's CVEs share, read from the data, not assumed."""
 
     def test_shared_pair_follows_the_record(self):
         d = json.loads(json.dumps(CORPUS))
-        arr = next(a for a in lc.LIVE_ARRAYS if any(i["id"] == "DR-2026-036" for i in d[a]))
-        rec = next(i for i in d[arr] if i["id"] == "DR-2026-036")
+        arr = next(a for a in lc.LIVE_ARRAYS if any(i["id"] == "2026-036" for i in d[a]))
+        rec = next(i for i in d[arr] if i["id"] == "2026-036")
         d[arr].remove(rec)
         rec["veris"]["security_incident"], rec["report"]["observed_severity"] = "Near miss", "Negligible"
         d["sub_threshold_incidents"].append(rec)
         obs, pot, n = bv.table_ibss_vs_cvss(bv.build_links(d))["stats"]["pair_036"]
-        # CVE-2026-59726 is also in play in the counted DR-2026-057, so its weights differ from the shared pair.
+        # CVE-2026-59726 is also in play in the counted 2026-057, so its weights differ from the shared pair.
         self.assertEqual((obs, pot, n), (1, 8, 160))
 
 
@@ -164,7 +164,7 @@ class BothArrays(unittest.TestCase):
         d = CORPUS
         row = next(r for r in self.rows(bv.table_cve_incidents(bv.build_links(d))) if r["cve"] == "CVE-2026-42824")
         self.assertEqual((row["incident_count"], row["sub_threshold_incident_count"], row["sub_threshold_incidents"]),
-                         (0, 1, ["DR-2026-081"]))
+                         (0, 1, ["2026-081"]))
 
     def expected(self, d):
         """Every CVE, every CNA CWE of an in-play link and every non-CVE identifier of the live records."""
@@ -178,7 +178,7 @@ class BothArrays(unittest.TestCase):
         return cves, cwes, non
 
     def test_coverage_in_memory(self):
-        # Sub-threshold records such as DR-2026-081 and DR-2026-088 (which alone carries CWE-121 and other CWEs of its
+        # Sub-threshold records such as 2026-081 and 2026-088 (which alone carries CWE-121 and other CWEs of its
         # AI-discovered CVEs) must reach every table.
         d = CORPUS
         links = bv.build_links(d)
@@ -209,9 +209,9 @@ class ActionList(unittest.TestCase):
     def test_order_by_ibss_potential_then_cvss(self):
         # The finder is no triage signal: a `discovered` CVE ranks with `self-vulnerability` ones, and IBSS potential
         # orders before CVSS (the triage order stated in the action list of vulnerabilities/README.md).
-        d = {"incidents": [one_cve_record("DR-2026-001", "High", "CVE-2000-0002", "self-vulnerability", 9.8),
-                           one_cve_record("DR-2026-002", "Critical", "CVE-2000-0001", "discovered", 5.0),
-                           one_cve_record("DR-2026-003", "High", "CVE-2000-0003", "self-vulnerability", 7.0)]}
+        d = {"incidents": [one_cve_record("2026-001", "High", "CVE-2000-0002", "self-vulnerability", 9.8),
+                           one_cve_record("2026-002", "Critical", "CVE-2000-0001", "discovered", 5.0),
+                           one_cve_record("2026-003", "High", "CVE-2000-0003", "self-vulnerability", 7.0)]}
         rows = [r for r in action_rows(d) if r["action"] == "patch"]
         self.assertEqual([(r["identifier"], r["ibss_potential"]) for r in rows],
                          [("CVE-2000-0001", 16), ("CVE-2000-0002", 8), ("CVE-2000-0003", 8)])
@@ -221,7 +221,7 @@ class Fetch(unittest.TestCase):
     def test_ids_include_sub_threshold_records(self):
         # Class A checks sub-threshold records too, so the fetcher must cache their CVEs (methodology §10.2).
         d = json.loads(fu.JSON_PATH.read_text(encoding="utf-8"))
-        self.assertIn("DR-2026-081", [i["id"] for i in d["sub_threshold_incidents"]])
+        self.assertIn("2026-081", [i["id"] for i in d["sub_threshold_incidents"]])
         self.assertIn("CVE-2026-42824", fu.ids_from_json(d)[0])
 
     def test_titleless_cves_from_cache(self):

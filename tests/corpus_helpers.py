@@ -75,9 +75,9 @@ def retire(d, iid, into, reason="duplicate"):
     return w
 
 
-def next_id(d, prefix="DR"):
+def next_id(d):
     """The ID that a new record gets: id_scheme.highest_assigned + 1 (methodology §4.1)."""
-    return f"{prefix}-2026-{d['id_scheme']['highest_assigned'] + 1:03d}"
+    return f"2026-{d['id_scheme']['highest_assigned'] + 1:03d}"
 
 
 def add_record(d, like, iid, array="incidents", bump=True):
@@ -99,7 +99,7 @@ def recount(d):
     cnt["by_observed_severity"] = {s: sum(1 for i in inc if i["report"]["observed_severity"] == s) for s in lib_corpus.SEVERITIES}
     cnt["by_status"] = {s: sum(1 for i in inc if i["veris"]["security_incident"] == s) for s in lib_corpus.STATUSES}
     cnt["citations_by_source"] = dict(Counter(s["source"] for i in inc for s in i["sources"]))
-    d["id_scheme"]["counts"] = {p: sum(1 for i in inc if i["id"].startswith(p + "-")) for p in ("DB", "DR")}
+    d["id_scheme"]["counts"] = {k: sum(1 for i in inc if i.get("source_kind") == k) for k in ("DB", "DR")}
     d["cve_validation"]["incidents_with_non_cve_identifiers_only"] = sum(
         1 for i in lib_corpus.records(d)
         if not i.get("validated_cve") and (i.get("validated_cve_details") or {}).get("non_cve_identifiers"))

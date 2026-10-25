@@ -7,6 +7,7 @@ Run: python3 -m unittest discover tests
 from __future__ import annotations
 
 import copy
+import re
 import sys
 import unittest
 from pathlib import Path
@@ -49,6 +50,11 @@ class RealCorpus(unittest.TestCase):
     def test_core_checks_pass(self):
         self.assertEqual(vi.core_checks(CORPUS), [])
 
+    def test_no_old_id_form(self):
+        # Methodology §4.1: IDs are 2026-nnn since the source kind moved into source_kind; no text keeps the old form.
+        old = re.findall(r"\bD[BR]-2026-\d{3}\b", lib_corpus.JSON_PATH.read_text(encoding="utf-8"))
+        self.assertEqual(old, [])
+
 
 class Mutations(unittest.TestCase):
     def setUp(self):
@@ -59,23 +65,23 @@ class Mutations(unittest.TestCase):
 
     # ---- Class A
     def test_wrong_cna(self):
-        link(self.d, "DR-2026-008", "CVE-2026-33017")["cna"] = "someone"
-        self.assertTrue(has(self.run_v(), "cna", cve="CVE-2026-33017", incident="DR-2026-008"))
+        link(self.d, "2026-008", "CVE-2026-33017")["cna"] = "someone"
+        self.assertTrue(has(self.run_v(), "cna", cve="CVE-2026-33017", incident="2026-008"))
 
     def test_wrong_published(self):
-        link(self.d, "DR-2026-008", "CVE-2026-33017")["published"] = "2020-01-01"
+        link(self.d, "2026-008", "CVE-2026-33017")["published"] = "2020-01-01"
         self.assertTrue(has(self.run_v(), "published", cve="CVE-2026-33017"))
 
     def test_wrong_product(self):
-        link(self.d, "DR-2026-008", "CVE-2026-33017")["product"] = "x/y"
+        link(self.d, "2026-008", "CVE-2026-33017")["product"] = "x/y"
         self.assertTrue(has(self.run_v(), "product", cve="CVE-2026-33017"))
 
     def test_wrong_title(self):
-        link(self.d, "DR-2026-008", "CVE-2026-33017")["title"] = "made up"
+        link(self.d, "2026-008", "CVE-2026-33017")["title"] = "made up"
         self.assertTrue(has(self.run_v(), "title", cve="CVE-2026-33017"))
 
     def test_cvss_score_not_in_any_container(self):
-        link(self.d, "DR-2026-008", "CVE-2026-33017")["cvss_score"] = 1.1
+        link(self.d, "2026-008", "CVE-2026-33017")["cvss_score"] = 1.1
         self.assertTrue(has(self.run_v(), "cvss", cve="CVE-2026-33017"))
 
     def test_cvss_version_and_score_from_different_entries(self):
@@ -86,7 +92,7 @@ class Mutations(unittest.TestCase):
         self.assertTrue(has(self.run_v(), "cvss", cve="CVE-2026-1979"))
 
     def test_cwe_not_in_upstream(self):
-        link(self.d, "DR-2026-008", "CVE-2026-33017")["cwe"] = ["CWE-1"]
+        link(self.d, "2026-008", "CVE-2026-33017")["cwe"] = ["CWE-1"]
         self.assertTrue(has(self.run_v(), "cwe", cve="CVE-2026-33017"))
 
     def test_upstream_rejected(self):
@@ -95,19 +101,19 @@ class Mutations(unittest.TestCase):
         self.assertTrue(has(self.run_v(up), "state", cve="CVE-2026-33017"))
 
     def test_kev_flag_for_non_kev_cve(self):
-        c = link(self.d, "DR-2026-008", "CVE-2026-21858")
+        c = link(self.d, "2026-008", "CVE-2026-21858")
         self.assertFalse(c["cisa_kev"])
         c["cisa_kev"], c["kev_date_added"] = True, "2026-01-01"
         self.assertTrue(has(self.run_v(), "cisa_kev", cve="CVE-2026-21858"))
 
     def test_kev_date_wrong(self):
-        c = link(self.d, "DR-2026-008", "CVE-2026-33017")
+        c = link(self.d, "2026-008", "CVE-2026-33017")
         self.assertTrue(c["cisa_kev"])
         c["kev_date_added"] = "2020-01-01"
         self.assertTrue(has(self.run_v(), "kev_date_added", cve="CVE-2026-33017"))
 
     def test_credit_type_wrong(self):
-        c = link(self.d, "DR-2026-085", "CVE-2026-55803")
+        c = link(self.d, "2026-085", "CVE-2026-55803")
         self.assertEqual(c["credits"][0], {"value": "Michael Maturi (michaelmaturi)", "type": "finder"})
         c["credits"][0]["type"] = "coordinator"
         self.assertTrue(has(self.run_v(), "credits", cve="CVE-2026-55803"))
@@ -118,18 +124,18 @@ class Mutations(unittest.TestCase):
         self.assertTrue(has(self.run_v(up), "credits", cve="CVE-2026-55803"))
 
     def test_credit_dropped(self):
-        c = link(self.d, "DR-2026-085", "CVE-2026-55803")
+        c = link(self.d, "2026-085", "CVE-2026-55803")
         c["credits"].pop()
         self.assertTrue(has(self.run_v(), "credits", cve="CVE-2026-55803"))
 
     def test_override_accepts_named_field_only(self):
-        c = link(self.d, "DR-2026-008", "CVE-2026-33017")
+        c = link(self.d, "2026-008", "CVE-2026-33017")
         c["cna"], c["published"] = "someone", "2020-01-01"
         c["overrides"] = {"cna": "test reason"}
         r = self.run_v()
         self.assertFalse(has(r, "cna", cve="CVE-2026-33017"))
         self.assertTrue(has(r, "published", cve="CVE-2026-33017"))
-        self.assertIn(("DR-2026-008", "CVE-2026-33017", "cna", "test reason"), r.overrides)
+        self.assertIn(("2026-008", "CVE-2026-33017", "cna", "test reason"), r.overrides)
 
     def test_titleless_cve_needs_cached_alias_lookup(self):
         up = copy.deepcopy(UPSTREAM)
@@ -139,42 +145,42 @@ class Mutations(unittest.TestCase):
 
     # ---- Class B
     def test_validated_cve_differs_from_details(self):
-        incident(self.d, "DR-2026-008")["validated_cve"].append("CVE-2000-0001")
-        self.assertTrue(has(self.run_v(), "validated-cve-set", incident="DR-2026-008"))
+        incident(self.d, "2026-008")["validated_cve"].append("CVE-2000-0001")
+        self.assertTrue(has(self.run_v(), "validated-cve-set", incident="2026-008"))
 
     def test_added_wrong(self):
-        incident(self.d, "DR-2026-008")["validated_cve_details"]["added"] = []
-        self.assertTrue(has(self.run_v(), "added", incident="DR-2026-008"))
+        incident(self.d, "2026-008")["validated_cve_details"]["added"] = []
+        self.assertTrue(has(self.run_v(), "added", incident="2026-008"))
 
     def test_in_original_wrong(self):
-        c = link(self.d, "DR-2026-008", "CVE-2026-33017")
+        c = link(self.d, "2026-008", "CVE-2026-33017")
         c["in_original"] = not c["in_original"]
-        self.assertTrue(has(self.run_v(), "in-original", incident="DR-2026-008"))
+        self.assertTrue(has(self.run_v(), "in-original", incident="2026-008"))
 
     def test_non_exploited_cve_in_veris_action(self):
-        i = incident(self.d, "DR-2026-008")
+        i = incident(self.d, "2026-008")
         i["veris"]["action"].setdefault("hacking", {})["cve"] = "CVE-2026-33017; CVE-2026-21858"  # 2nd is attempted
-        self.assertTrue(has(self.run_v(), "veris-action-cve", incident="DR-2026-008"))
+        self.assertTrue(has(self.run_v(), "veris-action-cve", incident="2026-008"))
 
     def test_exploited_cve_missing_from_veris_action(self):
-        i = incident(self.d, "DR-2026-008")
+        i = incident(self.d, "2026-008")
         i["veris"]["action"]["hacking"]["cve"] = "CVE-2026-33017"
-        self.assertTrue(has(self.run_v(), "veris-action-cve", incident="DR-2026-008"))
+        self.assertTrue(has(self.run_v(), "veris-action-cve", incident="2026-008"))
 
     def test_unknown_relation(self):
-        link(self.d, "DR-2026-008", "CVE-2026-33017")["relation"] = "primary"
+        link(self.d, "2026-008", "CVE-2026-33017")["relation"] = "primary"
         self.assertTrue(has(self.run_v(), "relation", cve="CVE-2026-33017"))
 
     def test_kev_date_without_flag(self):
-        c = link(self.d, "DR-2026-008", "CVE-2026-21858")
+        c = link(self.d, "2026-008", "CVE-2026-21858")
         c["kev_date_added"] = "2026-01-01"
         self.assertTrue(has(self.run_v(), "kev-date-iff-flag", cve="CVE-2026-21858"))
 
     def test_intrinsic_fields_differ_between_incidents(self):
-        # CVE-2026-33634 is cited by DB-2026-001 and DR-2026-010.
-        link(self.d, "DR-2026-010", "CVE-2026-33634")["note"] = "x"  # note is per link: allowed
+        # CVE-2026-33634 is cited by 2026-001 and 2026-010.
+        link(self.d, "2026-010", "CVE-2026-33634")["note"] = "x"  # note is per link: allowed
         self.assertFalse(has(self.run_v(), "intrinsic-agree", cve="CVE-2026-33634"))
-        link(self.d, "DR-2026-010", "CVE-2026-33634")["cna"] = "someone"
+        link(self.d, "2026-010", "CVE-2026-33634")["cna"] = "someone"
         self.assertTrue(has(self.run_v(), "intrinsic-agree", cve="CVE-2026-33634"))
 
     def test_count_by_status_wrong(self):
@@ -183,27 +189,27 @@ class Mutations(unittest.TestCase):
 
     def test_ranking_table_mismatch(self):
         self.d["ranking_table"][0]["observed"] = "Low"
-        self.assertTrue(has(self.run_v(), "ranking-table", incident="DB-2026-001"))
+        self.assertTrue(has(self.run_v(), "ranking-table", incident="2026-001"))
 
     # ---- methodology §4.2, §4.3: the motive of a deliberate action; a false positive has no effect
     def test_deliberate_action_needs_a_motive(self):
-        # DR-2026-008 has a hacking action; motive NA means an unintentional action.
-        incident(self.d, "DR-2026-008")["veris"]["actor"]["external"]["motive"] = ["NA"]
-        self.assertTrue(has(self.run_v(), "motive", incident="DR-2026-008"))
+        # 2026-008 has a hacking action; motive NA means an unintentional action.
+        incident(self.d, "2026-008")["veris"]["actor"]["external"]["motive"] = ["NA"]
+        self.assertTrue(has(self.run_v(), "motive", incident="2026-008"))
 
     def test_error_with_motive_na_passes(self):
-        # DB-2026-026 has only an error action, and an error is unintentional.
-        self.assertEqual(incident(self.d, "DB-2026-026")["veris"]["action"].keys(), {"error"})
-        self.assertFalse(has(self.run_v(), "motive", incident="DB-2026-026"))
+        # 2026-026 has only an error action, and an error is unintentional.
+        self.assertEqual(incident(self.d, "2026-026")["veris"]["action"].keys(), {"error"})
+        self.assertFalse(has(self.run_v(), "motive", incident="2026-026"))
 
     def test_false_positive_with_effect(self):
-        incident(self.d, "DB-2026-096")["veris"]["attribute"]["confidentiality"]["data_disclosure"] = "Potentially"
-        self.assertTrue(has(self.run_v(), "status-effect", msg="False positive", incident="DB-2026-096"))
+        incident(self.d, "2026-096")["veris"]["attribute"]["confidentiality"]["data_disclosure"] = "Potentially"
+        self.assertTrue(has(self.run_v(), "status-effect", msg="False positive", incident="2026-096"))
 
     def test_false_positive_with_ai_role(self):
         # Methodology §5.1: the roles describe AI's part in a security incident, and a false positive is none.
-        incident(self.d, "DB-2026-096")["report"]["ai_role"] = ["AI security control"]
-        self.assertTrue(has(self.run_v(), "false-positive-role", incident="DB-2026-096"))
+        incident(self.d, "2026-096")["report"]["ai_role"] = ["AI security control"]
+        self.assertTrue(has(self.run_v(), "false-positive-role", incident="2026-096"))
 
     def test_false_positives_have_no_ai_role(self):
         self.assertFalse(has(self.run_v(), "false-positive-role"))
@@ -213,10 +219,10 @@ class Mutations(unittest.TestCase):
         for k in ("observed_severity", "potential_severity"):
             with self.subTest(k=k):
                 d = copy.deepcopy(CORPUS)
-                rep = incident(d, "DB-2026-099")["report"]
+                rep = incident(d, "2026-099")["report"]
                 rep["observed_severity"] = rep["potential_severity"] = "Negligible"
                 rep[k] = "Low"
-                self.assertTrue(has(vi.validate(d, UPSTREAM), "false-positive-severity", msg=k, incident="DB-2026-099"))
+                self.assertTrue(has(vi.validate(d, UPSTREAM), "false-positive-severity", msg=k, incident="2026-099"))
 
     def test_false_positives_are_negligible(self):
         self.assertFalse(has(self.run_v(), "false-positive-severity"))
@@ -227,35 +233,35 @@ class Mutations(unittest.TestCase):
         incident(self.d, iid)["veris"]["action"]["malware"] = {"variety": ["Trojan"], "vector": ["Software update"]}
 
     def test_several_action_categories_need_an_event_chain(self):
-        self.add_malware("DR-2026-008")
-        incident(self.d, "DR-2026-008")["veris"].pop("plus", None)
-        self.assertTrue(has(self.run_v(), "event-chain", msg="no veris.plus.event_chain", incident="DR-2026-008"))
+        self.add_malware("2026-008")
+        incident(self.d, "2026-008")["veris"].pop("plus", None)
+        self.assertTrue(has(self.run_v(), "event-chain", msg="no veris.plus.event_chain", incident="2026-008"))
 
     def test_event_chain_step_without_counterpart(self):
-        # DR-2026-008 has only an external actor; a step by an internal actor has no counterpart.
-        self.add_malware("DR-2026-008")
-        incident(self.d, "DR-2026-008")["veris"]["plus"] = {"event_chain": [
+        # 2026-008 has only an external actor; a step by an internal actor has no counterpart.
+        self.add_malware("2026-008")
+        incident(self.d, "2026-008")["veris"]["plus"] = {"event_chain": [
             {"actor": "int", "action": "hak", "asset": "srv", "attribute": "cp", "summary": "a"},
             {"actor": "ext", "action": "mal", "asset": "srv", "attribute": "cp", "summary": "b"}]}
-        self.assertTrue(has(self.run_v(), "event-chain", msg="step 1: actor 'int'", incident="DR-2026-008"))
+        self.assertTrue(has(self.run_v(), "event-chain", msg="step 1: actor 'int'", incident="2026-008"))
 
     def test_event_chain_must_cover_every_action_category(self):
-        self.add_malware("DR-2026-008")
-        incident(self.d, "DR-2026-008")["veris"]["plus"] = {"event_chain": [
+        self.add_malware("2026-008")
+        incident(self.d, "2026-008")["veris"]["plus"] = {"event_chain": [
             {"actor": "ext", "action": "hak", "asset": "srv", "attribute": "cp", "summary": "a"},
             {"actor": "ext", "action": "unk", "asset": "unk", "attribute": "unk", "summary": "b"}]}
         r = self.run_v()
-        self.assertTrue(has(r, "event-chain", msg="malware appears in no step", incident="DR-2026-008"))
-        self.assertFalse(has(r, "event-chain", msg="step 2", incident="DR-2026-008"), "unk is always allowed")
+        self.assertTrue(has(r, "event-chain", msg="malware appears in no step", incident="2026-008"))
+        self.assertFalse(has(r, "event-chain", msg="step 2", incident="2026-008"), "unk is always allowed")
 
     def test_misuse_needs_a_trusted_actor(self):
-        incident(self.d, "DR-2026-008")["veris"]["action"]["misuse"] = {"variety": ["Privilege abuse"], "vector": ["Remote access"]}
-        self.assertTrue(has(self.run_v(), "misuse-actor", incident="DR-2026-008"))
+        incident(self.d, "2026-008")["veris"]["action"]["misuse"] = {"variety": ["Privilege abuse"], "vector": ["Remote access"]}
+        self.assertTrue(has(self.run_v(), "misuse-actor", incident="2026-008"))
 
     # ---- ranking_table order (methodology §9.3): observed desc, potential desc, ID asc
     def add_counted_copy(self, like):
         """A copy of a counted record with the next ID, and a copy of its ranking_table row (not yet placed)."""
-        new = add_record(self.d, like, next_id(self.d, like[:2]))
+        new = add_record(self.d, like, next_id(self.d))
         row = dict(next(x for x in self.d["ranking_table"] if x["id"] == like), id=new["id"])
         return new, row
 
@@ -264,80 +270,96 @@ class Mutations(unittest.TestCase):
         self.assertTrue(has(self.run_v(), "ranking-table", msg="ranking order"))
 
     def test_new_record_at_its_ranking_position(self):
-        # DB-2026-001 is Critical/Critical; its copy belongs after the last Critical/Critical row, not at the end.
-        new, row = self.add_counted_copy("DB-2026-001")
+        # 2026-001 is Critical/Critical; its copy belongs after the last Critical/Critical row, not at the end.
+        new, row = self.add_counted_copy("2026-001")
         rows = self.d["ranking_table"]
         last_tie = max(k for k, x in enumerate(rows) if (x["observed"], x["potential"]) == (row["observed"], row["potential"]))
         rows.insert(last_tie + 1, row)
         self.assertFalse(has(self.run_v(), "ranking-table"))
 
     def test_new_record_in_id_position_fails(self):
-        new, row = self.add_counted_copy("DB-2026-001")
+        new, row = self.add_counted_copy("2026-001")
         self.d["ranking_table"].append(row)
         self.assertTrue(has(self.run_v(), "ranking-table", msg="ranking order"))
 
-    def test_db_prefix_without_register_source(self):
-        i = incident(self.d, "DB-2026-001")
+    # ---- methodology §4.1: the ID 2026-nnn and the field source_kind
+    def test_db_kind_without_register_source(self):
+        i = incident(self.d, "2026-001")
         for s in i["sources"]:
             s["source"] = "Grok_DeepResearch_ai_incidents_2026.md"
-        self.assertTrue(has(self.run_v(), "id-prefix", incident="DB-2026-001"))
+        self.assertTrue(has(self.run_v(), "source-kind", msg="DR", incident="2026-001"))
+
+    def test_source_kind_missing(self):
+        del incident(self.d, "2026-081")["source_kind"]
+        self.assertTrue(has(self.run_v(), "source-kind", incident="2026-081"))
+
+    def test_source_kind_outside_the_vocabulary(self):
+        incident(self.d, "2026-081")["source_kind"] = "DX"
+        self.assertTrue(has(self.run_v(), "source-kind", incident="2026-081"))
+
+    def test_old_id_form_is_malformed(self):
+        for bad in ("DR-2026-081", "2026-81", "2026-0810"):
+            with self.subTest(bad=bad):
+                d = copy.deepcopy(CORPUS)
+                sub(d, "2026-081")["id"] = bad
+                self.assertTrue(has(vi.validate(d, UPSTREAM), "id-format", incident=bad))
 
     def test_duplicate_number(self):
         self.d["incidents"][1]["id"] = self.d["incidents"][0]["id"]
         self.assertTrue(has(self.run_v(), "id-unique"))
 
     def test_source_not_in_catalog(self):
-        incident(self.d, "DB-2026-001")["sources"][0]["source"] = "unknown.md"
-        self.assertTrue(has(self.run_v(), "source-catalog", incident="DB-2026-001"))
+        incident(self.d, "2026-001")["sources"][0]["source"] = "unknown.md"
+        self.assertTrue(has(self.run_v(), "source-catalog", incident="2026-001"))
 
     def test_veris_schema_violation(self):
-        i = incident(self.d, "DB-2026-001")
+        i = incident(self.d, "2026-001")
         i["veris"]["actor"]["external"]["variety"] = ["Martian"]
-        self.assertTrue(has(self.run_v(), "veris-schema", incident="DB-2026-001"))
+        self.assertTrue(has(self.run_v(), "veris-schema", incident="2026-001"))
 
     def test_confirmed_without_effect(self):
-        # Methodology §3.1: Confirmed needs an affected asset; DB-2026-016 has only data_disclosure "Yes".
-        conf = incident(self.d, "DB-2026-016")["veris"]["attribute"]["confidentiality"]
+        # Methodology §3.1: Confirmed needs an affected asset; 2026-016 has only data_disclosure "Yes".
+        conf = incident(self.d, "2026-016")["veris"]["attribute"]["confidentiality"]
         self.assertEqual(conf["data_disclosure"], "Yes")
         conf["data_disclosure"] = "No"
-        self.assertTrue(has(self.run_v(), "status-effect", incident="DB-2026-016"))
+        self.assertTrue(has(self.run_v(), "status-effect", incident="2026-016"))
 
     def test_unknown_disclosure_counts_as_effect(self):
-        incident(self.d, "DB-2026-016")["veris"]["attribute"]["confidentiality"]["data_disclosure"] = "Unknown"
-        self.assertFalse(has(self.run_v(), "status-effect", incident="DB-2026-016"))
+        incident(self.d, "2026-016")["veris"]["attribute"]["confidentiality"]["data_disclosure"] = "Unknown"
+        self.assertFalse(has(self.run_v(), "status-effect", incident="2026-016"))
 
     def test_core_checks_numbering_gap(self):
         self.d["incidents"].pop(5)
         self.assertTrue(vi.core_checks(self.d))
 
     def test_malformed_id_is_reported_not_raised(self):
-        self.d["incidents"][0]["id"] = "DB-2026-01a"
+        self.d["incidents"][0]["id"] = "2026-01a"
         r = self.run_v()   # must not raise ValueError
-        self.assertTrue(has(r, "id-format", incident="DB-2026-01a"))
+        self.assertTrue(has(r, "id-format", incident="2026-01a"))
         self.assertTrue(any(f.check == "id-format" for f in vi.core_checks(self.d)))
         self.assertFalse(has(r, "numbering"), "numbering must be skipped, not reported, while an ID is malformed")
 
     def test_malformed_id_stops_builder_with_message(self):
         import build_incidents_report as bir
-        self.d["incidents"][0]["id"] = "DB-2026-01a"
+        self.d["incidents"][0]["id"] = "2026-01a"
         with self.assertRaises(SystemExit) as cm:
             bir.render(self.d)
-        self.assertIn("DB-2026-01a", str(cm.exception.code))
+        self.assertIn("2026-01a", str(cm.exception.code))
 
     def test_relation_containing_order_is_filed_as_relation(self):
-        link(self.d, "DR-2026-008", "CVE-2026-33017")["relation"] = "border"
+        link(self.d, "2026-008", "CVE-2026-33017")["relation"] = "border"
         r = self.run_v()
-        self.assertTrue(has(r, "relation", incident="DR-2026-008", cve="CVE-2026-33017"))
+        self.assertTrue(has(r, "relation", incident="2026-008", cve="CVE-2026-33017"))
         self.assertFalse(has(r, "numbering"))
 
     def test_credits_missing_although_record_has_them(self):
-        del link(self.d, "DR-2026-085", "CVE-2026-55803")["credits"]
+        del link(self.d, "2026-085", "CVE-2026-55803")["credits"]
         self.assertTrue(has(self.run_v(), "credits", cve="CVE-2026-55803"))
 
     def test_related_only_incident_is_no_disclosure(self):
-        # DR-2026-025 has only 'related' CVEs; with Negligible harm it would fail (a) and (c), but it is no disclosure.
-        incident(self.d, "DR-2026-025")["report"]["observed_severity"] = "Negligible"
-        self.assertNotIn("DR-2026-025", self.run_v().measurements["disclosure_rule_fails"])
+        # 2026-025 has only 'related' CVEs; with Negligible harm it would fail (a) and (c), but it is no disclosure.
+        incident(self.d, "2026-025")["report"]["observed_severity"] = "Negligible"
+        self.assertNotIn("2026-025", self.run_v().measurements["disclosure_rule_fails"])
 
 
 
@@ -365,11 +387,11 @@ class Numbering(unittest.TestCase):
 
     def test_new_record_above_highest_assigned(self):
         iid = next_id(self.d)
-        add_record(self.d, "DR-2026-081", iid, bump=False)
+        add_record(self.d, "2026-081", iid, bump=False)
         self.assertTrue(any(f"above highest_assigned {iid[-3:]}" in f.message for f in self.numbering()))
 
     def test_new_record_with_bump_is_clean(self):
-        add_record(self.d, "DR-2026-081", next_id(self.d), "sub_threshold_incidents")
+        add_record(self.d, "2026-081", next_id(self.d), "sub_threshold_incidents")
         self.assertEqual(self.numbering(), [])
 
     def test_highest_assigned_missing(self):
@@ -381,12 +403,12 @@ class Numbering(unittest.TestCase):
         self.assertTrue(any("id_scheme.highest_assigned" in f.message for f in self.numbering()))
 
     def test_number_in_two_arrays_is_doubled(self):
-        self.d["incidents"].append(copy.deepcopy(sub(self.d, "DR-2026-081")))
+        self.d["incidents"].append(copy.deepcopy(sub(self.d, "2026-081")))
         self.assertTrue(any("doubled 081" in f.message for f in self.numbering()))
 
     def test_stale_folded_array_shows_as_missing(self):
         # Records in an array the verifier does not know are invisible, so their numbers are missing.
-        self.d["folded_incidents"] = [take(self.d, "DR-2026-081")]
+        self.d["folded_incidents"] = [take(self.d, "2026-081")]
         self.assertTrue(any("missing 081" in f.message for f in self.numbering()))
 
     def test_sub_threshold_in_ascending_order(self):
@@ -405,42 +427,42 @@ class SubThreshold(unittest.TestCase):
         return vi.validate(self.d, up)
 
     def test_move_keeps_numbering(self):
-        promote(self.d, "DR-2026-081")
+        promote(self.d, "2026-081")
         self.assertEqual(vi.core_checks(self.d), [])
-        move(self.d, "DR-2026-081")
+        move(self.d, "2026-081")
         self.assertEqual(vi.core_checks(self.d), [])
 
     # ---- sub-threshold records are verified like counted ones
     def test_class_a(self):
-        c = next(c for c in sub(self.d, "DR-2026-085")["validated_cve_details"]["cves"] if c["cve"] == "CVE-2026-55803")
+        c = next(c for c in sub(self.d, "2026-085")["validated_cve_details"]["cves"] if c["cve"] == "CVE-2026-55803")
         c["credits"][0]["type"] = "coordinator"
-        self.assertTrue(has(self.run_v(), "credits", incident="DR-2026-085", cve="CVE-2026-55803"))
+        self.assertTrue(has(self.run_v(), "credits", incident="2026-085", cve="CVE-2026-55803"))
 
     def test_veris_schema(self):
-        sub(self.d, "DR-2026-081")["veris"]["confidence"] = "Martian"
-        self.assertTrue(has(self.run_v(), "veris-schema", incident="DR-2026-081"))
+        sub(self.d, "2026-081")["veris"]["confidence"] = "Martian"
+        self.assertTrue(has(self.run_v(), "veris-schema", incident="2026-081"))
 
     def test_status_effect(self):
-        sub(self.d, "DR-2026-081")["veris"]["security_incident"] = "Confirmed"
-        self.assertTrue(has(self.run_v(), "status-effect", incident="DR-2026-081"))
+        sub(self.d, "2026-081")["veris"]["security_incident"] = "Confirmed"
+        self.assertTrue(has(self.run_v(), "status-effect", incident="2026-081"))
 
     def test_validated_cve_set(self):
-        sub(self.d, "DR-2026-081")["validated_cve"].append("CVE-2000-0001")
-        self.assertTrue(has(self.run_v(), "validated-cve-set", incident="DR-2026-081"))
+        sub(self.d, "2026-081")["validated_cve"].append("CVE-2000-0001")
+        self.assertTrue(has(self.run_v(), "validated-cve-set", incident="2026-081"))
 
     def test_id_format(self):
-        sub(self.d, "DR-2026-081")["id"] = "DR-2026-08x"
-        self.assertTrue(has(self.run_v(), "id-format", incident="DR-2026-08x"))
+        sub(self.d, "2026-081")["id"] = "2026-08x"
+        self.assertTrue(has(self.run_v(), "id-format", incident="2026-08x"))
 
     # ---- counts cover incidents; cve_validation covers every live record
     def test_counts_cover_incidents_only(self):
-        promote(self.d, "DR-2026-081")
+        promote(self.d, "2026-081")
         self.assertTrue(has(self.run_v(), "counts", msg="counts.total_incidents"))
 
     def test_cve_validation_covers_sub_threshold_records(self):
         # A move changes no cve_validation value, because it covers both live arrays.
-        promote(self.d, "DR-2026-062")
-        promote(self.d, "DR-2026-089")
+        promote(self.d, "2026-062")
+        promote(self.d, "2026-089")
         recount(self.d)
         bad = [f for f in self.run_v().errors if f.check == "counts" and f.message.startswith("cve_validation.")]
         self.assertEqual(bad, [], "\n".join(map(str, bad)))
@@ -453,49 +475,49 @@ class SubThreshold(unittest.TestCase):
 
     def test_kev_listed_cve_must_be_promoted(self):
         up = self.kev_listed("CVE-2026-42824")
-        c = sub(self.d, "DR-2026-081")["validated_cve_details"]["cves"][0]
+        c = sub(self.d, "2026-081")["validated_cve_details"]["cves"][0]
         c["cisa_kev"], c["kev_date_added"] = True, "2026-10-01"
         r = self.run_v(up)
-        self.assertTrue(has(r, "sub-threshold", msg="(a)", incident="DR-2026-081"))
-        self.assertFalse(has(r, "cisa_kev", incident="DR-2026-081"))
+        self.assertTrue(has(r, "sub-threshold", msg="(a)", incident="2026-081"))
+        self.assertFalse(has(r, "cisa_kev", incident="2026-081"))
 
     def test_kev_flag_cannot_dodge_promotion(self):
         # Class A forces the copied flag: leaving cisa_kev false after a KEV refresh is an error of its own.
         up = self.kev_listed("CVE-2026-42824")
-        self.assertTrue(has(self.run_v(up), "cisa_kev", incident="DR-2026-081", cve="CVE-2026-42824"))
+        self.assertTrue(has(self.run_v(up), "cisa_kev", incident="2026-081", cve="CVE-2026-42824"))
 
     def test_realized_harm_must_be_promoted(self):
-        rec = sub(self.d, "DR-2026-081")
+        rec = sub(self.d, "2026-081")
         rec["veris"]["security_incident"], rec["report"]["observed_severity"] = "Confirmed", "Low"
         rec["veris"]["attribute"]["confidentiality"]["data_disclosure"] = "Yes"
         r = self.run_v()
-        self.assertTrue(has(r, "sub-threshold", msg="(c)", incident="DR-2026-081"))
-        self.assertFalse(has(r, "status-effect", incident="DR-2026-081"))
+        self.assertTrue(has(r, "sub-threshold", msg="(c)", incident="2026-081"))
+        self.assertFalse(has(r, "status-effect", incident="2026-081"))
 
     def test_negligible_near_miss_disclosure_stays(self):
         self.assertFalse(has(self.run_v(), "sub-threshold"))
 
     # ---- only disclosures (methodology §3.3 definition)
     def test_attack_relation_is_no_disclosure(self):
-        sub(self.d, "DR-2026-062")["validated_cve_details"]["cves"][0]["relation"] = "exploited"
-        self.assertTrue(has(self.run_v(), "sub-threshold", msg="not a vulnerability disclosure", incident="DR-2026-062"))
+        sub(self.d, "2026-062")["validated_cve_details"]["cves"][0]["relation"] = "exploited"
+        self.assertTrue(has(self.run_v(), "sub-threshold", msg="not a vulnerability disclosure", incident="2026-062"))
 
     def test_related_only_is_no_disclosure(self):
-        move(self.d, "DR-2026-025")
-        self.assertTrue(has(self.run_v(), "sub-threshold", msg="not a vulnerability disclosure", incident="DR-2026-025"))
+        move(self.d, "2026-025")
+        self.assertTrue(has(self.run_v(), "sub-threshold", msg="not a vulnerability disclosure", incident="2026-025"))
 
     def test_record_without_cve_passes(self):
-        # Whether a record without a CVE is a disclosure is judgment (Class C). DR-2026-065 has no CVE.
-        self.assertFalse(has(self.run_v(), "sub-threshold", incident="DR-2026-065"))
+        # Whether a record without a CVE is a disclosure is judgment (Class C). 2026-065 has no CVE.
+        self.assertFalse(has(self.run_v(), "sub-threshold", incident="2026-065"))
 
     # ---- measurement
     def test_population_per_class(self):
-        # The 24 disclosures that fail methodology §3.3 (a)-(c): 18 with a CVE (the wave DR-2026-036 among them) and
-        # DR-2026-064, 065, 086, 090, 092, 104 without.
+        # The 24 disclosures that fail methodology §3.3 (a)-(c): 18 with a CVE (the wave 2026-036 among them) and
+        # 2026-064, 065, 086, 090, 092, 104 without.
         m = self.run_v().measurements
         self.assertEqual(m["sub_threshold_classes"], {"AI-discovered": 9, "AI-stack": 14, "AI-written": 1})
         self.assertEqual(m["sub_threshold_records"], 24)
-        self.assertNotIn("DR-2026-081", m["disclosure_rule_fails"], "the measurement covers incidents only")
+        self.assertNotIn("2026-081", m["disclosure_rule_fails"], "the measurement covers incidents only")
 
 
 class Retirement(unittest.TestCase):
@@ -508,52 +530,52 @@ class Retirement(unittest.TestCase):
         return vi.validate(self.d, UPSTREAM)
 
     def test_retired_record_keeps_numbering(self):
-        retire(self.d, "DR-2026-081", ["DR-2026-083"])
+        retire(self.d, "2026-081", ["2026-083"])
         self.assertEqual(vi.core_checks(self.d), [])
 
     def test_valid_wrapper_is_clean_and_record_is_frozen(self):
-        w = retire(self.d, "DR-2026-081", ["DR-2026-083"])
+        w = retire(self.d, "2026-081", ["2026-083"])
         w["record"]["veris"]["confidence"] = "Martian"
         r = self.run_v()
         self.assertFalse(has(r, "retired"), "\n".join(map(str, r.errors)))
-        self.assertFalse(has(r, "veris-schema", incident="DR-2026-081"))
+        self.assertFalse(has(r, "veris-schema", incident="2026-081"))
 
     def test_wrapper_id_differs_from_record(self):
-        retire(self.d, "DR-2026-081", ["DR-2026-083"])["record"]["id"] = "DR-2026-083"
-        self.assertTrue(has(self.run_v(), "retired", msg="record.id", incident="DR-2026-081"))
+        retire(self.d, "2026-081", ["2026-083"])["record"]["id"] = "2026-083"
+        self.assertTrue(has(self.run_v(), "retired", msg="record.id", incident="2026-081"))
 
     def test_unknown_reason(self):
-        retire(self.d, "DR-2026-081", ["DR-2026-083"], reason="obsolete")
-        self.assertTrue(has(self.run_v(), "retired", msg="reason", incident="DR-2026-081"))
+        retire(self.d, "2026-081", ["2026-083"], reason="obsolete")
+        self.assertTrue(has(self.run_v(), "retired", msg="reason", incident="2026-081"))
 
     def test_into_empty(self):
-        retire(self.d, "DR-2026-081", [])
-        self.assertTrue(has(self.run_v(), "retired", msg="into", incident="DR-2026-081"))
+        retire(self.d, "2026-081", [])
+        self.assertTrue(has(self.run_v(), "retired", msg="into", incident="2026-081"))
 
     def test_into_names_no_live_record(self):
-        retire(self.d, "DR-2026-081", ["DR-2026-777"])
-        self.assertTrue(has(self.run_v(), "retired", msg="into", incident="DR-2026-081"))
+        retire(self.d, "2026-081", ["2026-777"])
+        self.assertTrue(has(self.run_v(), "retired", msg="into", incident="2026-081"))
 
     def test_into_names_a_retired_record(self):
-        retire(self.d, "DR-2026-081", ["DR-2026-083"])
-        retire(self.d, "DR-2026-083", ["DR-2026-087"])
+        retire(self.d, "2026-081", ["2026-083"])
+        retire(self.d, "2026-083", ["2026-087"])
         r = self.run_v()
-        self.assertTrue(has(r, "retired", msg="into", incident="DR-2026-081"))
-        self.assertFalse(has(r, "retired", incident="DR-2026-083"))
+        self.assertTrue(has(r, "retired", msg="into", incident="2026-081"))
+        self.assertFalse(has(r, "retired", incident="2026-083"))
 
     def test_bad_date(self):
-        retire(self.d, "DR-2026-081", ["DR-2026-083"])["retired_on"] = "03.10.2026"
-        self.assertTrue(has(self.run_v(), "retired", msg="retired_on", incident="DR-2026-081"))
+        retire(self.d, "2026-081", ["2026-083"])["retired_on"] = "03.10.2026"
+        self.assertTrue(has(self.run_v(), "retired", msg="retired_on", incident="2026-081"))
 
     def test_retired_number_is_not_reused(self):
-        retire(self.d, "DR-2026-081", ["DR-2026-083"])
-        add_record(self.d, "DR-2026-083", "DR-2026-081", "sub_threshold_incidents", bump=False)
+        retire(self.d, "2026-081", ["2026-083"])
+        add_record(self.d, "2026-083", "2026-081", "sub_threshold_incidents", bump=False)
         self.assertTrue(has(self.run_v(), "numbering", msg="doubled 081"))
 
     def test_malformed_retired_id(self):
-        w = retire(self.d, "DR-2026-081", ["DR-2026-083"])
-        w["id"] = w["record"]["id"] = "DR-2026-08x"
-        self.assertTrue(has(self.run_v(), "id-format", incident="DR-2026-08x"))
+        w = retire(self.d, "2026-081", ["2026-083"])
+        w["id"] = w["record"]["id"] = "2026-08x"
+        self.assertTrue(has(self.run_v(), "id-format", incident="2026-08x"))
 
 
 class Sources(unittest.TestCase):
@@ -577,41 +599,41 @@ class Sources(unittest.TestCase):
     # ---- at least one entry
     def test_counted_record_without_sources(self):
         # Counts and the ranking row are fixed by hand, so only the sources check can catch it.
-        incident(self.d, "DR-2026-078")["sources"] = []
+        incident(self.d, "2026-078")["sources"] = []
         recount(self.d)
-        self.row("DR-2026-078")["sources"] = ""
-        self.assert_only_sources_finding("DR-2026-078")
+        self.row("2026-078")["sources"] = ""
+        self.assert_only_sources_finding("2026-078")
 
     def test_counted_db_record_without_sources(self):
-        # The id-prefix error also fires (no register source is left), but the sources check names the cause.
-        incident(self.d, "DB-2026-016")["sources"] = []
+        # The source-kind error also fires (no register source is left), but the sources check names the cause.
+        incident(self.d, "2026-016")["sources"] = []
         recount(self.d)
-        self.row("DB-2026-016")["sources"] = ""
-        self.assertTrue(has(self.run_v(), "sources", incident="DB-2026-016"))
+        self.row("2026-016")["sources"] = ""
+        self.assertTrue(has(self.run_v(), "sources", incident="2026-016"))
 
     def test_sub_threshold_record_without_sources(self):
-        sub(self.d, "DR-2026-081")["sources"] = []
-        self.assert_only_sources_finding("DR-2026-081")
+        sub(self.d, "2026-081")["sources"] = []
+        self.assert_only_sources_finding("2026-081")
 
     def test_sub_threshold_record_with_sources_missing(self):
-        del sub(self.d, "DR-2026-081")["sources"]
-        self.assert_only_sources_finding("DR-2026-081")
+        del sub(self.d, "2026-081")["sources"]
+        self.assert_only_sources_finding("2026-081")
 
     def test_retired_record_is_not_checked(self):
-        retire(self.d, "DR-2026-081", ["DR-2026-083"])["record"]["sources"] = []
+        retire(self.d, "2026-081", ["2026-083"])["record"]["sources"] = []
         self.assertFalse(has(self.run_v(), "sources"))
 
     # ---- malformed entries: a finding from validate and core_checks, a message from the builder, never a crash
     def check_malformed(self, entry=None):
-        """Append a malformed entry to DR-2026-081 (or, without `entry`, check the record as the test left it)."""
+        """Append a malformed entry to 2026-081 (or, without `entry`, check the record as the test left it)."""
         import build_incidents_report as bir
         if entry is not None:
-            incident(self.d, "DR-2026-081")["sources"].append(entry)
-        self.assert_only_sources_finding("DR-2026-081")
-        self.assertTrue(any(f.check == "sources" and f.incident == "DR-2026-081" for f in vi.core_checks(self.d)))
+            incident(self.d, "2026-081")["sources"].append(entry)
+        self.assert_only_sources_finding("2026-081")
+        self.assertTrue(any(f.check == "sources" and f.incident == "2026-081" for f in vi.core_checks(self.d)))
         with self.assertRaises(SystemExit) as cm:
             bir.render(self.d)
-        self.assertIn("DR-2026-081", str(cm.exception.code))
+        self.assertIn("2026-081", str(cm.exception.code))
 
     def test_string_entry(self):
         self.check_malformed("Grok_DeepResearch_ai_incidents_2026.md")
@@ -627,7 +649,7 @@ class Sources(unittest.TestCase):
 
     def test_locator_not_a_string(self):
         # The source itself is well-formed, so counts and the ranking row stay right; only the locator is reported.
-        incident(self.d, "DR-2026-081")["sources"][0]["locator"] = 3
+        incident(self.d, "2026-081")["sources"][0]["locator"] = 3
         self.check_malformed()
 
     def test_unhashable_url(self):
@@ -635,14 +657,14 @@ class Sources(unittest.TestCase):
         for url in (["https://example.org/a"], {"href": "https://example.org/a"}):
             with self.subTest(url=url):
                 self.setUp()
-                incident(self.d, "DR-2026-081")["sources"][0]["url"] = url
+                incident(self.d, "2026-081")["sources"][0]["url"] = url
                 self.check_malformed()
 
     def test_sources_not_a_list(self):
-        incident(self.d, "DR-2026-081")["sources"] = "ClaudeCode_DeepResearch_ai_incidents_2026.md"
+        incident(self.d, "2026-081")["sources"] = "ClaudeCode_DeepResearch_ai_incidents_2026.md"
         r = self.run_v()
         self.assertEqual(len([f for f in r.errors if f.check == "sources"]), 1, "one finding, not one per character")
-        self.assertTrue(has(r, "sources", msg="not a list", incident="DR-2026-081"))
+        self.assertTrue(has(r, "sources", msg="not a list", incident="2026-081"))
 
 
 class Locate(unittest.TestCase):
@@ -702,46 +724,46 @@ class Veris142(unittest.TestCase):
     def run_v(self):
         return vi.validate(self.d, UPSTREAM)
 
-    def ext(self, iid="DB-2026-019"):
+    def ext(self, iid="2026-019"):
         return incident(self.d, iid)["veris"]["actor"]["external"]
 
     def test_agentic_system_alone_in_its_branch(self):
         self.ext()["variety"] = ["Agentic system"]
-        self.assertTrue(has(self.run_v(), "agentic", msg="only variety", incident="DB-2026-019"))
+        self.assertTrue(has(self.run_v(), "agentic", msg="only variety", incident="2026-019"))
 
     def test_misalignment_without_agentic_system_in_its_branch(self):
         self.ext()["variety"], self.ext()["motive"] = ["Other"], ["Misalignment"]
-        self.assertTrue(has(self.run_v(), "agentic", msg="Misalignment", incident="DB-2026-019"))
+        self.assertTrue(has(self.run_v(), "agentic", msg="Misalignment", incident="2026-019"))
 
     def test_inadequate_containment_without_agentic_system(self):
         self.ext()["variety"] = ["Other"]
-        incident(self.d, "DB-2026-019")["veris"]["action"]["error"] = {"variety": ["Inadequate containment"], "vector": ["Unknown"]}
-        self.assertTrue(has(self.run_v(), "agentic", msg="Inadequate containment", incident="DB-2026-019"))
+        incident(self.d, "2026-019")["veris"]["action"]["error"] = {"variety": ["Inadequate containment"], "vector": ["Unknown"]}
+        self.assertTrue(has(self.run_v(), "agentic", msg="Inadequate containment", incident="2026-019"))
 
     def test_valid_agentic_coding_passes(self):
         e = self.ext()
         e["variety"], e["motive"] = ["Agentic system", "Other"], ["Misalignment", "NA"]
-        incident(self.d, "DB-2026-019")["veris"]["action"]["error"] = {"variety": ["Inadequate containment"], "vector": ["Unknown"]}
-        self.assertFalse(has(self.run_v(), "agentic", incident="DB-2026-019"))
+        incident(self.d, "2026-019")["veris"]["action"]["error"] = {"variety": ["Inadequate containment"], "vector": ["Unknown"]}
+        self.assertFalse(has(self.run_v(), "agentic", incident="2026-019"))
 
     def test_agentic_actor_without_the_agent_role_passes(self):
         # Methodology §5.1: the rule is one-way. An agent that found flaws and did no harm (e.g. an AI discovery campaign)
         # is an agentic actor without the role "AI-agent-caused incident".
-        rec = incident(self.d, "DB-2026-019")
+        rec = incident(self.d, "2026-019")
         rec["veris"]["actor"]["external"]["variety"] = ["Agentic system", "Other"]
         rec["report"]["ai_role"] = ["AI-enabled attacker"]
-        self.assertFalse(has(self.run_v(), "agentic-role", incident="DB-2026-019"))
+        self.assertFalse(has(self.run_v(), "agentic-role", incident="2026-019"))
 
     def test_agent_role_needs_an_agentic_actor(self):
-        # Methodology §5.1: "AI-agent-caused incident" => an Agentic system actor. DR-2026-035 (a prompt-injected agent,
+        # Methodology §5.1: "AI-agent-caused incident" => an Agentic system actor. 2026-035 (a prompt-injected agent,
         # coded as the attacked asset) has neither the role nor the variety.
-        rec = incident(self.d, "DR-2026-035")
+        rec = incident(self.d, "2026-035")
         rec["report"]["ai_role"] = rec["report"]["ai_role"] + ["AI-agent-caused incident"]
-        self.assertTrue(has(self.run_v(), "agentic-role", incident="DR-2026-035"))
+        self.assertTrue(has(self.run_v(), "agentic-role", incident="2026-035"))
 
     def test_every_record_has_the_schema_version(self):
-        incident(self.d, "DB-2026-019")["veris"]["schema_version"] = "1.4.0"
-        self.assertTrue(has(self.run_v(), "schema-version", incident="DB-2026-019"))
+        incident(self.d, "2026-019")["veris"]["schema_version"] = "1.4.0"
+        self.assertTrue(has(self.run_v(), "schema-version", incident="2026-019"))
 
 
 class AiInitiated(unittest.TestCase):
@@ -761,59 +783,59 @@ class AiInitiated(unittest.TestCase):
         return rep
 
     def test_flag_is_a_boolean(self):
-        self.flag("DB-2026-006", "true")
+        self.flag("2026-006", "true")
         r = self.run_v()
-        self.assertTrue(has(r, "ai-initiated", msg="boolean", incident="DB-2026-006"))
+        self.assertTrue(has(r, "ai-initiated", msg="boolean", incident="2026-006"))
         self.assertEqual(len([f for f in r.errors if f.check == "ai-initiated"]), 1, "a string is no true: one finding")
 
     def test_null_is_no_boolean(self):
-        self.flag("DB-2026-006", None)
-        self.assertTrue(has(self.run_v(), "ai-initiated", msg="boolean", incident="DB-2026-006"))
+        self.flag("2026-006", None)
+        self.assertTrue(has(self.run_v(), "ai-initiated", msg="boolean", incident="2026-006"))
 
     def test_flag_without_rationale(self):
-        del self.flag("DB-2026-006", True)["ai_initiated_rationale"]
-        self.assertTrue(has(self.run_v(), "ai-initiated", msg="rationale", incident="DB-2026-006"))
+        del self.flag("2026-006", True)["ai_initiated_rationale"]
+        self.assertTrue(has(self.run_v(), "ai-initiated", msg="rationale", incident="2026-006"))
 
     def test_empty_rationale(self):
-        self.flag("DB-2026-006", True, " ")
-        self.assertTrue(has(self.run_v(), "ai-initiated", msg="rationale", incident="DB-2026-006"))
+        self.flag("2026-006", True, " ")
+        self.assertTrue(has(self.run_v(), "ai-initiated", msg="rationale", incident="2026-006"))
 
     def test_rationale_without_flag_passes(self):
         # Methodology §5.3: a record without the flag may say why it has none, e.g. a prompt-injected agent.
-        rep = incident(self.d, "DR-2026-035")["report"]
+        rep = incident(self.d, "2026-035")["report"]
         rep.pop("ai_initiated", None)
         rep["ai_initiated_rationale"] = "The bot is the attacked asset, steered by prompt injection."
-        self.assertFalse(has(self.run_v(), "ai-initiated", incident="DR-2026-035"))
+        self.assertFalse(has(self.run_v(), "ai-initiated", incident="2026-035"))
 
     def test_empty_rationale_without_flag(self):
-        rep = incident(self.d, "DR-2026-035")["report"]
+        rep = incident(self.d, "2026-035")["report"]
         rep.pop("ai_initiated", None)
         rep["ai_initiated_rationale"] = ""
-        self.assertTrue(has(self.run_v(), "ai-initiated", msg="rationale", incident="DR-2026-035"))
+        self.assertTrue(has(self.run_v(), "ai-initiated", msg="rationale", incident="2026-035"))
 
     def test_flag_needs_an_agentic_actor(self):
-        # DR-2026-035: the prompt-injected agent is the attacked asset, not an actor (methodology §4.2).
-        self.flag("DR-2026-035", False)
-        self.assertTrue(has(self.run_v(), "ai-initiated", msg="Agentic system", incident="DR-2026-035"))
+        # 2026-035: the prompt-injected agent is the attacked asset, not an actor (methodology §4.2).
+        self.flag("2026-035", False)
+        self.assertTrue(has(self.run_v(), "ai-initiated", msg="Agentic system", incident="2026-035"))
 
     def test_true_needs_the_agent_role(self):
-        rep = self.flag("DB-2026-006", True)
+        rep = self.flag("2026-006", True)
         rep["ai_role"] = [x for x in rep["ai_role"] if x != "AI-agent-caused incident"]
-        self.assertTrue(has(self.run_v(), "ai-initiated", msg="AI-agent-caused incident", incident="DB-2026-006"))
+        self.assertTrue(has(self.run_v(), "ai-initiated", msg="AI-agent-caused incident", incident="2026-006"))
 
     def test_true_needs_misalignment(self):
-        # DR-2026-002: operators directed the agent (motive Financial), so its branch has no Misalignment.
-        self.flag("DR-2026-002", True)
-        self.assertTrue(has(self.run_v(), "ai-initiated", msg="Misalignment", incident="DR-2026-002"))
+        # 2026-002: operators directed the agent (motive Financial), so its branch has no Misalignment.
+        self.flag("2026-002", True)
+        self.assertTrue(has(self.run_v(), "ai-initiated", msg="Misalignment", incident="2026-002"))
 
     def test_false_needs_neither_role_nor_misalignment(self):
         # An AI discovery campaign: an agentic actor with motive Other and without the agent role.
-        self.flag("DR-2026-058", False)
-        self.assertFalse(has(self.run_v(), "ai-initiated", incident="DR-2026-058"))
+        self.flag("2026-058", False)
+        self.assertFalse(has(self.run_v(), "ai-initiated", incident="2026-058"))
 
     def test_valid_true_passes(self):
-        self.flag("DB-2026-006", True)
-        self.assertFalse(has(self.run_v(), "ai-initiated", incident="DB-2026-006"))
+        self.flag("2026-006", True)
+        self.assertFalse(has(self.run_v(), "ai-initiated", incident="2026-006"))
 
 
 class SourceLocators(unittest.TestCase):
@@ -829,13 +851,13 @@ class SourceLocators(unittest.TestCase):
     def run_v(self):
         return vi.validate(self.d, UPSTREAM)
 
-    def entry(self, iid="DR-2026-081", source=CLAUDE):
+    def entry(self, iid="2026-081", source=CLAUDE):
         return next(s for s in incident(self.d, iid)["sources"] if s["source"] == source)
 
     def permalink(self, source=CLAUDE):
         return self.d["sources_catalog"][source]["permalink"]
 
-    def flagged(self, iid="DR-2026-081"):
+    def flagged(self, iid="2026-081"):
         r = self.run_v()
         return has(r, "source-locator", incident=iid)
 
@@ -874,9 +896,9 @@ class SourceLocators(unittest.TestCase):
         self.assertTrue(has(self.run_v(), "source-locator", msg="sha256"))
 
     def test_register_url_names_another_item(self):
-        e = self.entry("DB-2026-001", "vz-risk/VCDB")
+        e = self.entry("2026-001", "vz-risk/VCDB")
         e["url"] = e["url"].rsplit("/", 1)[0] + "/99999"
-        self.assertTrue(self.flagged("DB-2026-001"))
+        self.assertTrue(self.flagged("2026-001"))
 
     # The live AIID (incidents added after the export of 2026-08-24) is a register like VCDB.
     LIVE_AIID = {"kind": "AI Incident Database (AIID), live site", "home": "https://incidentdatabase.ai/",
@@ -886,21 +908,21 @@ class SourceLocators(unittest.TestCase):
         self.d["sources_catalog"]["incidentdatabase.ai"] = self.LIVE_AIID
         incident(self.d, iid)["sources"].append({"source": "incidentdatabase.ai", "locator": "AIID 1627", "url": url})
 
-    def test_live_aiid_source_needs_db_prefix(self):
-        self.cite_live_aiid("DR-2026-081")
-        self.assertTrue(has(self.run_v(), "id-prefix", incident="DR-2026-081"))
+    def test_live_aiid_source_needs_db_kind(self):
+        self.cite_live_aiid("2026-081")
+        self.assertTrue(has(self.run_v(), "source-kind", incident="2026-081"))
 
     def test_live_aiid_url_names_another_item(self):
-        self.cite_live_aiid("DB-2026-001", url="https://incidentdatabase.ai/cite/9999")
-        self.assertTrue(self.flagged("DB-2026-001"))
+        self.cite_live_aiid("2026-001", url="https://incidentdatabase.ai/cite/9999")
+        self.assertTrue(self.flagged("2026-001"))
 
     def test_locator_and_url_are_required(self):
         e = self.entry()
         e["locator"] = ""
         del e["url"]
         r = self.run_v()
-        self.assertTrue(has(r, "sources", msg="locator", incident="DR-2026-081"))
-        self.assertTrue(has(r, "sources", msg="url", incident="DR-2026-081"))
+        self.assertTrue(has(r, "sources", msg="locator", incident="2026-081"))
+        self.assertTrue(has(r, "sources", msg="url", incident="2026-081"))
 
 
 class Reference(unittest.TestCase):
@@ -913,14 +935,14 @@ class Reference(unittest.TestCase):
     def run_v(self):
         return vi.validate(self.d, UPSTREAM)
 
-    def set_ref(self, value, iid="DR-2026-081"):
+    def set_ref(self, value, iid="2026-081"):
         incident(self.d, iid)["veris"]["reference"] = value
 
-    def add_ref(self, url, iid="DR-2026-081"):
+    def add_ref(self, url, iid="2026-081"):
         v = incident(self.d, iid)["veris"]
         v["reference"] += "; " + url
 
-    def flagged(self, iid="DR-2026-081"):
+    def flagged(self, iid="2026-081"):
         return has(self.run_v(), "reference", incident=iid)
 
     # ---- form
@@ -941,48 +963,48 @@ class Reference(unittest.TestCase):
         self.assertTrue(self.flagged())
 
     def test_duplicate(self):
-        self.add_ref(incident(self.d, "DR-2026-081")["veris"]["reference"].split("; ")[0])
+        self.add_ref(incident(self.d, "2026-081")["veris"]["reference"].split("; ")[0])
         self.assertTrue(self.flagged())
 
     # ---- no discovery channel
     def test_own_vcdb_issue(self):
-        self.add_ref("https://github.com/vz-risk/VCDB/issues/23174", "DB-2026-001")
-        self.assertTrue(self.flagged("DB-2026-001"))
+        self.add_ref("https://github.com/vz-risk/VCDB/issues/23174", "2026-001")
+        self.assertTrue(self.flagged("2026-001"))
 
     def test_other_records_aiid_page(self):
         self.add_ref("https://incidentdatabase.ai/cite/1412")
         self.assertTrue(self.flagged())
 
     def test_repo_permalink(self):
-        self.add_ref(next(s["url"] for s in incident(self.d, "DR-2026-081")["sources"]))
+        self.add_ref(next(s["url"] for s in incident(self.d, "2026-081")["sources"]))
         self.assertTrue(self.flagged())
 
     # ---- overrides on the VCDB record whose coding was adopted
-    def vcdb_record_entry(self, iid="DB-2026-024"):
+    def vcdb_record_entry(self, iid="2026-024"):
         return next(s for s in incident(self.d, iid)["sources"] if s["locator"].startswith("data/json/"))
 
     def test_valid_register_override_is_printed(self):
         self.vcdb_record_entry()["overrides"] = {"reference": "test reason 7f3a"}
         r = self.run_v()
-        self.assertFalse(has(r, "sources", incident="DB-2026-024"))
+        self.assertFalse(has(r, "sources", incident="2026-024"))
         self.assertIn("test reason 7f3a", vi.report(r, False))
 
     def test_override_with_empty_reason(self):
         self.vcdb_record_entry()["overrides"] = {"reference": " "}
-        self.assertTrue(has(self.run_v(), "sources", msg="overrides", incident="DB-2026-024"))
+        self.assertTrue(has(self.run_v(), "sources", msg="overrides", incident="2026-024"))
 
     def test_override_not_a_dict(self):
         self.vcdb_record_entry()["overrides"] = "reference differs"
-        self.assertTrue(has(self.run_v(), "sources", msg="overrides", incident="DB-2026-024"))
+        self.assertTrue(has(self.run_v(), "sources", msg="overrides", incident="2026-024"))
 
     def test_override_on_a_vcdb_issue(self):
-        e = next(s for s in incident(self.d, "DB-2026-001")["sources"] if s["locator"].startswith("issues/"))
+        e = next(s for s in incident(self.d, "2026-001")["sources"] if s["locator"].startswith("issues/"))
         e["overrides"] = {"reference": "x"}
-        self.assertTrue(has(self.run_v(), "sources", msg="overrides", incident="DB-2026-001"))
+        self.assertTrue(has(self.run_v(), "sources", msg="overrides", incident="2026-001"))
 
     def test_override_on_an_aiid_entry(self):
-        incident(self.d, "DB-2026-003")["sources"][0]["overrides"] = {"reference": "x"}
-        self.assertTrue(has(self.run_v(), "sources", msg="overrides", incident="DB-2026-003"))
+        incident(self.d, "2026-003")["sources"][0]["overrides"] = {"reference": "x"}
+        self.assertTrue(has(self.run_v(), "sources", msg="overrides", incident="2026-003"))
 
 
 class AdoptedCoding(unittest.TestCase):
@@ -999,27 +1021,27 @@ class AdoptedCoding(unittest.TestCase):
         return next(s for s in incident(self.d, iid)["sources"] if s["locator"].startswith(prefix))
 
     def test_adopted_on_a_vcdb_issue(self):
-        self.entry("DB-2026-001", "issues/")["adopted"] = True
-        self.assertTrue(has(self.run_v(), "sources", msg="adopted", incident="DB-2026-001"))
+        self.entry("2026-001", "issues/")["adopted"] = True
+        self.assertTrue(has(self.run_v(), "sources", msg="adopted", incident="2026-001"))
 
     def test_adopted_on_an_aiid_entry(self):
-        self.entry("DB-2026-003", "AIID")["adopted"] = True
-        self.assertTrue(has(self.run_v(), "sources", msg="adopted", incident="DB-2026-003"))
+        self.entry("2026-003", "AIID")["adopted"] = True
+        self.assertTrue(has(self.run_v(), "sources", msg="adopted", incident="2026-003"))
 
     def test_adopted_not_true(self):
-        self.entry("DB-2026-024", "data/json/")["adopted"] = "yes"
-        self.assertTrue(has(self.run_v(), "sources", msg="adopted", incident="DB-2026-024"))
+        self.entry("2026-024", "data/json/")["adopted"] = "yes"
+        self.assertTrue(has(self.run_v(), "sources", msg="adopted", incident="2026-024"))
 
     def test_override_on_a_record_that_is_not_adopted(self):
-        e = self.entry("DB-2026-024", "data/json/")
+        e = self.entry("2026-024", "data/json/")
         e.pop("adopted", None)
         e["overrides"] = {"reference": "x"}
-        self.assertTrue(has(self.run_v(), "sources", msg="overrides", incident="DB-2026-024"))
+        self.assertTrue(has(self.run_v(), "sources", msg="overrides", incident="2026-024"))
 
     def test_record_url_on_master(self):
-        e = self.entry("DB-2026-024", "data/json/")
+        e = self.entry("2026-024", "data/json/")
         e["url"] = "https://github.com/vz-risk/VCDB/blob/master/" + e["locator"]
-        self.assertTrue(has(self.run_v(), "source-locator", msg="pinned", incident="DB-2026-024"))
+        self.assertTrue(has(self.run_v(), "source-locator", msg="pinned", incident="2026-024"))
 
     def test_real_adopted_entries_are_pinned_and_marked(self):
         n = 0

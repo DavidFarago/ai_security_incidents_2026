@@ -231,7 +231,7 @@ def core_checks(d: dict) -> list[Finding]:
     ids = lc.numbered_ids(d)
     malformed = [x for _, x in ids if lc.incident_number(x) is None]
     for x in malformed:
-        out.append(Finding("B", "id-format", "ID is not DB-/DR-2026-nnn (§4.1)", x))
+        out.append(Finding("B", "id-format", "ID is not 2026-nnn (§4.1)", x))
     if not malformed:
         arrays = lc.LIVE_ARRAYS + (lc.RETIRED_ARRAY,)
         for name in arrays:
@@ -358,16 +358,15 @@ def check_class_b(d, up, r: Result):
     for x, n in Counter(ids).items():
         if n > 1:
             r.add("B", "id-unique", f"{x} occurs {n} times", x)
-    for x, n in Counter(n for n in map(lc.incident_number, ids) if n is not None).items():
-        if n > 1:
-            r.add("B", "id-unique", f"number {x:03d} is used {n} times (numbers are unique across prefixes)")
 
     for i in recs:
         iid, det, v, rep = i["id"], i.get("validated_cve_details") or {}, i["veris"], i["report"]
         srcs = lc.source_names(i)
-        want = "DB" if any(s in lc.REGISTER_SOURCES for s in srcs) else "DR"
-        if not iid.startswith(want + "-"):
-            r.add("B", "id-prefix", f"prefix must be {want} (register source: {want == 'DB'})", iid)
+        kind, want = i.get("source_kind"), lc.source_kind(i)
+        if kind not in lc.SOURCE_KINDS:
+            r.add("B", "source-kind", f"source_kind {kind!r} is neither DB nor DR (§4.1)", iid)
+        elif kind != want:
+            r.add("B", "source-kind", f"source_kind must be {want} (register source: {want == 'DB'}; §4.1)", iid)
         if v.get("incident_id") != iid:
             r.add("B", "veris-incident-id", f"veris.incident_id {v.get('incident_id')!r} != id", iid)
         for s in srcs:
@@ -702,7 +701,7 @@ def check_counts(d, r):
        dict(sorted(Counter(s for i in inc for s in lc.source_names(i)).items())))
     r.skipped += FROZEN_COUNTS
     eq("id_scheme.counts", (d.get("id_scheme") or {}).get("counts"),
-       {p: sum(1 for i in inc if i["id"].startswith(p + "-")) for p in ("DB", "DR")})
+       {k: sum(1 for i in inc if i.get("source_kind") == k) for k in lc.SOURCE_KINDS})
     cv = d.get("cve_validation") or {}
     dets = [i.get("validated_cve_details") or {} for i in recs]
     eq("cve_validation.incidents_with_validated_cve", cv.get("incidents_with_validated_cve"), sum(1 for i in recs if i.get("validated_cve")))

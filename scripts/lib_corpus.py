@@ -51,7 +51,7 @@ RETIREMENT_REASONS = ["duplicate", "merged"]
 # caches from a pinned commit of VCDB's branch 1_4_2.
 VERIS_SCHEMA_VERSION = "1.4.2"
 
-# Incident registers (methodology §4.1: prefix DB when at least one source is one). A planned field
+# Incident registers (methodology §4.1: source_kind DB when at least one source is one). A planned field
 # sources_catalog[...].source_class will replace this set.
 REGISTER_SOURCES = {"incidentdatabase.ai_20260824_ai_incidents_2026.xlsx", "incidentdatabase.ai", "vz-risk/VCDB"}
 
@@ -92,13 +92,14 @@ def load_upstream(up: Path = UPSTREAM_DIR) -> dict:
     return out
 
 
-ID_RE = re.compile(r"(DB|DR)-2026-(\d{3})")   # methodology §4.1
+ID_RE = re.compile(r"2026-(\d{3})")   # methodology §4.1
+SOURCE_KINDS = ("DB", "DR")
 
 
 def incident_number(iid: str) -> int | None:
-    """The nnn of DB-/DR-2026-nnn as int; None for an ID that does not match ID_RE."""
+    """The nnn of 2026-nnn as int; None for an ID that does not match ID_RE."""
     m = ID_RE.fullmatch(iid or "")
-    return int(m.group(2)) if m else None
+    return int(m.group(1)) if m else None
 
 
 def ranking_key(rec: dict) -> tuple:
@@ -142,6 +143,12 @@ def source_names(rec: dict) -> list:
     list. A malformed entry is skipped here; the verifier's `sources` check reports it."""
     srcs = rec.get("sources")
     return [s["source"] for s in srcs if is_source_entry(s)] if isinstance(srcs, list) else []
+
+
+def source_kind(rec: dict) -> str:
+    """The source_kind that a record's `sources` give (methodology §4.1): DB when at least one source is an incident
+    register, DR otherwise."""
+    return "DB" if any(s in REGISTER_SOURCES for s in source_names(rec)) else "DR"
 
 
 LOCATOR_SEP = " › "

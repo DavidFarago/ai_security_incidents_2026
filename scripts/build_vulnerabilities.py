@@ -230,7 +230,7 @@ def ibss_per_cve(links):
             "obs": s.obs, "pot": s.pot, "obs_tiers": s.obs_tiers, "pot_tiers": s.pot_tiers,
             "cvss": ls[0]["cvss_score"], "cvss_version": ls[0]["cvss_version"], "kev": ls[0]["cisa_kev"],
             "incidents": [l["incident_id"] for l in ip], "relations": [l["relation"] for l in ip],
-            "in_036": any(l["incident_id"] == "DR-2026-036" for l in ip),
+            "in_036": any(l["incident_id"] == "2026-036" for l in ip),
         }
     return out
 
@@ -303,7 +303,7 @@ def table_ibss_vs_cvss(links):
         "n_036": sum(1 for v in per.values() if v["in_036"]), "n_no036_scored": len(no036),
         "n_no036_clusters": len(clusters), "top_cluster": clusters.most_common(1)[0] if clusters else ((), 0),
         "n_unscored": len(unscored), "unscored_incidents": sorted({i for v in unscored for i in v["incidents"]}),
-        # (observed, potential, CVEs): the weight pair that most of DR-2026-036's in-play CVEs share
+        # (observed, potential, CVEs): the weight pair that most of 2026-036's in-play CVEs share
         "pair_036": next(((o, p, n) for (o, p), n in Counter((v["obs"], v["pot"]) for v in per.values() if v["in_036"]).most_common(1)), (0, 0, 0)),
         "rho_obs": spearman([v["cvss"] for v in scored], [v["obs"] for v in scored]),
         "rho_pot": spearman([v["cvss"] for v in scored], [v["pot"] for v in scored]),
@@ -631,7 +631,7 @@ def table_action_list(d, links, recs, manifest):
             src = prov or "ADP" if cvss is not None else ""
         segs = {l["segment"] for l in ls}
         if segs == {"ai-written"}:
-            scope = "AI-written corpus (DR-2026-036, aggregate)"
+            scope = "AI-written corpus (2026-036, aggregate)"
         elif evidence == "toolkit":
             scope = "attacker toolkit (use unconfirmed)"
         elif evidence in ("exploited", "exploited-unconfirmed", "attempted"):
@@ -858,7 +858,7 @@ def build_report(d, links, T) -> str:
       "class's records, observed and potential separately. It is designed for CWEs, which span many incidents. For CVEs it is computed "
       f"over **in-play** links only and left blank for CVEs that are only `related`/`toolkit`; since {pct_single} % of CVEs occur in a single "
       "record, a CVE's IBSS is usually just that record's weight — see the *IBSS vs CVSS* section. "
-      "Incidents — not CVEs — are the unit because a CVE count measures cataloguing practice as much as prevalence: CNA conventions differ (the Linux kernel CNA assigns a CVE per fixing commit; Mozilla issues per-bug CVEs but also rollup CVEs covering many memory-safety bugs at once; ecosystem CNAs often issue one CVE per affected package), so the same underlying flaw can be 1 or 11 CVEs depending on who assigned them — the MCP STDIO transport flaw (DR-2026-059) is eleven. IBSS therefore scores a weakness by the harm of the incidents it was involved in, each counted incident once and each class of sub-threshold records once, and reports prevalence (CVE links, distinct CVEs) beside it rather than folding it in. This is the deliberate inverse of MITRE's CWE Top 25 score (CVE count × average CVSS), which ranks the catalogue.")
+      "Incidents — not CVEs — are the unit because a CVE count measures cataloguing practice as much as prevalence: CNA conventions differ (the Linux kernel CNA assigns a CVE per fixing commit; Mozilla issues per-bug CVEs but also rollup CVEs covering many memory-safety bugs at once; ecosystem CNAs often issue one CVE per affected package), so the same underlying flaw can be 1 or 11 CVEs depending on who assigned them — the MCP STDIO transport flaw (2026-059) is eleven. IBSS therefore scores a weakness by the harm of the incidents it was involved in, each counted incident once and each class of sub-threshold records once, and reports prevalence (CVE links, distinct CVEs) beside it rather than folding it in. This is the deliberate inverse of MITRE's CWE Top 25 score (CVE count × average CVSS), which ranks the catalogue.")
     A("- **Segments** used for the CNA-CWE profile (defined over relation × AI role, one per CVE link):")
     for s, desc in SEGMENTS:
         A(f"  - `{s}` — {desc}")
@@ -887,7 +887,7 @@ def build_report(d, links, T) -> str:
     # ---- Findings (computed)
     X0 = T["ibss"]; ALH, AL0 = T["action"]; AL0n = named(ALH, AL0)
     n_live_with = n_with + n_sub_with
-    dr_share = sum(1 for i in lc.records(d) if i.get("validated_cve") and i["id"].startswith("DR"))
+    dr_share = sum(1 for i in lc.records(d) if i.get("validated_cve") and i.get("source_kind") == "DR")
     expl_links = [l for l in links if l["relation"] == "exploited"]
     expl_all_kev = all(l["cisa_kev"] for l in expl_links)
     fam = [l for l in links if l["relation"] in EXPLOITED_FAMILY and l["cvss_score"] is not None]
@@ -924,7 +924,7 @@ def build_report(d, links, T) -> str:
     A(f"5. **Three populations, three countermeasure programmes.** Top CNA CWEs — AI-written code: {top3['ai-written']}; AI-exploited: {top3['ai-exploited']}; "
       f"AI-discovered: {top3['ai-discovered']}; AI-stack products: {top3['ai-stack-vulnerability']} (CVE links of all live records). The AI-written profile is one external corpus (Radar) and needs a baseline before any \"AI writes X\" claim.")
     A(f"6. **The CVE ecosystem is not yet fit for AI-stack components.** {adp_rows} `self (vulnerability)` CVEs (flaws in AI products and AI-written code) carry no CNA CVSS — the score used here comes from CISA-ADP; "
-      f"the MCP STDIO cluster (DR-2026-059) has no CNA CVSS, no CWE and product `n/a` in its records.")
+      f"the MCP STDIO cluster (2026-059) has no CNA CVSS, no CWE and product `n/a` in its records.")
     pi_harm = sum(1 for i in pi if lc.realized_harm(i))
     A(f"7. **Prompt injection: disclosed {'more' if len(pi_sub) > pi_harm else 'no more'} often than realized.** {len(pi_sub)} sub-threshold records carry VERIS "
       f"`hacking.variety = Prompt injection` (observed {prof(pi_sub_obs)}, potential {prof(pi_sub_pot)}): disclosed proofs of concept without "
@@ -1046,12 +1046,12 @@ def build_report(d, links, T) -> str:
       f"could have realized (potential). Three limits apply. **(1)** {s['n_single']} of the {s['n_inplay']} in-play CVEs have a single "
       f"in-play record, so their IBSS is just that record's weight — the summation is barely exercised. **(2)** Each in-play CVE receives the "
       f"*full* weight of every counted incident it is in play in, and per class that of the highest-weighted sub-threshold record (†); "
-      f"where several CVEs share an incident (e.g. the Artifactory CVEs of DB-2026-006) the score does not establish per-CVE causation. **(3)** {s['n_036']} of the {s['n_inplay']} in-play CVEs belong to DR-2026-036, and {s['pair_036'][2]} of those share one observed "
+      f"where several CVEs share an incident (e.g. the Artifactory CVEs of 2026-006) the score does not establish per-CVE causation. **(3)** {s['n_036']} of the {s['n_inplay']} in-play CVEs belong to 2026-036, and {s['pair_036'][2]} of those share one observed "
       f"({tier(s['pair_036'][0])}) and one potential ({tier(s['pair_036'][1])}) value, so aggregate statistics are dominated by that "
       f"record; figures are therefore also given without it.")
     A("")
     A(f"- A Spearman rank correlation between CVSS and IBSS is computed by the build script but **not reported at this stage**: "
-      f"{s['n_036']} of the {s['n_scored']} scored in-play CVEs share one severity value (DR-2026-036), and the remaining n = {s['n_no036_scored']} "
+      f"{s['n_036']} of the {s['n_scored']} scored in-play CVEs share one severity value (2026-036), and the remaining n = {s['n_no036_scored']} "
       f"come from only {s['n_no036_clusters']} incidents or incident sets ({', '.join(s['top_cluster'][0])} alone holds {s['top_cluster'][1]}). "
       f"The CVEs of one incident share its IBSS, so they are not independent observations, and an interval computed as if they were would "
       f"overstate the precision. The corpus is planned to grow (further sources, later years), and the correlation will be "
@@ -1123,7 +1123,7 @@ def build_report(d, links, T) -> str:
     AH = ["ID", "Evidence", "Records", "Max observed", "KEV", "IBSS pot", "CVSS", "Product / package", "Ecosystem", "Affected versions", "Fixed / unaffected"]
     patch = [r for r in AL if r["action"] == "patch"]
     agg = [r for r in patch if "aggregate" in r["scope"]]
-    A(f"### patch ({len(patch)} CVEs; {len(patch) - len(agg)} shown, {len(agg)} of the AI-written aggregate corpus DR-2026-036 in the CSV only)")
+    A(f"### patch ({len(patch)} CVEs; {len(patch) - len(agg)} shown, {len(agg)} of the AI-written aggregate corpus 2026-036 in the CSV only)")
     A("")
     A(md_table(AH, act_rows([r for r in patch if "aggregate" not in r["scope"]])))
     A("")
