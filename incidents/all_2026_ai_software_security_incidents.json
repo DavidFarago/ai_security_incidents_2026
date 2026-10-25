@@ -1023,7 +1023,7 @@
         "incident_id": "DB-2026-001",
         "security_incident": "Confirmed",
         "confidence": "High",
-        "reference": "https://docs.litellm.ai/blog/security-update-march-2026; https://securitylabs.datadoghq.com/articles/litellm-compromised-pypi-teampcp-supply-chain-campaign/; https://techcrunch.com/2026/03/31/mercor-says-it-was-hit-by-cyberattack-tied-to-compromise-of-open-source-litellm-project/; https://exposure.cloudsek.com/ai-supply-chain-incident; https://arstechnica.com/security/2026/08/terabytes-of-credentials-leaked-in-massive-supply-chain-attack/",
+        "reference": "https://docs.litellm.ai/blog/security-update-march-2026; https://securitylabs.datadoghq.com/articles/litellm-compromised-pypi-teampcp-supply-chain-campaign/; https://snyk.io/blog/poisoned-security-scanner-backdooring-litellm/; https://techcrunch.com/2026/03/31/mercor-says-it-was-hit-by-cyberattack-tied-to-compromise-of-open-source-litellm-project/; https://exposure.cloudsek.com/ai-supply-chain-incident; https://arstechnica.com/security/2026/08/terabytes-of-credentials-leaked-in-massive-supply-chain-attack/",
         "summary": "On 24 Mar 2026 (10:39 UTC, ~40 min live) the threat group TeamPCP published malicious LiteLLM PyPI releases 1.82.7/1.82.8 (and Telnyx 4.87.1/4.87.2 on 27 Mar) after stealing the maintainer's publishing credentials via a prior compromise of the Trivy scanner in LiteLLM's CI. LiteLLM is a widely used open-source LLM gateway (~3.4M downloads/day). The multi-stage payload harvested env vars, SSH keys, cloud/Kubernetes/Docker credentials, DB creds, crypto wallets and CI/CD secrets (exfil to models.litellm.cloud / checkmarx.zone), installed a systemd backdoor, and could create privileged Kubernetes pods for lateral movement. CloudSEK/Hudson Rock analysed a ~195TB leaked dump and assessed credentials exposed from 2,500+ organisations (incl. Microsoft, AWS, Cisco, Samsung, Salesforce). AI recruiter Mercor confirmed it was 'one of thousands of companies' affected; Lapsus$ separately claimed Mercor data.",
         "actor": {
           "external": {
@@ -1150,8 +1150,7 @@
       },
       "report": {
         "ai_role": [
-          "AI system/harness attacked",
-          "AI-enabled attacker"
+          "AI system/harness attacked"
         ],
         "ai_component": [
           "open-source LLM gateway (LiteLLM)",
@@ -1173,7 +1172,8 @@
             "mapping_basis": "Analyst inference (reliance on compromised component; embedded malicious code; credential exposure)",
             "confidence": "High"
           }
-        ]
+        ],
+        "ai_involvement_note": "AI is the attacked software here, not the attackers' tool. TeamPCP's wider campaign has an AI component: 'A component called `hackerbot-claw` uses an AI agent (`openclaw`) for automated attack targeting.' (Snyk). No source ties it to this compromise, and LiteLLM was hit through the poisoned Trivy scanner in its CI: 'According to CloudSEK, TeamPCP, the threat actor behind multiple high-profile open source software (OSS) compromises, never targeted LiteLLM directly.' (SecurityWeek, quoted in VCDB issue 24173)"
       },
       "validated_cve": [
         "CVE-2026-33634"
