@@ -19,7 +19,7 @@ DB-2026-017,High,High,0,,,0,"Attackers abused Meta's AI-powered support (HTS) to
 DB-2026-018,High,High,7,CVE-2017-7269; CVE-2021-3156; CVE-2021-4034; CVE-2026-31431; CVE-2026-43284; CVE-2026-43500; CVE-2026-43503,"toolkit: CVE-2017-7269, CVE-2021-3156, CVE-2021-4034, CVE-2026-31431, CVE-2026-43284, CVE-2026-43500, CVE-2026-43503",0,Autonomous 'Hermes' AI agent (YOLO mode) ran post-exploitation against Thailand's Ministry of Finance,incidents
 DB-2026-019,High,High,0,,,0,Claude Opus 4.7 breached a real company it mistook for its fictional target during an Anthropic cyber evaluation,incidents
 DR-2026-020,High,High,1,CVE-2026-39987,exploited: CVE-2026-39987,0,Sysdig May 10 — AI-agent-driven intrusion from marimo CVE-2026-39987 to full PostgreSQL dump in under an hour,incidents
-DR-2026-021,High,High,0,,,0,LLMjacking industrialized — Operation Bizarre Bazaar marketplace + Sysdig 'VAPT' autonomous pipeline,incidents
+DR-2026-021,Low,High,0,,,0,Operation Bizarre Bazaar — the LLMjacking marketplace silver.inc resold unauthorized access to 30+ LLM providers,incidents
 DR-2026-022,High,High,2,CVE-2026-45321; CVE-2026-45758,self-malicious-release: CVE-2026-45321 | related: CVE-2026-45758,11,"TeamPCP 'Mini Shai-Hulud' / TanStack npm worm (170+ packages; OpenAI employee devices, Mistral, UiPath)",incidents
 DR-2026-023,High,High,1,CVE-2026-39987,exploited: CVE-2026-39987,0,"Sysdig May 29 - agentic container/Kubernetes escape via marimo RCE, Docker-socket abuse, host root & cluster-secret extraction",incidents
 DB-2026-024,High,High,0,,,0,"Cannabis Club Systems - public URLs / IDOR exposed 1,082,680 members (VCDB; no AI component)",incidents
@@ -106,3 +106,4 @@ DR-2026-104,Negligible,High,0,,,0,Mozilla 0DIN: a repository without malicious c
 DR-2026-105,Low,Medium,0,,,0,Malicious npm package mouse5212-super-formatter uploaded the files of Claude's /mnt/user-data directory to an attacker's GitHub account,incidents
 DB-2026-106,Medium,High,0,,,0,Lovable backend regression exposed public projects' source code and AI chat histories to any Lovable user for 77 days,incidents
 DR-2026-107,Medium,High,0,,,0,"RedAccess found ~5,000 vibe-coded apps on Lovable, Base44, Replit and Netlify open to anyone, close to 2,000 of them showing private data",incidents
+DR-2026-108,Negligible,Low,0,,,0,"Sysdig 'VAPT': an actor powered an autonomous exploitation pipeline with an exposed Ollama server, tested only on practice targets",incidents

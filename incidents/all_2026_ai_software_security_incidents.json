@@ -48,12 +48,12 @@
     }
   },
   "counts": {
-    "total_incidents": 83,
+    "total_incidents": 84,
     "from_ai_software_security_incidents_2026": 35,
     "from_merged_incidents_2026_VERIS_described": 64,
     "citations_by_source": {
       "vz-risk/VCDB": 49,
-      "ClaudeCode_DeepResearch_ai_incidents_2026.md": 24,
+      "ClaudeCode_DeepResearch_ai_incidents_2026.md": 25,
       "incidentdatabase.ai_20260824_ai_incidents_2026.xlsx": 17,
       "Grok_DeepResearch_ai_incidents_2026.md": 6,
       "ChatGPT_DeepResearch_ai_incidents_2026.md": 7,
@@ -61,14 +61,14 @@
     },
     "by_observed_severity": {
       "Critical": 2,
-      "High": 25,
+      "High": 24,
       "Medium": 32,
-      "Low": 16,
-      "Negligible": 8
+      "Low": 17,
+      "Negligible": 9
     },
     "by_status": {
-      "Confirmed": 75,
-      "Suspected": 1,
+      "Confirmed": 74,
+      "Suspected": 3,
       "Near miss": 2,
       "False positive": 5
     }
@@ -78,10 +78,10 @@
     "prefix_rule": "DB (database) = at least one source is an incident register (AI Incident Database export or vz-risk/VCDB); DR (direct report) = no source is a register: the incident was found through a report, deep-research (ChatGPT / Claude Code / Grok) or primary. The prefix records the discovery channel only, not source quality. None of the records 001-099 had both kinds of source.",
     "number_rule": "001-099: the position in the priority ranking of 2026-08-27 (observed severity desc, potential severity as tiebreaker, order within ties as in the ranking of that day). From 100 on: highest_assigned + 1, whatever the rank. The number is unique across both prefixes and is the '#' of the Markdown report; ranking_table holds the current ranking (methodology §9.3).",
     "stability": "Frozen: IDs are never renumbered. Later re-ranking is reflected in ranking_table only; new incidents continue from 100. A new record gets highest_assigned + 1 in whichever array it enters; no number is deleted or reused (methodology §4.1).",
-    "highest_assigned": 107,
+    "highest_assigned": 108,
     "counts": {
       "DB": 54,
-      "DR": 29
+      "DR": 30
     }
   },
   "ranking_table": [
@@ -304,17 +304,6 @@
       "sources": "ChatGPT_DeepResearch_ai_incidents_2026.md; ClaudeCode_DeepResearch_ai_incidents_2026.md",
       "cve_cwe": "CVE-2026-39987",
       "validated_cve": "CVE-2026-39987"
-    },
-    {
-      "id": "DR-2026-021",
-      "incident": "LLMjacking industrialized — Operation Bizarre Bazaar marketplace + Sysdig 'VAPT' autonomous pipeline",
-      "date": "Dec 2025 – Jun 2026",
-      "status": "Confirmed",
-      "observed": "High",
-      "potential": "High",
-      "sources": "ClaudeCode_DeepResearch_ai_incidents_2026.md",
-      "cve_cwe": "CWE-522 / CWE-306",
-      "validated_cve": ""
     },
     {
       "id": "DR-2026-022",
@@ -757,6 +746,17 @@
       "validated_cve": "CVE-2025-65720; CVE-2026-30623; CVE-2026-30624; CVE-2026-30618; CVE-2026-30617; CVE-2026-30616; CVE-2026-30625; CVE-2026-30615; CVE-2026-26015; CVE-2026-40933; CVE-2026-54449; CVE-2026-42271; CVE-2025-49596; CVE-2026-22252; CVE-2026-22688; CVE-2025-54994; CVE-2025-54136"
     },
     {
+      "id": "DR-2026-021",
+      "incident": "Operation Bizarre Bazaar — the LLMjacking marketplace silver.inc resold unauthorized access to 30+ LLM providers",
+      "date": "Dec 2025 – Jan 2026",
+      "status": "Suspected",
+      "observed": "Low",
+      "potential": "High",
+      "sources": "ClaudeCode_DeepResearch_ai_incidents_2026.md",
+      "cve_cwe": "CWE-522 / CWE-306",
+      "validated_cve": ""
+    },
+    {
       "id": "DB-2026-061",
       "incident": "DJI Romo robot-vacuum cloud authorization flaw exposed ~7,000 homes' camera/mic/maps",
       "date": "2026-01-01",
@@ -941,6 +941,17 @@
       "potential": "High",
       "sources": "ChatGPT_DeepResearch_ai_incidents_2026.md; Grok_DeepResearch_ai_incidents_2026.md",
       "cve_cwe": "CWE-1357",
+      "validated_cve": ""
+    },
+    {
+      "id": "DR-2026-108",
+      "incident": "Sysdig 'VAPT': an actor powered an autonomous exploitation pipeline with an exposed Ollama server, tested only on practice targets",
+      "date": "2026-06-12",
+      "status": "Suspected",
+      "observed": "Negligible",
+      "potential": "Low",
+      "sources": "ClaudeCode_DeepResearch_ai_incidents_2026.md",
+      "cve_cwe": "CWE-306",
       "validated_cve": ""
     },
     {
@@ -5668,8 +5679,8 @@
     },
     {
       "id": "DR-2026-021",
-      "title": "LLMjacking industrialized — Operation Bizarre Bazaar marketplace + Sysdig 'VAPT' autonomous pipeline",
-      "date": "Dec 2025 – Jun 2026",
+      "title": "Operation Bizarre Bazaar — the LLMjacking marketplace silver.inc resold unauthorized access to 30+ LLM providers",
+      "date": "Dec 2025 – Jan 2026",
       "sources": [
         {
           "source": "ClaudeCode_DeepResearch_ai_incidents_2026.md",
@@ -5682,10 +5693,10 @@
         "schema_name": "vcdb",
         "source_id": "vcdb",
         "incident_id": "DR-2026-021",
-        "security_incident": "Confirmed",
+        "security_incident": "Suspected",
         "confidence": "Medium",
         "reference": "https://www.pillar.security/blog/operation-bizarre-bazaar-first-attributed-llmjacking-campaign-with-commercial-marketplace-monetization; https://labs.cloudsecurityalliance.org/research/csa-research-note-llmjacking-evolved-offensive-agentic-20260/",
-        "summary": "Sysdig recorded a 376% jump in AI-credential theft (Q4'25->Q1'26). Pillar's 'Operation Bizarre Bazaar' captured 35,000+ attack sessions — the first attributed LLMjacking marketplace reselling stolen/exposed LLM and MCP endpoints, with victim costs exceeding $100k/day for flagship models. By 12 Jun, Sysdig documented 'VAPT', wiring a hijacked unauthenticated Ollama server in as the reasoning core of an autonomous exploitation pipeline.",
+        "summary": "Pillar Security's honeypots captured 35,000 attack sessions against exposed LLM and MCP endpoints between December 2025 and January 2026, 'averaging 972 attacks per day'. Pillar traced them to an actor using the alias 'Hecker' and to silver.inc, 'a commercial marketplace reselling discounted access to 30+ LLM providers without legitimate authorization': the first attributed LLMjacking campaign with commercial monetization (Pillar, 28 Jan 2026). Pillar names and counts no victim. The CSA cites Sysdig's 2026 reporting of a 376% rise in credential theft targeting AI services from Q4 2025 to Q1 2026.",
         "actor": {
           "external": {
             "variety": [
@@ -5714,7 +5725,7 @@
             "result": [
               "Infiltrate"
             ],
-            "notes": "Stolen LLM/MCP endpoints resold; hijacked Ollama used as reasoning core for attacks."
+            "notes": "Exposed or stolen access to LLM and MCP endpoints, resold through silver.inc."
           }
         },
         "asset": {
@@ -5732,7 +5743,7 @@
         },
         "attribute": {
           "confidentiality": {
-            "data_disclosure": "Yes",
+            "data_disclosure": "Potentially",
             "data": [
               {
                 "variety": "API key"
@@ -5744,7 +5755,7 @@
             "data_victim": [
               "Victim organization"
             ],
-            "notes": "Stolen LLM/MCP credentials/endpoints resold at scale; victim compute abused."
+            "notes": "Pillar documents resale of access to 30+ LLM providers 'without legitimate authorization' and 35,000 attack sessions on its own honeypots; it names and counts no victim."
           }
         },
         "discovery_method": {
@@ -5775,23 +5786,21 @@
       "report": {
         "ai_role": [
           "AI model/capability theft",
-          "AI-enabled attacker"
+          "AI system/harness attacked"
         ],
         "ai_component": [
-          "stolen LLM/MCP API access",
-          "hijacked local LLM (Ollama) as attack engine"
+          "exposed or stolen access to LLM and MCP endpoints",
+          "LLM API resale marketplace (silver.inc)"
         ],
         "ai_security_mechanism": [
           "LLMjacking (stolen AI compute)",
-          "marketplace resale",
-          "autonomous exploitation pipeline"
+          "marketplace resale"
         ],
-        "ai_initiated_rationale": "The record codes the theft and resale of LLM access. The 'VAPT' pipeline that used a hijacked Ollama server as its reasoning core is the attackers' tool; the record codes none of its attacks and no agentic actor, so the record has no flag (methodology §4.2, §5.3).",
-        "observed_severity": "High",
-        "observed_severity_rationale": "A confirmed, industrialized market for stolen AI access (35,000+ sessions) with real six-figure/day victim costs and stolen compute repurposed for autonomous attacks.",
+        "observed_severity": "Low",
+        "observed_severity_rationale": "Pillar documents a marketplace that resells access to 30+ LLM providers 'without legitimate authorization', which implies abused third-party endpoints; but its counts are its own honeypot sessions, and it names and counts no victim or cost.",
         "potential_severity": "High",
-        "potential_severity_rationale": "Commoditized stolen AI compute lowers the cost of autonomous offense and spreads victim financial and abuse impact broadly.",
-        "potential_severity_confidence": "Medium",
+        "potential_severity_rationale": "Systematic targeting of exposed LLM and MCP endpoints (35,000 sessions; 'MCP servers accessible without access controls' among the targets) and commercial resale of the access: compute theft across many organisations, and access to the data and tools behind unauthenticated MCP servers. Confidence is low, because no source documents a victim.",
+        "potential_severity_confidence": "Low",
         "weaknesses": [
           {
             "cwe": "CWE-522 / CWE-306",
@@ -5808,7 +5817,7 @@
         "added": [],
         "removed": [],
         "cves": [],
-        "note": "LLMjacking via stolen/exposed API keys and unauthenticated Ollama endpoints; Pillar/Sysdig name no CVE."
+        "note": "LLMjacking via exposed or stolen access to LLM and MCP endpoints; Pillar names no CVE."
       }
     },
     {
@@ -16195,6 +16204,143 @@
         "removed": [],
         "cves": [],
         "note": "No CVE: the configuration of individual apps, not a flaw of a product."
+      }
+    },
+    {
+      "id": "DR-2026-108",
+      "title": "Sysdig 'VAPT': an actor powered an autonomous exploitation pipeline with an exposed Ollama server, tested only on practice targets",
+      "date": "2026-06-12",
+      "sources": [
+        {
+          "source": "ClaudeCode_DeepResearch_ai_incidents_2026.md",
+          "locator": "item 22",
+          "url": "https://github.com/DavidFarago/ai_security_incidents_2026/blob/ecb3ccd52e17931f30fb6887020458a922a945d9/incidents/sources/ClaudeCode_DeepResearch_ai_incidents_2026.md?plain=1#L125-L126"
+        }
+      ],
+      "veris": {
+        "schema_version": "1.4.2",
+        "schema_name": "vcdb",
+        "source_id": "vcdb",
+        "incident_id": "DR-2026-108",
+        "security_incident": "Suspected",
+        "confidence": "Medium",
+        "reference": "https://www.sysdig.com/blog/llmjacking-evolved-attackers-are-using-stolen-ai-compute-to-build-offensive-agentic-tools; https://labs.cloudsecurityalliance.org/research/csa-research-note-llmjacking-evolved-offensive-agentic-20260/",
+        "summary": "On 12 and 14 June 2026, Sysdig's Threat Research Team observed an actor run an offensive tool that Sysdig calls VAPT: a pipeline that 'scans a target, matches it to known vulnerabilities, writes proof-of-concept exploits, and attempts to break into a victim's environment — with the model making the decisions at every step'. Its reasoning engine was an Ollama model server 'bound to a public interface with no authentication': 'The actor found the server, confirmed that it would answer, and then pointed their tool at it.' Sysdig does not say whose server it was and reports no harm to its owner. The tool's targets were private: 'No public host appeared as a target across the entire window'; they were practice apps that the actor stood up and HackTheBox lab networks. Sysdig attributes the four sessions to one actor with Indian residential IP addresses and calls the tool's intention 'still unclear' (Sysdig, 17 Jun 2026).",
+        "actor": {
+          "external": {
+            "variety": [
+              "Unknown"
+            ],
+            "motive": [
+              "Unknown"
+            ],
+            "country": [
+              "Unknown"
+            ],
+            "region": [
+              "000000"
+            ],
+            "notes": "Sysdig attributes the four sessions to one actor through the same pipeline, the same private benchmark targets and 'the shared Indian residential origin', and calls the tool's intention 'still unclear'. No Agentic system actor: a human found and used the server, and the pipeline attacked no victim (report.ai_initiated_rationale)."
+          }
+        },
+        "action": {
+          "hacking": {
+            "variety": [
+              "Exploit misconfig"
+            ],
+            "vector": [
+              "Web application"
+            ],
+            "result": [
+              "Infiltrate"
+            ],
+            "notes": "Used an Ollama model server without authentication as the reasoning engine of its exploitation pipeline."
+          }
+        },
+        "asset": {
+          "assets": [
+            {
+              "variety": "S - LLM application"
+            }
+          ],
+          "cloud": [
+            "Unknown"
+          ],
+          "notes": "An Ollama model server reachable on port 11434 without authentication; Sysdig does not say whose."
+        },
+        "attribute": {
+          "integrity": {
+            "variety": [
+              "Repurpose"
+            ],
+            "notes": "The actor's tool used the server's compute. Suspected: Sysdig does not say whose server it was or report any harm to its owner."
+          }
+        },
+        "discovery_method": {
+          "external": {
+            "variety": [
+              "Security researcher"
+            ]
+          }
+        },
+        "timeline": {
+          "incident": {
+            "year": 2026,
+            "month": 6,
+            "day": 12
+          }
+        },
+        "victim": {
+          "victim_id": "Owner of an exposed Ollama server (not named by Sysdig)",
+          "country": [
+            "Unknown"
+          ],
+          "employee_count": "Unknown",
+          "industry": "000",
+          "government": [
+            "NA"
+          ]
+        },
+        "plus": {
+          "master_id": "251781cd-f20a-4768-ad73-8ccd36410363"
+        }
+      },
+      "report": {
+        "ai_role": [
+          "AI system/harness attacked",
+          "AI-enabled attacker"
+        ],
+        "ai_component": [
+          "exposed Ollama model server used as the reasoning engine",
+          "LLM-driven exploitation pipeline (VAPT)"
+        ],
+        "ai_security_mechanism": [
+          "LLMjacking of an unauthenticated Ollama server",
+          "LLM-driven reconnaissance, exploit writing and orchestration"
+        ],
+        "ai_initiated_rationale": "The pipeline is an autonomous agent ('with the model making the decisions at every step', Sysdig), but its targets were the actor's own practice apps and lab networks: 'No public host appeared as a target across the entire window.' The only victim, the server's owner, was hit by the actor's own act: 'The actor found the server, confirmed that it would answer, and then pointed their tool at it.' So no AI agent found or exploited a flaw of a victim, and the record has no flag (methodology §4.2, §5.3).",
+        "observed_severity": "Negligible",
+        "observed_severity_rationale": "No documented harm: Sysdig reports no cost, change or data access for the server's owner and does not say whose server it was; the pipeline attacked only practice targets that the actor stood up and lab networks.",
+        "potential_severity": "Low",
+        "potential_severity_rationale": "The demonstrated path is the unauthorized use of one exposed model server's compute (methodology §7.3); the pipeline's exploits were demonstrated only against practice targets, so no victim's system lies on the path.",
+        "potential_severity_confidence": "Medium",
+        "weaknesses": [
+          {
+            "cwe": "CWE-306",
+            "mapping_basis": "Analyst inference (model server without authentication)",
+            "confidence": "High"
+          }
+        ]
+      },
+      "validated_cve": [],
+      "validated_cve_details": {
+        "validated_on": "2026-10-25",
+        "method_ref": "see top-level cve_validation.method",
+        "original_cve_mentions": [],
+        "added": [],
+        "removed": [],
+        "cves": [],
+        "note": "No CVE: 'There is no CVE in this particular operation.' (Sysdig)"
       }
     }
   ],

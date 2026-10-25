@@ -9,13 +9,13 @@ Everything below is built from the live records that have a validated CVE: the c
 | Observed severity | Incidents | With validated CVE | Without CVE (in scope) | Without CVE (out of scope) |
 |---|---|---|---|---|
 | Critical | 2 | 1 | 1 | 0 |
-| High | 25 | 8 | 16 | 1 |
+| High | 24 | 8 | 15 | 1 |
 | Medium | 32 | 3 | 22 | 7 |
-| Low | 16 | 2 | 12 | 2 |
-| Negligible | 8 | 0 | 3 | 5 |
-| total | 83 | 14 | 54 | 15 |
+| Low | 17 | 2 | 13 | 2 |
+| Negligible | 9 | 0 | 4 | 5 |
+| total | 84 | 14 | 55 | 15 |
 
-- **17 of the 26 in-scope High/Critical incidents have no CVE.** What identifies them instead: stolen credentials, misconfiguration, malicious package releases (GHSA/MAL/PYSEC advisories — see the non-CVE identifiers table), prompt injection, agent misuse.
+- **16 of the 25 in-scope High/Critical incidents have no CVE.** What identifies them instead: stolen credentials, misconfiguration, malicious package releases (GHSA/MAL/PYSEC advisories — see the non-CVE identifiers table), prompt injection, agent misuse.
 - 0 of the 14 counted incidents with a CVE are observed *Negligible*. A disclosure without a KEV listing, an exploitation report or realized harm is a sub-threshold record (methodology §3.3): 18 of them carry a CVE and enter the CVE-side statistics beside the counted incidents, marked †.
 - 6 incidents are identified only by non-CVE identifiers: DB-2026-005, DR-2026-012, DR-2026-035, DR-2026-045, DR-2026-046, DR-2026-063.
 
@@ -67,7 +67,7 @@ Everything below is built from the live records that have a validated CVE: the c
 
 ## Summary
 
-- **83 incidents**; **14** carry validated CVEs, 69 do not (6 of those have only non-CVE identifiers: DB-2026-005, DR-2026-012, DR-2026-035, DR-2026-045, DR-2026-046, DR-2026-063). Beside them **24 sub-threshold records** (†), 18 of them with validated CVEs.
+- **84 incidents**; **14** carry validated CVEs, 70 do not (6 of those have only non-CVE identifiers: DB-2026-005, DR-2026-012, DR-2026-035, DR-2026-045, DR-2026-046, DR-2026-063). Beside them **24 sub-threshold records** (†), 18 of them with validated CVEs.
 - **322 distinct CVEs**, 333 record–CVE links (63 of counted incidents, 270 of sub-threshold records). Only 11 CVEs occur in more than one record (all in exactly two): [CVE-2025-3248](https://www.cve.org/CVERecord?id=CVE-2025-3248), [CVE-2025-65720](https://www.cve.org/CVERecord?id=CVE-2025-65720), [CVE-2026-15903](https://www.cve.org/CVERecord?id=CVE-2026-15903), [CVE-2026-28472](https://www.cve.org/CVERecord?id=CVE-2026-28472), [CVE-2026-30623](https://www.cve.org/CVERecord?id=CVE-2026-30623), [CVE-2026-33634](https://www.cve.org/CVERecord?id=CVE-2026-33634), [CVE-2026-39987](https://www.cve.org/CVERecord?id=CVE-2026-39987), [CVE-2026-54316](https://www.cve.org/CVERecord?id=CVE-2026-54316), [CVE-2026-54769](https://www.cve.org/CVERecord?id=CVE-2026-54769), [CVE-2026-59726](https://www.cve.org/CVERecord?id=CVE-2026-59726), [CVE-2026-76021](https://www.cve.org/CVERecord?id=CVE-2026-76021).
 - Links by relation (all live records): `exploited` 5, `self (malicious release)` 4, `exploited-unconfirmed` 5, `attempted` 3, `toolkit` 7, `self (vulnerability)` 193, `discovered` 55, `related` 61.
 - **16 distinct CVEs on CISA KEV**; 20 CVE links in the exploited family (exploited 5, exploited-unconfirmed 5, attempted 3, toolkit 7).
@@ -77,7 +77,7 @@ Everything below is built from the live records that have a validated CVE: the c
 
 ## Findings
 
-1. **CVE covers the disclosures, not the breaches.** 17 of the 26 in-scope High/Critical incidents have no CVE; 14 of the 83 counted incidents carry a CVE, against 18 of the 24 sub-threshold disclosures (see *Coverage*). The CVE-side tables describe the part of the corpus that is easiest to identify, not the part that hurt most.
+1. **CVE covers the disclosures, not the breaches.** 16 of the 25 in-scope High/Critical incidents have no CVE; 14 of the 84 counted incidents carry a CVE, against 18 of the 24 sub-threshold disclosures (see *Coverage*). The CVE-side tables describe the part of the corpus that is easiest to identify, not the part that hurt most.
 2. **The CVE side is deep-research-sourced.** 29 of the 32 live records with a validated CVE (14 counted, 18 sub-threshold) come from the deep-research reports (DR ids), 3 from the registers — registers record breaches, not vulnerability disclosures. The CVEs are validated at CVE.org; the *sample* of CVE-bearing incidents is not representative of AI-related incidents.
 3. **Exploitation evidence tracked harm; the base score did not.** Every confirmed-`exploited` CVE is on CISA KEV, and the exploited family spans CVSS 6.5–10 — the same range as unexploited disclosures.
 4. **Medium CVSS ≠ safe.** 4 CVEs rated CVSS < 7.0 sit in potential-Critical incidents (jfrog/artifactory 3, anthropics/claude-code 1; incidents DB-2026-006, DR-2026-056). Per CVSS band, the share of CVEs in a potential-Critical incident is 31% for 9.0–10.0 against 5% / 5% for 7.0–8.9 / 4.0–6.9 — CVSS separates the top band, not the middle. 2 incidents; a case, not a statistic.
@@ -134,7 +134,7 @@ ID order; † marks a sub-threshold record. Records with more than 10 CVEs are l
 | DB-2026-018 | Autonomous 'Hermes' AI agent (YOLO mode) ran post-exploitation against Thailand's Ministry of Finance | High | High | 7 | *toolkit:* [CVE-2017-7269](https://www.cve.org/CVERecord?id=CVE-2017-7269), [CVE-2021-3156](https://www.cve.org/CVERecord?id=CVE-2021-3156), [CVE-2021-4034](https://www.cve.org/CVERecord?id=CVE-2021-4034), [CVE-2026-31431](https://www.cve.org/CVERecord?id=CVE-2026-31431), [CVE-2026-43284](https://www.cve.org/CVERecord?id=CVE-2026-43284), [CVE-2026-43500](https://www.cve.org/CVERecord?id=CVE-2026-43500), [CVE-2026-43503](https://www.cve.org/CVERecord?id=CVE-2026-43503) |
 | DB-2026-019 | Claude Opus 4.7 breached a real company it mistook for its fictional target during an Anthropic cyber evaluation | High | High | 0 | — |
 | DR-2026-020 | Sysdig May 10 — AI-agent-driven intrusion from marimo CVE-2026-39987 to full PostgreSQL dump in under an hour | High | High | 1 | *exploited:* [CVE-2026-39987](https://www.cve.org/CVERecord?id=CVE-2026-39987) |
-| DR-2026-021 | LLMjacking industrialized — Operation Bizarre Bazaar marketplace + Sysdig 'VAPT' autonomous pipeline | High | High | 0 | — |
+| DR-2026-021 | Operation Bizarre Bazaar — the LLMjacking marketplace silver.inc resold unauthorized access to 30+ LLM providers | Low | High | 0 | — |
 | DR-2026-022 | TeamPCP 'Mini Shai-Hulud' / TanStack npm worm (170+ packages; OpenAI employee devices, Mistral, UiPath) | High | High | 2 | *self (malicious release):* [CVE-2026-45321](https://www.cve.org/CVERecord?id=CVE-2026-45321); *related:* [CVE-2026-45758](https://www.cve.org/CVERecord?id=CVE-2026-45758) (+11 non-CVE ids) |
 | DR-2026-023 | Sysdig May 29 - agentic container/Kubernetes escape via marimo RCE, Docker-socket abuse, host root & cluster-secret extraction | High | High | 1 | *exploited:* [CVE-2026-39987](https://www.cve.org/CVERecord?id=CVE-2026-39987) |
 | DB-2026-024 | Cannabis Club Systems - public URLs / IDOR exposed 1,082,680 members (VCDB; no AI component) | High | High | 0 | — |
@@ -221,6 +221,7 @@ ID order; † marks a sub-threshold record. Records with more than 10 CVEs are l
 | DR-2026-105 | Malicious npm package mouse5212-super-formatter uploaded the files of Claude's /mnt/user-data directory to an attacker's GitHub account | Low | Medium | 0 | — |
 | DB-2026-106 | Lovable backend regression exposed public projects' source code and AI chat histories to any Lovable user for 77 days | Medium | High | 0 | — |
 | DR-2026-107 | RedAccess found ~5,000 vibe-coded apps on Lovable, Base44, Replit and Netlify open to anyone, close to 2,000 of them showing private data | Medium | High | 0 | — |
+| DR-2026-108 | Sysdig 'VAPT': an actor powered an autonomous exploitation pipeline with an exposed Ollama server, tested only on practice targets | Negligible | Low | 0 | — |
 
 ### Full CVE lists of the aggregate records
 
