@@ -208,6 +208,19 @@ class Mutations(unittest.TestCase):
     def test_false_positives_have_no_ai_role(self):
         self.assertFalse(has(self.run_v(), "false-positive-role"))
 
+    def test_false_positive_with_a_severity(self):
+        # Methodology §8.2: a false positive is no security incident, so both severities are Negligible.
+        for k in ("observed_severity", "potential_severity"):
+            with self.subTest(k=k):
+                d = copy.deepcopy(CORPUS)
+                rep = incident(d, "DB-2026-099")["report"]
+                rep["observed_severity"] = rep["potential_severity"] = "Negligible"
+                rep[k] = "Low"
+                self.assertTrue(has(vi.validate(d, UPSTREAM), "false-positive-severity", msg=k, incident="DB-2026-099"))
+
+    def test_false_positives_are_negligible(self):
+        self.assertFalse(has(self.run_v(), "false-positive-severity"))
+
     # ---- methodology §4.3, §4.6: event chains and the actor of a misuse
     def add_malware(self, iid):
         """Give a record with only a hacking action a second action category."""

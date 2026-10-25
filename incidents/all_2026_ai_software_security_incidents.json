@@ -63,8 +63,8 @@
       "Critical": 2,
       "High": 25,
       "Medium": 32,
-      "Low": 17,
-      "Negligible": 7
+      "Low": 16,
+      "Negligible": 8
     },
     "by_status": {
       "Confirmed": 75,
@@ -867,17 +867,6 @@
       "validated_cve": ""
     },
     {
-      "id": "DB-2026-074",
-      "incident": "Meta AI smart glasses exposed intimate user imagery/video to human reviewers in Kenya (AIID 1418)",
-      "date": "27 Feb 2026",
-      "status": "False positive",
-      "observed": "Low",
-      "potential": "Medium",
-      "sources": "incidentdatabase.ai_20260824_ai_incidents_2026.xlsx",
-      "cve_cwe": "CWE-noinfo",
-      "validated_cve": ""
-    },
-    {
       "id": "DB-2026-075",
       "incident": "Southern Design RV - CMD Organization extortion (VCDB; no AI component)",
       "date": "~20 Jun 2026",
@@ -955,12 +944,23 @@
       "validated_cve": ""
     },
     {
+      "id": "DB-2026-074",
+      "incident": "Meta AI smart glasses exposed intimate user imagery/video to human reviewers in Kenya (AIID 1418)",
+      "date": "27 Feb 2026",
+      "status": "False positive",
+      "observed": "Negligible",
+      "potential": "Negligible",
+      "sources": "incidentdatabase.ai_20260824_ai_incidents_2026.xlsx",
+      "cve_cwe": "CWE-noinfo",
+      "validated_cve": ""
+    },
+    {
       "id": "DB-2026-096",
       "incident": "Border Patrol facial recognition identified legal observer Nicole Cleland; Global Entry revoked (AIID 1362)",
       "date": "10 Jan 2026",
       "status": "False positive",
       "observed": "Negligible",
-      "potential": "Low",
+      "potential": "Negligible",
       "sources": "incidentdatabase.ai_20260824_ai_incidents_2026.xlsx",
       "cve_cwe": "CWE-noinfo",
       "validated_cve": ""
@@ -971,7 +971,7 @@
       "date": "21 Jan 2026",
       "status": "False positive",
       "observed": "Negligible",
-      "potential": "Low",
+      "potential": "Negligible",
       "sources": "incidentdatabase.ai_20260824_ai_incidents_2026.xlsx",
       "cve_cwe": "CWE-noinfo",
       "validated_cve": ""
@@ -982,7 +982,7 @@
       "date": "19 Feb 2026",
       "status": "False positive",
       "observed": "Negligible",
-      "potential": "Low",
+      "potential": "Negligible",
       "sources": "incidentdatabase.ai_20260824_ai_incidents_2026.xlsx",
       "cve_cwe": "CWE-noinfo",
       "validated_cve": ""
@@ -13711,10 +13711,10 @@
         "ai_security_mechanism": [
           "data-handling/privacy exposure (not a security compromise)"
         ],
-        "observed_severity": "Low",
-        "observed_severity_rationale": "A privacy/data-governance harm from AI product design and human review, not a security compromise of an asset.",
-        "potential_severity": "Medium",
-        "potential_severity_rationale": "Large-scale exposure of intimate content to reviewers/bystanders; a governance rather than intrusion risk.",
+        "observed_severity": "Negligible",
+        "observed_severity_rationale": "No security harm: Meta sent the footage to its own contractor for review, so no asset was compromised. The harm is a privacy and data-governance harm from AI product design and human review (methodology §8.2: a false positive is Negligible).",
+        "potential_severity": "Negligible",
+        "potential_severity_rationale": "No security path was demonstrated (methodology §7.3): the footage went where Meta sent it. The large-scale exposure of intimate content to reviewers is a privacy and governance risk, not a security one.",
         "potential_severity_confidence": "Low",
         "weaknesses": [
           {
@@ -14590,8 +14590,8 @@
         ],
         "observed_severity": "Negligible",
         "observed_severity_rationale": "No software-security compromise; a privacy/civil-liberties harm from lawful facial-recognition use.",
-        "potential_severity": "Low",
-        "potential_severity_rationale": "Chilling effects and misuse potential of face-recognition surveillance, but not a confidentiality/integrity/availability breach of an asset.",
+        "potential_severity": "Negligible",
+        "potential_severity_rationale": "No security path was demonstrated (methodology §7.3). The chilling effects and misuse potential of face-recognition surveillance are civil-liberties risks, not a confidentiality/integrity/availability breach of an asset.",
         "potential_severity_confidence": "Low",
         "weaknesses": [
           {
@@ -14703,8 +14703,8 @@
         ],
         "observed_severity": "Negligible",
         "observed_severity_rationale": "Not a software-security compromise; alleged surveillance/intimidation harm.",
-        "potential_severity": "Low",
-        "potential_severity_rationale": "Misuse of surveillance databases against protected activity, but not a CIA breach of an asset.",
+        "potential_severity": "Negligible",
+        "potential_severity_rationale": "No security path was demonstrated (methodology §7.3). Misuse of surveillance databases against protected activity is a civil-liberties risk, not a CIA breach of an asset.",
         "potential_severity_confidence": "Low",
         "weaknesses": [
           {
@@ -14816,8 +14816,8 @@
         ],
         "observed_severity": "Negligible",
         "observed_severity_rationale": "Not a software-security compromise; a harmful-output/doxxing privacy harm.",
-        "potential_severity": "Low",
-        "potential_severity_rationale": "Model-surfaced PII can amplify doxxing/harassment, but no CIA breach of an asset.",
+        "potential_severity": "Negligible",
+        "potential_severity_rationale": "No security path was demonstrated (methodology §7.3). Model-surfaced PII can amplify doxxing and harassment, a privacy risk, but no CIA breach of an asset.",
         "potential_severity_confidence": "Low",
         "weaknesses": [
           {

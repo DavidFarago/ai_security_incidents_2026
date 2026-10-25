@@ -11,8 +11,8 @@ Everything below is built from the live records that have a validated CVE: the c
 | Critical | 2 | 1 | 1 | 0 |
 | High | 25 | 8 | 16 | 1 |
 | Medium | 32 | 3 | 22 | 7 |
-| Low | 17 | 2 | 12 | 3 |
-| Negligible | 7 | 0 | 3 | 4 |
+| Low | 16 | 2 | 12 | 2 |
+| Negligible | 8 | 0 | 3 | 5 |
 | total | 83 | 14 | 54 | 15 |
 
 - **17 of the 26 in-scope High/Critical incidents have no CVE.** What identifies them instead: stolen credentials, misconfiguration, malicious package releases (GHSA/MAL/PYSEC advisories — see the non-CVE identifiers table), prompt injection, agent misuse.
@@ -187,7 +187,7 @@ ID order; † marks a sub-threshold record. Records with more than 10 CVEs are l
 | DB-2026-071 | OpenAI crawler accessed exposed Universa insurance customer data before detection | Low | Medium | 0 | — |
 | DB-2026-072 | Loma Linda University Health uploaded a patient-data file to an external AI platform (research) | Low | Medium | 0 | — |
 | DB-2026-073 | Alation (AI data-catalog vendor) confirmed a cyberattack (details undisclosed) | Low | Medium | 0 | — |
-| DB-2026-074 | Meta AI smart glasses exposed intimate user imagery/video to human reviewers in Kenya (AIID 1418) | Low | Medium | 0 | — |
+| DB-2026-074 | Meta AI smart glasses exposed intimate user imagery/video to human reviewers in Kenya (AIID 1418) | Negligible | Negligible | 0 | — |
 | DB-2026-075 | Southern Design RV - CMD Organization extortion (VCDB; no AI component) | Low | Medium | 0 | — |
 | DB-2026-076 | Melbourne Football Club — insider privilege abuse (VCDB; no AI component) | Low | Low | 0 | — |
 | DB-2026-077 | Hidden prompt injection in a Brazilian labour-court petition targeted the Galileu AI (blocked — near miss) | Negligible | High | 0 | — |
@@ -209,9 +209,9 @@ ID order; † marks a sub-threshold record. Records with more than 10 CVEs are l
 | DR-2026-093† | Google AI-assisted Chrome bug hunting found more issues in a short window than many prior cycles | Negligible | High | 1 | *discovered:* [CVE-2026-76021](https://www.cve.org/CVERecord?id=CVE-2026-76021) (+1 non-CVE ids) |
 | DR-2026-094† | Claude Opus 4.6 Firefox vulnerability-discovery campaign (22 vulnerabilities, 14 high; Firefox 148) | Negligible | High | 28 | **28 CVEs** — see [full list](#dr-2026-094) below |
 | DR-2026-095† | Claude Mythos Preview Firefox discovery wave (271 vulnerabilities fixed in Firefox 150) | Negligible | High | 6 | *discovered:* [CVE-2026-6784](https://www.cve.org/CVERecord?id=CVE-2026-6784), [CVE-2026-6785](https://www.cve.org/CVERecord?id=CVE-2026-6785), [CVE-2026-6786](https://www.cve.org/CVERecord?id=CVE-2026-6786); *related:* [CVE-2026-6746](https://www.cve.org/CVERecord?id=CVE-2026-6746), [CVE-2026-6757](https://www.cve.org/CVERecord?id=CVE-2026-6757), [CVE-2026-6758](https://www.cve.org/CVERecord?id=CVE-2026-6758) (+1 non-CVE ids) |
-| DB-2026-096 | Border Patrol facial recognition identified legal observer Nicole Cleland; Global Entry revoked (AIID 1362) | Negligible | Low | 0 | — |
-| DB-2026-097 | DHS agents threatened legal observers with a 'domestic terrorist' database while using AI-enabled surveillance (AIID 1390) | Negligible | Low | 0 | — |
-| DB-2026-098 | Grok disclosed adult performer Siri Dahl's legal name and birthdate - doxxing (AIID 1443) | Negligible | Low | 0 | — |
+| DB-2026-096 | Border Patrol facial recognition identified legal observer Nicole Cleland; Global Entry revoked (AIID 1362) | Negligible | Negligible | 0 | — |
+| DB-2026-097 | DHS agents threatened legal observers with a 'domestic terrorist' database while using AI-enabled surveillance (AIID 1390) | Negligible | Negligible | 0 | — |
+| DB-2026-098 | Grok disclosed adult performer Siri Dahl's legal name and birthdate - doxxing (AIID 1443) | Negligible | Negligible | 0 | — |
 | DB-2026-099 | NotebookLM voice-replication lawsuit — David Greene v. Google (AIID 1386) | Negligible | Negligible | 0 | — |
 | DR-2026-100 | Early Claude Mythos Preview escaped its test sandbox on request and, unasked, posted its exploit details online | Low | Medium | 0 | — |
 | DB-2026-101 | Claude Mythos 5 published a malicious PyPI package during an Anthropic cyber evaluation; a security vendor's scanner ran it and lost its credentials | High | High | 0 | — |

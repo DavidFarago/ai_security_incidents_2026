@@ -4,7 +4,7 @@
 
 Compiled 2026-08-26 as the union of `ai_software_security_incidents_2026.json` (35) and `merged_incidents_2026_VERIS_described.json` (64); 8 records numbered 100 or higher were added later. Ordered highest → lowest **observed** severity (realized harm), with **potential** severity (the bounded counterfactual from the demonstrated attack path) alongside — kept separate per the VERIS methodology, never collapsed. Severity is a report-specific ordinal rubric from VERIS evidence, **not** CVSS/AIRIS.
 
-- **2 Critical · 25 High · 32 Medium · 17 Low · 7 Negligible** (83 incidents; 2 near-miss, 5 *False positive* as outside the software-security inclusion criterion).
+- **2 Critical · 25 High · 32 Medium · 16 Low · 8 Negligible** (83 incidents; 2 near-miss, 5 *False positive* as outside the software-security inclusion criterion).
 - **Sub-threshold disclosures** (not counted here; methodology §3.3): 24 records (AI-written 1 · AI-stack 14 · AI-discovered 9), in `all_2026_ai_software_security_incidents_sub_threshold.md` / `.csv`.
 - **Original sources cited** (per methodology §5/§6): AIID export `incidentdatabase.ai_20260824_ai_incidents_2026.xlsx` (for incidents that AIID added later: the live AIID) and the VERIS Community Database `vz-risk/VCDB` for the register incidents; the three deep-research reports (`ChatGPT`/`ClaudeCode`/`Grok`_DeepResearch_ai_incidents_2026.md) for the rest. Citation counts: VCDB 49 · ClaudeCode 24 · ChatGPT 7 · AIID 17 · AIID (live) 4 · Grok 6.
 
@@ -87,7 +87,6 @@ Full VERIS + report-layer coding is in the companion `all_2026_ai_software_secur
 | 71 | OpenAI crawler accessed exposed Universa insurance customer data before detection | Jul 2026 | AI product breach | AI system/harness attacked | VCDB | Low | Medium |
 | 72 | Loma Linda University Health uploaded a patient-data file to an external AI platform (research) | May 2026 | AI product breach | AI system/harness attacked | VCDB | Low | Medium |
 | 73 | Alation (AI data-catalog vendor) confirmed a cyberattack (details undisclosed) | Aug 2026 | AI product breach | AI system/harness attacked | VCDB | Low | Medium |
-| 74 | Meta AI smart glasses exposed intimate user imagery/video to human reviewers in Kenya (AIID 1418) | Feb 2026 | Not a security event | — | AIID | Low | Medium |
 | 75 | Southern Design RV - CMD Organization extortion (VCDB; no AI component) | Jun 2026 | No AI (register context) | — | VCDB | Low | Medium |
 | 100 | Early Claude Mythos Preview escaped its test sandbox on request and, unasked, posted its exploit details online | 2026 | AI agent incident | AI-agent-caused incident | ClaudeCode | Low | Medium |
 | 105 | Malicious npm package mouse5212-super-formatter uploaded the files of Claude's /mnt/user-data directory to an attacker's GitHub account | May 2026 | AI supply chain | AI system/harness attacked | ClaudeCode | Low | Medium |
@@ -95,9 +94,10 @@ Full VERIS + report-layer coding is in the companion `all_2026_ai_software_secur
 | 77 | Hidden prompt injection in a Brazilian labour-court petition targeted the Galileu AI (blocked — near miss) | May 2026 | AI-discovered vuln | AI system/harness attacked, AI security control | AIID | Negligible | High |
 | 78 | Google GTIG — first AI-developed zero-day exploit used by a cybercrime actor (2FA bypass) | May 2026 | AI-driven attack | AI-enabled attacker | ChatGPT+ClaudeCode+Grok | Negligible | High |
 | 82 | UK AISI cyber-capability evaluation — unsanctioned agent actions against real people/projects | Jul 2026 | AI agent incident | AI-agent-caused incident, AI-enabled attacker | ChatGPT+Grok | Negligible | High |
-| 96 | Border Patrol facial recognition identified legal observer Nicole Cleland; Global Entry revoked (AIID 1362) | Jan 2026 | Not a security event | — | AIID | Negligible | Low |
-| 97 | DHS agents threatened legal observers with a 'domestic terrorist' database while using AI-enabled surveillance (AIID 1390) | Jan 2026 | Not a security event | — | AIID | Negligible | Low |
-| 98 | Grok disclosed adult performer Siri Dahl's legal name and birthdate - doxxing (AIID 1443) | Feb 2026 | Not a security event | — | AIID | Negligible | Low |
+| 74 | Meta AI smart glasses exposed intimate user imagery/video to human reviewers in Kenya (AIID 1418) | Feb 2026 | Not a security event | — | AIID | Negligible | Negligible |
+| 96 | Border Patrol facial recognition identified legal observer Nicole Cleland; Global Entry revoked (AIID 1362) | Jan 2026 | Not a security event | — | AIID | Negligible | Negligible |
+| 97 | DHS agents threatened legal observers with a 'domestic terrorist' database while using AI-enabled surveillance (AIID 1390) | Jan 2026 | Not a security event | — | AIID | Negligible | Negligible |
+| 98 | Grok disclosed adult performer Siri Dahl's legal name and birthdate - doxxing (AIID 1443) | Feb 2026 | Not a security event | — | AIID | Negligible | Negligible |
 | 99 | NotebookLM voice-replication lawsuit — David Greene v. Google (AIID 1386) | Jan 2026 | Not a security event | — | AIID | Negligible | Negligible |
 
 ---
@@ -419,7 +419,7 @@ Full VERIS + report-layer coding is in the companion `all_2026_ai_software_secur
 **Validated CVEs:** none identified · Hacking/exfiltration (VCDB); no CVE identified, no AI component.
 
 
-### LOW tier (17 incidents)
+### LOW tier (16 incidents)
 
 **57. RufRoot (CVE-2026-59726, CVSS 10.0) in Ruflo/Claude Flow + max-severity agent-harness CVEs (Langroid, LiteLLM) — 2026.** 'RufRoot' (CVE-2026-59726, CVSS 10.0) in Ruflo (formerly Claude Flow), a popular multi-agent orchestration harness, exposed a large set of privileged tools — shell execution, database access, persistent memory — through an unauthenticated MCP bridge. Additional maximum-severity findings were reported in Langroid, LiteLLM and related agent infrastructure. These are agent-harness product vulnerabilities; the grok report notes exposure/risk rather than a confirmed mass breach.
 *VERIS: Confirmed · Observed **Low**, Potential **Critical** (confidence Medium). An unauthenticated bridge to privileged agent tools is effectively remote code execution and data access wherever these harnesses are internet-reachable. · CVE: CVE-2026-59726*
@@ -481,12 +481,6 @@ Full VERIS + report-layer coding is in the companion `all_2026_ai_software_secur
 **Sources:** [VCDB #24210](https://github.com/vz-risk/VCDB/issues/24210) · **Reporting:** [TechCrunch](https://techcrunch.com/2026/08/20/ai-data-giant-alation-confirms-cyberattack/)
 **Validated CVEs:** none identified · Alation cyberattack, root cause undisclosed; no CVE.
 
-**74. Meta AI smart glasses exposed intimate user imagery/video to human reviewers in Kenya (AIID 1418) — Feb 2026.** Ray-Ban Meta AI glasses that mis-triggered captured footage (bathrooms, sex, documents) that Sama contractors in Nairobi then reviewed, often without the recorded people's knowledge; the reports prompted lawsuits and regulatory inquiries before Meta paused the work and ended the Sama contract (~1,108 workers). Per the VERIS methodology this is a data-handling/privacy practice, not an unauthorized security event against a data controller - included only for register completeness.
-*AI-involvement: Outside the software-security inclusion criterion (data-handling/privacy practice); not a VERIS security incident.*
-*VERIS: False positive · Observed **Low**, Potential **Medium** (confidence Medium). Large-scale exposure of intimate content to reviewers/bystanders; a governance rather than intrusion risk.*
-**Sources:** [AIID 1418](https://incidentdatabase.ai/cite/1418) · **Reporting:** [TechCrunch](https://techcrunch.com/2026/03/05/meta-sued-over-ai-smartglasses-privacy-concerns-after-workers-reviewed-nudity-sex-and-other-footage/), [svd.se](https://www.svd.se/a/K8nrV4/metas-ai-smart-glasses-and-data-privacy-concerns-workers-say-we-see-everything), [gizmodo.com](https://gizmodo.com/dear-meta-smart-glasses-wearers-youre-being-watched-too-2000728928)
-**Validated CVEs:** none identified · Data-handling/privacy practice (False positive per methodology); no CVE.
-
 **75. Southern Design RV - CMD Organization extortion (VCDB; no AI component) — Jun 2026.** Southern Design RV (Ballarat, VIC caravan/RV dealer) was listed on the CMD Organization extortion leak site ~20 Jun 2026; the group claimed stolen customer data (names, addresses, emails, phones, purchase details) and launched a 5 BTC auction. Conventional extortion breach with no AI component; included because it appears in the CC_MIT_VCDB 2026 register.
 *AI-involvement: No AI component. Included for register completeness; not an AI-related incident.*
 *VERIS: Confirmed · Observed **Low**, Potential **Medium** (confidence Medium). Customer PII sale/fraud; small population.*
@@ -510,7 +504,7 @@ Full VERIS + report-layer coding is in the companion `all_2026_ai_software_secur
 **Validated CVEs:** none identified · Insider privilege abuse (VCDB); no CVE, no AI component.
 
 
-### NEGLIGIBLE observed tier (7 incidents)
+### NEGLIGIBLE observed tier (8 incidents)
 
 **77. Hidden prompt injection in a Brazilian labour-court petition targeted the Galileu AI (blocked — near miss) — May 2026.** A petition filed before the 3rd Labour Court of Parauapebas (Brazil) contained hidden text instructing the court's Galileu AI to contest the petition only superficially and not challenge documents (a prompt-injection attack). Galileu detected the injected instructions, alerted the judge with a technical flag, and refused to process the injected content; the judge reviewed the material himself. Attempted integrity manipulation of a judicial-decision-support AI, blocked by design — a near miss.
 *VERIS: Near miss · Observed **Negligible**, Potential **High** (confidence High). Had the injection succeeded it could have steered a court AI to under-contest a case and not challenge documents, corrupting judicial output — a serious integrity/authenticity harm.*
@@ -527,21 +521,27 @@ Full VERIS + report-layer coding is in the companion `all_2026_ai_software_secur
 **Sources:** [ChatGPT Operational compromises and agent-harness incidents › UK AISI unsanctioned behavior](https://github.com/DavidFarago/ai_security_incidents_2026/blob/ecb3ccd52e17931f30fb6887020458a922a945d9/incidents/sources/ChatGPT_DeepResearch_ai_incidents_2026.md?plain=1#L89-L91), [Grok §3.4](https://github.com/DavidFarago/ai_security_incidents_2026/blob/ecb3ccd52e17931f30fb6887020458a922a945d9/incidents/sources/Grok_DeepResearch_ai_incidents_2026.md?plain=1#L100-L109) · **Reporting:** [UK AISI](https://www.aisi.gov.uk/blog/incident-report-unsanctioned-agent-behaviour-during-cyber-testing)
 **Validated CVEs:** none identified · Unsanctioned agent behaviour during AISI testing; no CVE.
 
+**74. Meta AI smart glasses exposed intimate user imagery/video to human reviewers in Kenya (AIID 1418) — Feb 2026.** Ray-Ban Meta AI glasses that mis-triggered captured footage (bathrooms, sex, documents) that Sama contractors in Nairobi then reviewed, often without the recorded people's knowledge; the reports prompted lawsuits and regulatory inquiries before Meta paused the work and ended the Sama contract (~1,108 workers). Per the VERIS methodology this is a data-handling/privacy practice, not an unauthorized security event against a data controller - included only for register completeness.
+*AI-involvement: Outside the software-security inclusion criterion (data-handling/privacy practice); not a VERIS security incident.*
+*VERIS: False positive · Observed **Negligible**, Potential **Negligible** (confidence Medium). No security path was demonstrated (methodology §7.3): the footage went where Meta sent it. The large-scale exposure of intimate content to reviewers is a privacy and governance risk, not a security one.*
+**Sources:** [AIID 1418](https://incidentdatabase.ai/cite/1418) · **Reporting:** [TechCrunch](https://techcrunch.com/2026/03/05/meta-sued-over-ai-smartglasses-privacy-concerns-after-workers-reviewed-nudity-sex-and-other-footage/), [svd.se](https://www.svd.se/a/K8nrV4/metas-ai-smart-glasses-and-data-privacy-concerns-workers-say-we-see-everything), [gizmodo.com](https://gizmodo.com/dear-meta-smart-glasses-wearers-youre-being-watched-too-2000728928)
+**Validated CVEs:** none identified · Data-handling/privacy practice (False positive per methodology); no CVE.
+
 **96. Border Patrol facial recognition identified legal observer Nicole Cleland; Global Entry revoked (AIID 1362) — Jan 2026.** Legal observer Nicole Cleland reported that a CBP Border Patrol agent stopped her, addressed her by name, and said agents used facial recognition (Mobile Fortify) to identify her while she recorded enforcement; her Global Entry/TSA PreCheck were revoked three days later, which she alleged was retaliation. Per the VERIS methodology this is NOT a software-security incident — it is lawful use of a deployed AI system against a person, with no victim organisation losing control of an asset — included here only because it appears in the CC_MIT_VCDB register.
 *AI-involvement: Outside the software-security inclusion criterion (privacy/civil-liberties harm from lawful AI use); not a VERIS security incident. Retained for register completeness.*
-*VERIS: False positive · Observed **Negligible**, Potential **Low** (confidence Medium). Chilling effects and misuse potential of face-recognition surveillance, but not a confidentiality/integrity/availability breach of an asset.*
+*VERIS: False positive · Observed **Negligible**, Potential **Negligible** (confidence Medium). No security path was demonstrated (methodology §7.3). The chilling effects and misuse potential of face-recognition surveillance are civil-liberties risks, not a confidentiality/integrity/availability breach of an asset.*
 **Sources:** [AIID 1362](https://incidentdatabase.ai/cite/1362) · **Reporting:** [Ars Technica](https://arstechnica.com/tech-policy/2026/01/ice-protester-says-her-global-entry-was-revoked-after-agent-scanned-her-face/)
 **Validated CVEs:** none identified · Not a software-security incident (False positive); no CVE.
 
 **97. DHS agents threatened legal observers with a 'domestic terrorist' database while using AI-enabled surveillance (AIID 1390) — Jan 2026.** Plaintiffs alleged DHS personnel used AI-enabled surveillance (facial recognition, ALPRs) to identify people recording immigration enforcement and threatened to add them to a 'domestic terrorist' database. Per the VERIS methodology this is not a software-security incident — it concerns alleged surveillance and intimidation, not a compromise of an information asset — included only for register completeness (companion to AIID 1362).
 *AI-involvement: Outside the software-security inclusion criterion (surveillance/civil-liberties); not a VERIS security incident.*
-*VERIS: False positive · Observed **Negligible**, Potential **Low** (confidence Low). Misuse of surveillance databases against protected activity, but not a CIA breach of an asset.*
+*VERIS: False positive · Observed **Negligible**, Potential **Negligible** (confidence Low). No security path was demonstrated (methodology §7.3). Misuse of surveillance databases against protected activity is a civil-liberties risk, not a CIA breach of an asset.*
 **Sources:** [AIID 1390](https://incidentdatabase.ai/cite/1390) · **Reporting:** [protectdemocracy.org](https://protectdemocracy.org/wp-content/uploads/2026/02/Hilton-v-Noem-ECF-1-Complaint-.pdf), [scrippsnews.com](https://www.scrippsnews.com/politics/immigration/dhs-accused-of-using-surveillance-technology-to-track-legal-observers)
 **Validated CVEs:** none identified · Not a software-security incident (False positive); no CVE.
 
 **98. Grok disclosed adult performer Siri Dahl's legal name and birthdate - doxxing (AIID 1443) — Feb 2026.** Grok reportedly disclosed adult performer Siri Dahl's legal name and birthdate unprompted; she said she had worked to keep them private and that impersonation accounts and reposts of stolen content using her legal name appeared afterward. Per the VERIS methodology this is harmful model output/doxxing, not a compromise of an organisation's asset - included only for register completeness.
 *AI-involvement: Outside the software-security inclusion criterion (harmful model output); not a VERIS security incident.*
-*VERIS: False positive · Observed **Negligible**, Potential **Low** (confidence Medium). Model-surfaced PII can amplify doxxing/harassment, but no CIA breach of an asset.*
+*VERIS: False positive · Observed **Negligible**, Potential **Negligible** (confidence Medium). No security path was demonstrated (methodology §7.3). Model-surfaced PII can amplify doxxing and harassment, a privacy risk, but no CIA breach of an asset.*
 **Sources:** [AIID 1443](https://incidentdatabase.ai/cite/1443) · **Reporting:** [Mashable](https://mashable.com/article/siri-dahl-doxxed-by-grok)
 **Validated CVEs:** none identified · Harmful model output/doxxing (False positive); no CVE.
 

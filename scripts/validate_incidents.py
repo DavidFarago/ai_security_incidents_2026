@@ -387,6 +387,12 @@ def check_class_b(d, up, r: Result):
         if v.get("security_incident") == "False positive" and rep.get("ai_role"):
             r.add("B", "false-positive-role", f"False positive with report.ai_role {rep['ai_role']}: the roles describe AI's "
                   "part in a security incident (methodology §5.1); record AI's involvement in ai_component and ai_involvement_note", iid)
+        if v.get("security_incident") == "False positive":
+            for k in ("observed_severity", "potential_severity"):
+                if rep.get(k) != "Negligible":
+                    r.add("B", "false-positive-severity", f"False positive with report.{k} {rep.get(k)!r}: a false positive is no "
+                          "security incident, so both severities are Negligible; its other harms go into the rationale "
+                          "(methodology §8.2)", iid)
         if "misuse" in (v.get("action") or {}) and not {"internal", "partner"} & set(v.get("actor") or {}):
             r.add("B", "misuse-actor", "veris.action.misuse needs an internal or partner actor: VERIS reserves misuse for "
                   "parties the organization trusts; an outsider's abuse of a service is hacking (methodology §4.3)", iid)
