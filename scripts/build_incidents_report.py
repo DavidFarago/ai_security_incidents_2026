@@ -40,8 +40,9 @@ MAX_CVE_LINKS = 12   # per relation group on the Validated CVEs line
 MAX_NON_CVE = 6
 CSV_COLS = ["id", "date", "incident", "status", "observed_severity", "potential_severity", "potential_confidence",
             "confidence", "sources", "source_citations", "ai_role", "ai_component", "ai_security_mechanism",
-            "actor", "action", "asset", "data_disclosure", "cve", "validated_cve", "cwe", "victim", "industry_naics",
-            "observed_severity_rationale", "potential_severity_rationale", "references"]
+            "ai_initiated", "actor", "action", "asset", "data_disclosure", "cve", "validated_cve", "cwe", "victim",
+            "industry_naics", "observed_severity_rationale", "potential_severity_rationale", "ai_initiated_rationale",
+            "references"]
 LINK_NAMES = {
     "anthropic.com": "Anthropic", "www-cdn.anthropic.com": "Anthropic", "openai.com": "OpenAI", "huggingface.co": "Hugging Face", "wiz.io": "Wiz",
     "koi.ai": "Koi Security", "bitdefender.com": "Bitdefender", "thehackernews.com": "The Hacker News",
@@ -193,14 +194,15 @@ def render_csv(records):
         cwe = "; ".join(x.get("cwe", "") for x in rep.get("weaknesses", []) if x.get("cwe"))
         srcs = "; ".join(dict.fromkeys(c["source"] for c in e["sources"]))
         srccit = "; ".join("|".join([c["source"], c.get("locator", ""), c.get("url", "")]).rstrip("|") for c in e["sources"])
+        flag = {True: "true", False: "false"}.get(rep.get("ai_initiated"), "")   # methodology §5.3: absent -> empty
         w.writerow([e["id"], e["date"], e["title"], v["security_incident"], rep["observed_severity"],
                     rep["potential_severity"], rep.get("potential_severity_confidence", ""), v.get("confidence", ""),
                     srcs, srccit, joinlist(rep["ai_role"]), joinlist(rep.get("ai_component", [])),
-                    joinlist(rep.get("ai_security_mechanism", [])), actor, action, assets, dd, cve,
+                    joinlist(rep.get("ai_security_mechanism", [])), flag, actor, action, assets, dd, cve,
                     "; ".join(e.get("validated_cve") or []), cwe,
                     v.get("victim", {}).get("victim_id", ""), v.get("victim", {}).get("industry", ""),
                     rep.get("observed_severity_rationale", ""), rep.get("potential_severity_rationale", ""),
-                    v.get("reference", "")])
+                    rep.get("ai_initiated_rationale", ""), v.get("reference", "")])
     return buf.getvalue()
 
 

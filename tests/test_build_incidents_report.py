@@ -5,6 +5,8 @@ Run: python3 -m unittest discover tests
 from __future__ import annotations
 
 import copy
+import csv
+import io
 import sys
 import unittest
 from pathlib import Path
@@ -80,6 +82,33 @@ class SourceLine(unittest.TestCase):
     def test_live_aiid_link_is_labelled_like_the_export(self):
         url = "https://incidentdatabase.ai/cite/1627"
         self.assertEqual(bir.cite_md({"source": "incidentdatabase.ai", "locator": "AIID 1627", "url": url}), f"[AIID 1627]({url})")
+
+
+class AiInitiatedColumns(unittest.TestCase):
+    def test_three_states_and_the_rationale(self):
+        # Methodology §5.3: report.ai_initiated is true, false or absent; the CSV writes true, false or an empty cell.
+        d = copy.deepcopy(CORPUS)
+        for iid, value in (("DB-2026-006", True), ("DR-2026-002", False)):
+            rep = incident(d, iid)["report"]
+            rep["ai_initiated"], rep["ai_initiated_rationale"] = value, f"Reason for {iid}."
+        for k in ("ai_initiated", "ai_initiated_rationale"):
+            incident(d, "DB-2026-028")["report"].pop(k, None)
+        rep = incident(d, "DR-2026-035")["report"]
+        rep.pop("ai_initiated", None)
+        rep["ai_initiated_rationale"] = "Reason for DR-2026-035."
+        rows = list(csv.reader(io.StringIO(bir.render_csv(d["incidents"]))))
+        head = rows[0]
+        self.assertLess(head.index("ai_security_mechanism"), head.index("ai_initiated"))
+        self.assertLess(head.index("potential_severity_rationale"), head.index("ai_initiated_rationale"))
+        by_id = {row[0]: dict(zip(head, row)) for row in rows[1:]}
+        self.assertEqual(by_id["DB-2026-006"]["ai_initiated"], "true")
+        self.assertEqual(by_id["DR-2026-002"]["ai_initiated"], "false")
+        self.assertEqual(by_id["DB-2026-028"]["ai_initiated"], "")
+        self.assertEqual(by_id["DB-2026-006"]["ai_initiated_rationale"], "Reason for DB-2026-006.")
+        self.assertEqual(by_id["DB-2026-028"]["ai_initiated_rationale"], "")
+        # A rationale without the flag (methodology §5.3): empty flag cell, rationale written.
+        self.assertEqual(by_id["DR-2026-035"]["ai_initiated"], "")
+        self.assertEqual(by_id["DR-2026-035"]["ai_initiated_rationale"], "Reason for DR-2026-035.")
 
 
 class VerisCategories(unittest.TestCase):

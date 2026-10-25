@@ -392,6 +392,7 @@ def check_class_b(d, up, r: Result):
                   "parties the organization trusts; an outsider's abuse of a service is hacking (methodology §4.3)", iid)
         check_event_chain(i, r)
         check_veris_142(i, r)
+        check_ai_initiated(i, r)
         deliberate = sorted(set(v.get("action") or {}) & DELIBERATE_ACTIONS)
         motives = [m for a in (v.get("actor") or {}).values() if isinstance(a, dict) for m in a.get("motive") or []]
         if deliberate and not [m for m in motives if m != "NA"]:
@@ -493,6 +494,35 @@ def check_veris_142(i, r):
     if "AI-agent-caused incident" in (i["report"].get("ai_role") or []) and not agentic:
         r.add("B", "agentic-role", "report.ai_role 'AI-agent-caused incident' needs 'Agentic system' in veris.actor "
               "(methodology §5.1)", iid)
+
+
+def check_ai_initiated(i, r):
+    """Methodology §5.3: report.ai_initiated is true, false or absent, and report.ai_initiated_rationale is a non-empty
+    string whenever either field is present: the flag needs it, and a record without the flag may use it to say why it has
+    none. Only a record with an `Agentic system` actor has the flag. `true` needs the role "AI-agent-caused incident" and
+    an actor branch with `Agentic system` and the motive `Misalignment`; the converse need not hold. Whether an act went
+    beyond the AI's instructions, and whether a rationale is relevant, is judgment, which no check can test."""
+    rep, iid = i["report"], i["id"]
+    if "ai_initiated" not in rep and "ai_initiated_rationale" not in rep:
+        return
+    flag, why = rep.get("ai_initiated"), rep.get("ai_initiated_rationale")
+    if "ai_initiated" in rep and not isinstance(flag, bool):
+        r.add("B", "ai-initiated", f"report.ai_initiated {flag!r} is no boolean: true, false or absent (methodology §5.3)", iid)
+    if not (isinstance(why, str) and why.strip()):
+        r.add("B", "ai-initiated", "report.ai_initiated_rationale must be a non-empty string; report.ai_initiated needs "
+              "it (methodology §5.3)", iid)
+    branches = [b for b in (i["veris"].get("actor") or {}).values() if isinstance(b, dict)]
+    agentic = [b for b in branches if "Agentic system" in (b.get("variety") or [])]
+    if "ai_initiated" in rep and not agentic:
+        r.add("B", "ai-initiated", "report.ai_initiated needs 'Agentic system' in veris.actor: the flag rates the acts of "
+              "an AI agent (methodology §5.3)", iid)
+    if flag is True:
+        if "AI-agent-caused incident" not in (rep.get("ai_role") or []):
+            r.add("B", "ai-initiated", "report.ai_initiated true needs 'AI-agent-caused incident' in report.ai_role "
+                  "(methodology §5.3)", iid)
+        if agentic and not [b for b in agentic if "Misalignment" in (b.get("motive") or [])]:
+            r.add("B", "ai-initiated", "report.ai_initiated true needs the motive 'Misalignment' in an actor branch with "
+                  "'Agentic system' (methodology §5.3)", iid)
 
 VCDB_PINNED = r"https://github\.com/vz-risk/VCDB/blob/[0-9a-f]{40}/"
 
@@ -744,7 +774,7 @@ def report(r: Result, verbose: bool) -> str:
     L.append(f"measurement — sub_threshold_incidents (disclosures failing §3.3; not counted): {r.measurements.get('sub_threshold_records', 0)} records"
              + (f", by class {r.measurements['sub_threshold_classes']}" if r.measurements.get("sub_threshold_classes") else "")
              + f"; retired_incidents: {r.measurements.get('retired_records', 0)}")
-    L.append("Class C (judgment) is not checked: relation, CVE membership, notes, severities, ai_role, inclusion, "
+    L.append("Class C (judgment) is not checked: relation, CVE membership, notes, severities, ai_role, ai_initiated, inclusion, "
              "§3.3 (b), whether a record without a CVE is a disclosure, and whether the events of one record need the same values.")
     return "\n".join(L)
 

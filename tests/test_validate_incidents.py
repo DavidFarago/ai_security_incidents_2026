@@ -731,6 +731,78 @@ class Veris142(unittest.TestCase):
         self.assertTrue(has(self.run_v(), "schema-version", incident="DB-2026-019"))
 
 
+class AiInitiated(unittest.TestCase):
+    """Methodology §5.3: report.ai_initiated is true, false or absent, always with a rationale, which may also stand without
+    the flag; only a record with an Agentic system actor has the flag; true needs the role "AI-agent-caused incident" and
+    an agentic branch with the motive Misalignment (not the converse)."""
+
+    def setUp(self):
+        self.d = copy.deepcopy(CORPUS)
+
+    def run_v(self):
+        return vi.validate(self.d, UPSTREAM)
+
+    def flag(self, iid, value, rationale="The decisive source sentence."):
+        rep = incident(self.d, iid)["report"]
+        rep["ai_initiated"], rep["ai_initiated_rationale"] = value, rationale
+        return rep
+
+    def test_flag_is_a_boolean(self):
+        self.flag("DB-2026-006", "true")
+        r = self.run_v()
+        self.assertTrue(has(r, "ai-initiated", msg="boolean", incident="DB-2026-006"))
+        self.assertEqual(len([f for f in r.errors if f.check == "ai-initiated"]), 1, "a string is no true: one finding")
+
+    def test_null_is_no_boolean(self):
+        self.flag("DB-2026-006", None)
+        self.assertTrue(has(self.run_v(), "ai-initiated", msg="boolean", incident="DB-2026-006"))
+
+    def test_flag_without_rationale(self):
+        del self.flag("DB-2026-006", True)["ai_initiated_rationale"]
+        self.assertTrue(has(self.run_v(), "ai-initiated", msg="rationale", incident="DB-2026-006"))
+
+    def test_empty_rationale(self):
+        self.flag("DB-2026-006", True, " ")
+        self.assertTrue(has(self.run_v(), "ai-initiated", msg="rationale", incident="DB-2026-006"))
+
+    def test_rationale_without_flag_passes(self):
+        # Methodology §5.3: a record without the flag may say why it has none, e.g. a prompt-injected agent.
+        rep = incident(self.d, "DR-2026-035")["report"]
+        rep.pop("ai_initiated", None)
+        rep["ai_initiated_rationale"] = "The bot is the attacked asset, steered by prompt injection."
+        self.assertFalse(has(self.run_v(), "ai-initiated", incident="DR-2026-035"))
+
+    def test_empty_rationale_without_flag(self):
+        rep = incident(self.d, "DR-2026-035")["report"]
+        rep.pop("ai_initiated", None)
+        rep["ai_initiated_rationale"] = ""
+        self.assertTrue(has(self.run_v(), "ai-initiated", msg="rationale", incident="DR-2026-035"))
+
+    def test_flag_needs_an_agentic_actor(self):
+        # DR-2026-035: the prompt-injected agent is the attacked asset, not an actor (methodology §4.2).
+        self.flag("DR-2026-035", False)
+        self.assertTrue(has(self.run_v(), "ai-initiated", msg="Agentic system", incident="DR-2026-035"))
+
+    def test_true_needs_the_agent_role(self):
+        rep = self.flag("DB-2026-006", True)
+        rep["ai_role"] = [x for x in rep["ai_role"] if x != "AI-agent-caused incident"]
+        self.assertTrue(has(self.run_v(), "ai-initiated", msg="AI-agent-caused incident", incident="DB-2026-006"))
+
+    def test_true_needs_misalignment(self):
+        # DR-2026-002: operators directed the agent (motive Financial), so its branch has no Misalignment.
+        self.flag("DR-2026-002", True)
+        self.assertTrue(has(self.run_v(), "ai-initiated", msg="Misalignment", incident="DR-2026-002"))
+
+    def test_false_needs_neither_role_nor_misalignment(self):
+        # An AI discovery campaign: an agentic actor with motive Other and without the agent role.
+        self.flag("DR-2026-058", False)
+        self.assertFalse(has(self.run_v(), "ai-initiated", incident="DR-2026-058"))
+
+    def test_valid_true_passes(self):
+        self.flag("DB-2026-006", True)
+        self.assertFalse(has(self.run_v(), "ai-initiated", incident="DB-2026-006"))
+
+
 class SourceLocators(unittest.TestCase):
     """Methodology §10.2: every sources entry has a locator and a url. A report held in this repo is cited by a
     permalink pinned to a commit, with a line range inside the passage that the locator names; a register url ends

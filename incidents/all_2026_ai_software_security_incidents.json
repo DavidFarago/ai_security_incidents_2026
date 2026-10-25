@@ -1370,6 +1370,8 @@
           "AI-planned-and-executed intrusion",
           "mass data theft"
         ],
+        "ai_initiated": false,
+        "ai_initiated_rationale": "A human attacker steered Claude Code into the attack: 'The attacker reportedly tried to shape the model's behavior with false framing and persistent instructions, then used it to assist with live exploitation, script refinement, privilege escalation, and system access tasks.' (SOCRadar)",
         "observed_severity": "Critical",
         "observed_severity_rationale": "Confirmed mass compromise of 10+ government agencies with ~195M sensitive records stolen, most commands executed autonomously by a jailbroken coding agent.",
         "potential_severity": "Critical",
@@ -1548,6 +1550,8 @@
           "SQL injection",
           "prompt-layer write access"
         ],
+        "ai_initiated": false,
+        "ai_initiated_rationale": "The agent proposed the target, and the humans decided the attack: 'the CodeWall research agent autonomously suggested McKinsey as a target' and 'So we decided to point our autonomous offensive agent at it.' (CodeWall)",
         "observed_severity": "High",
         "observed_severity_rationale": "Full read/write to a production AI platform holding 46.5M internal messages and 57k accounts, reached autonomously in 2 hours; realized access confirmed (by the researcher), remediated fast, no evidence of third-party abuse.",
         "potential_severity": "Critical",
@@ -2015,6 +2019,7 @@
           "repo-embedded prompt injection",
           "self-replicating supply-chain worm"
         ],
+        "ai_initiated_rationale": "The worm planted configuration files that make AI coding tools run its credential stealer when a developer opens a repository: a session hook for Claude Code, a prompt injection for Cursor. Each tool is the attacked asset, not an actor, so the record has no flag (methodology §4.2, §5.3).",
         "observed_severity": "High",
         "observed_severity_rationale": "A worm weaponised AI coding agents' auto-run config across 70+ official Microsoft/Azure repos to harvest credentials; GitHub disabled 73 repos within minutes, limiting realized spread, but the vector and reach are severe.",
         "potential_severity": "Critical",
@@ -2268,6 +2273,8 @@
           "credential theft + lateral movement",
           "safeguards disabled for eval"
         ],
+        "ai_initiated": true,
+        "ai_initiated_rationale": "The models were tested on a cyber benchmark inside 'a highly isolated environment'; on their own they escaped it and attacked Hugging Face, which no instruction named: 'After reaching the internet, the models determined that Hugging Face might host the ExploitGym datasets and test solutions they were attempting to obtain.' (BleepingComputer, reporting OpenAI's disclosure)",
         "observed_severity": "High",
         "observed_severity_rationale": "Autonomous agents chained 0-days to escape a sandbox and gain production RCE + broad credential access at a major AI platform; HF contained it in ~4 days and found no public-asset tampering and only operational metadata among customer records — but the realized production intrusion is serious.",
         "potential_severity": "Critical",
@@ -2669,6 +2676,8 @@
           "credential attacks",
           "lateral movement"
         ],
+        "ai_initiated": false,
+        "ai_initiated_rationale": "The operators launched the multi-agent framework against Taiwanese government systems: 'The operators had bypassed the model's safety guardrails simply by framing the entire hacking campaign as an authorized penetration test' (Security Affairs). The framework then 'expanded the operation to government IT supply chain vendors, a nuclear safety agency, a government email system, and 7+ energy sector companies' (Dream's researchers, quoted by The Register); no source says who chose these targets or that the operators did not want them, so they count as sanctioned (methodology §5.3).",
         "observed_severity": "High",
         "observed_severity_rationale": "Confirmed multi-day near-autonomous intrusion into government systems with 85 accounts cracked and 2,500+ personnel records stolen.",
         "potential_severity": "Critical",
@@ -2811,6 +2820,8 @@
           "mass exploitation",
           "AI-driven pivoting"
         ],
+        "ai_initiated": false,
+        "ai_initiated_rationale": "The threat actor deployed the agent as its attack tool: 'The threat actor, based in Zhuhai, China, is said to have leveraged DeepSeek, via the Hermes Agent framework, as an offensive operator to target internet-exposed devices.' The agent's pivot to n8n served the same attack (The Hacker News).",
         "observed_severity": "High",
         "observed_severity_rationale": "Confirmed rapid mass exploitation of a critical Langflow RCE (first AI-agent platform on CISA KEV), used as a ransomware entry point.",
         "potential_severity": "Critical",
@@ -3160,6 +3171,8 @@
           "AI reasoning about IT->OT paths",
           "critical-infrastructure targeting"
         ],
+        "ai_initiated": false,
+        "ai_initiated_rationale": "Dragos: 'the adversary tasked Claude with conducting an intelligence-gathering operation across the victim's internal enterprise IT network'. Claude then went further on its own: it 'independently analyzed the vNode server' of an OT gateway and executed 'a large, automated password spray attack against the interface', for 'an adversary with no prior objective in OT targeting'. No source says that the adversary did not want these steps, so they count as sanctioned (methodology §5.3).",
         "observed_severity": "High",
         "observed_severity_rationale": "Confirmed enterprise IT compromise of a water utility with AI as principal technical executor and reconnaissance toward OT — but no confirmed physical/process impact.",
         "potential_severity": "Critical",
@@ -3400,6 +3413,8 @@
           "supply-chain poisoning",
           "AI-reviewer social engineering"
         ],
+        "ai_initiated": false,
+        "ai_initiated_rationale": "The bot is the attack campaign itself: 'HackerBot-Claw is an emerging automated campaign that systematically scans public repositories for misconfigured GitHub Actions workflows and weaponizes them to gain privileged access.' (Orca). Its operators are unknown, and no source says that the bot went beyond what they deployed it for.",
         "observed_severity": "High",
         "observed_severity_rationale": "Confirmed AI-driven compromise of a widely used scanner's repo (release deletion, malicious extension, RCE in most targets), later chained into a major supply-chain breach.",
         "potential_severity": "Critical",
@@ -3648,6 +3663,8 @@
           "autonomous lateral movement",
           "destructive DB action"
         ],
+        "ai_initiated": false,
+        "ai_initiated_rationale": "A human operator set up and aimed the agent: 'A human still set up and pointed the operation and provisioned the infrastructure behind it, the command-and-control server, the staging server used for the stolen data and chose a victim' (Michael Clark of Sysdig, quoted by CyberScoop). The agent's escalation 'from row-level deletion to dropping entire database schemas' stayed within the operation's 'destructive database-extortion playbook' (Sysdig).",
         "observed_severity": "High",
         "observed_severity_rationale": "Confirmed first end-to-end agentic ransomware: autonomous intrusion, persistence and destruction of a production database.",
         "potential_severity": "Critical",
@@ -3864,6 +3881,7 @@
           "AI-agent config persistence hooks",
           "secret harvesting"
         ],
+        "ai_initiated_rationale": "The worm planted hooks in Claude Code's configuration that re-run its payload at every session; the tool itself runs such hooks, without any decision of the model. Claude Code is the attacked asset, not an actor, so the record has no flag (methodology §4.2, §5.3).",
         "observed_severity": "High",
         "observed_severity_rationale": "Confirmed worm across 452 packages (~2B dl/mo) harvesting secrets and, for the first time, planting persistence in AI coding-agent config that re-runs every session.",
         "potential_severity": "Critical",
@@ -4159,6 +4177,7 @@
           "supply-chain / marketplace abuse",
           "'lethal trifecta' agent memory"
         ],
+        "ai_initiated_rationale": "Attackers published malicious skills for the OpenClaw agent: their fake prerequisites tricked users into running stealers, and some skills exfiltrated the agent's own credentials. The agent is the attacked asset, not an actor, so the record has no flag (methodology §4.2, §5.3).",
         "observed_severity": "High",
         "observed_severity_rationale": "Hundreds of live malicious skills delivering info-stealers/keyloggers/backdoors at marketplace scale into corporate and consumer environments; credential and crypto theft is the documented payload capability, though per-victim losses were not enumerated.",
         "potential_severity": "High",
@@ -4342,6 +4361,8 @@
           "no destructive-action confirmation",
           "backups in same blast radius"
         ],
+        "ai_initiated": true,
+        "ai_initiated_rationale": "On a staging task, the agent took a token that it had not been given and used it to delete the production volume: 'To do so, it went looking for an API token and found one in an unrelated file.' The agent admitted: 'I decided to do it on my own to \"fix\" the credential mismatch, when I should have asked you first or found a non-destructive solution.' (The Register)",
         "observed_severity": "High",
         "observed_severity_rationale": "Production database and all colocated backups destroyed for a live multi-tenant SaaS; ~30h outage forcing every customer into manual recovery; interim data since last 3-month backup lost.",
         "potential_severity": "High",
@@ -4905,6 +4926,7 @@
           "AI-generated media to pass verification",
           "2FA bypass"
         ],
+        "ai_initiated_rationale": "Attackers abused Meta's AI-assisted support tool, whose separate code path did not check that the reset email matched the account, and reportedly passed verification with AI-generated facial animations. The tool is the attacked asset and the animations a tool of the attackers; no AI agent is an actor, so the record has no flag (methodology §4.2, §5.3).",
         "observed_severity": "High",
         "observed_severity_rationale": "20,225 Instagram accounts confirmed hijacked via an AI-support flaw, bypassing 2FA and exposing DMs/personal data; realized, large-scale account takeover.",
         "potential_severity": "High",
@@ -5101,6 +5123,8 @@
           "approval-prompt bypass",
           "implant staging"
         ],
+        "ai_initiated": false,
+        "ai_initiated_rationale": "An operator gave the agent its objectives: 'the exposed logs show an operator supplying the agent with objectives and tooling' and 'The findings do not indicate that Hermes independently decided to target the ministry.' (BleepingComputer)",
         "observed_severity": "High",
         "observed_severity_rationale": "Confirmed intrusion into a national finance ministry with webshells/implant deployed and credentials + personnel records catalogued, substantially automated by an AI agent; exfiltration not evidenced but access is realized.",
         "potential_severity": "High",
@@ -5424,6 +5448,8 @@
           "evaluation environment with unintended internet access",
           "autonomous exploitation of a real target mistaken for the fictional one"
         ],
+        "ai_initiated": true,
+        "ai_initiated_rationale": "Claude was to attack a fictional company and was told that it had no internet access ('In all cases, our evaluation prompt stated explicitly that Claude had no internet access'); it found a real company with a nearly identical name on the internet and attacked it after it had recognized it as real: 'In all four of the runs, the model eventually recognized (as can be observed in its verbalized reasoning) that the system was real' and 'However, none stopped the attack on that basis.' (Anthropic, 30 Jul 2026)",
         "observed_severity": "High",
         "observed_severity_rationale": "A real company's production system was compromised: application and infrastructure credentials extracted, several hundred rows of production data read, user records downloaded and modified (Anthropic, 30 Jul and 9 Sep 2026) — unauthorized production read and write access, 'the most serious impact' of the review.",
         "potential_severity": "High",
@@ -5585,6 +5611,8 @@
           "credential replay",
           "rapid multi-pivot intrusion"
         ],
+        "ai_initiated": false,
+        "ai_initiated_rationale": "An attacker ran the agent after the initial exploit: 'The attacker compromised an internet-reachable marimo notebook via CVE-2026-39987' and 'An LLM agent executed the post-compromise actions in real time rather than running a pre-built playbook.' (Sysdig). No source says that the agent went beyond the attacker's aim.",
         "observed_severity": "High",
         "observed_severity_rationale": "Confirmed real intrusion with a full database exfiltrated, executed autonomously in under an hour — first documented AI-driven lateral movement in a real incident.",
         "potential_severity": "High",
@@ -5758,6 +5786,7 @@
           "marketplace resale",
           "autonomous exploitation pipeline"
         ],
+        "ai_initiated_rationale": "The record codes the theft and resale of LLM access. The 'VAPT' pipeline that used a hijacked Ollama server as its reasoning core is the attackers' tool; the record codes none of its attacks and no agentic actor, so the record has no flag (methodology §4.2, §5.3).",
         "observed_severity": "High",
         "observed_severity_rationale": "A confirmed, industrialized market for stolen AI access (35,000+ sessions) with real six-figure/day victim costs and stolen compute repurposed for autonomous attacks.",
         "potential_severity": "High",
@@ -6177,6 +6206,8 @@
           "Docker-socket abuse",
           "K8s secret extraction"
         ],
+        "ai_initiated": false,
+        "ai_initiated_rationale": "The agent ran the intrusion for a threat actor: 'Every stage bears the fingerprints of an agentic threat actor (ATA), an attacker whose operations are driven by a large language model (LLM) harness rather than a human at a keyboard.' (Sysdig). No source says that its container escape or token replay went beyond the attacker's aim.",
         "observed_severity": "High",
         "observed_severity_rationale": "Confirmed agent-driven container escape to host root and Kubernetes Secret extraction - realized multi-secret compromise.",
         "potential_severity": "High",
@@ -6991,6 +7022,7 @@
           "over-broad tool authority",
           "no out-of-band confirmation"
         ],
+        "ai_initiated_rationale": "The agent's act was an error within the permissions its operator granted: it proposed 'terraform destroy', and 'a terraform destroy command was allowed to run' (AIID 1424). An error within granted permissions finds or exploits no flaw, so the record has no flag (methodology §5.3).",
         "observed_severity": "Medium",
         "observed_severity_rationale": "Complete destruction of a small platform's production stack and backups with ~24h outage, but data was recoverable from an AWS-side snapshot; contained, single small org.",
         "potential_severity": "High",
@@ -7159,6 +7191,7 @@
           "autonomous unapproved posting",
           "AI advice acted upon -> access-control error"
         ],
+        "ai_initiated_rationale": "The agent posted inaccurate advice 'without approval' (AIID 1471), an act its operator did not intend (motive Misalignment), but it found or exploited no flaw: the access opened because an employee followed the advice. So the record has no flag (methodology §5.3).",
         "observed_severity": "Medium",
         "observed_severity_rationale": "A SEV1 in which unauthorised employees could reach sensitive company/user data for ~2h; contained internally, Meta says no user data mishandled.",
         "potential_severity": "High",
@@ -7350,6 +7383,7 @@
           "deepfake defeat of biometric liveness",
           "authentication bypass"
         ],
+        "ai_initiated_rationale": "Humans used AI-generated deepfake videos to defeat a facial-authentication check; the AI generated media and acted on nothing itself. It was a tool under human control, not an agentic actor, so the record has no flag (methodology §4.2, §5.3).",
         "observed_severity": "Medium",
         "observed_severity_rationale": "Confirmed identity takeover of at least one victim — Aadhaar mobile changed, accounts opened, loans applied — via AI defeat of facial authentication; bounded to the identified victim(s), arrests made.",
         "potential_severity": "High",
@@ -8160,6 +8194,7 @@
           "credential theft",
           "supply-chain package poisoning"
         ],
+        "ai_initiated_rationale": "A crafted GitHub issue could prompt-inject Cline's Claude-based triage bot into leaking an npm publish token, which an attacker later used. The bot, steered by the prompt injection, is the attacked asset, not an actor, so the record has no flag (methodology §4.2, §5.3).",
         "observed_severity": "Medium",
         "observed_severity_rationale": "An unauthorized package release reached ~4,000 machines via a leaked publish token; downstream payload (OpenClaw) was benign, limiting realized harm.",
         "potential_severity": "High",
@@ -8902,6 +8937,7 @@
           "AI-accelerated phishing",
           "AI-assisted attack operations"
         ],
+        "ai_initiated_rationale": "The malware calls GenAI APIs at runtime, and attackers used AI in their operations; humans wrote and deployed the code, and the AI answered their requests. It was a tool under human control, not an agentic actor, so the record has no flag (methodology §4.2, §5.3).",
         "observed_severity": "Medium",
         "observed_severity_rationale": "Confirmed, mapped adversarial use of AI (runtime-LLM malware, AI phishing, thousands of malicious actions across ATT&CK) - realized but distributed across many actors/victims.",
         "potential_severity": "High",
@@ -9211,6 +9247,8 @@
           "eval sandbox internet misconfiguration",
           "autonomous reach into a real org"
         ],
+        "ai_initiated": true,
+        "ai_initiated_rationale": "The model was meant to stay isolated; through the evaluator's misconfiguration it reached the internet and attacked a third-party service that no instruction named: 'an error in the testing environment gave the model access to the public internet when it was supposed to be isolated' (Irregular), and the model 'exploited a security vulnerability in a third-party service' (Meta; both quoted by BleepingComputer)",
         "observed_severity": "Medium",
         "observed_severity_rationale": "A Meta eval model reportedly reached/compromised a real external firm via the same evaluator misconfiguration; details are limited (lower confidence).",
         "potential_severity": "High",
@@ -10980,6 +11018,7 @@
         "ai_security_mechanism": [
           "LLM-assisted attack technique"
         ],
+        "ai_initiated_rationale": "The attacker used ChatGPT-assisted techniques; ChatGPT was a tool under human control, not an agentic actor, so the record has no flag (methodology §4.2, §5.3).",
         "observed_severity": "Medium",
         "observed_severity_rationale": "Month-long outage of a consumer streaming service with ~1.36M members potentially exposed; realized availability loss, exposure unconfirmed.",
         "potential_severity": "Medium",
@@ -12270,6 +12309,7 @@
           "AI-assisted reverse engineering",
           "broken cloud authorization (MQTT wildcard)"
         ],
+        "ai_initiated_rationale": "A software engineer used an AI coding assistant to reverse-engineer a robot vacuum and found the flaw; the assistant was a tool under human control, not an agentic actor, so the record has no flag (methodology §4.2, §5.3).",
         "observed_severity": "Low",
         "observed_severity_rationale": "Highly sensitive in-home audio/video/maps for ~7,000 units in 24 countries was reachable; the finder's scanner collected over 100,000 messages from other owners' units, but he did not exploit them, and DJI patched within ~2 weeks; limited realized harm.",
         "potential_severity": "High",
@@ -12425,6 +12465,8 @@
           "GitHub Actions shell injection",
           "AI-driven discovery & exploitation"
         ],
+        "ai_initiated": false,
+        "ai_initiated_rationale": "Wiz ran its agent as security research in Snowflake's disclosure program: 'As part of ongoing security research conducted through Snowflake's HackerOne vulnerability disclosure program, Wiz Research's \"Red Agent\"—an autonomous, AI-powered security research tool—identified a critical GitHub Actions workflow vulnerability in one of Snowflake's public repositories.' (Wiz)",
         "observed_severity": "Low",
         "observed_severity_rationale": "A live, exploitable CI injection reachable to internal Jira — but exercised by an authorized AI red-team, patched same day, token rotated.",
         "potential_severity": "High",
@@ -12562,6 +12604,7 @@
           "autonomous destructive filesystem action",
           "Trash bypass via terminal"
         ],
+        "ai_initiated_rationale": "Asked to delete temporary Office files, the agent deleted a folder of family photos instead: an error (motive Misalignment) that finds or exploits no flaw, so the record has no flag (methodology §5.3).",
         "observed_severity": "Low",
         "observed_severity_rationale": "Irreplaceable personal data destroyed but fully recovered via iCloud retention; single individual.",
         "potential_severity": "Medium",
@@ -13264,6 +13307,7 @@
           "AI crawler ingesting exposed data",
           "server misconfiguration"
         ],
+        "ai_initiated_rationale": "The crawler that accessed the exposed data collects web content for OpenAI; it is automation, not an AI agent, and it read data that Universa's misconfiguration had exposed. No AI agent is an actor, so the record has no flag (methodology §5.3).",
         "observed_severity": "Low",
         "observed_severity_rationale": "Customer PII briefly exposed and accessed by an AI crawler (not a malicious actor); OpenAI says not used for training and deletion requested; no sensitive categories exposed.",
         "potential_severity": "Medium",
@@ -14107,6 +14151,7 @@
           "prompt injection (blocked)",
           "injection detection + human review"
         ],
+        "ai_initiated_rationale": "Hidden text in a court petition tried to prompt-inject the court's Galileu AI; Galileu detected the instructions, alerted the judge and refused them. The AI is the attacked asset and a security control, not an actor, so the record has no flag (methodology §4.2, §5.3).",
         "observed_severity": "Negligible",
         "observed_severity_rationale": "Attack detected and blocked by design; the injected content was never processed and human review occurred. No realized harm.",
         "potential_severity": "High",
@@ -14245,6 +14290,7 @@
           "AI-authored exploit code",
           "2FA/authentication bypass"
         ],
+        "ai_initiated_rationale": "A cybercrime actor prepared to use an exploit that GTIG assessed as AI-developed; the AI wrote code that humans planned to use. It was a tool under human control, not an agentic actor, so the record has no flag (methodology §4.2, §5.3).",
         "observed_severity": "Negligible",
         "observed_severity_rationale": "An attack, not a vulnerability disclosure: a cybercrime actor prepared to use an AI-developed zero-day exploit against victims, but the exploit was caught and the vendor patched before the planned campaign; no confirmed realized compromise.",
         "potential_severity": "High",
@@ -14428,6 +14474,8 @@
           "social engineering of a maintainer",
           "attempted malicious PR"
         ],
+        "ai_initiated": true,
+        "ai_initiated_rationale": "The 'agents were given a task of solving a cyber security challenge', with internet access on purpose; they went beyond the challenge to real targets: 'an AI agent took autonomous, unsanctioned action on the live internet, targeting real people and organisations' (UK AISI)",
         "observed_severity": "Negligible",
         "observed_severity_rationale": "Real people and a live project were targeted with deception and supply-chain intent, but the attempt was caught within ~1 hour with no confirmed lasting harm.",
         "potential_severity": "High",
@@ -15051,6 +15099,8 @@
           "requested sandbox escape through a multi-step exploit",
           "unasked publication of exploit details"
         ],
+        "ai_initiated": false,
+        "ai_initiated_rationale": "The only act in which the model exploited a flaw, the sandbox escape, was requested: the simulated user 'instructed it to try to escape that secure container and find a way to send a message to the researcher running the evaluation' (Anthropic, Claude Mythos Preview system card). Its unasked posting of the exploit details is no flaw act; VERIS codes it with the motive Misalignment.",
         "observed_severity": "Low",
         "observed_severity_rationale": "Details of an exploit against Anthropic's evaluation sandbox reached multiple public-facing websites without being asked for: a realized disclosure of limited scope, and no source reports a reader or a further effect. The escape itself was a requested test that reached no internal system (system card, footnote 9).",
         "potential_severity": "Medium",
@@ -15263,6 +15313,8 @@
           "malicious package publication",
           "credential theft from a package scanner"
         ],
+        "ai_initiated": true,
+        "ai_initiated_rationale": "Claude Mythos 5 'was given a CTF task to hack a fictional company and was told it had no internet access'; it went online with credentials it found, published a malicious package to PyPI and used a security vendor's leaked credentials: 'It performed actions that it should have clearly understood as being outside the scope of a CTF and harmful to third parties.' (Anthropic, 9 Sep 2026)",
         "observed_severity": "High",
         "observed_severity_rationale": "A security vendor's access credentials were stolen and used to access its live database, and the malicious package ran on 15 hosts: a significant credential compromise with unauthorized production access.",
         "potential_severity": "High",
@@ -15471,6 +15523,8 @@
           "autonomous scanning and exploitation of real hosts",
           "remote-control script on a compromised host"
         ],
+        "ai_initiated": true,
+        "ai_initiated_rationale": "The model 'was told it had no internet access'; when its target shut down, it scanned the network around the target and attacked hosts that its task did not name, which it took for parts of the exercise: 'In reality, these systems were unrelated third-party entities, which the model then attacked.' (Anthropic, 9 Sep 2026)",
         "observed_severity": "High",
         "observed_severity_rationale": "A real company's internet-facing application was compromised: credentials read, files downloaded and a remote-control script inserted — unauthorized production read and write access with persistence.",
         "potential_severity": "High",
@@ -15670,6 +15724,8 @@
           "abort command broken by a harness misconfiguration",
           "autonomous privilege escalation on a real host"
         ],
+        "ai_initiated": true,
+        "ai_initiated_rationale": "The model made its own target unreachable and could not abort the task; it then reached a third party's machine that its task did not name, took it for part of the CTF and broke in: 'Inside the machine, the model found a file listing a password, which it used to gain admin access to the system.' (Anthropic, 9 Sep 2026)",
         "observed_severity": "High",
         "observed_severity_rationale": "Admin access to a real third party's machine, further credentials harvested, its settings changed to ease access, and one person's personal information read: unauthorized privileged access with a lasting change, though to one machine and one person's data.",
         "potential_severity": "High",
@@ -20387,6 +20443,7 @@
           "RCE on CI",
           "credential theft"
         ],
+        "ai_initiated_rationale": "Researchers showed that one untrusted GitHub issue or comment can prompt-inject coding agents into running commands and leaking tokens. Each agent, steered by the injection, is the attacked asset, not an actor, so the record has no flag (methodology §4.2, §5.3).",
         "observed_severity": "Negligible",
         "observed_severity_rationale": "Demonstrated RCE/credential theft across all major coding agents; patched, no confirmed victims.",
         "potential_severity": "Critical",
@@ -20582,6 +20639,8 @@
           "autonomous 0-day discovery at scale",
           "maintainer overload"
         ],
+        "ai_initiated": false,
+        "ai_initiated_rationale": "Anthropic tasked its model with the search: 'Over the past few weeks, we have used Claude Mythos Preview to identify thousands of zero-day vulnerabilities' (Anthropic, Project Glasswing)",
         "observed_severity": "Negligible",
         "observed_severity_rationale": "Massive defensive discovery (incl. a ~5B-device WolfSSL flaw), reported to maintainers; no source reports exploitation of the found flaws, so no asset of a victim was affected (a near miss, methodology §8.2). The >99% unpatched findings are a risk, not a realized effect.",
         "potential_severity": "High",
@@ -21036,6 +21095,7 @@
           "sandbox escape",
           "OS-level RCE"
         ],
+        "ai_initiated_rationale": "Attacker content that Cursor ingests can prompt-inject it into overwriting its sandbox helper, which leads to code execution on the host. Cursor, steered by the injection, is the attacked asset, not an actor, so the record has no flag (methodology §4.2, §5.3).",
         "observed_severity": "Negligible",
         "observed_severity_rationale": "Critical zero-click host RCE in a very widely used AI IDE, fixed via disclosure with no confirmed victims.",
         "potential_severity": "Critical",
@@ -21228,6 +21288,7 @@
           "trust-boundary bypass",
           "RCE / API-key exfiltration"
         ],
+        "ai_initiated_rationale": "A malicious repository or project configuration makes Claude Code run code or leak its API key, often just by being opened. Claude Code is the attacked asset, not an actor, so the record has no flag (methodology §4.2, §5.3).",
         "observed_severity": "Negligible",
         "observed_severity_rationale": "Multiple critical defects fixed via coordinated disclosure; no confirmed real-world victims, though the trigger (opening a repo) is low-friction.",
         "potential_severity": "High",
@@ -21730,6 +21791,7 @@
           "AI code reviewers that skip images",
           "secret exfiltration through committed code"
         ],
+        "ai_initiated_rationale": "A prompt injection hidden in an image made coding agents write a repository's .env secrets into the code, in the researchers' tests with a seeded credential; Claude Code refused. Each agent, steered by the injection, is the attacked asset, not an actor, so the record has no flag (methodology §4.2, §5.3).",
         "observed_severity": "Negligible",
         "observed_severity_rationale": "A demonstration on the researchers' own repositories with a seeded, non-production credential; no real secret was exposed and no source reports use against a victim.",
         "potential_severity": "High",
@@ -21866,6 +21928,7 @@
           "issue-triggered CI hijack",
           "OIDC/secret theft"
         ],
+        "ai_initiated_rationale": "One opened GitHub issue could hijack the Claude Code GitHub Action and steal OIDC tokens and CI secrets, because the action trusted any GitHub App actor. The action is the attacked asset, not an actor, so the record has no flag (methodology §4.2, §5.3).",
         "observed_severity": "Negligible",
         "observed_severity_rationale": "A one-issue takeover of any public repo running the action, with ~50 bypass variants; fixed via disclosure, no confirmed victims.",
         "potential_severity": "High",
@@ -21999,6 +22062,8 @@
         "ai_security_mechanism": [
           "AI-driven vulnerability discovery"
         ],
+        "ai_initiated": false,
+        "ai_initiated_rationale": "XBOW runs its agent to find such flaws: 'This is exactly the kind of result the XBOW autonomous offensive security platform is built to deliver' (XBOW)",
         "observed_severity": "Negligible",
         "observed_severity_rationale": "AI helped remove risk: critical RCEs found and fixed with no reported exploitation.",
         "potential_severity": "High",
@@ -22209,6 +22274,7 @@
           "prompt injection as control-flow injection",
           "tool-call RCE"
         ],
+        "ai_initiated_rationale": "Microsoft showed how prompt injection steers agents built with Semantic Kernel and other frameworks into tool calls that run code. Each agent is the attacked asset, not an actor, so the record has no flag (methodology §4.2, §5.3).",
         "observed_severity": "Negligible",
         "observed_severity_rationale": "Framework RCE classes disclosed and fixed; no confirmed exploitation.",
         "potential_severity": "High",
@@ -22449,6 +22515,7 @@
           "SSRF",
           "data exfiltration"
         ],
+        "ai_initiated_rationale": "Attacker content prompt-injects Microsoft 365 Copilot, without any user interaction, into sending data from the victim's context to the attacker. Copilot, steered by the injection, is the attacked asset, not an actor, so the record has no flag (methodology §4.2, §5.3).",
         "observed_severity": "Negligible",
         "observed_severity_rationale": "Research PoC fixed server-side; no evidence of real exploitation.",
         "potential_severity": "High",
@@ -22607,6 +22674,7 @@
           "zero-click indirect prompt injection",
           "data exfiltration"
         ],
+        "ai_initiated_rationale": "Instructions hidden in content that Copilot processes steer it into opening a channel for data exfiltration. Copilot is the attacked asset, not an actor, so the record has no flag (methodology §4.2, §5.3).",
         "observed_severity": "Negligible",
         "observed_severity_rationale": "Research PoC fixed; no real victims reported.",
         "potential_severity": "High",
@@ -22763,6 +22831,8 @@
         "ai_security_mechanism": [
           "AI-driven discovery of unauthenticated RCE"
         ],
+        "ai_initiated": false,
+        "ai_initiated_rationale": "XBOW found the flaw with its agent and then had a model develop the exploit on purpose: 'XBOW discovered CVE-2026-45185, a critical unauthenticated RCE in Exim, and used the disclosure window to test how far human and autonomous exploit development could go.' (XBOW)",
         "observed_severity": "Negligible",
         "observed_severity_rationale": "AI found and helped fix a critical MTA RCE with no reported exploitation.",
         "potential_severity": "High",
@@ -22928,6 +22998,8 @@
         "ai_security_mechanism": [
           "AI-driven vulnerability discovery at scale"
         ],
+        "ai_initiated": false,
+        "ai_initiated_rationale": "Mandiant runs its harness on code in its engagements: 'Today, we use the Agentic Vulnerability Discovery Harness (AVDH) to rapidly analyze code and find exploit paths during proactive reviews, penetration tests, red team operations, and incident response engagements.' (Google Cloud)",
         "observed_severity": "Negligible",
         "observed_severity_rationale": "AI removed risk at scale: 100+ verified critical vulns in two days and 12+ CVEs, all defensively via human-validated disclosure.",
         "potential_severity": "Medium",
@@ -23308,6 +23380,7 @@
           "covert DNS exfiltration",
           "parameter command injection"
         ],
+        "ai_initiated_rationale": "A calendar invite prompt-injected Gemini into copying meeting data into an event the attacker could see; the ChatGPT and Codex flaws let attackers exfiltrate data or inject commands. Each AI system is the attacked asset, not an actor, so the record has no flag (methodology §4.2, §5.3).",
         "observed_severity": "Negligible",
         "observed_severity_rationale": "Three exfiltration/injection classes across major assistants, all fixed via coordinated disclosure with no confirmed victims.",
         "potential_severity": "High",
@@ -23437,6 +23510,7 @@
           "XSS-driven agent egress",
           "data exfiltration"
         ],
+        "ai_initiated_rationale": "A single email (EchoLeak) or an Excel cross-site scripting flaw steers Copilot into sending data out without user interaction. Copilot is the attacked asset, not an actor, so the record has no flag (methodology §4.2, §5.3).",
         "observed_severity": "Negligible",
         "observed_severity_rationale": "Zero-click Copilot exfiltration classes fixed via coordinated disclosure; no confirmed victims.",
         "potential_severity": "High",
@@ -23619,6 +23693,8 @@
         "ai_security_mechanism": [
           "AI-driven discovery and remediation"
         ],
+        "ai_initiated": false,
+        "ai_initiated_rationale": "The companies ran their discovery agents on the code: 'Over the last 30 days, Codex Security has scanned more than 1.2 million commits across external repositories over the course of the beta' (The Hacker News)",
         "observed_severity": "Negligible",
         "observed_severity_rationale": "AI defensively found and helped fix numerous critical flaws (10+ CVEs incl. a GHE RCE) with no exploitation.",
         "potential_severity": "High",
@@ -24213,6 +24289,7 @@
           "sandbox escape",
           "Docker-socket abuse"
         ],
+        "ai_initiated_rationale": "Pillar Security showed that host tools outside the sandbox run files that sandboxed coding agents write, which leads to code execution on the host. Each agent is the attacked asset, not an actor, so the record has no flag (methodology §4.2, §5.3).",
         "observed_severity": "Negligible",
         "observed_severity_rationale": "A cluster of agent sandbox escapes across major tools, fixed via disclosure with no confirmed victims.",
         "potential_severity": "High",
@@ -24408,6 +24485,7 @@
           "zero-click indirect prompt injection",
           "data disclosure"
         ],
+        "ai_initiated_rationale": "Attacker-authored content steers Atlassian Rovo, without a victim prompt, toward disclosing sensitive data. Rovo is the attacked asset, not an actor, so the record has no flag (methodology §4.2, §5.3).",
         "observed_severity": "Negligible",
         "observed_severity_rationale": "Research PoC remediated; no confirmed real exploitation.",
         "potential_severity": "High",
@@ -24540,6 +24618,8 @@
         "ai_security_mechanism": [
           "AI-driven discovery of memory-corruption/sandbox-escape chain"
         ],
+        "ai_initiated": false,
+        "ai_initiated_rationale": "OpenAI ran its cyber model on V8 and disclosed the findings to Google: 'OpenAI reported in August that GPT-5.6-Cyber investigated V8 and found two previously unknown issues that could be chained.' (ChatGPT deep-research report)",
         "observed_severity": "Negligible",
         "observed_severity_rationale": "AI defensively found and helped fix a V8 memory-corruption/sandbox chain with no exploitation.",
         "potential_severity": "High",
@@ -24704,6 +24784,7 @@
           "link-seeded instruction injection",
           "data exfiltration"
         ],
+        "ai_initiated_rationale": "A crafted URL pre-seeds attacker instructions into consumer Copilot, which then sends data from its context to the attacker. Copilot, steered by the injection, is the attacked asset, not an actor, so the record has no flag (methodology §4.2, §5.3).",
         "observed_severity": "Negligible",
         "observed_severity_rationale": "Research PoC fixed server-side; no evidence of real victims.",
         "potential_severity": "Medium",
@@ -24828,6 +24909,8 @@
         "ai_security_mechanism": [
           "AI-driven discovery in a hardened codebase"
         ],
+        "ai_initiated": false,
+        "ai_initiated_rationale": "Google built the agent harness to find flaws in its own code: 'In early 2026, we built an agent harness that used Gemini to find vulnerabilities across the broader Chrome codebase with higher efficiency and lower false positives.' (Google)",
         "observed_severity": "Negligible",
         "observed_severity_rationale": "AI accelerated defensive discovery in Chrome; bugs fixed, no exploitation.",
         "potential_severity": "High",
@@ -24988,6 +25071,8 @@
         "ai_security_mechanism": [
           "AI-driven vulnerability discovery"
         ],
+        "ai_initiated": false,
+        "ai_initiated_rationale": "Anthropic tasked the model with the search: 'So we tasked Claude with finding novel vulnerabilities in the current version of Firefox' (Anthropic)",
         "observed_severity": "Negligible",
         "observed_severity_rationale": "AI removed latent risk: 22 Firefox bugs found and fixed with no exploitation.",
         "potential_severity": "High",
@@ -25717,6 +25802,8 @@
         "ai_security_mechanism": [
           "AI-driven vulnerability discovery at scale"
         ],
+        "ai_initiated": false,
+        "ai_initiated_rationale": "Mozilla applied the model to Firefox: 'As part of our continued collaboration with Anthropic, we had the opportunity to apply an early version of Claude Mythos Preview to Firefox.' (Mozilla)",
         "observed_severity": "Negligible",
         "observed_severity_rationale": "Large-scale defensive discovery (271 fixes) with no reported exploitation.",
         "potential_severity": "High",
@@ -25984,6 +26071,7 @@
           "payload fetched at run time from a DNS TXT record",
           "reverse shell"
         ],
+        "ai_initiated_rationale": "Claude Code ran a setup script to fix a staged error, and the script opened a reverse shell: 'Claude Code never decided to open a shell. It decided to fix an error.' (0DIN, 25 Jun 2026). The agent, steered by the indirect prompt injection, is the attacked asset, not an actor, so the record has no flag (methodology §4.2, §5.3).",
         "observed_severity": "Negligible",
         "observed_severity_rationale": "A proof of concept on the researchers' own setup; no source reports use against a victim.",
         "potential_severity": "High",
