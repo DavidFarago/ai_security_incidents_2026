@@ -2,30 +2,63 @@
 
 # ai_security_incidents_2026
 
-A VERIS-coded catalogue of **2026 software-security incidents in which AI was materially involved** — as a cause, a weapon, a target, the loot, or the tool that found (or wrote) the flaw.
+A VERIS-coded catalogue of **2026 software-security incidents in which AI was materially involved** — as a cause,
+a weapon, a target, the loot, or the tool that found (or wrote) the flaw.
 
-The dataset consolidates five original sources into one consistent, machine-readable corpus, each incident described with the [VERIS](https://verisframework.org/) schema plus a small AI-specific report layer, following the methodology in [`incidents/VERIS_Methodology_for_AI_Security_Incidents_concise.md`](incidents/VERIS_Methodology_for_AI_Security_Incidents_concise.md).
+The dataset consolidates five original sources into one consistent, machine-readable corpus,
+each incident described with the [VERIS](https://verisframework.org/) schema plus a small AI-specific report layer,
+following the methodology in [`incidents/VERIS_Methodology_for_AI_Security_Incidents_concise.md`](incidents/VERIS_Methodology_for_AI_Security_Incidents_concise.md).
 
 ## Why this repository exists
 
-AI significantly changes software and software development, and likely software security too. This repository takes a view on how software security has changed through the recent AI disruptions. To see the change while it happens, it considers only very recent security incidents, those of 2026, in which AI was materially involved.
+AI significantly changes software and software development, and likely software security too.
+This repository takes a view on how software security has changed through the recent AI disruptions.
+To see the change while it happens, it considers only very recent security incidents, those of 2026,
+in which AI was materially involved.
 
 ## Approach
 
-**Incident-first.** The unit of this project is the *incident*, not the vulnerability. Everything else is derived from the incident list:
+**Incident-first.**
+The unit of this project is the *incident*, not the vulnerability.
+Everything else is derived from the incident list:
 
-1. **Collect** 2026 software-security incidents in which AI was materially involved — from incident registers (AI Incident Database, VERIS Community Database) and research reports — each cited to its original source and to the primary reporting behind it.
-2. **Code** every incident in VERIS plus a thin AI-specific report layer, with *observed* (realized) and *potential* severity kept separate.
-3. **Validate and enrich** what the incidents cite: the CVEs are resolved against CVE.org / NVD / CISA KEV and classified by their relation to the incident; the CWEs are validated next. Vulnerability databases are used to check and enrich what the incidents cite — **not as the source of incidents**: a CVE record describes a vulnerability and carries no incident information.
-4. **Derive** insights from the incident list — the CVE-side tables in `vulnerabilities/`, the forthcoming incident-based CWE priority list, and the analyses behind the AISEC 2026 talk — by scripts, so that every statistic traces back to the incidents that support it and is regenerated when the incident list changes.
+1. **Collect** 2026 software-security incidents in which AI was materially involved —
+   from incident registers (AI Incident Database, VERIS Community Database) and research reports —
+   each cited to its original source and to the primary reporting behind it.
+2. **Code** every incident in VERIS plus a thin AI-specific report layer,
+   with *observed* (realized) and *potential* severity kept separate.
+3. **Validate and enrich** what the incidents cite:
+   the CVEs are resolved against CVE.org / NVD / CISA KEV and classified by their relation to the incident;
+   the CWEs are validated next.
+   Vulnerability databases are used to check and enrich what the incidents cite — **not as the source of incidents**:
+   a CVE record describes a vulnerability and carries no incident information.
+4. **Derive** insights from the incident list — the CVE-side tables in `vulnerabilities/`,
+   the forthcoming incident-based CWE priority list, and the analyses behind the AISEC 2026 talk — by scripts,
+   so that every statistic traces back to the incidents that support it and is regenerated when the incident list changes.
 
 ## Why VERIS
 
-Rather than invent a bespoke AI-incident score, this project adopts **VERIS** — the mature, open incident vocabulary behind the Verizon DBIR and the VERIS Community Database — as the single external framework, adding only a thin AI-specific layer on top. It fits better than the obvious alternatives: **CVSS** rates a *vulnerability's* technical severity, not what a realized incident actually did; **NCISS**'s coarse national-response categories discard the details that matter most here (records and credentials exposed, systems touched, confirmed-vs-possible disclosure); and **FAIR / FAIR-MAM** need quantitative loss data that public incident reports seldom provide. Coding to VERIS instead preserves those granular facts, natively separates confirmed breaches from near-misses and mere exposure, and lets these AI incidents be compared and pooled with the tens of thousands already in VCDB — the innovation is applying that established discipline to AI-related software-security incidents. Crucially, VERIS keeps the *incident* layer distinct from the *vulnerability/weakness* layer: exploited CVEs are referenced through VERIS's own `action.hacking.cve` / `action.malware.cve` fields, CVSS is never repurposed as incident severity, and CWE weaknesses are carried in the AI report layer with an explicit mapping basis (authoritative CVE/CNA vs analyst-inferred) rather than silently guessed.
+Rather than invent a bespoke AI-incident score, this project adopts **VERIS** — the mature,
+open incident vocabulary behind the Verizon DBIR and the VERIS Community Database — as the single external framework,
+adding only a thin AI-specific layer on top.
+It fits better than the obvious alternatives: **CVSS** rates a *vulnerability's* technical severity,
+not what a realized incident actually did;
+**NCISS**'s coarse national-response categories discard the details that matter most here (records and credentials exposed,
+systems touched, confirmed-vs-possible disclosure);
+and **FAIR / FAIR-MAM** need quantitative loss data that public incident reports seldom provide.
+Coding to VERIS instead preserves those granular facts,
+natively separates confirmed breaches from near-misses and mere exposure,
+and lets these AI incidents be compared and pooled with the tens of thousands already in VCDB —
+the innovation is applying that established discipline to AI-related software-security incidents.
+Crucially, VERIS keeps the *incident* layer distinct from the *vulnerability/weakness* layer:
+exploited CVEs are referenced through VERIS's own `action.hacking.cve` / `action.malware.cve` fields,
+CVSS is never repurposed as incident severity,
+and CWE weaknesses are carried in the AI report layer with an explicit mapping basis (authoritative CVE/CNA vs analyst-inferred) rather than silently guessed.
 
 ## The dataset
 
-**`incidents/all_2026_ai_software_security_incidents.{json,csv,md}`** — the 84 counted incidents in three forms (the JSON also holds the 24 sub-threshold records):
+**`incidents/all_2026_ai_software_security_incidents.{json,csv,md}`** —
+the 84 counted incidents in three forms (the JSON also holds the 24 sub-threshold records):
 
 | File | What it is |
 |---|---|
@@ -34,38 +67,92 @@ Rather than invent a bespoke AI-incident score, this project adopts **VERIS** �
 | `.md` | A severity-ranked field guide: an incident index plus a narrative entry per incident. |
 | `_sub_threshold.{csv,md}` | The sub-threshold records (the array `sub_threshold_incidents` of the JSON; methodology §3.3) in the same two forms; the `.md` lists them in ID order, with their class (AI-written, AI-stack, AI-discovered). |
 
-The per-CVE validated layer (each CVE's relation to the incident, CVSS, KEV flag, CNA CWE, credits) exists in full only in the `.json`; the `.md` shows it condensed as a relation-grouped "Validated CVEs" line per entry, and the `.csv` lists only the CVE and CWE ids (`cve` as cited, `validated_cve`, `cwe`) — so a change to relations alters the `.json` and `.md` but not the `.csv`. The `.csv` and `.md` files, the sub-threshold ones included, are generated from the JSON by `scripts/build_incidents_report.py`, and everything under `vulnerabilities/` by `scripts/build_vulnerabilities.py` (see *Verifying and rebuilding*); edit only the JSON.
+The per-CVE validated layer (each CVE's relation to the incident, CVSS, KEV flag, CNA CWE,
+credits) exists in full only in the `.json`;
+the `.md` shows it condensed as a relation-grouped "Validated CVEs" line per entry,
+and the `.csv` lists only the CVE and CWE ids (`cve` as cited, `validated_cve`, `cwe`) —
+so a change to relations alters the `.json` and `.md` but not the `.csv`.
+The `.csv` and `.md` files, the sub-threshold ones included,
+are generated from the JSON by `scripts/build_incidents_report.py`,
+and everything under `vulnerabilities/` by `scripts/build_vulnerabilities.py` (see *Verifying and rebuilding*);
+edit only the JSON.
 
 **84 counted incidents**, severity-ranked by *observed* (realized) harm:
 
 - **2 Critical · 24 High · 32 Medium · 17 Low · 9 Negligible**
 - Status: 74 Confirmed · 3 Suspected · 2 Near miss · 5 False positive
-- IDs: `2026-nnn`, and every record's `source_kind` says where it came from: `DB` (*database*: at least one register source — AIID or VCDB; 54 incidents) or `DR` (*direct report*: no register source, found through a deep-research or primary report; 30 counted incidents and the 24 sub-threshold records, all of them so far from the three deep-research reports). A record switches its `source_kind`, never its ID, when a register adds it. For 001–099, `nnn` is the position in the priority ranking of 2026-08-27. New records continue from 100 (`id_scheme.highest_assigned` + 1, the highest number assigned plus one). No number is renumbered, deleted or reused; the current ranking is `ranking_table` (observed severity, then potential severity, then ID).
+- IDs: `2026-nnn`, and every record's `source_kind` says where it came from: `DB` (*database*:
+  at least one register source — AIID or VCDB; 54 incidents) or `DR` (*direct report*: no register source,
+  found through a deep-research or primary report; 30 counted incidents and the 24 sub-threshold records,
+  all of them so far from the three deep-research reports).
+  A record switches its `source_kind`, never its ID, when a register adds it.
+  For 001–099, `nnn` is the position in the priority ranking of 2026-08-27.
+  New records continue from 100 (`id_scheme.highest_assigned` + 1, the highest number assigned plus one).
+  No number is renumbered, deleted or reused; the current ranking is `ranking_table` (observed severity,
+  then potential severity, then ID).
 
 ### Counted incidents and sub-threshold disclosures
 
-A vulnerability disclosure is a flaw that someone found and reported, but that nobody used against a victim. Disclosures of AI-related vulnerabilities far outnumber incidents with harm: a keyword search of the NVD for AI terms found 593 CVEs published in the first eight months of 2026, only 41 of them in this corpus. Counted as incidents, they would dominate every count and ranking; left out, the corpus would lose security-relevant near misses whose CVEs feed the CVE-side tables and that can still be exploited later.
+A vulnerability disclosure is a flaw that someone found and reported, but that nobody used against a victim.
+Disclosures of AI-related vulnerabilities far outnumber incidents with harm:
+a keyword search of the NVD for AI terms found 593 CVEs published in the first eight months of 2026,
+only 41 of them in this corpus.
+Counted as incidents, they would dominate every count and ranking; left out,
+the corpus would lose security-relevant near misses whose CVEs feed the CVE-side tables and that can still be exploited later.
 
-So a disclosure is a counted incident (array `incidents`) only with known exploitation (a CISA KEV listing or a reported exploitation) or realized harm (status `Confirmed`, observed severity Low or higher). Every other disclosure keeps a complete record, verified like an incident, in the array `sub_threshold_incidents`. It enters no incident count, and scores such as IBSS see it only through its class (AI-written, AI-stack or AI-discovered), with at most one weight per class and entity: in each entity's score, a flood of similar disclosures weighs no more than one incident per class. Definitions and rules: methodology §3.3.
+So a disclosure is a counted incident (array `incidents`) only with known exploitation (a CISA KEV listing or a reported exploitation) or realized harm (status `Confirmed`,
+observed severity Low or higher).
+Every other disclosure keeps a complete record, verified like an incident, in the array `sub_threshold_incidents`.
+It enters no incident count, and scores such as IBSS see it only through its class (AI-written,
+AI-stack or AI-discovered), with at most one weight per class and entity: in each entity's score,
+a flood of similar disclosures weighs no more than one incident per class.
+Definitions and rules: methodology §3.3.
 
-The records in `incidents` and `sub_threshold_incidents` are the **live records**. A live record that stops being relevant, for example a duplicate, is never deleted: it moves, unchanged, into a wrapper in `retired_incidents` (methodology §10.2).
+The records in `incidents` and `sub_threshold_incidents` are the **live records**.
+A live record that stops being relevant, for example a duplicate, is never deleted: it moves, unchanged,
+into a wrapper in `retired_incidents` (methodology §10.2).
 
-The 24 disclosures that fail the threshold are in `sub_threshold_incidents`: 14 AI-stack, 9 AI-discovered and 1 AI-written records, 18 of them with a CVE (2026-036, 056, 058, 060, 062, 064, 065, 079–081, 083–095, 104). 21 of them moved there on 2026-10-23 with their IDs and contents unchanged. 2026-064 and 104 are the two disclosures of a record that also held other events, and 2026-036, the wave of the Vibe Security Radar corpus, lost the events that had made it a counted incident (methodology §6.7). The counts above cover the 83 counted incidents.
+The 24 disclosures that fail the threshold are in `sub_threshold_incidents`: 14 AI-stack,
+9 AI-discovered and 1 AI-written records, 18 of them with a CVE (2026-036, 056, 058, 060, 062, 064, 065, 079–081,
+083–095, 104).
+21 of them moved there on 2026-10-23 with their IDs and contents unchanged.
+2026-064 and 104 are the two disclosures of a record that also held other events, and 2026-036,
+the wave of the Vibe Security Radar corpus, lost the events that had made it a counted incident (methodology §6.7).
+The counts above cover the 83 counted incidents.
 
 ### How each incident is coded
 
-Two layers are kept separate (per the methodology), so the standard security facts stay schema-compliant while the AI-specific judgements remain explicit:
+Two layers are kept separate (per the methodology),
+so the standard security facts stay schema-compliant while the AI-specific judgements remain explicit:
 
-- **`veris`** — canonical VERIS 1.4.1: Actor / Action / Asset / Attribute, CIA with graded `data_disclosure` (Yes / Potentially / No), scope, timeline, victim, confidence, and CVE linkage where applicable.
-- **`report`** — AI-specific metadata: `ai_role`, `ai_component`, `ai_security_mechanism`, **Observed** vs **Potential** severity (each with a rationale and confidence), and CWE/CVE with a mapping basis.
+- **`veris`** — canonical VERIS 1.4.1: Actor / Action / Asset / Attribute,
+  CIA with graded `data_disclosure` (Yes / Potentially / No), scope, timeline, victim, confidence,
+  and CVE linkage where applicable.
+- **`report`** — AI-specific metadata: `ai_role`, `ai_component`, `ai_security_mechanism`,
+  **Observed** vs **Potential** severity (each with a rationale and confidence), and CWE/CVE with a mapping basis.
 
-**Observed and Potential severity are never collapsed into one score**, and neither is CVSS/AIRIS: severity here is a transparent ordinal rubric (Critical > High > Medium > Low > Negligible) derived from the VERIS evidence. Vulnerability-discovery and coordinated-disclosure PoC items therefore sit at low *observed* / high *potential*.
+**Observed and Potential severity are never collapsed into one score**, and neither is CVSS/AIRIS:
+severity here is a transparent ordinal rubric (Critical > High > Medium > Low > Negligible) derived from the VERIS evidence.
+Vulnerability-discovery and coordinated-disclosure PoC items therefore sit at low *observed* / high *potential*.
 
-Non-software-security items carried by the registers (e.g. facial-recognition identification, doxxing, likeness disputes) are marked `security_incident: "False positive"`, and conventional breaches with no AI component are flagged in an `ai_involvement_note`; both are retained for register completeness.
+Non-software-security items carried by the registers (e.g. facial-recognition identification, doxxing,
+likeness disputes) are marked `security_incident: "False positive"`,
+and conventional breaches with no AI component are flagged in an `ai_involvement_note`;
+both are retained for register completeness.
 
 ### CVE-side tables (`vulnerabilities/`)
 
-`python3 scripts/build_vulnerabilities.py` derives CSV tables and a report from the validated CVE layer of the JSON: which CVEs each incident involves and vice versa, the CVEs actually exploited / attempted / carried by AI-enabled attackers (with KEV and CVSS), the CVEs credited to AI discovery, the CNA-assigned CWE profile of the CVEs per segment (AI-exploited · AI-written · AI-stack vulnerabilities · malicious releases · AI-discovered · related), CVSS-vs-observed-harm, a first IBSS-vs-CVSS comparison (IBSS = incident-based severity score, the doubling-weight sum over linked incidents), an **action list** (patch / remove / watch, with affected and fixed versions taken from the CVE.org, GitHub Advisory and OSV records that `scripts/fetch_upstream.py` caches under `vulnerabilities/upstream/`), every KEV-listed CVE, non-CVE identifiers, and — as input for the forthcoming CWE validation — the CNA CWEs of each incident's in-play CVEs. The unit of those tables is the CVE link, not the incident; the incident-level CWE ranking is a separate, later step.
+`python3 scripts/build_vulnerabilities.py` derives CSV tables and a report from the validated CVE layer of the JSON:
+which CVEs each incident involves and vice versa,
+the CVEs actually exploited / attempted / carried by AI-enabled attackers (with KEV and CVSS),
+the CVEs credited to AI discovery, the CNA-assigned CWE profile of the CVEs per segment (AI-exploited · AI-written · AI-stack vulnerabilities · malicious releases · AI-discovered · related),
+CVSS-vs-observed-harm, a first IBSS-vs-CVSS comparison (IBSS = incident-based severity score,
+the doubling-weight sum over linked incidents), an **action list** (patch / remove / watch,
+with affected and fixed versions taken from the CVE.org,
+GitHub Advisory and OSV records that `scripts/fetch_upstream.py` caches under `vulnerabilities/upstream/`),
+every KEV-listed CVE, non-CVE identifiers, and — as input for the forthcoming CWE validation —
+the CNA CWEs of each incident's in-play CVEs.
+The unit of those tables is the CVE link, not the incident; the incident-level CWE ranking is a separate, later step.
 
 ### Verifying and rebuilding
 
@@ -77,7 +164,37 @@ python3 scripts/build_incidents_report.py    # JSON -> incidents/*.csv, incident
 python3 -m unittest discover tests           # verifier mutation tests; derived reports up to date
 ```
 
-`validate_incidents.py` re-derives every copied CVE field (state, CNA, dates, product, title, CVSS, CWE, credits, KEV) from the cached records (Class A) and checks the bookkeeping of the JSON: validated-layer set algebra, the VERIS `action.*.cve` alignment, vocabularies, the ID scheme (`2026-nnn`; the numbers over `incidents`, `sub_threshold_incidents` and `retired_incidents` run exactly from 001 to `id_scheme.highest_assigned`, each array in ascending order; every record's `source_kind` as its `sources` give it), the sub-threshold rule (a record there must be a vulnerability disclosure, and one that meets methodology §3.3 (a) KEV or (c) realized harm must be promoted to `incidents`), the wrappers of retired records, the `sources` of every live record (at least one entry, each with `source`, `locator` and `url`; a register `url` names the item of its `locator`, and a report held in this repository is cited by its pinned permalink with a line range inside the passage that the `locator` names), `veris.reference` (URLs only, each once, none of them a discovery channel), VCDB records cited at a pinned commit, `adopted` only on a VCDB record and `overrides` only on an adopted one, the ranking table (each counted incident once, in ranking order: methodology §9.3), the motive of deliberate actions, no effect, no AI role and Negligible severities on a false positive, and an internal or partner actor for every misuse (methodology §4.2, §4.3, §5.1, §8.2), the event chain of a record with several action categories or actor types (§4.6), an `Agentic system` actor in every record whose `report.ai_role` holds *AI-agent-caused incident* (§5.1), `report.ai_initiated` (a boolean with a rationale, only in a record with an `Agentic system` actor; when `true`, with the role *AI-agent-caused incident* and the motive `Misalignment`) and a non-empty `report.ai_initiated_rationale` wherever it is present, with or without the flag (§5.3), recomputable counts, and every `veris` block against the VERIS JSON schema (VCDB's VERIS 1.4.2 schema from a pinned commit, with VERIS's validity rules for the agentic values and one `veris.schema_version` for every record; Class B; needs the `jsonschema` package). Every check of a record covers every live record; counts cover `incidents` only. It cannot check judgment: a CVE's `relation`, notes, severities, `ai_role`, `ai_initiated`, the inclusion decision, §3.3 condition (b), whether a record without a CVE is a disclosure, or whether the events of one record need the same values (methodology §6.7). The rules are in the methodology, §3.3, §4.1 and §10.2. The builders stop only on the core checks their tables rely on (ID format and numbering, one `ranking_table` row per counted incident, well-formed `sources`, validated-CVE sets, relation vocabulary, per-CVE agreement across incidents), not on the full gate.
+`validate_incidents.py` re-derives every copied CVE field (state, CNA, dates, product, title, CVSS, CWE, credits,
+KEV) from the cached records (Class A) and checks the bookkeeping of the JSON: validated-layer set algebra,
+the VERIS `action.*.cve` alignment, vocabularies, the ID scheme (`2026-nnn`; the numbers over `incidents`,
+`sub_threshold_incidents` and `retired_incidents` run exactly from 001 to `id_scheme.highest_assigned`,
+each array in ascending order; every record's `source_kind` as its `sources` give it),
+the sub-threshold rule (a record there must be a vulnerability disclosure,
+and one that meets methodology §3.3 (a) KEV or (c) realized harm must be promoted to `incidents`),
+the wrappers of retired records, the `sources` of every live record (at least one entry, each with `source`,
+`locator` and `url`; a register `url` names the item of its `locator`,
+and a report held in this repository is cited by its pinned permalink with a line range inside the passage that the `locator` names),
+`veris.reference` (URLs only, each once, none of them a discovery channel), VCDB records cited at a pinned commit,
+`adopted` only on a VCDB record and `overrides` only on an adopted one, the ranking table (each counted incident once,
+in ranking order: methodology §9.3), the motive of deliberate actions, no effect,
+no AI role and Negligible severities on a false positive,
+and an internal or partner actor for every misuse (methodology §4.2, §4.3, §5.1, §8.2),
+the event chain of a record with several action categories or actor types (§4.6),
+an `Agentic system` actor in every record whose `report.ai_role` holds *AI-agent-caused incident* (§5.1),
+`report.ai_initiated` (a boolean with a rationale, only in a record with an `Agentic system` actor; when `true`,
+with the role *AI-agent-caused incident* and the motive `Misalignment`) and a non-empty `report.ai_initiated_rationale` wherever it is present,
+with or without the flag (§5.3), recomputable counts,
+and every `veris` block against the VERIS JSON schema (VCDB's VERIS 1.4.2 schema from a pinned commit,
+with VERIS's validity rules for the agentic values and one `veris.schema_version` for every record; Class B;
+needs the `jsonschema` package).
+Every check of a record covers every live record; counts cover `incidents` only.
+It cannot check judgment: a CVE's `relation`, notes, severities, `ai_role`, `ai_initiated`, the inclusion decision,
+§3.3 condition (b), whether a record without a CVE is a disclosure,
+or whether the events of one record need the same values (methodology §6.7).
+The rules are in the methodology, §3.3, §4.1 and §10.2.
+The builders stop only on the core checks their tables rely on (ID format and numbering,
+one `ranking_table` row per counted incident, well-formed `sources`, validated-CVE sets, relation vocabulary,
+per-CVE agreement across incidents), not on the full gate.
 
 ## Repository layout
 
@@ -118,28 +235,53 @@ vulnerabilities/                                   # derived CVE-side tables —
 └─ upstream/                                       # raw upstream records, verbatim (manifest.json, LICENSES.md); never edited
 ```
 
-Terminology: **sources** (`incidents/sources/`) are the incident sources — the registers and reports the incidents were collected from; **upstream** records are cached external records that `scripts/validate_incidents.py` compares the JSON with, fetched by `scripts/fetch_upstream.py`: on the vulnerability side (`vulnerabilities/upstream/`) the vulnerability-database entries (CVE.org, GitHub Advisory Database, OSV) for the identifiers those incidents cite, plus the CISA KEV catalog; on the incident side (`incidents/upstream/`) the VERIS JSON schema and the VCDB records whose coding a record adopts. Both are kept verbatim and never edited.
+Terminology: **sources** (`incidents/sources/`) are the incident sources —
+the registers and reports the incidents were collected from;
+**upstream** records are cached external records that `scripts/validate_incidents.py` compares the JSON with,
+fetched by `scripts/fetch_upstream.py`: on the vulnerability side (`vulnerabilities/upstream/`) the vulnerability-database entries (CVE.org,
+GitHub Advisory Database, OSV) for the identifiers those incidents cite, plus the CISA KEV catalog;
+on the incident side (`incidents/upstream/`) the VERIS JSON schema and the VCDB records whose coding a record adopts.
+Both are kept verbatim and never edited.
 
 ## Sources & provenance
 
-Every incident's `sources` field cites its **original** source(s), the discovery channel: where the record was found. Each entry names the source, the item in it (`locator`) and the item's `url`:
+Every incident's `sources` field cites its **original** source(s), the discovery channel: where the record was found.
+Each entry names the source, the item in it (`locator`) and the item's `url`:
 
-- **`incidentdatabase.ai_20260824_ai_incidents_2026.xlsx`** — AI Incident Database (AIID) export, 2026-08-24 (cited with `AIID <id>` + the cite-page URL).
-- **`vz-risk/VCDB`** — the [VERIS Community Database](https://github.com/vz-risk/VCDB), cited at the exact encoded record (`data/json/{validated,submitted}/<uuid>.json`) or the 2026 issue intake (`issues/<n>`). Citations point at VCDB itself; the adopted records are also cached under `incidents/upstream/vcdb/` for the verifier.
-- **`ChatGPT_DeepResearch_ai_incidents_2026.md`**, **`ClaudeCode_DeepResearch_ai_incidents_2026.md`**, **`Grok_DeepResearch_ai_incidents_2026.md`** — three independent deep-research incident reviews (kept in `incidents/sources/`).
+- **`incidentdatabase.ai_20260824_ai_incidents_2026.xlsx`** — AI Incident Database (AIID) export,
+  2026-08-24 (cited with `AIID <id>` + the cite-page URL).
+- **`vz-risk/VCDB`** — the [VERIS Community Database](https://github.com/vz-risk/VCDB),
+  cited at the exact encoded record (`data/json/{validated,submitted}/<uuid>.json`) or the 2026 issue intake (`issues/<n>`).
+  Citations point at VCDB itself; the adopted records are also cached under `incidents/upstream/vcdb/` for the verifier.
+- **`ChatGPT_DeepResearch_ai_incidents_2026.md`**, **`ClaudeCode_DeepResearch_ai_incidents_2026.md`**,
+  **`Grok_DeepResearch_ai_incidents_2026.md`** —
+  three independent deep-research incident reviews (kept in `incidents/sources/`).
 
-Each record also carries **`veris.reference`**: the reporting on the incident's event, as URLs. It holds every link the record's sources give for the event, plus reporting found by the analyst, primary disclosures first (methodology §10.2). No URL appears in both fields: `veris.reference` holds no `sources` url, no register item and no link into this repository. The `.md` shows up to three of the reference URLs as the "Reporting" links.
+Each record also carries **`veris.reference`**: the reporting on the incident's event, as URLs.
+It holds every link the record's sources give for the event, plus reporting found by the analyst,
+primary disclosures first (methodology §10.2).
+No URL appears in both fields: `veris.reference` holds no `sources` url,
+no register item and no link into this repository.
+The `.md` shows up to three of the reference URLs as the "Reporting" links.
 
 Citation counts across the corpus: VCDB 41 · ClaudeCode 36 · ChatGPT 19 · AIID 17 · Grok 9.
 
 ## Scope
 
-An event is included when **AI was materially involved** *and* there was an actual, suspected, or near-miss adverse effect on the confidentiality, integrity, availability, or authorization of a software/information asset. Non-security AI controversies (deepfake fraud, disinformation, likeness/IP disputes, autonomous-vehicle safety, harmful model output) are out of scope, except where a register carried them — in which case they are retained and clearly flagged as outside the criterion.
+An event is included when **AI was materially involved** *and* there was an actual, suspected,
+or near-miss adverse effect on the confidentiality, integrity, availability,
+or authorization of a software/information asset.
+Non-security AI controversies (deepfake fraud, disinformation, likeness/IP disputes, autonomous-vehicle safety,
+harmful model output) are out of scope, except where a register carried them —
+in which case they are retained and clearly flagged as outside the criterion.
 
 ## Caveats
 
-- Several incidents rest on vendor self-disclosure or researcher/attacker claims; per-incident `confidence` reflects this, and "first-of-kind" claims are researcher/vendor assessments. Verify any single figure against the linked primary source.
-- Severity ranking is a documented judgement, not a formal aggregate; items near tier boundaries could reasonably be reordered.
+- Several incidents rest on vendor self-disclosure or researcher/attacker claims; per-incident `confidence` reflects this,
+  and "first-of-kind" claims are researcher/vendor assessments.
+  Verify any single figure against the linked primary source.
+- Severity ranking is a documented judgement, not a formal aggregate;
+  items near tier boundaries could reasonably be reordered.
 - The `.csv` and `.md` are **derived** from the `.json`; treat the JSON as authoritative.
 
 ## License
@@ -155,11 +297,25 @@ An event is included when **AI was materially involved** *and* there was an actu
 
 Copyright © 2026 Dave Farago.
 
-**Why the data is share-alike.** The dataset adapts material from two registers that are licensed CC BY-SA 4.0: for some incidents, the summary paraphrases the register's summary, and one VERIS coding follows its VCDB record. CC BY-SA 4.0 requires adapted material to carry the same licence. The VERIS vocabulary itself does not impose a licence on the data: the incidents use its field names and values, and copy no VERIS text.
+**Why the data is share-alike.**
+The dataset adapts material from two registers that are licensed CC BY-SA 4.0: for some incidents,
+the summary paraphrases the register's summary, and one VERIS coding follows its VCDB record.
+CC BY-SA 4.0 requires adapted material to carry the same licence.
+The VERIS vocabulary itself does not impose a licence on the data: the incidents use its field names and values,
+and copy no VERIS text.
 
 **Attribution of adapted material.**
 
-- **VERIS Community Database (VCDB)**, the vz-risk VCDB project and its contributors, https://github.com/vz-risk/VCDB, licensed [CC BY-SA 4.0](https://github.com/vz-risk/VCDB/blob/master/LICENSE.txt). Used: encoded incident records and 2026 issue intake, cited per incident in `sources[]`. Changes: summaries paraphrased and combined with other sources; VERIS codings adopted or revised, and extended with a report layer.
-- **AI Incident Database (AIID)**, Responsible AI Collaborative, https://incidentdatabase.ai/, database collections licensed [CC BY-SA 4.0](https://incidentdatabase.ai/terms-of-use/) (report texts are excluded from that licence and are not included here). Used: `incidents/sources/incidentdatabase.ai_20260824_ai_incidents_2026.xlsx`, an export of 73 incidents of 2026 (of 1,641) with their MIT, GMF and CSETv1 classifications and derived coverage columns; cited per incident in `sources[]`. Changes: selected 2026 incidents re-coded in VERIS.
+- **VERIS Community Database (VCDB)**, the vz-risk VCDB project and its contributors, https://github.com/vz-risk/VCDB,
+  licensed [CC BY-SA 4.0](https://github.com/vz-risk/VCDB/blob/master/LICENSE.txt).
+  Used: encoded incident records and 2026 issue intake, cited per incident in `sources[]`.
+  Changes: summaries paraphrased and combined with other sources; VERIS codings adopted or revised,
+  and extended with a report layer.
+- **AI Incident Database (AIID)**, Responsible AI Collaborative, https://incidentdatabase.ai/,
+  database collections licensed [CC BY-SA 4.0](https://incidentdatabase.ai/terms-of-use/) (report texts are excluded from that licence and are not included here).
+  Used: `incidents/sources/incidentdatabase.ai_20260824_ai_incidents_2026.xlsx`,
+  an export of 73 incidents of 2026 (of 1,641) with their MIT,
+  GMF and CSETv1 classifications and derived coverage columns; cited per incident in `sources[]`.
+  Changes: selected 2026 incidents re-coded in VERIS.
 
 Nothing here implies endorsement by Verizon, the Responsible AI Collaborative, MITRE, CISA or any other source.
