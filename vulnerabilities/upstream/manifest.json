@@ -3951,13 +3951,5 @@
   "http_status": 404,
   "source": "osv-by-cve",
   "url": "https://api.osv.dev/v1/vulns/CVE-2026-76045"
- },
- "veris:vcdb-merged": {
-  "fetched_on": "2026-10-24",
-  "file": "vulnerabilities/upstream/veris/vcdb-merged.json",
-  "http_status": 200,
-  "source": "veris",
-  "updated": null,
-  "url": "https://raw.githubusercontent.com/vz-risk/VCDB/1adb272404b5ccac15e1dc1ff420661ac2ee3752/vcdb-merged.json"
  }
 }

@@ -227,6 +227,20 @@ class Fetch(unittest.TestCase):
     def test_titleless_cves_from_cache(self):
         self.assertEqual(fu.titleless_cves(["CVE-2021-3156", "CVE-2026-33017", "CVE-0000-0000"]), ["CVE-2021-3156"])
 
+    def test_vcdb_ids_are_the_adopted_records_only(self):
+        # Only a VCDB record whose coding a record adopts is compared (methodology §10.2), so only those are cached; an
+        # intake issue, a record cited without `adopted` and an unpinned URL are not.
+        pin = "0123456789abcdef0123456789abcdef01234567"
+        rec = lambda loc, url_ref, **k: {"source": "vz-risk/VCDB", "locator": loc,
+                                         "url": f"https://github.com/vz-risk/VCDB/blob/{url_ref}/{loc}", **k}
+        d = {"incidents": [{"id": "2026-001", "sources": [
+            {"source": "vz-risk/VCDB", "locator": "issues/1", "url": "https://github.com/vz-risk/VCDB/issues/1"},
+            rec("data/json/submitted/a.json", pin),
+            rec("data/json/submitted/b.json", pin, adopted=True),
+            rec("data/json/submitted/c.json", "master", adopted=True)]}],
+             "sub_threshold_incidents": [{"id": "2026-002", "sources": [rec("data/json/validated/d.json", pin, adopted=True)]}]}
+        self.assertEqual(fu.vcdb_ids(d), [(pin, "data/json/submitted/b.json"), (pin, "data/json/validated/d.json")])
+
     def test_cached_404_is_not_fetched_again(self):
         def no_network(*a, **k):
             raise AssertionError("run() must not fetch a lookup whose 404 is cached")
@@ -239,6 +253,30 @@ class Fetch(unittest.TestCase):
                 self.assertEqual(fu.run(plan, manifest, Path(tmp) / "manifest.json", False, "2026-09-26"), (0, 1, 0))
         finally:
             fu.get = orig
+
+
+class IncidentUpstream(unittest.TestCase):
+    """The incident-side upstream records under incidents/upstream/: the VERIS schema and the VCDB records whose coding
+    a record adopts. Records keep citing VCDB's pinned URL; the cache only serves the comparison."""
+
+    def test_vcdb_pin(self):
+        pin = "0123456789abcdef0123456789abcdef01234567"
+        loc = "data/json/validated/x.json"
+        entry = {"source": "vz-risk/VCDB", "locator": loc, "url": f"https://github.com/vz-risk/VCDB/blob/{pin}/{loc}"}
+        self.assertEqual(lc.vcdb_pin(entry), (pin, loc))
+        self.assertIsNone(lc.vcdb_pin({**entry, "url": f"https://github.com/vz-risk/VCDB/blob/master/{loc}"}))
+        self.assertIsNone(lc.vcdb_pin({**entry, "locator": "data/json/validated/y.json"}))
+        self.assertIsNone(lc.vcdb_pin({**entry, "locator": "issues/1", "url": "https://github.com/vz-risk/VCDB/issues/1"}))
+
+    def test_schema_is_cached_on_the_incident_side(self):
+        self.assertTrue((lc.INCIDENT_UPSTREAM_DIR / lc.VERIS_SCHEMA_FILE).is_file())
+        self.assertFalse((lc.UPSTREAM_DIR / "veris").exists())
+        self.assertIsNotNone(lc.load_upstream()["veris_schema"])
+
+    def test_every_adopted_record_is_cached(self):
+        want = {f"{c}/{loc}" for c, loc in fu.vcdb_ids(CORPUS)}
+        self.assertEqual(len(want), 16)
+        self.assertEqual(set(lc.load_upstream()["vcdb"]), want)
 
 
 if __name__ == "__main__":

@@ -12,7 +12,9 @@ Terms verified on 2026-09-25 at the URLs given. No record in this directory has 
 | `osv/` (MAL- ids) | OpenSSF Malicious Packages via OSV.dev | Apache License 2.0, https://github.com/ossf/malicious-packages/blob/main/LICENSE | A copy of the licence: `LICENSE-Apache-2.0.txt` in this directory. The records are unmodified. |
 | `osv/` (PYSEC- ids) | PyPA Advisory Database via OSV.dev | CC BY 4.0, https://github.com/pypa/advisory-database/blob/main/LICENSE | Attribution "PyPA Advisory Database", a link to the licence, unmodified. |
 | `cisa-kev/` | CISA Known Exploited Vulnerabilities catalog, https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json | CC0 1.0, as stated in the catalog's repository `cisagov/kev-data` (`LICENSE`) | Nothing. CISA adds: third-party links in the catalog keep their own terms, and use does not authorize the CISA logo or DHS seal, nor imply endorsement by CISA or DHS. |
-| `veris/` | `vcdb-merged.json`, the VERIS JSON schema as merged for the VERIS Community Database, https://github.com/vz-risk/VCDB (VERIS 1.4.2: branch `1_4_2`, commit `1adb272404b5ccac15e1dc1ff420661ac2ee3752`) | CC BY-SA 4.0, https://github.com/vz-risk/VCDB/blob/master/LICENSE.txt | Attribution "VERIS Community Database (VCDB), vz-risk", a link to the licence, unmodified. ShareAlike applies only to adapted versions; this copy is verbatim. |
+
+The incident-side upstream records (the VERIS schema and VCDB records) are in `incidents/upstream/`, with their own
+`LICENSES.md`.
 
 ### CVE: MITRE's copyright designation and licence
 
@@ -22,4 +24,4 @@ Terms verified on 2026-09-25 at the URLs given. No record in this directory has 
 
 *"Disclaimers: ALL DOCUMENTS AND THE INFORMATION CONTAINED THEREIN PROVIDED BY MITRE ARE PROVIDED ON AN "AS IS" BASIS AND THE CONTRIBUTOR, THE ORGANIZATION HE/SHE REPRESENTS OR IS SPONSORED BY (IF ANY), THE MITRE CORPORATION, ITS BOARD OF TRUSTEES, OFFICERS, AGENTS, AND EMPLOYEES, DISCLAIM ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO ANY WARRANTY THAT THE USE OF THE INFORMATION THEREIN WILL NOT INFRINGE ANY RIGHTS OR ANY IMPLIED WARRANTIES OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE."*
 
-Nothing here is a statement by CISA, MITRE, GitHub, OpenSSF, PyPA, OSV or Verizon about this project; the records are reproduced for validation and enrichment of the incident dataset only.
+Nothing here is a statement by CISA, MITRE, GitHub, OpenSSF, PyPA or OSV about this project; the records are reproduced for validation and enrichment of the incident dataset only.

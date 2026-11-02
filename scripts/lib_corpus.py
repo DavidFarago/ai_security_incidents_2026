@@ -11,7 +11,11 @@ from typing import NamedTuple
 
 ROOT = Path(__file__).resolve().parents[1]
 JSON_PATH = ROOT / "incidents" / "all_2026_ai_software_security_incidents.json"
+# Upstream records: cached external records that the verifier compares the JSON with. The vulnerability side holds
+# CVE.org, GitHub Advisory and OSV records and the CISA KEV catalog; the incident side holds the VERIS schema and the
+# VCDB records whose coding a record adopts (methodology §10.2).
 UPSTREAM_DIR = ROOT / "vulnerabilities" / "upstream"
+INCIDENT_UPSTREAM_DIR = ROOT / "incidents" / "upstream"
 
 # Relation vocabulary in the order methodology §6.4 Rule 2 lists it.
 RELATION_ORDER = ["exploited", "self-malicious-release", "exploited-unconfirmed", "attempted", "toolkit",
@@ -58,7 +62,12 @@ REGISTER_SOURCES = {"incidentdatabase.ai_20260824_ai_incidents_2026.xlsx", "inci
 # Cached per-identifier sources: sub-directory -> {stem: record}.
 RECORD_DIRS = ["cve.org", "ghsa", "osv", "ghsa-by-cve", "osv-by-cve"]
 KEV_FILE = Path("cisa-kev") / "known_exploited_vulnerabilities.json"
+# Incident side, under INCIDENT_UPSTREAM_DIR: the schema, and each adopted VCDB record at vcdb/<commit>/<locator>,
+# the path of its pinned URL.
 VERIS_SCHEMA_FILE = Path("veris") / "vcdb-merged.json"
+VCDB_DIR = Path("vcdb")
+# A VCDB record cited at a fixed VCDB commit (methodology §10.2): https://github.com/vz-risk/VCDB/blob/<commit>/<locator>.
+VCDB_PINNED = re.compile(r"https://github\.com/vz-risk/VCDB/blob/([0-9a-f]{40})/(.+)")
 
 
 def lab(rel: str) -> str:
@@ -70,13 +79,15 @@ def load_corpus(path: Path = JSON_PATH) -> dict:
     return json.loads(Path(path).read_text(encoding="utf-8"))
 
 
-def load_upstream(up: Path = UPSTREAM_DIR) -> dict:
+def load_upstream(up: Path = UPSTREAM_DIR, inc_up: Path = INCIDENT_UPSTREAM_DIR) -> dict:
     """Raw upstream records cached by scripts/fetch_upstream.py (never edited). A missing part stays empty or None.
 
-    Keys: one per RECORD_DIRS entry ({stem: record}); "kev" ({cveID: entry}) and "kev_catalog" (the feed without its
-    list); "veris_schema" (dict or None); "manifest".
+    Keys from `up` (vulnerability side): one per RECORD_DIRS entry ({stem: record}); "kev" ({cveID: entry}) and
+    "kev_catalog" (the feed without its list); "manifest". Keys from `inc_up` (incident side): "veris_schema" (dict or
+    None); "vcdb" ({"<commit>/<locator>": record}, the key that vcdb_pin gives for the citing entry);
+    "incident_manifest".
     """
-    up = Path(up)
+    up, inc_up = Path(up), Path(inc_up)
     out: dict = {}
     for src in RECORD_DIRS:
         pdir = up / src
@@ -85,10 +96,15 @@ def load_upstream(up: Path = UPSTREAM_DIR) -> dict:
     feed = json.loads(kf.read_text(encoding="utf-8")) if kf.exists() else None
     out["kev"] = {v["cveID"]: v for v in feed["vulnerabilities"]} if feed else {}
     out["kev_catalog"] = {k: v for k, v in feed.items() if k != "vulnerabilities"} if feed else None
-    sf = up / VERIS_SCHEMA_FILE
-    out["veris_schema"] = json.loads(sf.read_text(encoding="utf-8")) if sf.exists() else None
     mpath = up / "manifest.json"
     out["manifest"] = json.loads(mpath.read_text(encoding="utf-8")) if mpath.exists() else {}
+    sf = inc_up / VERIS_SCHEMA_FILE
+    out["veris_schema"] = json.loads(sf.read_text(encoding="utf-8")) if sf.exists() else None
+    vdir = inc_up / VCDB_DIR
+    out["vcdb"] = {f.relative_to(vdir).as_posix(): json.loads(f.read_text(encoding="utf-8"))
+                   for f in sorted(vdir.glob("*/data/json/*/*")) if f.is_file()} if vdir.exists() else {}
+    ipath = inc_up / "manifest.json"
+    out["incident_manifest"] = json.loads(ipath.read_text(encoding="utf-8")) if ipath.exists() else {}
     return out
 
 
@@ -136,6 +152,15 @@ def is_adopted_coding(s) -> bool:
     """A VCDB record entry marked `adopted: true`: the record follows its VERIS coding (methodology §10.2). Only such an
     entry may carry `overrides`, the reasons for deliberate differences from that coding."""
     return is_vcdb_record(s) and s.get("adopted") is True
+
+
+def vcdb_pin(s) -> tuple | None:
+    """(commit, locator) of a VCDB record entry whose url is pinned to a VCDB commit and names its locator; None for any
+    other entry, an intake issue or an unpinned url included (the verifier reports the latter)."""
+    if not is_vcdb_record(s) or not isinstance(s.get("url"), str):
+        return None
+    m = VCDB_PINNED.fullmatch(s["url"])
+    return (m.group(1), m.group(2)) if m and m.group(2) == s["locator"] else None
 
 
 def source_names(rec: dict) -> list:

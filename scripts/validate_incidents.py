@@ -29,7 +29,7 @@ record without a CVE is a vulnerability disclosure. Each of those needs a cited 
 clean run says nothing about them.
 
 Offline, deterministic. Needs the `jsonschema` package for the VERIS schema check (missing -> error, never a pass).
-Usage: python3 scripts/validate_incidents.py [--json PATH] [--upstream DIR] [--verbose]
+Usage: python3 scripts/validate_incidents.py [--json PATH] [--upstream DIR] [--incident-upstream DIR] [--verbose]
 Exit status: 0 when no error, 1 otherwise.
 """
 from __future__ import annotations
@@ -529,9 +529,6 @@ def check_ai_initiated(i, r):
             r.add("B", "ai-initiated", "report.ai_initiated true needs the motive 'Misalignment' in an actor branch with "
                   "'Agentic system' (methodology §5.3)", iid)
 
-VCDB_PINNED = r"https://github\.com/vz-risk/VCDB/blob/[0-9a-f]{40}/"
-
-
 def check_source_locators(d, r, root: Path = lc.ROOT):
     """Methodology §10.2: where a sources entry points. For a source with a `permalink` in sources_catalog (a report
     held in this repo), the file at `path` still has the catalog `sha256`, `url` is the permalink with a line range
@@ -572,7 +569,7 @@ def check_source_locators(d, r, root: Path = lc.ROOT):
                     if not span[0] <= a <= b <= span[1]:
                         r.add("B", "source-locator", f"{where}: lines {a}-{b} are not inside {loc!r} (lines "
                               f"{span[0]}-{span[1]})", i["id"])
-            elif lc.is_vcdb_record(s) and not re.fullmatch(VCDB_PINNED + re.escape(loc), url):
+            elif lc.is_vcdb_record(s) and lc.vcdb_pin(s) is None:
                 r.add("B", "source-locator", f"{where}: url is not pinned to a VCDB commit: "
                       f"https://github.com/vz-risk/VCDB/blob/<commit>/{loc}", i["id"])
             elif src in lc.REGISTER_SOURCES and not url.endswith("/" + loc.split()[-1]):
@@ -714,7 +711,7 @@ def check_counts(d, r):
 
 def check_veris_schema(d, up, r):
     if up["veris_schema"] is None:
-        r.add("B", "veris-schema", "VERIS schema not cached (upstream/veris/vcdb-merged.json); run scripts/fetch_upstream.py")
+        r.add("B", "veris-schema", "VERIS schema not cached (incidents/upstream/veris/vcdb-merged.json); run scripts/fetch_upstream.py")
         return
     try:
         import jsonschema
@@ -788,9 +785,10 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--json", default=lc.JSON_PATH, type=Path)
     ap.add_argument("--upstream", default=lc.UPSTREAM_DIR, type=Path)
+    ap.add_argument("--incident-upstream", default=lc.INCIDENT_UPSTREAM_DIR, type=Path)
     ap.add_argument("--verbose", action="store_true", help="list every finding and every incomplete field")
     a = ap.parse_args()
-    r = validate(lc.load_corpus(a.json), lc.load_upstream(a.upstream))
+    r = validate(lc.load_corpus(a.json), lc.load_upstream(a.upstream, a.incident_upstream))
     print(report(r, a.verbose))
     sys.exit(1 if r.errors else 0)
 

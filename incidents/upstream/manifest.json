@@ -1,0 +1,138 @@
+{
+ "vcdb:230cf22b56a481dd1a994b21e4d94c59e2bccea9/data/json/submitted/0090C11A-1761-42CC-B093-DE291F9F1F19.json": {
+  "fetched_on": "2026-11-02",
+  "file": "incidents/upstream/vcdb/230cf22b56a481dd1a994b21e4d94c59e2bccea9/data/json/submitted/0090C11A-1761-42CC-B093-DE291F9F1F19.json",
+  "http_status": 200,
+  "source": "vcdb",
+  "updated": "2026-07-14T21:13:34Z",
+  "url": "https://raw.githubusercontent.com/vz-risk/VCDB/230cf22b56a481dd1a994b21e4d94c59e2bccea9/data/json/submitted/0090C11A-1761-42CC-B093-DE291F9F1F19.json"
+ },
+ "vcdb:230cf22b56a481dd1a994b21e4d94c59e2bccea9/data/json/submitted/0B685211-665C-44C5-9246-386B23007039.json": {
+  "fetched_on": "2026-11-02",
+  "file": "incidents/upstream/vcdb/230cf22b56a481dd1a994b21e4d94c59e2bccea9/data/json/submitted/0B685211-665C-44C5-9246-386B23007039.json",
+  "http_status": 200,
+  "source": "vcdb",
+  "updated": "2026-07-14T21:20:13Z",
+  "url": "https://raw.githubusercontent.com/vz-risk/VCDB/230cf22b56a481dd1a994b21e4d94c59e2bccea9/data/json/submitted/0B685211-665C-44C5-9246-386B23007039.json"
+ },
+ "vcdb:230cf22b56a481dd1a994b21e4d94c59e2bccea9/data/json/submitted/53D3CE8F-BB77-42D6-BA86-133B5F52BB58.json": {
+  "fetched_on": "2026-11-02",
+  "file": "incidents/upstream/vcdb/230cf22b56a481dd1a994b21e4d94c59e2bccea9/data/json/submitted/53D3CE8F-BB77-42D6-BA86-133B5F52BB58.json",
+  "http_status": 200,
+  "source": "vcdb",
+  "updated": "2026-08-01T00:50:53Z",
+  "url": "https://raw.githubusercontent.com/vz-risk/VCDB/230cf22b56a481dd1a994b21e4d94c59e2bccea9/data/json/submitted/53D3CE8F-BB77-42D6-BA86-133B5F52BB58.json"
+ },
+ "vcdb:230cf22b56a481dd1a994b21e4d94c59e2bccea9/data/json/submitted/996F8B75-6F39-4898-A7E9-EDB4787E17F4.json": {
+  "fetched_on": "2026-11-02",
+  "file": "incidents/upstream/vcdb/230cf22b56a481dd1a994b21e4d94c59e2bccea9/data/json/submitted/996F8B75-6F39-4898-A7E9-EDB4787E17F4.json",
+  "http_status": 200,
+  "source": "vcdb",
+  "updated": "2026-08-01T00:50:53Z",
+  "url": "https://raw.githubusercontent.com/vz-risk/VCDB/230cf22b56a481dd1a994b21e4d94c59e2bccea9/data/json/submitted/996F8B75-6F39-4898-A7E9-EDB4787E17F4.json"
+ },
+ "vcdb:230cf22b56a481dd1a994b21e4d94c59e2bccea9/data/json/validated/032C9EBE-C5A4-4BAA-B096-5C7C7855E0AA.json": {
+  "fetched_on": "2026-11-02",
+  "file": "incidents/upstream/vcdb/230cf22b56a481dd1a994b21e4d94c59e2bccea9/data/json/validated/032C9EBE-C5A4-4BAA-B096-5C7C7855E0AA.json",
+  "http_status": 200,
+  "source": "vcdb",
+  "updated": "2026-07-02T13:40:40Z",
+  "url": "https://raw.githubusercontent.com/vz-risk/VCDB/230cf22b56a481dd1a994b21e4d94c59e2bccea9/data/json/validated/032C9EBE-C5A4-4BAA-B096-5C7C7855E0AA.json"
+ },
+ "vcdb:230cf22b56a481dd1a994b21e4d94c59e2bccea9/data/json/validated/0418FC68-9D79-4D42-8E9E-4CEB9ECBCBEA.json": {
+  "fetched_on": "2026-11-02",
+  "file": "incidents/upstream/vcdb/230cf22b56a481dd1a994b21e4d94c59e2bccea9/data/json/validated/0418FC68-9D79-4D42-8E9E-4CEB9ECBCBEA.json",
+  "http_status": 200,
+  "source": "vcdb",
+  "updated": "2026-07-13T20:21:32Z",
+  "url": "https://raw.githubusercontent.com/vz-risk/VCDB/230cf22b56a481dd1a994b21e4d94c59e2bccea9/data/json/validated/0418FC68-9D79-4D42-8E9E-4CEB9ECBCBEA.json"
+ },
+ "vcdb:230cf22b56a481dd1a994b21e4d94c59e2bccea9/data/json/validated/13CBB4AD-A22C-4664-A112-7528CAB0AAC3.json": {
+  "fetched_on": "2026-11-02",
+  "file": "incidents/upstream/vcdb/230cf22b56a481dd1a994b21e4d94c59e2bccea9/data/json/validated/13CBB4AD-A22C-4664-A112-7528CAB0AAC3.json",
+  "http_status": 200,
+  "source": "vcdb",
+  "updated": "2026-07-13T20:21:32Z",
+  "url": "https://raw.githubusercontent.com/vz-risk/VCDB/230cf22b56a481dd1a994b21e4d94c59e2bccea9/data/json/validated/13CBB4AD-A22C-4664-A112-7528CAB0AAC3.json"
+ },
+ "vcdb:230cf22b56a481dd1a994b21e4d94c59e2bccea9/data/json/validated/49E476BC-7B08-41C7-9864-B14A6B0D64AD.json": {
+  "fetched_on": "2026-11-02",
+  "file": "incidents/upstream/vcdb/230cf22b56a481dd1a994b21e4d94c59e2bccea9/data/json/validated/49E476BC-7B08-41C7-9864-B14A6B0D64AD.json",
+  "http_status": 200,
+  "source": "vcdb",
+  "updated": "2026-07-13T20:21:32Z",
+  "url": "https://raw.githubusercontent.com/vz-risk/VCDB/230cf22b56a481dd1a994b21e4d94c59e2bccea9/data/json/validated/49E476BC-7B08-41C7-9864-B14A6B0D64AD.json"
+ },
+ "vcdb:230cf22b56a481dd1a994b21e4d94c59e2bccea9/data/json/validated/94733B5A-B002-43E7-885B-5C2913582D22.json": {
+  "fetched_on": "2026-11-02",
+  "file": "incidents/upstream/vcdb/230cf22b56a481dd1a994b21e4d94c59e2bccea9/data/json/validated/94733B5A-B002-43E7-885B-5C2913582D22.json",
+  "http_status": 200,
+  "source": "vcdb",
+  "updated": "2026-07-13T20:21:32Z",
+  "url": "https://raw.githubusercontent.com/vz-risk/VCDB/230cf22b56a481dd1a994b21e4d94c59e2bccea9/data/json/validated/94733B5A-B002-43E7-885B-5C2913582D22.json"
+ },
+ "vcdb:230cf22b56a481dd1a994b21e4d94c59e2bccea9/data/json/validated/AAEFD515-974F-4153-BCDD-6B4179F1846E.json": {
+  "fetched_on": "2026-11-02",
+  "file": "incidents/upstream/vcdb/230cf22b56a481dd1a994b21e4d94c59e2bccea9/data/json/validated/AAEFD515-974F-4153-BCDD-6B4179F1846E.json",
+  "http_status": 200,
+  "source": "vcdb",
+  "updated": "2026-07-13T20:21:32Z",
+  "url": "https://raw.githubusercontent.com/vz-risk/VCDB/230cf22b56a481dd1a994b21e4d94c59e2bccea9/data/json/validated/AAEFD515-974F-4153-BCDD-6B4179F1846E.json"
+ },
+ "vcdb:230cf22b56a481dd1a994b21e4d94c59e2bccea9/data/json/validated/FE704346-BF9A-4435-927B-16A7ECF24C43.json": {
+  "fetched_on": "2026-11-02",
+  "file": "incidents/upstream/vcdb/230cf22b56a481dd1a994b21e4d94c59e2bccea9/data/json/validated/FE704346-BF9A-4435-927B-16A7ECF24C43.json",
+  "http_status": 200,
+  "source": "vcdb",
+  "updated": "2026-06-18T20:38:07Z",
+  "url": "https://raw.githubusercontent.com/vz-risk/VCDB/230cf22b56a481dd1a994b21e4d94c59e2bccea9/data/json/validated/FE704346-BF9A-4435-927B-16A7ECF24C43.json"
+ },
+ "vcdb:f6f98c00f66ab35f5b49977a5852ce94a5bb31d1/data/json/submitted/0ec40f9c-6ccb-4e1a-9b69-59b9b60a81fa.JSON": {
+  "fetched_on": "2026-11-02",
+  "file": "incidents/upstream/vcdb/f6f98c00f66ab35f5b49977a5852ce94a5bb31d1/data/json/submitted/0ec40f9c-6ccb-4e1a-9b69-59b9b60a81fa.JSON",
+  "http_status": 200,
+  "source": "vcdb",
+  "updated": "2026-09-15T19:23:42.811Z",
+  "url": "https://raw.githubusercontent.com/vz-risk/VCDB/f6f98c00f66ab35f5b49977a5852ce94a5bb31d1/data/json/submitted/0ec40f9c-6ccb-4e1a-9b69-59b9b60a81fa.JSON"
+ },
+ "vcdb:f6f98c00f66ab35f5b49977a5852ce94a5bb31d1/data/json/submitted/76f9dcd8-5db0-40e8-9335-cd929c1017b3.JSON": {
+  "fetched_on": "2026-11-02",
+  "file": "incidents/upstream/vcdb/f6f98c00f66ab35f5b49977a5852ce94a5bb31d1/data/json/submitted/76f9dcd8-5db0-40e8-9335-cd929c1017b3.JSON",
+  "http_status": 200,
+  "source": "vcdb",
+  "updated": "2026-09-15T19:06:25.685Z",
+  "url": "https://raw.githubusercontent.com/vz-risk/VCDB/f6f98c00f66ab35f5b49977a5852ce94a5bb31d1/data/json/submitted/76f9dcd8-5db0-40e8-9335-cd929c1017b3.JSON"
+ },
+ "vcdb:f6f98c00f66ab35f5b49977a5852ce94a5bb31d1/data/json/submitted/8084d01e-dd3e-4bca-b710-c6fdbfb5c5cf.JSON": {
+  "fetched_on": "2026-11-02",
+  "file": "incidents/upstream/vcdb/f6f98c00f66ab35f5b49977a5852ce94a5bb31d1/data/json/submitted/8084d01e-dd3e-4bca-b710-c6fdbfb5c5cf.JSON",
+  "http_status": 200,
+  "source": "vcdb",
+  "updated": "2026-09-15T18:56:32.339Z",
+  "url": "https://raw.githubusercontent.com/vz-risk/VCDB/f6f98c00f66ab35f5b49977a5852ce94a5bb31d1/data/json/submitted/8084d01e-dd3e-4bca-b710-c6fdbfb5c5cf.JSON"
+ },
+ "vcdb:f6f98c00f66ab35f5b49977a5852ce94a5bb31d1/data/json/submitted/9f45cb1b-ab67-4500-9ed0-9a171a0305e5.JSON": {
+  "fetched_on": "2026-11-02",
+  "file": "incidents/upstream/vcdb/f6f98c00f66ab35f5b49977a5852ce94a5bb31d1/data/json/submitted/9f45cb1b-ab67-4500-9ed0-9a171a0305e5.JSON",
+  "http_status": 200,
+  "source": "vcdb",
+  "updated": "2026-09-15T18:40:08.316Z",
+  "url": "https://raw.githubusercontent.com/vz-risk/VCDB/f6f98c00f66ab35f5b49977a5852ce94a5bb31d1/data/json/submitted/9f45cb1b-ab67-4500-9ed0-9a171a0305e5.JSON"
+ },
+ "vcdb:f6f98c00f66ab35f5b49977a5852ce94a5bb31d1/data/json/submitted/a5bf09d1-156f-4f39-96e6-6adec5bc0c66.JSON": {
+  "fetched_on": "2026-11-02",
+  "file": "incidents/upstream/vcdb/f6f98c00f66ab35f5b49977a5852ce94a5bb31d1/data/json/submitted/a5bf09d1-156f-4f39-96e6-6adec5bc0c66.JSON",
+  "http_status": 200,
+  "source": "vcdb",
+  "updated": "2026-09-15T18:49:56.750Z",
+  "url": "https://raw.githubusercontent.com/vz-risk/VCDB/f6f98c00f66ab35f5b49977a5852ce94a5bb31d1/data/json/submitted/a5bf09d1-156f-4f39-96e6-6adec5bc0c66.JSON"
+ },
+ "veris:vcdb-merged": {
+  "fetched_on": "2026-10-24",
+  "file": "incidents/upstream/veris/vcdb-merged.json",
+  "http_status": 200,
+  "source": "veris",
+  "updated": null,
+  "url": "https://raw.githubusercontent.com/vz-risk/VCDB/1adb272404b5ccac15e1dc1ff420661ac2ee3752/vcdb-merged.json"
+ }
+}

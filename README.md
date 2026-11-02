@@ -70,7 +70,7 @@ Non-software-security items carried by the registers (e.g. facial-recognition id
 ### Verifying and rebuilding
 
 ```
-python3 scripts/fetch_upstream.py            # network: cache upstream records (CVE.org, GHSA, OSV, CISA KEV, VERIS schema)
+python3 scripts/fetch_upstream.py            # network: cache upstream records (CVE.org, GHSA, OSV, CISA KEV; VERIS schema, adopted VCDB records)
 python3 scripts/validate_incidents.py        # offline gate: exit 1 on any error
 python3 scripts/build_vulnerabilities.py     # JSON + cache -> vulnerabilities/
 python3 scripts/build_incidents_report.py    # JSON -> incidents/*.csv, incidents/*.md
@@ -91,13 +91,16 @@ incidents/
 ├─ all_2026_ai_software_security_incidents.md     # severity-ranked field guide
 ├─ all_2026_ai_software_security_incidents_sub_threshold.{csv,md}  # the sub-threshold records (methodology §3.3)
 ├─ VERIS_Methodology_for_AI_Security_Incidents_concise.md
+├─ upstream/                                       # incident-side upstream records, verbatim (manifest.json, LICENSES.md); never edited
+│  ├─ veris/vcdb-merged.json                       # the VERIS JSON schema (VCDB, VERIS 1.4.2, pinned commit)
+│  └─ vcdb/<commit>/data/json/…                    # the VCDB records whose coding a record adopts, at the pinned commit
 └─ sources/                                        # the original sources
    ├─ ChatGPT_DeepResearch_ai_incidents_2026.{md,docx,pdf}
    ├─ ClaudeCode_DeepResearch_ai_incidents_2026.{md,html}
    ├─ Grok_DeepResearch_ai_incidents_2026.md
    └─ incidentdatabase.ai_20260824_ai_incidents_2026.xlsx
 scripts/
-├─ fetch_upstream.py                              # CVE.org / GitHub Advisory / OSV records for the cited ids, CISA KEV, VERIS schema → vulnerabilities/upstream/ (network)
+├─ fetch_upstream.py                              # CVE.org / GitHub Advisory / OSV records for the cited ids, CISA KEV → vulnerabilities/upstream/; VERIS schema, adopted VCDB records → incidents/upstream/ (network)
 ├─ lib_corpus.py                                  # shared loaders and vocabularies
 ├─ validate_incidents.py                          # the gate: Class A (upstream copies) + Class B (bookkeeping) checks (offline)
 ├─ build_vulnerabilities.py                       # incidents JSON + upstream cache → vulnerabilities/ (offline, stdlib, deterministic)
@@ -115,14 +118,14 @@ vulnerabilities/                                   # derived CVE-side tables —
 └─ upstream/                                       # raw upstream records, verbatim (manifest.json, LICENSES.md); never edited
 ```
 
-Terminology: **sources** (`incidents/sources/`) are the incident sources — the registers and reports the incidents were collected from; **upstream** (`vulnerabilities/upstream/`) are the upstream records — vulnerability-database entries (CVE.org, GitHub Advisory Database, OSV) fetched by `scripts/fetch_upstream.py` for the identifiers those incidents cite, plus the CISA KEV catalog and the VERIS JSON schema. Both are kept verbatim and never edited.
+Terminology: **sources** (`incidents/sources/`) are the incident sources — the registers and reports the incidents were collected from; **upstream** records are cached external records that `scripts/validate_incidents.py` compares the JSON with, fetched by `scripts/fetch_upstream.py`: on the vulnerability side (`vulnerabilities/upstream/`) the vulnerability-database entries (CVE.org, GitHub Advisory Database, OSV) for the identifiers those incidents cite, plus the CISA KEV catalog; on the incident side (`incidents/upstream/`) the VERIS JSON schema and the VCDB records whose coding a record adopts. Both are kept verbatim and never edited.
 
 ## Sources & provenance
 
 Every incident's `sources` field cites its **original** source(s), the discovery channel: where the record was found. Each entry names the source, the item in it (`locator`) and the item's `url`:
 
 - **`incidentdatabase.ai_20260824_ai_incidents_2026.xlsx`** — AI Incident Database (AIID) export, 2026-08-24 (cited with `AIID <id>` + the cite-page URL).
-- **`vz-risk/VCDB`** — the [VERIS Community Database](https://github.com/vz-risk/VCDB), cited at the exact encoded record (`data/json/{validated,submitted}/<uuid>.json`) or the 2026 issue intake (`issues/<n>`). No local VCDB snapshot is bundled; citations point upstream.
+- **`vz-risk/VCDB`** — the [VERIS Community Database](https://github.com/vz-risk/VCDB), cited at the exact encoded record (`data/json/{validated,submitted}/<uuid>.json`) or the 2026 issue intake (`issues/<n>`). Citations point at VCDB itself; the adopted records are also cached under `incidents/upstream/vcdb/` for the verifier.
 - **`ChatGPT_DeepResearch_ai_incidents_2026.md`**, **`ClaudeCode_DeepResearch_ai_incidents_2026.md`**, **`Grok_DeepResearch_ai_incidents_2026.md`** — three independent deep-research incident reviews (kept in `incidents/sources/`).
 
 Each record also carries **`veris.reference`**: the reporting on the incident's event, as URLs. It holds every link the record's sources give for the event, plus reporting found by the analyst, primary disclosures first (methodology §10.2). No URL appears in both fields: `veris.reference` holds no `sources` url, no register item and no link into this repository. The `.md` shows up to three of the reference URLs as the "Reporting" links.
@@ -148,7 +151,7 @@ An event is included when **AI was materially involved** *and* there was an actu
 | Code: `scripts/`, `tests/` | MIT (`LICENSE`) |
 | Deep-research reports in `incidents/sources/` | CC BY-SA 4.0, as far as the author holds rights in them; material they quote keeps its owners' rights |
 | AIID export in `incidents/sources/` | CC BY-SA 4.0, see attribution below |
-| Upstream records in `vulnerabilities/upstream/` | each source's own licence, see `vulnerabilities/upstream/LICENSES.md` |
+| Upstream records in `vulnerabilities/upstream/` and `incidents/upstream/` | each source's own licence, see the `LICENSES.md` in each directory |
 
 Copyright © 2026 Dave Farago.
 
