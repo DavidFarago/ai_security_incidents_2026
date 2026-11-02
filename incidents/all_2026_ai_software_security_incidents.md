@@ -223,7 +223,7 @@ Full VERIS + report-layer coding is in the companion `all_2026_ai_software_secur
 
 **24. Cannabis Club Systems - public URLs / IDOR exposed 1,082,680 members (VCDB; no AI component) — 2026.** Cannabis Club Systems (CCS/Nefos Solutions), an Irish SaaS behind the PuffPal app and CCS Nube platform, exposed 1,082,680 members' data - ~986,000 passport/ID scans, addresses, phones, DOB and cannabis-consumption records - via public URLs / IDOR-prone APIs (377 clubs in 40+ countries; disclosed 28 Jun). Conventional misconfiguration/IDOR exposure with no AI component; included because it appears in the CC_MIT_VCDB 2026 register.
 *AI-involvement: No AI component. Included for register completeness; not an AI-related incident.*
-*VERIS: Confirmed · Observed **High**, Potential **High** (confidence Medium). Mass identity-document exposure enables large-scale identity theft; sensitive (cannabis-use) data adds harm.*
+*VERIS: Confirmed · Observed **High**, Potential **High** (confidence High). Mass identity-document exposure enables large-scale identity theft; sensitive (cannabis-use) data adds harm.*
 **Sources:** [VCDB submitted/53D3CE8F…](https://github.com/vz-risk/VCDB/blob/230cf22b56a481dd1a994b21e4d94c59e2bccea9/data/json/submitted/53D3CE8F-BB77-42D6-BA86-133B5F52BB58.json) · **Reporting:** [daringfireball.net](https://daringfireball.net/linked/2026/06/28/puffpal-passport-leak), [mmjdaily.com](https://www.mmjdaily.com/article/9848605/cannabis-club-systems-breach-exposed-985-000-member-photo-ids-at-spanish-clubs/), [boingboing.net](https://boingboing.net/2026/06/28/a-million-passports-leaked-online-by-marijuana-club-portal.html)
 **Validated CVEs:** none identified · IDOR / public URLs in a bespoke SaaS; no CVE (conventional breach, no AI).
 
@@ -323,7 +323,7 @@ Full VERIS + report-layer coding is in the companion `all_2026_ai_software_secur
 
 **41. RXNT (EHR SaaS) - hacking via partner (VCDB; no AI component) — Mar 2026.** Networking Technology Inc (RXNT), a cloud e-prescribing/EHR/practice-management SaaS vendor, suffered a hacking breach in which an external actor gained unauthorized access between 1-3 Mar 2026 and copied stored patient data across its multi-tenant platform (vector via partner). Conventional breach with no AI component; included because it appears in the CC_MIT_VCDB 2026 register.
 *AI-involvement: No AI component. Included for register completeness; not an AI-related incident.*
-*VERIS: Confirmed · Observed **Medium**, Potential **High** (confidence High). Multi-tenant EHR compromise can affect many downstream practices' patients.*
+*VERIS: Confirmed · Observed **Medium**, Potential **High** (confidence Medium). Multi-tenant EHR compromise can affect many downstream practices' patients.*
 **Sources:** [VCDB validated/94733B5A…](https://github.com/vz-risk/VCDB/blob/230cf22b56a481dd1a994b21e4d94c59e2bccea9/data/json/validated/94733B5A-B002-43E7-885B-5C2913582D22.json) · **Reporting:** [HIPAA Journal](https://www.hipaajournal.com/clinical-registry-solutions-jason-r-egbert-od-pc-vnc-health-data-breaches/), [securityboulevard.com](https://securityboulevard.com/2026/05/rxnt-healthcare-software-breach-exposes-patient-data-across-multiple-provider-clients/)
 **Validated CVEs:** none identified · Conventional partner-vector breach (VCDB); no CVE, no AI component.
 
@@ -334,7 +334,7 @@ Full VERIS + report-layer coding is in the companion `all_2026_ai_software_secur
 
 **43. Clinical Registry Solutions - Akira ransomware / extortion (VCDB; no AI component) — Apr 2026.** Clinical Registry Solutions (Brooklyn, NY; clinical data abstraction/registry support) detected a cyberattack on 9 Apr 2026 in which an external actor accessed the network and copied files with PHI; the Akira group claimed ~41 GB and pursued extortion. Conventional ransomware/extortion breach with no AI component; included because it appears in the CC_MIT_VCDB 2026 register.
 *AI-involvement: No AI component. Included for register completeness; not an AI-related incident.*
-*VERIS: Confirmed · Observed **Medium**, Potential **High** (confidence High). PHI leak/sale across many client providers' patients if extortion unpaid.*
+*VERIS: Confirmed · Observed **Medium**, Potential **High** (confidence Medium). PHI leak/sale across many client providers' patients if extortion unpaid.*
 **Sources:** [VCDB validated/13CBB4AD…](https://github.com/vz-risk/VCDB/blob/230cf22b56a481dd1a994b21e4d94c59e2bccea9/data/json/validated/13CBB4AD-A22C-4664-A112-7528CAB0AAC3.json) · **Reporting:** [HIPAA Journal](https://www.hipaajournal.com/clinical-registry-solutions-jason-r-egbert-od-pc-vnc-health-data-breaches/), [dexpose.io](https://www.dexpose.io/akira-ransomware-attack-strikes-clinical-registry-solutions/)
 **Validated CVEs:** none identified · Akira ransomware/extortion (VCDB); no CVE identified, no AI component.
 
@@ -356,13 +356,13 @@ Full VERIS + report-layer coding is in the companion `all_2026_ai_software_secur
 
 **47. Mackay Sugar - The Gentlemen ransomware (VCDB; no AI component) — Jun 2026.** Mackay Sugar (Australia's second-largest raw sugar producer) suffered a ransomware attack by 'The Gentlemen' (Microsoft: Storm-2697) surfacing 10 Jun 2026 that forced two of three Queensland mills offline during the crushing season. Conventional ransomware/availability incident with no AI component; included because it appears in the CC_MIT_VCDB 2026 register.
 *AI-involvement: No AI component. Included for register completeness; not an AI-related incident.*
-*VERIS: Confirmed · Observed **Medium**, Potential **High** (confidence High). Prolonged production outage and possible data leak; bounded to the producer.*
+*VERIS: Confirmed · Observed **Medium**, Potential **High** (confidence Medium). Prolonged production outage and possible data leak; bounded to the producer.*
 **Sources:** [VCDB validated/49E476BC…](https://github.com/vz-risk/VCDB/blob/230cf22b56a481dd1a994b21e4d94c59e2bccea9/data/json/validated/49E476BC-7B08-41C7-9864-B14A6B0D64AD.json) · **Reporting:** [SecurityWeek](https://www.securityweek.com/ransomware-attack-shuts-down-mills-of-australias-second-largest-sugar-producer/), [mkysugar.com.au](https://www.mkysugar.com.au/news-updates-circulars/mackay-sugar-cyber-security-incident), [rescana.com](https://www.rescana.com/post/ransomware-attack-on-mackay-sugar-disrupts-australian-mills-cybersecurity-incident-analysis-and-lessons-learned)
 **Validated CVEs:** none identified · Ransomware (VCDB); no CVE identified, no AI component.
 
 **48. Eastman Kodak - ShinyHunters hacking / extortion (VCDB; no AI component) — Jun 2026.** Eastman Kodak confirmed a June 2026 data breach after ShinyHunters claimed on its leak site to have stolen 2.2M+ records of customer PII and internal corporate data, threatening publication. Conventional hacking/extortion breach with no AI component; included because it appears in the CC_MIT_VCDB 2026 register.
 *AI-involvement: No AI component. Included for register completeness; not an AI-related incident.*
-*VERIS: Confirmed · Observed **Medium**, Potential **High** (confidence High). Publication/sale of 2.2M records; standard large-breach downstream harm.*
+*VERIS: Confirmed · Observed **Medium**, Potential **High** (confidence Medium). Publication/sale of 2.2M records; standard large-breach downstream harm.*
 **Sources:** [VCDB validated/AAEFD515…](https://github.com/vz-risk/VCDB/blob/230cf22b56a481dd1a994b21e4d94c59e2bccea9/data/json/validated/AAEFD515-974F-4153-BCDD-6B4179F1846E.json) · **Reporting:** [BleepingComputer](https://www.bleepingcomputer.com/news/security/kodak-confirms-data-breach-claimed-by-shinyhunters-extortion-gang/), [securityboulevard.com](https://securityboulevard.com/2026/06/kodak-confirms-data-breach-claimed-by-shinyhunters-extortion-gang/), [computing.co.uk](https://www.computing.co.uk/news/2026/security/kodak-confirms-data-breach-shinyhunters)
 **Validated CVEs:** none identified · ShinyHunters extortion (VCDB); no CVE identified, no AI component.
 
@@ -398,19 +398,19 @@ Full VERIS + report-layer coding is in the companion `all_2026_ai_software_secur
 
 **53. Elmwood Home Care — LockBit 5.0 ransomware (VCDB; no AI component) — Jan 2026.** Elmwood Home Care (RI/MA home-healthcare) disclosed unauthorized access between 24 Jan and 13 Feb 2026 in which a threat group (LockBit 5.0) viewed or acquired patient files (names, medical data). A conventional ransomware/data-breach incident with no AI component; included because it appears in the CC_MIT_VCDB 2026 register as context.
 *AI-involvement: No AI component. Included for register completeness; not an AI-related incident.*
-*VERIS: Confirmed · Observed **Medium**, Potential **Medium** (confidence High). Standard PHI-breach downstream harms (identity/medical fraud); bounded to the provider's patient population.*
+*VERIS: Confirmed · Observed **Medium**, Potential **Medium** (confidence Medium). Standard PHI-breach downstream harms (identity/medical fraud); bounded to the provider's patient population.*
 **Sources:** [VCDB validated/032C9EBE…](https://github.com/vz-risk/VCDB/blob/230cf22b56a481dd1a994b21e4d94c59e2bccea9/data/json/validated/032C9EBE-C5A4-4BAA-B096-5C7C7855E0AA.json) · **Reporting:** [HIPAA Journal](https://www.hipaajournal.com/data-breaches-open-arms-care-elmwood-home-care/), [dexpose.io](https://www.dexpose.io/lockbit5-targets-elmwood-healthcare-in-ransomware-attack/), [classaction.org](https://www.classaction.org/data-breach-lawsuits/elmwood-healthcare-april-2026)
 **Validated CVEs:** none identified · LockBit 5.0 ransomware (VCDB); no CVE identified, no AI component.
 
 **54. Lifepoint Health - use of stolen credentials (VCDB; no AI component) — Feb 2026.** Lifepoint Health disclosed that on 22 Feb 2026 an unauthorized third party used a compromised (stolen) user account to reach internal databases; detected next day and contained within 24 hours. Exposed databases held names and other data. Conventional stolen-credentials breach with no AI component; included because it appears in the CC_MIT_VCDB 2026 register.
 *AI-involvement: No AI component. Included for register completeness; not an AI-related incident.*
-*VERIS: Confirmed · Observed **Medium**, Potential **Medium** (confidence High). Broader data access had containment been slower; bounded by fast detection.*
+*VERIS: Confirmed · Observed **Medium**, Potential **Medium** (confidence Medium). Broader data access had containment been slower; bounded by fast detection.*
 **Sources:** [VCDB validated/0418FC68…](https://github.com/vz-risk/VCDB/blob/230cf22b56a481dd1a994b21e4d94c59e2bccea9/data/json/validated/0418FC68-9D79-4D42-8E9E-4CEB9ECBCBEA.json) · **Reporting:** [claimdepot.com](https://www.claimdepot.com/data-breach/lifepoint-health-2026), [HIPAA Journal](https://www.hipaajournal.com/data-breach-lifepoint-health-southwest-behavioral-nottingham-village/), [databreachclassaction.io](https://databreachclassaction.io/cases/lifepoint-health-data-breach-class-action-investigation)
 **Validated CVEs:** none identified · Stolen-credential breach (VCDB); no CVE, no AI component.
 
 **55. Southern California University of Health Sciences - hacking / exfiltration of 2,206 records (VCDB; no AI component) — Mar 2026.** Southern California University of Health Sciences detected unauthorized activity on 24 Mar 2026 (initial access 23 Mar) after an external actor accessed and copied files exposing names and Social Security numbers (and, per litigation, additional data) for ~2,206 people. Conventional hacking/exfiltration breach with no AI component; included because it appears in the CC_MIT_VCDB 2026 register.
 *AI-involvement: No AI component. Included for register completeness; not an AI-related incident.*
-*VERIS: Confirmed · Observed **Medium**, Potential **Medium** (confidence High). Standard identity-theft downstream harm; bounded record count.*
+*VERIS: Confirmed · Observed **Medium**, Potential **Medium** (confidence Medium). Standard identity-theft downstream harm; bounded record count.*
 **Sources:** [VCDB submitted/996F8B75…](https://github.com/vz-risk/VCDB/blob/230cf22b56a481dd1a994b21e4d94c59e2bccea9/data/json/submitted/996F8B75-6F39-4898-A7E9-EDB4787E17F4.json) · **Reporting:** [mcshanebradylaw.com](https://mcshanebradylaw.com/southern-california-univ-health-sciences-data-breach/), [claimdepot.com](https://www.claimdepot.com/data-breach/southern-california-university-of-health-sciences-2026), [federmanlaw.com](https://www.federmanlaw.com/blog/southern-california-university-of-health-sciences-data-breach-investigated-by-federman-sherwood/)
 **Validated CVEs:** none identified · Hacking/exfiltration (VCDB); no CVE identified, no AI component.
 

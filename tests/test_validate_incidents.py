@@ -1054,6 +1054,152 @@ class AdoptedCoding(unittest.TestCase):
         self.assertGreaterEqual(n, 11)
 
 
+class AdoptionDifferences(unittest.TestCase):
+    """Methodology §10.2: which fields of an adopted VCDB coding count, and when a value of ours differs from VCDB's.
+    Each test changes one thing in a copy of a small VERIS block and compares it with the original as VCDB's record."""
+
+    VCDB = {
+        "incident_id": "VCDB-ID", "schema_version": "1.4.1", "summary": "VCDB's summary.", "confidence": "Medium",
+        "action": {"hacking": {"variety": ["Exploit vuln"], "vector": ["Unknown"], "notes": "VCDB's note."}},
+        "actor": {"external": {"variety": ["Organized crime"], "motive": ["Financial"], "name": ["Unknown"]}},
+        "asset": {"assets": [{"variety": "S - Database", "amount": 1}, {"variety": "S - File"}]},
+        "attribute": {"confidentiality": {"data": [{"variety": "Personal"}], "data_disclosure": "Yes"}},
+        "victim": {"industry": "51", "employee_count": ""},
+        "reference": "https://a.example/1; https://b.example/2",
+        "plus": {"master_id": "m-1", "github": "1", "analyst": "x", "created": "2026-01-01",
+                 "event_chain": [{"action": "hak", "actor": "ext", "asset": "srv", "attribute": "cp", "summary": "VCDB"}]},
+    }
+
+    def diff(self, change):
+        ours = copy.deepcopy(self.VCDB)
+        change(ours)
+        return lib_corpus.adoption_differences(ours, self.VCDB)
+
+    def test_identical_codings_do_not_differ(self):
+        self.assertEqual(self.diff(lambda o: None), [])
+
+    def test_own_fields_free_text_and_vcdb_record_keys_are_exempt(self):
+        def change(o):
+            o["incident_id"], o["schema_version"], o["summary"] = "2026-024", "1.4.2", "Our summary."
+            o["action"]["hacking"]["notes"] = "Our note."
+            o["plus"]["event_chain"][0]["summary"] = "ours"
+            for k in ("github", "analyst", "created"):
+                del o["plus"][k]
+            o["control_failure"] = "Our text."
+        self.assertEqual(self.diff(change), [])
+
+    def test_changed_value(self):
+        self.assertEqual(self.diff(lambda o: o.update(confidence="High")), ["confidence"])
+
+    def test_list_order_does_not_count(self):
+        self.assertEqual(self.diff(lambda o: o["asset"]["assets"].reverse()), [])
+
+    def test_key_that_vcdb_leaves_empty_inside_an_element_may_be_filled(self):
+        self.assertEqual(self.diff(lambda o: o["attribute"]["confidentiality"]["data"][0].update(amount=2200)), [])
+
+    def test_new_list_element_differs(self):
+        self.assertEqual(self.diff(lambda o: o["asset"]["assets"].append({"variety": "S - Web application"})), ["asset.assets"])
+
+    def test_dropped_list_element_differs(self):
+        self.assertEqual(self.diff(lambda o: o["asset"]["assets"].pop()), ["asset.assets"])
+
+    def test_dropped_key_of_a_vcdb_element_differs(self):
+        self.assertEqual(self.diff(lambda o: o["asset"]["assets"][0].pop("amount")), ["asset.assets"])
+
+    def test_unknown_is_a_value(self):
+        # Replacing VCDB's "Unknown" differs, and so does leaving out a field that VCDB codes only as "Unknown".
+        self.assertEqual(self.diff(lambda o: o["action"]["hacking"].update(vector=["Web application"])), ["action.hacking.vector"])
+        self.assertEqual(self.diff(lambda o: o["actor"]["external"].pop("name")), ["actor.external.name"])
+
+    def test_field_that_vcdb_leaves_empty_may_be_filled(self):
+        def change(o):
+            o["victim"]["employee_count"] = "11 to 100"
+            o["timeline"] = {"containment": {"unit": "Hours", "value": 4}}
+        self.assertEqual(self.diff(change), [])
+
+    def test_added_section_differs_once(self):
+        # An added action category is a new element (its leaves alone would pass as filled gaps).
+        self.assertEqual(self.diff(lambda o: o["action"].update(social={"variety": ["Phishing"], "vector": ["Email"]})),
+                         ["action.social"])
+
+    def test_dropped_section_differs(self):
+        self.assertEqual(self.diff(lambda o: o["action"].pop("hacking")), ["action.hacking.variety", "action.hacking.vector"])
+
+    def test_reference_compares_as_a_set_of_urls(self):
+        self.assertEqual(self.diff(lambda o: o.update(reference="https://b.example/2; https://a.example/1")), [])
+        self.assertEqual(self.diff(lambda o: o.update(reference=o["reference"] + "; https://c.example/3")), ["reference"])
+
+    def test_vcdb_value_absent_from_ours_differs(self):
+        self.assertEqual(self.diff(lambda o: o["plus"].pop("master_id")), ["plus.master_id"])
+
+    def test_list_matching_is_not_greedy(self):
+        # A matching exists ({a} -> {a}, {b} -> {a, b}); a greedy first fit takes {a, b} for {a} and fails.
+        self.assertTrue(lib_corpus.list_matches([{"a": 1, "b": 2}, {"a": 1}], [{"a": 1}, {"b": 2}]))
+        self.assertFalse(lib_corpus.list_matches([{"a": 1, "b": 2}], [{"a": 1}, {"b": 2}]))
+
+
+class AdoptedCodingCheck(unittest.TestCase):
+    """Methodology §10.2: every difference from the cached VCDB record of an adopted coding has a reason in `overrides`,
+    and every reason names a difference. 2026-024 adopts a VCDB record; its cached record is replaced by a copy of its
+    own coding and its reasons are removed, so only the change and the reasons of each test count."""
+
+    IID = "2026-024"
+
+    def setUp(self):
+        self.d = copy.deepcopy(CORPUS)
+        self.e = next(s for s in incident(self.d, self.IID)["sources"] if lib_corpus.is_adopted_coding(s))
+        self.e.pop("overrides", None)
+        self.key = "/".join(lib_corpus.vcdb_pin(self.e))
+        own = copy.deepcopy(incident(self.d, self.IID)["veris"])
+        own["plus"] = {**(own.get("plus") or {}), "github": "1", "analyst": "x"}
+        self.up = {**UPSTREAM, "vcdb": {**UPSTREAM["vcdb"], self.key: own}}
+
+    def findings(self):
+        r = vi.validate(self.d, self.up)
+        return r, [f for f in r.errors if f.check == "adopted-coding" and f.incident == self.IID]
+
+    def test_same_coding_passes(self):
+        self.assertEqual(self.findings()[1], [])
+
+    def test_difference_without_reason(self):
+        incident(self.d, self.IID)["veris"]["confidence"] = "Low"
+        fs = self.findings()[1]
+        self.assertEqual(len(fs), 1)
+        self.assertIn("confidence", fs[0].message)
+        self.assertEqual(fs[0].cls, "A")
+
+    def test_reason_is_printed_not_reported(self):
+        incident(self.d, self.IID)["veris"]["confidence"] = "Low"
+        self.e["overrides"] = {"confidence": "test reason 51c"}
+        r, fs = self.findings()
+        self.assertEqual(fs, [])
+        self.assertTrue(any(i == self.IID and f == "confidence" and why == "test reason 51c" for i, _, f, why in r.overrides))
+
+    def test_reason_on_a_parent_covers_a_child(self):
+        incident(self.d, self.IID)["veris"]["victim"]["industry"] = "999999"
+        self.e["overrides"] = {"victim": "test reason"}
+        self.assertEqual(self.findings()[1], [])
+
+    def test_added_section_needs_a_reason(self):
+        incident(self.d, self.IID)["veris"]["action"]["social"] = {"variety": ["Phishing"], "vector": ["Email"]}
+        fs = self.findings()[1]
+        self.assertEqual([f.message.split(":")[0] for f in fs], ["action.social"])
+        self.e["overrides"] = {"action.social": "test reason"}
+        self.assertEqual(self.findings()[1], [])
+
+    def test_stale_reason(self):
+        self.e["overrides"] = {"victim.industry": "test reason"}
+        fs = self.findings()[1]
+        self.assertEqual(len(fs), 1)
+        self.assertIn("names no difference", fs[0].message)
+
+    def test_record_not_cached(self):
+        del self.up["vcdb"][self.key]
+        fs = self.findings()[1]
+        self.assertEqual(len(fs), 1)
+        self.assertIn("not cached", fs[0].message)
+
+
 class DisclosureClasses(unittest.TestCase):
     """Methodology §3.3: classes are derived per CVE link, and from ai_role for a record
     without a validated CVE."""

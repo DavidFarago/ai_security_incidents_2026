@@ -3,8 +3,10 @@
 
 Class A (lookup): each copied field of validated_cve_details.cves[] is re-derived from the records cached under
   vulnerabilities/upstream/ by scripts/fetch_upstream.py, with the rules of methodology §10.2 ("Copied CVE
-  metadata"). A mismatch is an error unless the cves[] entry names the field in `overrides`; every override is printed,
-  as is every `overrides` reason on a VCDB entry whose coding a record adopted (methodology §10.2).
+  metadata"). A mismatch is an error unless the cves[] entry names the field in `overrides`; every override is printed.
+  Likewise, the VERIS coding of a record that adopts a VCDB record is compared with that record, cached under
+  incidents/upstream/vcdb/: each difference needs a reason in `overrides` on the adopted entry, each reason a
+  difference, and every reason is printed (methodology §10.2).
 Class B (bookkeeping): set algebra of the validated layer, the VERIS action.*.cve alignment, vocabularies, the ID
   scheme with its numbering over all record arrays up to id_scheme.highest_assigned, the sub-threshold rule
   (a disclosure that meets methodology §3.3 (a) or (c) must be promoted), the wrappers of retired records, the
@@ -342,6 +344,45 @@ def check_class_a(d, up, r: Result):
                 bad("kev_date_added", f"JSON {c.get('kev_date_added')!r} != catalog {k.get('dateAdded')!r}")
         if c.get("record_url") != CVE_URL.format(cve):
             bad("record_url", f"{c.get('record_url')!r} is not the cve.org template")
+
+
+def check_adopted_codings(d, up, r: Result):
+    """Methodology §10.2 "Change logs in the data": a record that adopts the VERIS coding of a VCDB record (`adopted:
+    true`) has per field one of three outcomes: theirs (the VCDB record's value), ours (its own value, a VCDB value left
+    out or an added section included) or other (a value that differs from both); ours and other state their reason in
+    `overrides` on that entry. Compared with the VCDB record cached at the commit that the entry's url pins
+    (lc.adoption_differences: own fields, free text and VCDB's record keys are exempt; a field that VCDB leaves empty
+    may be filled; lists compare in any order; an added actor, action, attribute or discovery_method section is a
+    difference). A reason covers its
+    field and every field under it; a reason that covers no difference is reported too. Class A: a reason is the
+    override; check_class_b prints every reason."""
+    for i in lc.records(d):
+        for s in i.get("sources") if isinstance(i.get("sources"), list) else []:
+            pin = lc.vcdb_pin(s) if lc.is_adopted_coding(s) else None
+            if pin is None:
+                continue              # not an adopted coding, or an unpinned url, which source-locator reports
+            key = "/".join(pin)
+            theirs = up["vcdb"].get(key)
+            if theirs is None:
+                r.add("A", "adopted-coding", f"VCDB record {key} is not cached; run scripts/fetch_upstream.py --only vcdb",
+                      i["id"])
+                continue
+            ov = s.get("overrides") if isinstance(s.get("overrides"), dict) else {}
+            covered = lambda path, k: path == k or path.startswith(k + ".")
+            diffs = lc.adoption_differences(i["veris"], theirs)
+            ours_leaves, their_leaves = lc.adoption_leaves(i["veris"]), lc.adoption_leaves(theirs)
+            for path in diffs:
+                if not any(covered(path, k) for k in ov):
+                    if path in their_leaves:
+                        what = f"ours {json.dumps(ours_leaves.get(path))[:80]} != VCDB {json.dumps(their_leaves[path])[:80]}"
+                    else:
+                        what = "a section that VCDB's record lacks"
+                    r.add("A", "adopted-coding", f"{path}: {what}; take VCDB's value (theirs), or give the reason for ours "
+                          f"or other in sources[].overrides (§10.2)", i["id"])
+            for k in ov:
+                if not any(covered(path, k) for path in diffs):
+                    r.add("A", "adopted-coding", f"overrides[{k!r}] names no difference from VCDB record {key} (§10.2)",
+                          i["id"])
 
 
 # ----------------------------------------------------------------------------- Class B
@@ -744,6 +785,7 @@ def measure(d, r):
 def validate(d: dict, up: dict) -> Result:
     r = Result()
     check_class_a(d, up, r)
+    check_adopted_codings(d, up, r)
     check_class_b(d, up, r)
     measure(d, r)
     return r

@@ -175,9 +175,11 @@ the wrappers of retired records, the `sources` of every live record (at least on
 `locator` and `url`; a register `url` names the item of its `locator`,
 and a report held in this repository is cited by its pinned permalink with a line range inside the passage that the `locator` names),
 `veris.reference` (URLs only, each once, none of them a discovery channel), VCDB records cited at a pinned commit,
-`adopted` only on a VCDB record and `overrides` only on an adopted one, the ranking table (each counted incident once,
-in ranking order: methodology §9.3), the motive of deliberate actions, no effect,
-no AI role and Negligible severities on a false positive,
+`adopted` only on a VCDB record and `overrides` only on an adopted one,
+every field of an adopted VERIS coding that is not VCDB's value (*ours* or *other*;
+the VCDB record is cached under `incidents/upstream/vcdb/`) with a reason in `overrides`, and every reason with such a field (Class A,
+methodology §10.2), the ranking table (each counted incident once, in ranking order: methodology §9.3),
+the motive of deliberate actions, no effect, no AI role and Negligible severities on a false positive,
 and an internal or partner actor for every misuse (methodology §4.2, §4.3, §5.1, §8.2),
 the event chain of a record with several action categories or actor types (§4.6),
 an `Agentic system` actor in every record whose `report.ai_role` holds *AI-agent-caused incident* (§5.1),
@@ -253,6 +255,8 @@ Each entry names the source, the item in it (`locator`) and the item's `url`:
 - **`vz-risk/VCDB`** — the [VERIS Community Database](https://github.com/vz-risk/VCDB),
   cited at the exact encoded record (`data/json/{validated,submitted}/<uuid>.json`) or the 2026 issue intake (`issues/<n>`).
   Citations point at VCDB itself; the adopted records are also cached under `incidents/upstream/vcdb/` for the verifier.
+  A record that adopts the coding of a VCDB record (`adopted: true`) has, per field, VCDB's value (*theirs*), its own value (*ours*)
+  or a value that differs from both (*other*); *ours* and *other* state their reason in `overrides` (methodology §10.2).
 - **`ChatGPT_DeepResearch_ai_incidents_2026.md`**, **`ClaudeCode_DeepResearch_ai_incidents_2026.md`**,
   **`Grok_DeepResearch_ai_incidents_2026.md`** —
   three independent deep-research incident reviews (kept in `incidents/sources/`).

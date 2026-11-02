@@ -163,6 +163,103 @@ def vcdb_pin(s) -> tuple | None:
     return (m.group(1), m.group(2)) if m and m.group(2) == s["locator"] else None
 
 
+# Methodology §10.2 "Change logs in the data": the adopted coding of a VCDB record is every field of `veris` except
+# three groups, which differ from VCDB's record without a reason.
+ADOPTION_OWN_FIELDS = {"incident_id", "schema_version"}          # set by this project's rules (§4.1, §5.2)
+ADOPTION_FREE_TEXT = {"summary", "notes", "control_failure", "corrective_action"}   # prose, at any depth
+VCDB_RECORD_KEYS = {"analysis_status", "analyst", "analyst_notes", "created", "modified", "dbir_year", "github",
+                    "sub_source", "row_number"}                  # keys of `plus` that describe VCDB's record
+# The keys of these sections count like list elements: a key that our record adds needs a reason.
+ADOPTION_SECTIONS = ("actor", "action", "attribute", "discovery_method")
+
+
+def is_empty(x) -> bool:
+    """A value that leaves a field empty (methodology §10.2): None, "", [] or {}. "Unknown" is a value."""
+    return x is None or x == "" or x == [] or x == {}
+
+
+def _without_free_text(x):
+    if isinstance(x, dict):
+        return {k: _without_free_text(v) for k, v in x.items() if k not in ADOPTION_FREE_TEXT}
+    if isinstance(x, list):
+        return [_without_free_text(v) for v in x]
+    return x
+
+
+def adoption_leaves(veris: dict) -> dict:
+    """{path: value} of the adopted coding of a VERIS block: free text removed at any depth (also inside list elements,
+    such as the summary of an event-chain step), the own fields and VCDB's record keys left out. A dict is walked; any
+    other value, a list included, is one leaf. `reference` becomes the list of its URLs."""
+    out = {}
+
+    def walk(x, path):
+        if isinstance(x, dict) and x:
+            for k, v in x.items():
+                walk(v, f"{path}.{k}" if path else k)
+        else:
+            out[path] = x
+
+    v = _without_free_text(veris)
+    for k, x in v.items():
+        if k in ADOPTION_OWN_FIELDS:
+            continue
+        if k == "plus" and isinstance(x, dict):
+            x = {pk: pv for pk, pv in x.items() if pk not in VCDB_RECORD_KEYS}
+        if k == "reference" and isinstance(x, str):
+            x = [u for u in x.split("; ") if u]
+        walk(x, k)
+    return out
+
+
+def covers(ours, vcdb) -> bool:
+    """Our value keeps VCDB's: equal, or, for objects, every key that VCDB's object fills has a value of ours that
+    covers it (a key that VCDB leaves empty may be filled)."""
+    if isinstance(vcdb, dict):
+        return isinstance(ours, dict) and all(k in ours and covers(ours[k], v) for k, v in vcdb.items() if not is_empty(v))
+    return ours == vcdb
+
+
+def list_matches(ours: list, vcdb: list) -> bool:
+    """Our list keeps VCDB's list, in any order: both have the same length, and each element of VCDB's list is covered
+    by its own element of ours (a perfect matching, found by augmenting paths)."""
+    if len(ours) != len(vcdb):
+        return False
+    match = {}                       # index in ours -> index in vcdb
+
+    def place(j, seen):
+        for i, o in enumerate(ours):
+            if i not in seen and covers(o, vcdb[j]):
+                seen.add(i)
+                if i not in match or place(match[i], seen):
+                    match[i] = j
+                    return True
+        return False
+
+    return all(place(j, set()) for j in range(len(vcdb)))
+
+
+def adoption_differences(veris: dict, vcdb: dict) -> list:
+    """The paths where a record's adopted coding differs from its VCDB record (methodology §10.2), sorted: every leaf
+    that VCDB fills and our value does not keep (lists compared with list_matches), and `<section>.<key>` for every key
+    of ADOPTION_SECTIONS that our record adds. A field that VCDB leaves empty may be filled."""
+    ours, theirs = adoption_leaves(veris), adoption_leaves(vcdb)
+    out = []
+    for path, v in theirs.items():
+        if is_empty(v):
+            continue
+        o = ours.get(path)
+        if isinstance(o, list) and isinstance(v, list) and list_matches(o, v):
+            continue
+        if o != v:
+            out.append(path)
+    for sec in ADOPTION_SECTIONS:
+        theirs_sec = vcdb.get(sec) if isinstance(vcdb.get(sec), dict) else {}
+        for k in (veris.get(sec) or {}) if isinstance(veris.get(sec), dict) else ():
+            if is_empty(theirs_sec.get(k)):
+                out.append(f"{sec}.{k}")
+    return sorted(out)
+
+
 def source_names(rec: dict) -> list:
     """The `source` of every well-formed `sources` entry of a record, in order; [] when `sources` is missing or not a
     list. A malformed entry is skipped here; the verifier's `sources` check reports it."""
