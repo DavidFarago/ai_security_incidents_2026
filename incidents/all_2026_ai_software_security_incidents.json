@@ -61,8 +61,8 @@
     },
     "by_observed_severity": {
       "Critical": 2,
-      "High": 24,
-      "Medium": 32,
+      "High": 23,
+      "Medium": 33,
       "Low": 17,
       "Negligible": 9
     },
@@ -116,28 +116,6 @@
       "potential": "Critical",
       "sources": "incidentdatabase.ai_20260824_ai_incidents_2026.xlsx",
       "cve_cwe": "CWE-89",
-      "validated_cve": ""
-    },
-    {
-      "id": "2026-004",
-      "incident": "Novo Nordisk breach — clinical-trial data stolen; AI model assets claimed (FulcrumSec)",
-      "date": "2026-03-01",
-      "status": "Confirmed",
-      "observed": "High",
-      "potential": "Critical",
-      "sources": "vz-risk/VCDB",
-      "cve_cwe": "CWE-522 / CWE-798",
-      "validated_cve": ""
-    },
-    {
-      "id": "2026-005",
-      "incident": "'Miasma' worm targeted AI coding agents via poisoned Microsoft/Azure repos (73 repos disabled)",
-      "date": "2026-06-05",
-      "status": "Confirmed",
-      "observed": "High",
-      "potential": "Critical",
-      "sources": "vz-risk/VCDB",
-      "cve_cwe": "CWE-94 / CWE-77 / CWE-829",
       "validated_cve": ""
     },
     {
@@ -339,6 +317,17 @@
       "validated_cve": ""
     },
     {
+      "id": "2026-041",
+      "incident": "RXNT (EHR SaaS) - hacking (VCDB; no AI component)",
+      "date": "1 Mar 2026",
+      "status": "Confirmed",
+      "observed": "High",
+      "potential": "High",
+      "sources": "vz-risk/VCDB",
+      "cve_cwe": "CWE-noinfo",
+      "validated_cve": ""
+    },
+    {
       "id": "2026-101",
       "incident": "Claude Mythos 5 published a malicious PyPI package during an Anthropic cyber evaluation; a security vendor's scanner ran it and lost its credentials",
       "date": "2026-07-18 (disclosed 30 Jul 2026)",
@@ -381,6 +370,28 @@
       "sources": "ClaudeCode_DeepResearch_ai_incidents_2026.md",
       "cve_cwe": "CWE-506 / CWE-1357",
       "validated_cve": "CVE-2026-34841"
+    },
+    {
+      "id": "2026-004",
+      "incident": "Novo Nordisk breach — clinical-trial data stolen; AI model assets claimed (FulcrumSec)",
+      "date": "2026-03-01",
+      "status": "Confirmed",
+      "observed": "Medium",
+      "potential": "High",
+      "sources": "vz-risk/VCDB",
+      "cve_cwe": "CWE-522 / CWE-798",
+      "validated_cve": ""
+    },
+    {
+      "id": "2026-005",
+      "incident": "'Miasma' worm targeted AI coding agents via poisoned Microsoft/Azure repos (73 repos disabled)",
+      "date": "2026-06-05",
+      "status": "Confirmed",
+      "observed": "Medium",
+      "potential": "High",
+      "sources": "vz-risk/VCDB",
+      "cve_cwe": "CWE-94 / CWE-77 / CWE-829",
+      "validated_cve": ""
     },
     {
       "id": "2026-026",
@@ -533,17 +544,6 @@
       "observed": "Medium",
       "potential": "High",
       "sources": "ClaudeCode_DeepResearch_ai_incidents_2026.md",
-      "cve_cwe": "CWE-noinfo",
-      "validated_cve": ""
-    },
-    {
-      "id": "2026-041",
-      "incident": "RXNT (EHR SaaS) - hacking (VCDB; no AI component)",
-      "date": "1 Mar 2026",
-      "status": "Confirmed",
-      "observed": "Medium",
-      "potential": "High",
-      "sources": "vz-risk/VCDB",
       "cve_cwe": "CWE-noinfo",
       "validated_cve": ""
     },
@@ -1823,10 +1823,10 @@
         "ai_security_mechanism": [
           "theft of proprietary model artifacts (AI as loot)"
         ],
-        "observed_severity": "High",
-        "observed_severity_rationale": "Confirmed exfiltration of pseudonymised clinical-trial patient data and healthcare-provider contacts from a major pharma; the attacker claims 1.3TB including R&D secrets and internal AI model assets, demanded a ransom and leaked 264 GB.",
-        "potential_severity": "Critical",
-        "potential_severity_rationale": "Public sale/leak of clinical-trial patient data + proprietary drug R&D and AI model assets would be a large-scale, irreversible confidentiality and competitive/IP loss.",
+        "observed_severity": "Medium",
+        "observed_severity_rationale": "Confirmed copying of pseudonymised clinical-trial patient data and healthcare-provider contacts from Novo Nordisk's internal IT systems; scale undisclosed. FulcrumSec's further claims (1.3 TB, R&D secrets, internal AI model assets, credentials, a 264 GB leak) are unverified and not rated.",
+        "potential_severity": "High",
+        "potential_severity_rationale": "Publication or sale of the copied clinical-trial patient data and healthcare-provider contacts would be a large-scale, irreversible exposure of health-related data. If FulcrumSec's unverified claims of R&D secrets, AI model assets and credentials for lateral movement were true, the potential would be Critical.",
         "potential_severity_confidence": "Medium",
         "weaknesses": [
           {
@@ -2071,11 +2071,11 @@
           "self-replicating supply-chain worm"
         ],
         "ai_initiated_rationale": "The worm planted configuration files that make AI coding tools run its credential stealer when a developer opens a repository: a session hook for Claude Code, a prompt injection for Cursor. Each tool is the attacked asset, not an actor, so the record has no flag (methodology §4.2, §5.3).",
-        "observed_severity": "High",
-        "observed_severity_rationale": "A worm planted AI coding agents' auto-run config in an official Microsoft repository (Azure/durabletask) to harvest credentials; hours later GitHub disabled 73 Microsoft repositories, limiting realized spread, but the vector and reach are severe.",
-        "potential_severity": "Critical",
-        "potential_severity_rationale": "Auto-executing credential theft from every developer who opens a poisoned Microsoft repo in an AI tool, combined with self-replication, could have driven a very large, cascading supply-chain compromise.",
-        "potential_severity_confidence": "High",
+        "observed_severity": "Medium",
+        "observed_severity_rationale": "A compromised contributor account pushed a credential harvester with AI-coding-agent auto-run config into one official Microsoft repository (Azure/durabletask); GitHub's automated abuse detection disabled 73 Microsoft repositories within hours, and no source reports harvested credentials. A contained integrity compromise.",
+        "potential_severity": "High",
+        "potential_severity_rationale": "Every developer who opened the poisoned repository in an AI coding tool before the takedown would have run the credential harvester (cloud, Kubernetes and developer-tool credentials), and the worm could have spread from their accounts; GitHub's detection within hours bounds the window.",
+        "potential_severity_confidence": "Medium",
         "weaknesses": [
           {
             "cwe": "CWE-94 / CWE-77 / CWE-829",
@@ -9336,8 +9336,8 @@
         "ai_role": [],
         "ai_component": [],
         "ai_security_mechanism": [],
-        "observed_severity": "Medium",
-        "observed_severity_rationale": "Confirmed breach of an EHR SaaS: patient data, Social Security numbers included, copied from one of its solutions (no AI involvement).",
+        "observed_severity": "High",
+        "observed_severity_rationale": "Confirmed copying of 353,844 patients' data (names, dates of birth, demographics, prescription data; Social Security numbers for at least some) from one of RXNT's EHR solutions; large-scale sensitive-data exposure (no AI involvement).",
         "potential_severity": "High",
         "potential_severity_rationale": "Multi-tenant EHR compromise can affect many downstream practices' patients.",
         "potential_severity_confidence": "Medium",
@@ -11683,7 +11683,7 @@
         "ai_component": [],
         "ai_security_mechanism": [],
         "observed_severity": "Medium",
-        "observed_severity_rationale": "Confirmed ransomware breach of patient healthcare data at a home-care provider (no AI involvement).",
+        "observed_severity_rationale": "Unauthorized access, 24 Jan–13 Feb 2026, to a home-care provider's systems holding patient files (names, SSNs, medical data), which the actor may have viewed or copied; LockBit 5.0 claimed the attack (no AI involvement).",
         "potential_severity": "Medium",
         "potential_severity_rationale": "Standard PHI-breach downstream harms (identity/medical fraud); bounded to the provider's patient population.",
         "potential_severity_confidence": "Medium",

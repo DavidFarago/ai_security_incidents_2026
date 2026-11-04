@@ -9,13 +9,13 @@ Everything below is built from the live records that have a validated CVE: the c
 | Observed severity | Incidents | With validated CVE | Without CVE (in scope) | Without CVE (out of scope) |
 |---|---|---|---|---|
 | Critical | 2 | 1 | 1 | 0 |
-| High | 24 | 8 | 15 | 1 |
-| Medium | 32 | 3 | 22 | 7 |
+| High | 23 | 8 | 13 | 2 |
+| Medium | 33 | 3 | 24 | 6 |
 | Low | 17 | 2 | 13 | 2 |
 | Negligible | 9 | 0 | 4 | 5 |
 | total | 84 | 14 | 55 | 15 |
 
-- **16 of the 25 in-scope High/Critical incidents have no CVE.** What identifies them instead: stolen credentials, misconfiguration, malicious package releases (GHSA/MAL/PYSEC advisories — see the non-CVE identifiers table), prompt injection, agent misuse.
+- **14 of the 23 in-scope High/Critical incidents have no CVE.** What identifies them instead: stolen credentials, misconfiguration, malicious package releases (GHSA/MAL/PYSEC advisories — see the non-CVE identifiers table), prompt injection, agent misuse.
 - 0 of the 14 counted incidents with a CVE are observed *Negligible*. A disclosure without a KEV listing, an exploitation report or realized harm is a sub-threshold record (methodology §3.3): 18 of them carry a CVE and enter the CVE-side statistics beside the counted incidents, marked †.
 - 6 incidents are identified only by non-CVE identifiers: 2026-005, 2026-012, 2026-035, 2026-045, 2026-046, 2026-063.
 
@@ -77,13 +77,13 @@ Everything below is built from the live records that have a validated CVE: the c
 
 ## Findings
 
-1. **CVE covers the disclosures, not the breaches.** 16 of the 25 in-scope High/Critical incidents have no CVE; 14 of the 84 counted incidents carry a CVE, against 18 of the 24 sub-threshold disclosures (see *Coverage*). The CVE-side tables describe the part of the corpus that is easiest to identify, not the part that hurt most.
+1. **CVE covers the disclosures, not the breaches.** 14 of the 23 in-scope High/Critical incidents have no CVE; 14 of the 84 counted incidents carry a CVE, against 18 of the 24 sub-threshold disclosures (see *Coverage*). The CVE-side tables describe the part of the corpus that is easiest to identify, not the part that hurt most.
 2. **The CVE side is deep-research-sourced.** 29 of the 32 live records with a validated CVE (14 counted, 18 sub-threshold) come from the deep-research reports (DR ids), 3 from the registers — registers record breaches, not vulnerability disclosures. The CVEs are validated at CVE.org; the *sample* of CVE-bearing incidents is not representative of AI-related incidents.
 3. **Exploitation evidence tracked harm; the base score did not.** Every confirmed-`exploited` CVE is on CISA KEV, and the exploited family spans CVSS 6.5–10 — the same range as unexploited disclosures.
 4. **Medium CVSS ≠ safe.** 4 CVEs rated CVSS < 7.0 sit in potential-Critical incidents (jfrog/artifactory 3, anthropics/claude-code 1; incidents 2026-006, 2026-056). Per CVSS band, the share of CVEs in a potential-Critical incident is 31% for 9.0–10.0 against 5% / 5% for 7.0–8.9 / 4.0–6.9 — CVSS separates the top band, not the middle. 2 incidents; a case, not a statistic.
 5. **Three populations, three countermeasure programmes.** Top CNA CWEs — AI-written code: CWE-918 (21), CWE-22 (19), CWE-78 (11); AI-exploited: CWE-306 (4), CWE-918 (3), CWE-94 (2); AI-discovered: CWE-416 (4), CWE-121 (3), CWE-295 (3); AI-stack products: CWE-77 (4), CWE-94 (4), CWE-22 (3) (CVE links of all live records). The AI-written profile is one external corpus (Radar) and needs a baseline before any "AI writes X" claim.
 6. **The CVE ecosystem is not yet fit for AI-stack components.** 12 `self (vulnerability)` CVEs (flaws in AI products and AI-written code) carry no CNA CVSS — the score used here comes from CISA-ADP; the MCP STDIO cluster (2026-059) has no CNA CVSS, no CWE and product `n/a` in its records.
-7. **Prompt injection: disclosed more often than realized.** 13 sub-threshold records carry VERIS `hacking.variety = Prompt injection` (observed N13, potential C2 H10 M1): disclosed proofs of concept without known exploitation. 6 counted incidents carry it (observed H3 M1 N2, potential C2 H4), 4 of them with realized harm (`Confirmed`, observed Low or higher).
+7. **Prompt injection: disclosed more often than realized.** 13 sub-threshold records carry VERIS `hacking.variety = Prompt injection` (observed N13, potential C2 H10 M1): disclosed proofs of concept without known exploitation. 6 counted incidents carry it (observed H2 M2 N2, potential C1 H5), 4 of them with realized harm (`Confirmed`, observed Low or higher).
 8. **Malicious releases need removal, not patching.** 5 CVEs and 48 package releases are malware by design (CNA CWE-506 / malware advisories); they are separated from the weakness profiles and listed under *remove* in the action list.
 
 Who should read what: vulnerability management → *Action list* and *KEV CVEs*; developers of AI systems → *CNA-assigned CWE profile* (`ai-stack-vulnerability`, `ai-exploited`) and the incident-level CWE ranking of the CWE thread; researchers → *Coverage*, *CVSS vs observed*, *IBSS vs CVSS*; the CWE validation → *Per-incident CNA CWEs*.
@@ -117,8 +117,8 @@ ID order; † marks a sub-threshold record. Records with more than 10 CVEs are l
 | 2026-001 | LiteLLM AI-gateway PyPI supply-chain compromise (TeamPCP) — terabytes of credentials from 2,500+ orgs | Critical | Critical | 1 | *self (malicious release):* [CVE-2026-33634](https://www.cve.org/CVERecord?id=CVE-2026-33634) (+6 non-CVE ids) |
 | 2026-002 | Mexican government mega-breach via jailbroken Claude Code | Critical | Critical | 0 | — |
 | 2026-003 | Autonomous offensive agent (CodeWall) breached McKinsey's Lilli AI platform via SQLi in 2 hours | High | Critical | 0 | — |
-| 2026-004 | Novo Nordisk breach — clinical-trial data stolen; AI model assets claimed (FulcrumSec) | High | Critical | 0 | — |
-| 2026-005 | 'Miasma' worm targeted AI coding agents via poisoned Microsoft/Azure repos (73 repos disabled) | High | Critical | 0 | — (3 non-CVE ids) |
+| 2026-004 | Novo Nordisk breach — clinical-trial data stolen; AI model assets claimed (FulcrumSec) | Medium | High | 0 | — |
+| 2026-005 | 'Miasma' worm targeted AI coding agents via poisoned Microsoft/Azure repos (73 repos disabled) | Medium | High | 0 | — (3 non-CVE ids) |
 | 2026-006 | OpenAI evaluation agents escaped their sandbox via Artifactory 0-days and breached Hugging Face | High | Critical | 8 | *exploited-unconfirmed:* [CVE-2026-65617](https://www.cve.org/CVERecord?id=CVE-2026-65617), [CVE-2026-65923](https://www.cve.org/CVERecord?id=CVE-2026-65923), [CVE-2026-65924](https://www.cve.org/CVERecord?id=CVE-2026-65924), [CVE-2026-65925](https://www.cve.org/CVERecord?id=CVE-2026-65925), [CVE-2026-66014](https://www.cve.org/CVERecord?id=CVE-2026-66014); *related:* [CVE-2026-65921](https://www.cve.org/CVERecord?id=CVE-2026-65921), [CVE-2026-66015](https://www.cve.org/CVERecord?id=CVE-2026-66015), [CVE-2026-66018](https://www.cve.org/CVERecord?id=CVE-2026-66018) |
 | 2026-007 | Hermes + OpenClaw multi-agent campaign against Taiwanese government systems | High | Critical | 0 | — |
 | 2026-008 | Langflow RCEs actively exploited (CVE-2026-33017, CVE-2026-9198; CISA KEV) with AI-driven exploitation | High | Critical | 8 | *exploited:* [CVE-2026-9198](https://www.cve.org/CVERecord?id=CVE-2026-9198), [CVE-2026-33017](https://www.cve.org/CVERecord?id=CVE-2026-33017); *attempted:* [CVE-2025-68613](https://www.cve.org/CVERecord?id=CVE-2025-68613), [CVE-2026-21858](https://www.cve.org/CVERecord?id=CVE-2026-21858); *related:* [CVE-2025-3248](https://www.cve.org/CVERecord?id=CVE-2025-3248), [CVE-2025-34291](https://www.cve.org/CVERecord?id=CVE-2025-34291), [CVE-2026-0770](https://www.cve.org/CVERecord?id=CVE-2026-0770), [CVE-2026-55255](https://www.cve.org/CVERecord?id=CVE-2026-55255) |
@@ -154,7 +154,7 @@ ID order; † marks a sub-threshold record. Records with more than 10 CVEs are l
 | 2026-038 | Sears Home Services AI chatbot / scheduling databases exposed ~3.7M records | Medium | High | 0 | — |
 | 2026-039 | OpenClaw one-click RCE (CVE-2026-25253) + 40,000+ exposed instances | Medium | High | 5 | *self (vulnerability):* [CVE-2026-25253](https://www.cve.org/CVERecord?id=CVE-2026-25253); *related:* [CVE-2026-24763](https://www.cve.org/CVERecord?id=CVE-2026-24763), [CVE-2026-25157](https://www.cve.org/CVERecord?id=CVE-2026-25157), [CVE-2026-25593](https://www.cve.org/CVERecord?id=CVE-2026-25593), [CVE-2026-28472](https://www.cve.org/CVERecord?id=CVE-2026-28472) |
 | 2026-040 | LLM-powered malware & AI-crime mapping — GTIG AI Threat Tracker (HONESTCUE, COINBAIT) + Anthropic MITRE ATT&CK report | Medium | High | 0 | — |
-| 2026-041 | RXNT (EHR SaaS) - hacking (VCDB; no AI component) | Medium | High | 0 | — |
+| 2026-041 | RXNT (EHR SaaS) - hacking (VCDB; no AI component) | High | High | 0 | — |
 | 2026-042 | Meta model reached and compromised an external firm via the same Irregular evaluator misconfiguration | Medium | High | 0 | — |
 | 2026-043 | Clinical Registry Solutions - Akira ransomware / extortion (VCDB; no AI component) | Medium | High | 0 | — |
 | 2026-044 | GlassWorm OpenVSX worm force-installs a malicious extension across Cursor & Windsurf (Solana C2) | Medium | High | 0 | — |
@@ -861,7 +861,6 @@ Purge the listed versions, rotate every credential the package could reach (clou
 | cache-manager | npm | 7.2.10 | GHSA-p7m5-96hg-gppj | 2026-012 | High |
 | cacheable | npm | 2.5.1 | GHSA-jpjx-r3gh-v5pf, MAL-2026-11963 | 2026-012 | High |
 | cacheable-request | npm | 13.0.20 | GHSA-mxgw-gq2g-4fq9 | 2026-012 | High |
-| durabletask | PyPI | 1.4.1, 1.4.2, 1.4.3 | GHSA-3qf7-886j-9wrc, MAL-2026-4174, PYSEC-2026-207 | 2026-005 | High |
 | file-entry-cache | npm | 11.1.6 | GHSA-qp89-2g43-jg8j | 2026-012 | High |
 | flat-cache | npm | 6.1.24 | GHSA-8jxr-wprf-45g8 | 2026-012 | High |
 | keyv | npm | 6.0.0 | GHSA-3p9h-f68w-m6fx, MAL-2026-11524 | 2026-012 | High |
@@ -889,6 +888,7 @@ Purge the listed versions, rotate every credential the package could reach (clou
 | ai-sdk-ollama | npm | 0.13.1, 1.1.1, 2.2.1, 3.8.5 | GHSA-m9j7-x8ww-5jwr, MAL-2026-5210 | 2026-046 | Medium |
 | axios | npm | 0.30.4, 1.14.1 | GHSA-fw8c-xr5c-95f9, MAL-2026-2307 | 2026-025 | Medium |
 | cline | npm | 2.3.0 | MAL-2026-1380 | 2026-035 | Medium |
+| durabletask | PyPI | 1.4.1, 1.4.2, 1.4.3 | GHSA-3qf7-886j-9wrc, MAL-2026-4174, PYSEC-2026-207 | 2026-005 | Medium |
 | node-ipc | npm | 9.1.6, 9.2.3, 12.0.1 | GHSA-pvh2-rg5g-69v7, MAL-2026-3744 | 2026-045 | Medium |
 | plain-crypto-js | npm | 0.0.1-security, 4.2.0, 4.2.1, >= 0 | GHSA-2x9r-6wxq-hrr7, MAL-2026-2306 | 2026-025 | Medium |
 

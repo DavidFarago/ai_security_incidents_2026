@@ -79,7 +79,7 @@ edit only the JSON.
 
 **84 counted incidents**, severity-ranked by *observed* (realized) harm:
 
-- **2 Critical · 24 High · 32 Medium · 17 Low · 9 Negligible**
+- **2 Critical · 23 High · 33 Medium · 17 Low · 9 Negligible**
 - Status: 74 Confirmed · 3 Suspected · 2 Near miss · 5 False positive
 - IDs: `2026-nnn`, and every record's `source_kind` says where it came from: `DB` (*database*:
   at least one register source — AIID or VCDB; 54 incidents) or `DR` (*direct report*: no register source,

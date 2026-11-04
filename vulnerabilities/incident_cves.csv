@@ -2,8 +2,8 @@ incident_id,observed_severity,potential_severity,cve_count,cves,cves_by_relation
 2026-001,Critical,Critical,1,CVE-2026-33634,self-malicious-release: CVE-2026-33634,6,"LiteLLM AI-gateway PyPI supply-chain compromise (TeamPCP) — terabytes of credentials from 2,500+ orgs",incidents
 2026-002,Critical,Critical,0,,,0,Mexican government mega-breach via jailbroken Claude Code,incidents
 2026-003,High,Critical,0,,,0,Autonomous offensive agent (CodeWall) breached McKinsey's Lilli AI platform via SQLi in 2 hours,incidents
-2026-004,High,Critical,0,,,0,Novo Nordisk breach — clinical-trial data stolen; AI model assets claimed (FulcrumSec),incidents
-2026-005,High,Critical,0,,,3,'Miasma' worm targeted AI coding agents via poisoned Microsoft/Azure repos (73 repos disabled),incidents
+2026-004,Medium,High,0,,,0,Novo Nordisk breach — clinical-trial data stolen; AI model assets claimed (FulcrumSec),incidents
+2026-005,Medium,High,0,,,3,'Miasma' worm targeted AI coding agents via poisoned Microsoft/Azure repos (73 repos disabled),incidents
 2026-006,High,Critical,8,CVE-2026-65617; CVE-2026-65923; CVE-2026-65924; CVE-2026-65925; CVE-2026-66014; CVE-2026-65921; CVE-2026-66015; CVE-2026-66018,"exploited-unconfirmed: CVE-2026-65617, CVE-2026-65923, CVE-2026-65924, CVE-2026-65925, CVE-2026-66014 | related: CVE-2026-65921, CVE-2026-66015, CVE-2026-66018",0,OpenAI evaluation agents escaped their sandbox via Artifactory 0-days and breached Hugging Face,incidents
 2026-007,High,Critical,0,,,0,Hermes + OpenClaw multi-agent campaign against Taiwanese government systems,incidents
 2026-008,High,Critical,8,CVE-2026-9198; CVE-2026-33017; CVE-2025-68613; CVE-2026-21858; CVE-2025-3248; CVE-2025-34291; CVE-2026-0770; CVE-2026-55255,"exploited: CVE-2026-9198, CVE-2026-33017 | attempted: CVE-2025-68613, CVE-2026-21858 | related: CVE-2025-3248, CVE-2025-34291, CVE-2026-0770, CVE-2026-55255",0,"Langflow RCEs actively exploited (CVE-2026-33017, CVE-2026-9198; CISA KEV) with AI-driven exploitation",incidents
@@ -39,7 +39,7 @@ incident_id,observed_severity,potential_severity,cve_count,cves,cves_by_relation
 2026-038,Medium,High,0,,,0,Sears Home Services AI chatbot / scheduling databases exposed ~3.7M records,incidents
 2026-039,Medium,High,5,CVE-2026-25253; CVE-2026-24763; CVE-2026-25157; CVE-2026-25593; CVE-2026-28472,"self-vulnerability: CVE-2026-25253 | related: CVE-2026-24763, CVE-2026-25157, CVE-2026-25593, CVE-2026-28472",0,"OpenClaw one-click RCE (CVE-2026-25253) + 40,000+ exposed instances",incidents
 2026-040,Medium,High,0,,,0,"LLM-powered malware & AI-crime mapping — GTIG AI Threat Tracker (HONESTCUE, COINBAIT) + Anthropic MITRE ATT&CK report",incidents
-2026-041,Medium,High,0,,,0,RXNT (EHR SaaS) - hacking (VCDB; no AI component),incidents
+2026-041,High,High,0,,,0,RXNT (EHR SaaS) - hacking (VCDB; no AI component),incidents
 2026-042,Medium,High,0,,,0,Meta model reached and compromised an external firm via the same Irregular evaluator misconfiguration,incidents
 2026-043,Medium,High,0,,,0,Clinical Registry Solutions - Akira ransomware / extortion (VCDB; no AI component),incidents
 2026-044,Medium,High,0,,,0,GlassWorm OpenVSX worm force-installs a malicious extension across Cursor & Windsurf (Solana C2),incidents
