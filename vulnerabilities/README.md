@@ -117,7 +117,7 @@ ID order; † marks a sub-threshold record. Records with more than 10 CVEs are l
 | 2026-001 | LiteLLM AI-gateway PyPI supply-chain compromise (TeamPCP) — terabytes of credentials from 2,500+ orgs | Critical | Critical | 1 | *self (malicious release):* [CVE-2026-33634](https://www.cve.org/CVERecord?id=CVE-2026-33634) (+6 non-CVE ids) |
 | 2026-002 | Mexican government mega-breach via jailbroken Claude Code | Critical | Critical | 0 | — |
 | 2026-003 | Autonomous offensive agent (CodeWall) breached McKinsey's Lilli AI platform via SQLi in 2 hours | High | Critical | 0 | — |
-| 2026-004 | Novo Nordisk breach — clinical-trial data AND internal AI model assets stolen (FulcrumSec) | High | Critical | 0 | — |
+| 2026-004 | Novo Nordisk breach — clinical-trial data stolen; AI model assets claimed (FulcrumSec) | High | Critical | 0 | — |
 | 2026-005 | 'Miasma' worm targeted AI coding agents via poisoned Microsoft/Azure repos (73 repos disabled) | High | Critical | 0 | — (3 non-CVE ids) |
 | 2026-006 | OpenAI evaluation agents escaped their sandbox via Artifactory 0-days and breached Hugging Face | High | Critical | 8 | *exploited-unconfirmed:* [CVE-2026-65617](https://www.cve.org/CVERecord?id=CVE-2026-65617), [CVE-2026-65923](https://www.cve.org/CVERecord?id=CVE-2026-65923), [CVE-2026-65924](https://www.cve.org/CVERecord?id=CVE-2026-65924), [CVE-2026-65925](https://www.cve.org/CVERecord?id=CVE-2026-65925), [CVE-2026-66014](https://www.cve.org/CVERecord?id=CVE-2026-66014); *related:* [CVE-2026-65921](https://www.cve.org/CVERecord?id=CVE-2026-65921), [CVE-2026-66015](https://www.cve.org/CVERecord?id=CVE-2026-66015), [CVE-2026-66018](https://www.cve.org/CVERecord?id=CVE-2026-66018) |
 | 2026-007 | Hermes + OpenClaw multi-agent campaign against Taiwanese government systems | High | Critical | 0 | — |
@@ -130,7 +130,7 @@ ID order; † marks a sub-threshold record. Records with more than 10 CVEs are l
 | 2026-014 | Cursor agent (Claude Opus 4.6) deleted PocketOS production DB + all backups via over-scoped Railway token | High | High | 0 | — |
 | 2026-015 | CBSE OnMark exam platform exposed 9.3M student rows; vendor processed student data via Google Gemini | High | High | 0 | — |
 | 2026-016 | Chat & Ask AI (Codeway) Firebase misconfiguration exposed ~300M messages / 25M users | High | High | 0 | — |
-| 2026-017 | Attackers abused Meta's AI-powered support (HTS) tool to hijack 20,225 Instagram accounts | High | High | 0 | — |
+| 2026-017 | Attackers abused Meta's AI-powered support (HTS) tool to hijack up to 20,225 Instagram accounts | High | High | 0 | — |
 | 2026-018 | Autonomous 'Hermes' AI agent (YOLO mode) ran post-exploitation against Thailand's Ministry of Finance | High | High | 7 | *toolkit:* [CVE-2017-7269](https://www.cve.org/CVERecord?id=CVE-2017-7269), [CVE-2021-3156](https://www.cve.org/CVERecord?id=CVE-2021-3156), [CVE-2021-4034](https://www.cve.org/CVERecord?id=CVE-2021-4034), [CVE-2026-31431](https://www.cve.org/CVERecord?id=CVE-2026-31431), [CVE-2026-43284](https://www.cve.org/CVERecord?id=CVE-2026-43284), [CVE-2026-43500](https://www.cve.org/CVERecord?id=CVE-2026-43500), [CVE-2026-43503](https://www.cve.org/CVERecord?id=CVE-2026-43503) |
 | 2026-019 | Claude Opus 4.7 breached a real company it mistook for its fictional target during an Anthropic cyber evaluation | High | High | 0 | — |
 | 2026-020 | Sysdig May 10 — AI-agent-driven intrusion from marimo CVE-2026-39987 to full PostgreSQL dump in under an hour | High | High | 1 | *exploited:* [CVE-2026-39987](https://www.cve.org/CVERecord?id=CVE-2026-39987) |
@@ -154,7 +154,7 @@ ID order; † marks a sub-threshold record. Records with more than 10 CVEs are l
 | 2026-038 | Sears Home Services AI chatbot / scheduling databases exposed ~3.7M records | Medium | High | 0 | — |
 | 2026-039 | OpenClaw one-click RCE (CVE-2026-25253) + 40,000+ exposed instances | Medium | High | 5 | *self (vulnerability):* [CVE-2026-25253](https://www.cve.org/CVERecord?id=CVE-2026-25253); *related:* [CVE-2026-24763](https://www.cve.org/CVERecord?id=CVE-2026-24763), [CVE-2026-25157](https://www.cve.org/CVERecord?id=CVE-2026-25157), [CVE-2026-25593](https://www.cve.org/CVERecord?id=CVE-2026-25593), [CVE-2026-28472](https://www.cve.org/CVERecord?id=CVE-2026-28472) |
 | 2026-040 | LLM-powered malware & AI-crime mapping — GTIG AI Threat Tracker (HONESTCUE, COINBAIT) + Anthropic MITRE ATT&CK report | Medium | High | 0 | — |
-| 2026-041 | RXNT (EHR SaaS) - hacking via partner (VCDB; no AI component) | Medium | High | 0 | — |
+| 2026-041 | RXNT (EHR SaaS) - hacking (VCDB; no AI component) | Medium | High | 0 | — |
 | 2026-042 | Meta model reached and compromised an external firm via the same Irregular evaluator misconfiguration | Medium | High | 0 | — |
 | 2026-043 | Clinical Registry Solutions - Akira ransomware / extortion (VCDB; no AI component) | Medium | High | 0 | — |
 | 2026-044 | GlassWorm OpenVSX worm force-installs a malicious extension across Cursor & Windsurf (Solana C2) | Medium | High | 0 | — |

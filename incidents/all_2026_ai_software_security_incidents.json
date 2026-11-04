@@ -120,7 +120,7 @@
     },
     {
       "id": "2026-004",
-      "incident": "Novo Nordisk breach — clinical-trial data AND internal AI model assets stolen (FulcrumSec)",
+      "incident": "Novo Nordisk breach — clinical-trial data stolen; AI model assets claimed (FulcrumSec)",
       "date": "2026-03-01",
       "status": "Confirmed",
       "observed": "High",
@@ -253,7 +253,7 @@
     {
       "id": "2026-016",
       "incident": "Chat & Ask AI (Codeway) Firebase misconfiguration exposed ~300M messages / 25M users",
-      "date": "2026-02-01",
+      "date": "Jan 2026",
       "status": "Confirmed",
       "observed": "High",
       "potential": "High",
@@ -263,7 +263,7 @@
     },
     {
       "id": "2026-017",
-      "incident": "Attackers abused Meta's AI-powered support (HTS) tool to hijack 20,225 Instagram accounts",
+      "incident": "Attackers abused Meta's AI-powered support (HTS) tool to hijack up to 20,225 Instagram accounts",
       "date": "2026-04-17",
       "status": "Confirmed",
       "observed": "High",
@@ -330,7 +330,7 @@
     {
       "id": "2026-024",
       "incident": "Cannabis Club Systems - public URLs / IDOR exposed 1,082,680 members (VCDB; no AI component)",
-      "date": "2026 (disclosed 28 Jun)",
+      "date": "2026 (disclosed 10 Jun)",
       "status": "Confirmed",
       "observed": "High",
       "potential": "High",
@@ -418,7 +418,7 @@
     {
       "id": "2026-029",
       "incident": "Meta internal AI agent's inaccurate advice caused SEV1 — unauthorized data access for ~2 hours",
-      "date": "2026-03-18",
+      "date": "Mar 2026",
       "status": "Confirmed",
       "observed": "Medium",
       "potential": "High",
@@ -538,7 +538,7 @@
     },
     {
       "id": "2026-041",
-      "incident": "RXNT (EHR SaaS) - hacking via partner (VCDB; no AI component)",
+      "incident": "RXNT (EHR SaaS) - hacking (VCDB; no AI component)",
       "date": "1 Mar 2026",
       "status": "Confirmed",
       "observed": "Medium",
@@ -616,7 +616,7 @@
     {
       "id": "2026-048",
       "incident": "Eastman Kodak - ShinyHunters hacking / extortion (VCDB; no AI component)",
-      "date": "Jun 2026",
+      "date": "2026 (disclosed Jun)",
       "status": "Confirmed",
       "observed": "Medium",
       "potential": "High",
@@ -869,7 +869,7 @@
     {
       "id": "2026-075",
       "incident": "Southern Design RV - CMD Organization extortion (VCDB; no AI component)",
-      "date": "~20 Jun 2026",
+      "date": "2026 (listed ~20 Jun)",
       "status": "Confirmed",
       "observed": "Low",
       "potential": "Medium",
@@ -1598,7 +1598,7 @@
     {
       "id": "2026-004",
       "source_kind": "DB",
-      "title": "Novo Nordisk breach — clinical-trial data AND internal AI model assets stolen (FulcrumSec)",
+      "title": "Novo Nordisk breach — clinical-trial data stolen; AI model assets claimed (FulcrumSec)",
       "date": "2026-03-01",
       "sources": [
         {
@@ -1617,7 +1617,16 @@
           "url": "https://github.com/vz-risk/VCDB/blob/230cf22b56a481dd1a994b21e4d94c59e2bccea9/data/json/validated/FE704346-BF9A-4435-927B-16A7ECF24C43.json",
           "adopted": true,
           "overrides": {
-            "reference": "Added https://finance.yahoo.com/sectors/healthcare/articles/novo-nordisk-hit-cyber-incident-154512317.html: given for this event by vz-risk/VCDB issues/23360."
+            "reference": "Added https://finance.yahoo.com/sectors/healthcare/articles/novo-nordisk-hit-cyber-incident-154512317.html: given for this event by vz-risk/VCDB issues/23360. The Register's article moved (the old URL returns 404; the live URL replaces it); Reuters' report (Insurance Journal) gives the e-mail outreach to executives and the employee data.",
+            "action.social.vector": "Reuters via Insurance Journal: 'The company used a random Proton Mail email address sent to email addresses that FulcrumSec used in its initial outreach'; the demand reached Novo by e-mail.",
+            "action.social.target": "Reuters via Insurance Journal: 'roughly 48 hours after the group's initial contact to unnamed company executives'.",
+            "asset.assets": "The person asset of the extortion is the executives whom FulcrumSec contacted (Reuters via Insurance Journal: 'initial contact to unnamed company executives').",
+            "asset.cloud": "HIPAA Journal names GitHub accounts and an Azure environment (external cloud); no source says that any affected system is on premises (On-Premise left out).",
+            "attribute.confidentiality.data": "HIPAA Journal: 'The repositories contained API tokens, database credentials, and service account passwords that allowed lateral movement to hundreds of Novo Nordisk systems' (Credentials added).",
+            "attribute.confidentiality.data_victim": "Reuters via Insurance Journal: FulcrumSec 'would not share some of the data it stole, including information on thousands of company employees' (attacker-claimed; Employee added).",
+            "discovery_method": "HIPAA Journal: 'The group claims that Novo Nordisk's security team detected its presence in its GitHub accounts around two weeks after the initial intrusion'; Novo: it 'recently identified an IT security incident'. No source says the actor disclosed the breach first (attacker-claimed, internal, method Unknown).",
+            "timeline.discovery": "HIPAA Journal: detected 'around two weeks after the initial intrusion' (attacker-claimed); VCDB's 3 months run to Novo's public disclosure, not to the discovery.",
+            "plus.event_chain": "Steps 1 and 2 took credentials (HIPAA Journal: API tokens, database credentials and service account passwords): confidentiality (cp). The record has no integrity effect on a server; its only integrity variety, Alter behavior, belongs to the extortion of a person (step 4)."
           }
         }
       ],
@@ -1628,8 +1637,8 @@
         "incident_id": "2026-004",
         "security_incident": "Confirmed",
         "confidence": "High",
-        "reference": "https://www.securityweek.com/ozempic-maker-novo-nordisk-says-hackers-breached-it-systems/; https://www.novonordisk.com/news-and-media/latest-news/incident-update.html; https://www.bleepingcomputer.com/news/security/pharmaceutical-giant-novo-nordisk-discloses-security-breach/; https://www.theregister.com/security/2026/06/12/novo-nordisk_says_hackers_stole_clinical_trial_data/; https://www.techrepublic.com/article/news-novo-nordisk-1-3tb-theft-25m-demand-emea/; https://www.hipaajournal.com/novo-nordisk-cyberattack/; https://finance.yahoo.com/sectors/healthcare/articles/novo-nordisk-hit-cyber-incident-154512317.html",
-        "summary": "Novo Nordisk disclosed (11 Jun 2026) that attackers accessed internal IT systems and copied non-public data including pseudonymised clinical-trial patient data, healthcare-provider contacts, other proprietary data AND internal AI model assets. FulcrumSec claimed entry via a GitHub access token in March 2026, ~2+ months dwell, and 1.3TB exfiltrated; Novo refused a reported $25M ransom and the group said it was exploring private sales. The AI dimension is that AI model assets were among the loot — theft OF AI rather than AI as the cause. Already encoded in VCDB (validated).",
+        "reference": "https://www.securityweek.com/ozempic-maker-novo-nordisk-says-hackers-breached-it-systems/; https://www.novonordisk.com/news-and-media/latest-news/incident-update.html; https://www.bleepingcomputer.com/news/security/pharmaceutical-giant-novo-nordisk-discloses-security-breach/; https://www.techrepublic.com/article/news-novo-nordisk-1-3tb-theft-25m-demand-emea/; https://www.hipaajournal.com/novo-nordisk-cyberattack/; https://finance.yahoo.com/sectors/healthcare/articles/novo-nordisk-hit-cyber-incident-154512317.html; https://www.theregister.com/security/2026/06/12/novo-nordisk-says-hackers-stole-clinical-trial-data/5254812; https://www.insurancejournal.com/news/international/2026/06/17/874030.htm",
+        "summary": "Novo Nordisk disclosed (11 Jun 2026) that attackers accessed internal IT systems and copied non-public data including pseudonymised clinical-trial patient data and healthcare-provider contacts; FulcrumSec claims the loot also included other proprietary data AND internal AI model assets, which Reuters could not verify. FulcrumSec claimed entry via a GitHub access token in March 2026, ~2+ months dwell, and 1.3TB exfiltrated; Novo refused a reported $25M ransom and the group said it was exploring private sales. The AI dimension is that AI model assets were among the loot — theft OF AI rather than AI as the cause. Already encoded in VCDB (validated).",
         "actor": {
           "external": {
             "variety": [
@@ -1671,12 +1680,12 @@
               "Extortion"
             ],
             "vector": [
-              "Unknown"
+              "Email"
             ],
             "target": [
-              "Unknown"
+              "Executive"
             ],
-            "notes": "$25M ransom demand refused; threatened private sale/leak."
+            "notes": "$25M ransom demand refused; 264 GB leaked and a private sale sought (attacker-claimed)."
           }
         },
         "asset": {
@@ -1691,12 +1700,11 @@
               "variety": "S - Web application"
             },
             {
-              "variety": "P - Unknown"
+              "variety": "P - Executive"
             }
           ],
           "cloud": [
-            "External Cloud Asset(s)",
-            "On-Premise Asset(s)"
+            "External Cloud Asset(s)"
           ]
         },
         "attribute": {
@@ -1717,11 +1725,15 @@
               },
               {
                 "variety": "Source code"
+              },
+              {
+                "variety": "Credentials"
               }
             ],
             "data_victim": [
               "Patient",
-              "Other"
+              "Other",
+              "Employee"
             ],
             "notes": "Pseudonymised trial data (biomarkers, immunogenicity), provider contacts, R&D secrets, and internal AI model assets (coded Source code). 1.3TB claimed (attacker-sourced)."
           },
@@ -1732,9 +1744,9 @@
           }
         },
         "discovery_method": {
-          "external": {
+          "internal": {
             "variety": [
-              "Actor disclosure"
+              "Unknown"
             ]
           }
         },
@@ -1744,8 +1756,8 @@
             "month": 3
           },
           "discovery": {
-            "unit": "Months",
-            "value": 3
+            "unit": "Weeks",
+            "value": 2
           }
         },
         "victim": {
@@ -1769,14 +1781,14 @@
               "action": "hak",
               "actor": "ext",
               "asset": "srv",
-              "attribute": "ia",
+              "attribute": "cp",
               "summary": "Initial access via a leaked/abused GitHub access token (Use of stolen creds)"
             },
             {
               "action": "hak",
               "actor": "ext",
               "asset": "srv",
-              "attribute": "ia",
+              "attribute": "cp",
               "summary": "Token used to obtain additional credentials; lateral movement and 2+ months of persistence"
             },
             {
@@ -1806,13 +1818,13 @@
           "AI model/capability theft"
         ],
         "ai_component": [
-          "internal AI model assets (stolen)"
+          "internal AI model assets (stolen, per the attacker's claim)"
         ],
         "ai_security_mechanism": [
           "theft of proprietary model artifacts (AI as loot)"
         ],
         "observed_severity": "High",
-        "observed_severity_rationale": "Confirmed exfiltration (1.3TB claimed) of pseudonymised clinical-trial patient data, R&D secrets and internal AI model assets from a major pharma; data ransomed and threatened for sale.",
+        "observed_severity_rationale": "Confirmed exfiltration of pseudonymised clinical-trial patient data and healthcare-provider contacts from a major pharma; the attacker claims 1.3TB including R&D secrets and internal AI model assets, demanded a ransom and leaked 264 GB.",
         "potential_severity": "Critical",
         "potential_severity_rationale": "Public sale/leak of clinical-trial patient data + proprietary drug R&D and AI model assets would be a large-scale, irreversible confidentiality and competitive/IP loss.",
         "potential_severity_confidence": "Medium",
@@ -1857,10 +1869,16 @@
             "actor.external.name": "The group's spelling in the sources and in 2026-001, 2026-022 and 2026-046.",
             "attribute.confidentiality.data": "GovInfoSecurity: the payload steals 'credentials, authentication tokens and developer secrets'.",
             "attribute.confidentiality.data_disclosure": "No source confirms stolen credentials; GitHub has not said whether downstream organizations were affected (GovInfoSecurity).",
-            "discovery_method": "StepSecurity's researchers reported the attack (GovInfoSecurity); no source names an antivirus partner.",
+            "discovery_method": "StepSecurity: 'Hours after the malicious commit, GitHub's automated abuse detection disabled 73 repositories'; researchers reported the takedown afterwards. GitHub, which hosts the repositories, found it (partner Other); no source names an antivirus product.",
             "plus.attribute.confidentiality.data_abuse": "No source reports a ransom or extortion: GovInfoSecurity says only that the payload 'was designed to steal credentials, authentication tokens and developer secrets', and our record codes the disclosure as Potentially.",
             "plus.timeline.notification": "VCDB's record swaps day and year ({day: 2026, month: 6, year: 5}); read as 5 June 2026, the day of the attack. StepSecurity: 'On June 5, 2026, the Miasma worm campaign reached Microsoft's Azure GitHub organizations.'",
-            "reference": "Added https://www.stepsecurity.io/blog/miasma-worm-hits-microsoft-again-azure-functions-action-and-72-other-repositories-disabled-after-supply-chain-attack-targeting-ai-coding-agents: given for this event by vz-risk/VCDB issues/23310, whose quoted GovInfoSecurity passage links it ('Researchers at StepSecurity said')."
+            "reference": "Added https://www.stepsecurity.io/blog/miasma-worm-hits-microsoft-again-azure-functions-action-and-72-other-repositories-disabled-after-supply-chain-attack-targeting-ai-coding-agents: given for this event by vz-risk/VCDB issues/23310, whose quoted GovInfoSecurity passage links it ('Researchers at StepSecurity said'). ThreatLocker documents one malicious commit and 73 repositories disabled as a precaution; 404 Media carries Microsoft's statement.",
+            "action.malware.vector": "StepSecurity: 'the same contributor account was used again to push a malicious commit directly into the Azure/durabletask GitHub repository' (VERIS Direct install: inserted by the attacker after system access; not a software update).",
+            "action.malware.result": "No source reports that the harvester ran or exfiltrated data (data_disclosure Potentially); GovInfoSecurity: GitHub 'has not publicly disclosed additional details about the scope of the compromise'.",
+            "attribute.confidentiality.data_victim": "No source says whose credentials the harvester endangered or calls them a partner's.",
+            "timeline.discovery.unit": "StepSecurity: 'Hours later, GitHub disabled 73 Microsoft repositories ... in a 105-second automated sweep'.",
+            "targeted": "No source says whether the actor chose Microsoft or whether the worm reached it by chance.",
+            "plus.event_chain": "Step 2 installed the harvester in the repository (integrity, Software installation); no source reports a confidentiality loss on Microsoft's side (data_disclosure Potentially)."
           }
         }
       ],
@@ -1871,8 +1889,8 @@
         "incident_id": "2026-005",
         "security_incident": "Confirmed",
         "confidence": "High",
-        "reference": "https://www.stepsecurity.io/blog/miasma-worm-hits-microsoft-again-azure-functions-action-and-72-other-repositories-disabled-after-supply-chain-attack-targeting-ai-coding-agents; https://www.govinfosecurity.com/miasma-worm-hits-microsofts-ai-coding-ecosystem-a-31912",
-        "summary": "On 5 Jun 2026 the self-replicating 'Miasma' worm (TeamPCP) pushed a commit via a compromised contributor account into the Azure/durabletask repo and spread across 70+ Microsoft/Azure/Azure-Samples/MicrosoftDocs repositories in minutes. Its novelty: it plants config files that make AI coding tools auto-execute a credential-harvesting payload when a developer opens the repo — .claude/settings.json SessionStart hook (Claude Code), .gemini/settings.json (Gemini CLI), .cursor/rules/setup.mdc prompt injection (Cursor) and .vscode/tasks.json runOn:folderOpen (VS Code) — all invoking .github/setup.js which steals AWS/Azure/GCP/Kubernetes and 90+ dev-tool credentials. GitHub disabled 73 repos within minutes; Microsoft restored them after removing the code. AI coding agents were the deliberate execution vector.",
+        "reference": "https://www.stepsecurity.io/blog/miasma-worm-hits-microsoft-again-azure-functions-action-and-72-other-repositories-disabled-after-supply-chain-attack-targeting-ai-coding-agents; https://www.govinfosecurity.com/miasma-worm-hits-microsofts-ai-coding-ecosystem-a-31912; https://www.threatlocker.com/blog/miasma-worm-targets-microsoft-compromises-73-github-repositories; https://www.404media.co/microsoft-hacked-to-deliver-malware-to-claude-and-gemini-users/",
+        "summary": "On 5 Jun 2026 the self-replicating 'Miasma' worm (TeamPCP) pushed a commit via a compromised contributor account into the Azure/durabletask repo. Its novelty: it plants config files that make AI coding tools auto-execute a credential-harvesting payload when a developer opens the repo — .claude/settings.json SessionStart hook (Claude Code), .gemini/settings.json (Gemini CLI), .cursor/rules/setup.mdc prompt injection (Cursor) and .vscode/tasks.json runOn:folderOpen (VS Code) — all invoking .github/setup.js, a credential harvester (the campaign's 19 May payload targeted AWS/Azure/GCP/Kubernetes and 90+ dev-tool credentials). Hours later, GitHub's automated abuse detection disabled 73 Microsoft/Azure/Azure-Samples/MicrosoftDocs repositories in a 105-second sweep; Microsoft restored them after removing the code. AI coding agents were the deliberate execution vector.",
         "actor": {
           "external": {
             "variety": [
@@ -1916,10 +1934,10 @@
               "Worm"
             ],
             "vector": [
-              "Software update"
+              "Direct install"
             ],
             "result": [
-              "Exfiltrate"
+              "Unknown"
             ],
             "notes": "Self-replicating repo worm; AI-agent config hooks/prompt injection auto-execute credential stealer."
           }
@@ -1957,7 +1975,7 @@
               }
             ],
             "data_victim": [
-              "Partner"
+              "Unknown"
             ],
             "data_disclosure": "Potentially",
             "state": [
@@ -1974,9 +1992,9 @@
           }
         },
         "discovery_method": {
-          "external": {
+          "partner": {
             "variety": [
-              "Security researcher"
+              "Other"
             ]
           }
         },
@@ -1993,11 +2011,10 @@
             "unit": "Unknown"
           },
           "discovery": {
-            "unit": "Days"
+            "unit": "Hours"
           },
           "containment": {
-            "unit": "Hours",
-            "value": 1
+            "unit": "Unknown"
           }
         },
         "victim": {
@@ -2011,7 +2028,7 @@
           "employee_count": "Over 100000",
           "industry": "513210"
         },
-        "targeted": "Opportunistic",
+        "targeted": "Unknown",
         "plus": {
           "master_id": "9f45cb1b-ab67-4500-9ed0-9a171a0305e5",
           "event_chain": [
@@ -2026,7 +2043,7 @@
               "action": "mal",
               "actor": "ext",
               "asset": "srv",
-              "attribute": "cp",
+              "attribute": "ia",
               "summary": "codebase has stealer installed"
             }
           ],
@@ -2055,7 +2072,7 @@
         ],
         "ai_initiated_rationale": "The worm planted configuration files that make AI coding tools run its credential stealer when a developer opens a repository: a session hook for Claude Code, a prompt injection for Cursor. Each tool is the attacked asset, not an actor, so the record has no flag (methodology §4.2, §5.3).",
         "observed_severity": "High",
-        "observed_severity_rationale": "A worm weaponised AI coding agents' auto-run config across 70+ official Microsoft/Azure repos to harvest credentials; GitHub disabled 73 repos within minutes, limiting realized spread, but the vector and reach are severe.",
+        "observed_severity_rationale": "A worm planted AI coding agents' auto-run config in an official Microsoft repository (Azure/durabletask) to harvest credentials; hours later GitHub disabled 73 Microsoft repositories, limiting realized spread, but the vector and reach are severe.",
         "potential_severity": "Critical",
         "potential_severity_rationale": "Auto-executing credential theft from every developer who opens a poisoned Microsoft repo in an AI tool, combined with self-replication, could have driven a very large, cascading supply-chain compromise.",
         "potential_severity_confidence": "High",
@@ -4616,7 +4633,7 @@
       "id": "2026-016",
       "source_kind": "DB",
       "title": "Chat & Ask AI (Codeway) Firebase misconfiguration exposed ~300M messages / 25M users",
-      "date": "2026-02-01",
+      "date": "Jan 2026",
       "sources": [
         {
           "source": "vz-risk/VCDB",
@@ -4630,7 +4647,9 @@
           "adopted": true,
           "overrides": {
             "attribute.confidentiality.data": "Sensitive Personal instead of Internal: Malwarebytes reports users' chat histories, chosen models and settings, which are users' data, not Codeway's internal data.",
-            "attribute.confidentiality.data_total": "Malwarebytes: 300 million messages from over 25 million users were exposed; 50 million is the app's total user base."
+            "attribute.confidentiality.data_total": "Malwarebytes: 300 million messages from over 25 million users were exposed; 50 million is the app's total user base.",
+            "action.error.vector": "No source says why Codeway made the error; 404 Media: Firebase 'by default makes it easy for anyone to make themselves an \"authenticated\" user' (Carelessness is an inference).",
+            "reference": "404 Media is the original report that Malwarebytes summarises; Hackmag dates the report to Codeway (20 January 2026) and the fix."
           }
         }
       ],
@@ -4641,8 +4660,8 @@
         "incident_id": "2026-016",
         "security_incident": "Confirmed",
         "confidence": "High",
-        "reference": "https://www.malwarebytes.com/blog/news/2026/02/ai-chat-app-leak-exposes-300-million-messages-tied-to-25-million-users",
-        "summary": "A researcher ('Harry') found that Chat & Ask AI — a popular AI-chat wrapper app by Codeway that fronts ChatGPT, Claude and Gemini (50M+ installs) — had a Firebase misconfiguration (Security Rules left public) exposing ~300 million messages from 25M+ users, including entire chat histories, model used, settings, and data from other Codeway apps. Some messages discussed illegal activity or requested suicide assistance. Codeway fixed it within hours of disclosure; no evidence of malicious third-party access reported.",
+        "reference": "https://www.malwarebytes.com/blog/news/2026/02/ai-chat-app-leak-exposes-300-million-messages-tied-to-25-million-users; https://www.404media.co/massive-ai-chat-app-leaked-millions-of-users-private-conversations/; https://hackmag.com/news/chat-ask-ai",
+        "summary": "A researcher ('Harry') found that Chat & Ask AI — a popular AI-chat wrapper app by Codeway that fronts ChatGPT, Claude and Gemini (50M+ users claimed) — had a Firebase misconfiguration (anyone could make themselves an \"authenticated\" user and read the backend storage) exposing ~300 million messages from 25M+ users, including entire chat histories, model used, settings, and data from other Codeway apps. Some messages discussed illegal activity or requested suicide assistance. Codeway fixed it within hours of disclosure; no evidence of malicious third-party access reported.",
         "actor": {
           "internal": {
             "variety": [
@@ -4660,9 +4679,9 @@
               "Misconfiguration"
             ],
             "vector": [
-              "Carelessness"
+              "Unknown"
             ],
-            "notes": "Firebase Security Rules set to public -> unauthenticated read (and potentially write/delete) of the backend."
+            "notes": "Firebase let anyone make themselves an \"authenticated\" user -> read access to the backend storage."
           }
         },
         "asset": {
@@ -4718,11 +4737,10 @@
         "timeline": {
           "incident": {
             "year": 2026,
-            "month": 2
+            "month": 1
           },
           "containment": {
-            "unit": "Hours",
-            "value": 4
+            "unit": "Hours"
           }
         },
         "victim": {
@@ -4768,12 +4786,12 @@
           "consumer AI chat app (LLM wrapper)"
         ],
         "ai_security_mechanism": [
-          "Firebase public Security Rules misconfiguration"
+          "Firebase misconfiguration: anyone could make themselves an authenticated user"
         ],
         "observed_severity": "High",
         "observed_severity_rationale": "~300M private AI-chat messages tied to 25M+ users exposed to unauthenticated access — very large scale and highly sensitive content — though found by a researcher and fixed within hours.",
         "potential_severity": "High",
-        "potential_severity_rationale": "Public read/write to the backend could have enabled mass exfiltration or tampering of 25M+ users' intimate conversations.",
+        "potential_severity_rationale": "Read access to the backend for anyone (write access not shown) could have enabled mass exfiltration of 25M+ users' intimate conversations.",
         "potential_severity_confidence": "Medium",
         "weaknesses": [
           {
@@ -4797,7 +4815,7 @@
     {
       "id": "2026-017",
       "source_kind": "DB",
-      "title": "Attackers abused Meta's AI-powered support (HTS) tool to hijack 20,225 Instagram accounts",
+      "title": "Attackers abused Meta's AI-powered support (HTS) tool to hijack up to 20,225 Instagram accounts",
       "date": "2026-04-17",
       "sources": [
         {
@@ -4821,7 +4839,9 @@
             "action.social": "BleepingComputer: 'the attacker uses a photo from the target's account, passes it through an AI video generator to turn it into an animation, and uploads it to Meta for verification' (Forgery); the event chain already holds this social step.",
             "attribute.confidentiality": "Meta's notice to the Maine AG: the bug 'allowed unauthorized third parties to receive a password reset link for accounts they did not own', and contact information, date of birth and direct messages 'were potentially accessible within the Instagram accounts'.",
             "plus.timeline.notification": "VCDB's 31 May 2025 is Meta's discovery day with a wrong year ('On May 31, 2026, Meta discovered that there was a vulnerability'); the notification is Meta's letter to the Maine attorney general, headed 'INCIDENT NOTIFICATION' and dated 'June 5, 2026'.",
-            "reference": "Added the two BleepingComputer articles and Meta's Maine AG notice on DocumentCloud: given for this event by vz-risk/VCDB issues/23309 (the first as its source, the other two linked in its quoted text); added the Yahoo Finance article: given for this event by vz-risk/VCDB issues/23466."
+            "reference": "Added the two BleepingComputer articles and Meta's Maine AG notice on DocumentCloud: given for this event by vz-risk/VCDB issues/23309 (the first as its source, the other two linked in its quoted text); added the Yahoo Finance article: given for this event by vz-risk/VCDB issues/23466. Meta's own user notice (California AG) gives the window 17 April to 31 May 2026.",
+            "asset.cloud": "No source says where Meta's HTS recovery system runs (External Cloud is an inference).",
+            "victim.industry": "Instagram is a social network: NAICS 516210 covers 'operating social network sites'; 519290 is 'Web Search Portals and All Other Information Services'."
           }
         },
         {
@@ -4837,8 +4857,8 @@
         "incident_id": "2026-017",
         "security_incident": "Confirmed",
         "confidence": "High",
-        "reference": "https://www.bleepingcomputer.com/news/security/meta-ai-support-data-breach-affects-20-000-instagram-accounts/; https://www.bleepingcomputer.com/news/security/instagram-users-locked-out-after-meta-ai-abused-to-steal-accounts/; https://legacy.www.documentcloud.org/documents/28211657-meta-ai-support-tool-incident-ag-notification-bc-me/; https://finance.yahoo.com/technology/ai/articles/meta-meta-faces-ai-support-044119550.html; https://krebsonsecurity.com/2026/06/hackers-used-metas-ai-support-bot-to-seize-instagram-accounts/",
-        "summary": "Meta disclosed (breach letter to Maine AG) that 20,225 Instagram accounts were hijacked by attackers abusing its AI-assisted High Touch Support (HTS) recovery tool. A bug in a separate code path meant HTS did not verify that the email address supplied for a password reset matched the account's email, so attackers received reset links for accounts they didn't own and took over any account without 2FA. Reports describe attackers using AI-generated facial animations to pass verification and changing account emails. High-profile handles were among those taken. Meta says the issue is resolved and impacted accounts secured.",
+        "reference": "https://www.bleepingcomputer.com/news/security/meta-ai-support-data-breach-affects-20-000-instagram-accounts/; https://www.bleepingcomputer.com/news/security/instagram-users-locked-out-after-meta-ai-abused-to-steal-accounts/; https://legacy.www.documentcloud.org/documents/28211657-meta-ai-support-tool-incident-ag-notification-bc-me/; https://finance.yahoo.com/technology/ai/articles/meta-meta-faces-ai-support-044119550.html; https://krebsonsecurity.com/2026/06/hackers-used-metas-ai-support-bot-to-seize-instagram-accounts/; https://oag.ca.gov/system/files/Meta%20AI%20Support%20Tool%20Incident%20Sample%20Notice.pdf",
+        "summary": "Meta disclosed (breach letter to Maine AG) that up to 20,225 Instagram accounts (an upper bound) were potentially hijacked by attackers abusing its AI-assisted High Touch Support (HTS) recovery tool. A bug in a separate code path meant HTS did not verify that the email address supplied for a password reset matched the account's email, so attackers received reset links for accounts they didn't own and took over any account without 2FA. Reports describe attackers using AI-generated facial animations to pass verification and changing account emails. High-profile handles were among those taken. Meta says the issue is resolved and impacted accounts secured.",
         "actor": {
           "external": {
             "variety": [
@@ -4870,7 +4890,7 @@
             "result": [
               "Infiltrate"
             ],
-            "notes": "HTS AI-support flow failed to verify email ownership -> password-reset links issued to attacker; 2FA bypassed for non-2FA accounts."
+            "notes": "HTS AI-support flow failed to verify email ownership -> password-reset links issued to attacker; only accounts without 2FA could be taken over."
           },
           "social": {
             "variety": [
@@ -4893,7 +4913,7 @@
             }
           ],
           "cloud": [
-            "External Cloud Asset(s)"
+            "Unknown"
           ],
           "role": [
             "IT"
@@ -4925,7 +4945,7 @@
             "data_victim": [
               "Customer"
             ],
-            "notes": "20,225 accounts hijacked; attacker could access DMs, posts, profile/contact info, connected accounts."
+            "notes": "Up to 20,225 accounts (Meta: an upper bound) potentially hijacked; attacker could access DMs, posts, profile/contact info, connected accounts."
           }
         },
         "discovery_method": {
@@ -4955,7 +4975,7 @@
           ],
           "victim_id": "Meta",
           "employee_count": "50001 to 100000",
-          "industry": "519290"
+          "industry": "516210"
         },
         "targeted": "Targeted",
         "plus": {
@@ -5007,7 +5027,7 @@
         ],
         "ai_initiated_rationale": "Attackers abused Meta's AI-assisted support tool, whose separate code path did not check that the reset email matched the account, and reportedly passed verification with AI-generated facial animations. The tool is the attacked asset and the animations a tool of the attackers; no AI agent is an actor, so the record has no flag (methodology §4.2, §5.3).",
         "observed_severity": "High",
-        "observed_severity_rationale": "20,225 Instagram accounts confirmed hijacked via an AI-support flaw, bypassing 2FA and exposing DMs/personal data; realized, large-scale account takeover.",
+        "observed_severity_rationale": "Up to 20,225 Instagram accounts (Meta: an upper bound) hijacked via an AI-support flaw where 2FA was off, exposing DMs/personal data; realized, large-scale account takeover.",
         "potential_severity": "High",
         "potential_severity_rationale": "The same verification gap could have been used against far more accounts, including high-value ones, until fixed.",
         "potential_severity_confidence": "Medium",
@@ -6348,7 +6368,7 @@
       "id": "2026-024",
       "source_kind": "DB",
       "title": "Cannabis Club Systems - public URLs / IDOR exposed 1,082,680 members (VCDB; no AI component)",
-      "date": "2026 (disclosed 28 Jun)",
+      "date": "2026 (disclosed 10 Jun)",
       "sources": [
         {
           "source": "vz-risk/VCDB",
@@ -6358,7 +6378,10 @@
           "overrides": {
             "asset.assets": "Newsweed (reporting the researcher's report): 'The exposed database would have contained information on 1,082,680 registered members'; Daring Fireball, quoting The Verge: 'Azdoufal says celebrities are in the database, too'. The member profiles came from a database behind the APIs, so 'S - Database' stays next to VCDB's 'S - Web application'.",
             "victim.employee_count": "No source gives the headcount of Cannabis Club Systems / Nefos Solutions, and VCDB's own analyst notes call '11 to 100' an 'ESTIMATE for a small SaaS startup ... no published headcount'. Our '1 to 10' has no source either.",
-            "victim.industry": "Newsweed: 'the SaaS platform developed by Cannabis Club Systems (CCS), the business unit of the Irish company Nefos Solutions Ltd'. That is a software publisher, which is 2022 NAICS 513210, more precise than VCDB's sector 51. Our 511210 is the NAICS 2017 code for the same industry (as for 2026-005)."
+            "victim.industry": "Newsweed: 'the SaaS platform developed by Cannabis Club Systems (CCS), the business unit of the Irish company Nefos Solutions Ltd'. That is a software publisher, which is 2022 NAICS 513210, more precise than VCDB's sector 51. Our 511210 is the NAICS 2017 code for the same industry (as for 2026-005).",
+            "actor.partner": "MMJDaily (The Verge): Nefos 'is parting ways with outsourcing firm 9Series, which he says was responsible for building the vulnerable app and APIs'; the researcher's timeline (22 May 2026): 'Vulnerabilities attributed to third-party agency.' The programming errors are the partner's (§4.2), the public ID folder stays Nefos's misconfiguration.",
+            "plus.event_chain": "Two actors made the errors (see actor.partner): the chain says which made which.",
+            "reference": "The researcher's own report (public 10 June 2026), Newsweed and The Verge back the counts, the dates and the outsourcing firm."
           }
         }
       ],
@@ -6369,8 +6392,8 @@
         "incident_id": "2026-024",
         "security_incident": "Confirmed",
         "confidence": "High",
-        "reference": "https://daringfireball.net/linked/2026/06/28/puffpal-passport-leak; https://www.mmjdaily.com/article/9848605/cannabis-club-systems-breach-exposed-985-000-member-photo-ids-at-spanish-clubs/; https://boingboing.net/2026/06/28/a-million-passports-leaked-online-by-marijuana-club-portal.html",
-        "summary": "Cannabis Club Systems (CCS/Nefos Solutions), an Irish SaaS behind the PuffPal app and CCS Nube platform, exposed 1,082,680 members' data - ~986,000 passport/ID scans, addresses, phones, DOB and cannabis-consumption records - via public URLs / IDOR-prone APIs (377 clubs in 40+ countries; disclosed 28 Jun). Conventional misconfiguration/IDOR exposure with no AI component; included because it appears in the CC_MIT_VCDB 2026 register.",
+        "reference": "https://daringfireball.net/linked/2026/06/28/puffpal-passport-leak; https://www.mmjdaily.com/article/9848605/cannabis-club-systems-breach-exposed-985-000-member-photo-ids-at-spanish-clubs/; https://boingboing.net/2026/06/28/a-million-passports-leaked-online-by-marijuana-club-portal.html; https://github.com/xn0tsa/because-i-got-high; https://www.newsweed.fr/en/data-leak-cannabis-club-members/; https://www.theverge.com/tech/947157/passports-data-breach-cannabis-club-systems-nefos-puffpal",
+        "summary": "Cannabis Club Systems (CCS/Nefos Solutions), an Irish SaaS behind the PuffPal app and CCS Nube platform, exposed 1,082,680 members' data - ~986,000 passport/ID scans, addresses, phones, DOB and cannabis-consumption records - via public URLs / IDOR-prone APIs (377 clubs in 40+ countries; disclosed 10 Jun). Conventional misconfiguration/IDOR exposure with no AI component; included because it appears in the CC_MIT_VCDB 2026 register.",
         "actor": {
           "internal": {
             "variety": [
@@ -6379,6 +6402,18 @@
             "motive": [
               "NA"
             ]
+          },
+          "partner": {
+            "motive": [
+              "NA"
+            ],
+            "name": [
+              "9Series"
+            ],
+            "country": [
+              "Unknown"
+            ],
+            "notes": "9Series, the outsourcing firm that built the app and APIs, per Nefos's CEO (MMJDaily/The Verge: 'parting ways with outsourcing firm 9Series, which he says was responsible for building the vulnerable app and APIs'); the vendor's own claim."
           }
         },
         "action": {
@@ -6411,11 +6446,11 @@
             "data_disclosure": "Yes",
             "data": [
               {
-                "variety": "Personal"
+                "variety": "Personal",
+                "amount": 1082680
               },
               {
-                "variety": "Sensitive Personal",
-                "amount": 1082680
+                "variety": "Sensitive Personal"
               },
               {
                 "variety": "API key"
@@ -6425,7 +6460,8 @@
               }
             ],
             "data_victim": [
-              "Customer"
+              "Customer",
+              "Victim organization"
             ],
             "notes": "1,082,680 members; ~986k passport/ID scans exposed.",
             "data_total": 1082680,
@@ -6467,7 +6503,14 @@
               "actor": "int",
               "asset": "srv",
               "attribute": "cp",
-              "summary": "Misconfigured public URLs and insecure APIs exposed ~1M members' identity documents"
+              "summary": "Misconfigured public URLs exposed ~1M members' identity documents"
+            },
+            {
+              "action": "err",
+              "actor": "prt",
+              "asset": "srv",
+              "attribute": "cp",
+              "summary": "IDOR-prone APIs and a hardcoded Stripe key, built by the outsourcing firm, exposed member data and secrets"
             }
           ],
           "master_id": "53D3CE8F-BB77-42D6-BA86-133B5F52BB58"
@@ -7169,7 +7212,7 @@
       "id": "2026-029",
       "source_kind": "DB",
       "title": "Meta internal AI agent's inaccurate advice caused SEV1 — unauthorized data access for ~2 hours",
-      "date": "2026-03-18",
+      "date": "Mar 2026",
       "sources": [
         {
           "source": "incidentdatabase.ai_20260824_ai_incidents_2026.xlsx",
@@ -7196,7 +7239,11 @@
             "actor.internal.motive": "VERIS 1.4.2, which VCDB's record (coded in 1.4.1) predates: Meta's AI agent posted the advice 'without approval' (AIID 1471), an act its operator did not intend, so Agentic system with motive Misalignment stands beside the engineer's error (Developer, NA).",
             "plus.event_chain": "VCDB's single step calls the cause a 'misprogrammed LLM application', which the reason on action.error rejects; The Guardian shows two steps, the agent's advice and the engineer's change: 'An AI agent responded with a solution, which the employee implemented'.",
             "plus.timeline.notification": "VCDB's 20 May 2026 has the wrong month, and 20 March is The Guardian's report, not the first one: Meta sent no notice, and The Verge (19 March 2026) says 'as previously reported by The Information', whose report AIID 1471 and OECD AIM 2026-03-18-fefc date to 18 March 2026.",
-            "reference": "Added https://www.theverge.com/ai-artificial-intelligence/897528/meta-rogue-ai-agent-security-incident and https://futurism.com/artificial-intelligence/rogue-ai-agent-triggers-emergency-at-meta: both are reports listed for this event by AIID 1471 (incidentdatabase.ai/cite/1471)."
+            "reference": "Added https://www.theverge.com/ai-artificial-intelligence/897528/meta-rogue-ai-agent-security-incident and https://futurism.com/artificial-intelligence/rogue-ai-agent-triggers-emergency-at-meta: both are reports listed for this event by AIID 1471 (incidentdatabase.ai/cite/1471).",
+            "asset.assets": "The Guardian: the employee's change 'caus[ed] a large amount of sensitive user and company data to be' exposed; the data sat in internal systems that no source names (S - Unknown), not in the agent.",
+            "asset.cloud": "The Verge: an internal agent 'within a secure development environment'; no source says where the systems run.",
+            "discovery_method.internal.variety": "No source says how Meta found the exposure (an employee report is an inference).",
+            "victim.industry": "Meta's business is social networks: NAICS 516210 covers 'operating social network sites'; 519290 is 'Web Search Portals and All Other Information Services'."
           }
         }
       ],
@@ -7239,10 +7286,13 @@
             {
               "variety": "S - LLM application",
               "amount": 1
+            },
+            {
+              "variety": "S - Unknown"
             }
           ],
           "cloud": [
-            "External Cloud Asset(s)"
+            "Unknown"
           ],
           "role": [
             "IT"
@@ -7274,15 +7324,14 @@
         "discovery_method": {
           "internal": {
             "variety": [
-              "Reported by employee"
+              "Unknown"
             ]
           }
         },
         "timeline": {
           "incident": {
             "year": 2026,
-            "month": 3,
-            "day": 18
+            "month": 3
           },
           "containment": {
             "unit": "Hours",
@@ -7298,7 +7347,7 @@
           ],
           "victim_id": "Meta",
           "employee_count": "50001 to 100000",
-          "industry": "519290"
+          "industry": "516210"
         },
         "targeted": "NA",
         "plus": {
@@ -9128,7 +9177,7 @@
     {
       "id": "2026-041",
       "source_kind": "DB",
-      "title": "RXNT (EHR SaaS) - hacking via partner (VCDB; no AI component)",
+      "title": "RXNT (EHR SaaS) - hacking (VCDB; no AI component)",
       "date": "1 Mar 2026",
       "sources": [
         {
@@ -9140,7 +9189,11 @@
             "timeline.compromise": "No source gives the time from the first action to the compromise: VCDB's 2 days is the whole access window of the RXNT letter ('between March 1, 2026, and March 3, 2026'), which timeline.discovery already measures.",
             "victim.industry": "Wikipedia: RXNT 'develops, supports, and sells proprietary healthcare software applications with the software-as-a-service (SaaS) model'. That is a software publisher: VCDB's 511210 (NAICS 2017), now 2022 NAICS 513210. Our 541511 (custom programming for a particular customer) has no support.",
             "victim.secondary.amount": "HIPAA Journal: 'It is clear that multiple clients have been affected'. It also names the Office of the Attending Physician as a second client. VCDB's amount 1 counts only the client named in the issue and contradicts this, and no source gives the total.",
-            "victim.secondary.victim_id": "VCDB's secondary victim, with a corrected NAICS code: HIPAA Journal calls First Sight Family Vision 'a Battle Ground, Washington-based optometry practice', which is 621320 (Offices of Optometrists), not 621111 (Offices of Physicians)."
+            "victim.secondary.victim_id": "VCDB's secondary victim, with a corrected NAICS code: HIPAA Journal calls First Sight Family Vision 'a Battle Ground, Washington-based optometry practice', which is 621320 (Offices of Optometrists), not 621111 (Offices of Physicians).",
+            "actor.external.motive": "No source reports a ransom, extortion, sale or claim; VCDB's note: 'Motive inferred as Financial from the theft'.",
+            "action.hacking.vector": "RXNT's notice: 'unauthorized activity in one of the RXNT solutions used by a portion of RXNT customers'; no source says the actor entered through a partner (VCDB's notes: 'the actual technical entry vector into RXNT was not disclosed').",
+            "attribute.confidentiality.data": "RXNT's notice (Washington AG): 'The incident did involve your Social Security Number' (Sensitive Personal added).",
+            "reference": "RXNT's notice filed with the Washington AG: access 1-3 March 2026 and the data types, Social Security numbers included."
           }
         }
       ],
@@ -9151,15 +9204,15 @@
         "incident_id": "2026-041",
         "security_incident": "Confirmed",
         "confidence": "Medium",
-        "reference": "https://www.hipaajournal.com/clinical-registry-solutions-jason-r-egbert-od-pc-vnc-health-data-breaches/; https://securityboulevard.com/2026/05/rxnt-healthcare-software-breach-exposes-patient-data-across-multiple-provider-clients/; https://www.hipaajournal.com/rxnt-data-breach/",
-        "summary": "Networking Technology Inc (RXNT), a cloud e-prescribing/EHR/practice-management SaaS vendor, suffered a hacking breach in which an external actor gained unauthorized access between 1-3 Mar 2026 and copied stored patient data across its multi-tenant platform (vector via partner). Conventional breach with no AI component; included because it appears in the CC_MIT_VCDB 2026 register.",
+        "reference": "https://www.hipaajournal.com/clinical-registry-solutions-jason-r-egbert-od-pc-vnc-health-data-breaches/; https://securityboulevard.com/2026/05/rxnt-healthcare-software-breach-exposes-patient-data-across-multiple-provider-clients/; https://www.hipaajournal.com/rxnt-data-breach/; https://agportal-s3bucket.s3.amazonaws.com/databreach/BreachA41120.pdf",
+        "summary": "Networking Technology Inc (RXNT), a cloud e-prescribing/EHR/practice-management SaaS vendor, suffered a hacking breach in which an external actor gained unauthorized access between 1-3 Mar 2026 and copied stored patient data from one of its solutions used by a portion of its customers. Conventional breach with no AI component; included because it appears in the CC_MIT_VCDB 2026 register.",
         "actor": {
           "external": {
             "variety": [
               "Unknown"
             ],
             "motive": [
-              "Financial"
+              "Unknown"
             ],
             "country": [
               "Unknown"
@@ -9178,7 +9231,7 @@
               "Unknown"
             ],
             "vector": [
-              "Partner"
+              "Unknown"
             ],
             "result": [
               "Infiltrate",
@@ -9206,15 +9259,19 @@
               },
               {
                 "variety": "Personal"
+              },
+              {
+                "variety": "Sensitive Personal"
               }
             ],
             "data_victim": [
               "Patient"
             ],
-            "notes": "Stored patient data copied across the multi-tenant EHR platform.",
+            "notes": "Stored patient data copied from one RXNT solution used by a portion of its customers.",
             "state": [
               "Stored"
-            ]
+            ],
+            "data_total": 353844
           }
         },
         "discovery_method": {
@@ -9280,14 +9337,14 @@
         "ai_component": [],
         "ai_security_mechanism": [],
         "observed_severity": "Medium",
-        "observed_severity_rationale": "Confirmed breach of a multi-tenant EHR SaaS with patient data copied (no AI involvement).",
+        "observed_severity_rationale": "Confirmed breach of an EHR SaaS: patient data, Social Security numbers included, copied from one of its solutions (no AI involvement).",
         "potential_severity": "High",
         "potential_severity_rationale": "Multi-tenant EHR compromise can affect many downstream practices' patients.",
         "potential_severity_confidence": "Medium",
         "weaknesses": [
           {
             "cwe": "CWE-noinfo",
-            "mapping_basis": "Not AI-related; hacking via partner",
+            "mapping_basis": "Not AI-related; entry vector undisclosed",
             "confidence": "Low"
           }
         ],
@@ -9493,7 +9550,15 @@
           "overrides": {
             "discovery_method.external.variety": "CRS found the attack itself, before the actor disclosed it. The CRS letter: 'On April 9, 2026, CRS discovered suspicious activity within its network', while Akira claimed it only 'On May 6, 2026' (DeXpose). VCDB's 'Actor disclosure' contradicts this.",
             "discovery_method.internal": "CRS letter: 'On April 9, 2026, CRS discovered suspicious activity within its network'; it does not say how (variety Unknown).",
-            "victim.employee_count": "Enterprise League describes the firm, under its former name Cardiac Registry Support (per VCDB's victim notes), as 'based in Brooklyn, United States (US), with 100-150 employees'. Clutch lists Clinical Registry Solutions (306 Gold Street, Brooklyn) with 'Number of employees' '250 - 999'. VCDB's '11 to 100' cites only unlinked LinkedIn profiles."
+            "victim.employee_count": "Enterprise League describes the firm, under its former name Cardiac Registry Support (per VCDB's victim notes), as 'based in Brooklyn, United States (US), with 100-150 employees'. Clutch lists Clinical Registry Solutions (306 Gold Street, Brooklyn) with 'Number of employees' '250 - 999'. VCDB's '11 to 100' cites only unlinked LinkedIn profiles.",
+            "action.social.vector": "The only documented threat is Akira's leak-site posting (ransomware.live: 'We will upload 41gb of corporate data soon.'); 2026-048 codes the same leak-site pattern as Web application.",
+            "asset.assets": "CRS's notice: 'certain files containing patient information may have been taken from our network'; no source names a database.",
+            "attribute.confidentiality.data": "HIPAA Journal: 'Company data was also stolen in the attack'; Akira's listing names contracts, agreements and NDAs (Internal added).",
+            "action.malware": "CRS's counsel to the Nebraska AG: 'CRS discovered suspicious activity within its network environment, which was later confirmed to be ransomware.'",
+            "attribute.availability": "CRS's letter (Nebraska AG): 'On April 9, 2026, employees experienced issues accessing our computer network.'",
+            "attribute.integrity.variety": "Ransomware installed on CRS's network (counsel: 'later confirmed to be ransomware').",
+            "plus.event_chain": "Step 1: the entry method is undisclosed, so its attribute is unk (as VCDB's reviewer set it in 2026-041 and 2026-048). New step 3: the ransomware (CRS's counsel: 'later confirmed to be ransomware'; 'employees experienced issues accessing our computer network').",
+            "reference": "CRS's own notices (California and Nebraska AG) confirm the ransomware, the network disruption and the HR files; ransomware.live holds Akira's listing."
           }
         }
       ],
@@ -9504,7 +9569,7 @@
         "incident_id": "2026-043",
         "security_incident": "Confirmed",
         "confidence": "Medium",
-        "reference": "https://www.hipaajournal.com/clinical-registry-solutions-jason-r-egbert-od-pc-vnc-health-data-breaches/; https://www.dexpose.io/akira-ransomware-attack-strikes-clinical-registry-solutions/",
+        "reference": "https://www.hipaajournal.com/clinical-registry-solutions-jason-r-egbert-od-pc-vnc-health-data-breaches/; https://www.dexpose.io/akira-ransomware-attack-strikes-clinical-registry-solutions/; https://oag.ca.gov/system/files/CRS%20-%20Sample%20Notice%20Letter%20%28CA%29.pdf; https://www.nebraska.gov/ago/data-breach/documents/6e387f65-61df-4d13-a811-afec9f35fa43.pdf; https://ransomware.live/id/Q2xpbmljYWwgUmVnaXN0cnkgU29sdXRpb25zQGFraXJh",
         "summary": "Clinical Registry Solutions (Brooklyn, NY; clinical data abstraction/registry support) detected a cyberattack on 9 Apr 2026 in which an external actor accessed the network and copied files with PHI; the Akira group claimed ~41 GB and pursued extortion. Conventional ransomware/extortion breach with no AI component; included because it appears in the CC_MIT_VCDB 2026 register.",
         "actor": {
           "external": {
@@ -9544,19 +9609,25 @@
               "Extortion"
             ],
             "vector": [
-              "Unknown"
+              "Web application"
             ],
             "target": [
               "Unknown"
             ],
             "notes": "Akira extortion."
+          },
+          "malware": {
+            "variety": [
+              "Ransomware"
+            ],
+            "vector": [
+              "Unknown"
+            ],
+            "notes": "CRS's counsel: suspicious activity 'later confirmed to be ransomware'."
           }
         },
         "asset": {
           "assets": [
-            {
-              "variety": "S - Database"
-            },
             {
               "variety": "S - File"
             },
@@ -9583,10 +9654,15 @@
               },
               {
                 "variety": "Bank"
+              },
+              {
+                "variety": "Internal"
               }
             ],
             "data_victim": [
-              "Patient"
+              "Patient",
+              "Employee",
+              "Victim organization"
             ],
             "notes": "PHI copied; ~41GB claimed by Akira.",
             "state": [
@@ -9596,8 +9672,15 @@
           "integrity": {
             "notes": "Extortion demand is an attempt to coerce the victim into paying to prevent publication of stolen data (Alter behavior). No payment or compliance is confirmed in the sources.",
             "variety": [
-              "Alter behavior"
+              "Alter behavior",
+              "Software installation"
             ]
+          },
+          "availability": {
+            "variety": [
+              "Interruption"
+            ],
+            "notes": "Employees could not access the network on 9 April 2026."
           }
         },
         "discovery_method": {
@@ -9642,7 +9725,7 @@
               "action": "unk",
               "actor": "ext",
               "asset": "srv",
-              "attribute": "ia",
+              "attribute": "unk",
               "summary": "Initial unauthorized access to CRS network (method not disclosed)"
             },
             {
@@ -9651,6 +9734,13 @@
               "asset": "srv",
               "attribute": "cp",
               "summary": "Files containing patient/employee/company data copied (exfiltrated)"
+            },
+            {
+              "action": "mal",
+              "actor": "ext",
+              "asset": "srv",
+              "attribute": "au",
+              "summary": "Ransomware disrupted CRS's network on 9 April 2026"
             },
             {
               "action": "soc",
@@ -10317,7 +10407,10 @@
             "attribute.confidentiality.data_disclosure": "Only the actor claims the theft. SecurityWeek: 'it has yet to leak any data'. Mackay Sugar (17 Jun): 'We are working urgently to verify these claims, including the nature and extent of any information which may have been accessed.'",
             "discovery_method.external.variety": "The victim found the incident on 10 Jun, five days before the actor's leak-site claim of 15 Jun, and no source mentions a ransom note. Rescana: 'Mackay Sugar issues \"cease harvesting\" advice to growers after detecting a cyber security incident.'",
             "discovery_method.internal": "teiss: 'it activated its response immediately upon discovering the breach'; no source names how the attack was detected (variety Unknown; VERIS 'Incident response' means discovery while responding to a separate incident).",
-            "value_chain.cash-out.variety": "No source names cryptocurrency or a payment. The Record: 'Mackay Sugar has not revealed whether it has made contact with the group.' VCDB's own note shows the value was added automatically 'because action.malware.variety.Ransomware exists', and methodology §4.6 takes only value-chain activities that a source names."
+            "value_chain.cash-out.variety": "No source names cryptocurrency or a payment. The Record: 'Mackay Sugar has not revealed whether it has made contact with the group.' VCDB's own note shows the value was added automatically 'because action.malware.variety.Ransomware exists', and methodology §4.6 takes only value-chain activities that a source names.",
+            "asset.cloud": "Mackay Sugar: 'unauthorised access by an external party to parts of our IT environment'; no source says where the systems run.",
+            "attribute.confidentiality.data": "Cyber Daily: 'the data the threat actor claims to have stolen is currently unknown'; no source names a data variety.",
+            "reference": "Mackay Sugar's Update 4 (unauthorised access, the dark-web claim) and Update 6 (all mills operational again); ABC News on the shutdown of 10 June."
           }
         }
       ],
@@ -10328,8 +10421,8 @@
         "incident_id": "2026-047",
         "security_incident": "Confirmed",
         "confidence": "Medium",
-        "reference": "https://www.securityweek.com/ransomware-attack-shuts-down-mills-of-australias-second-largest-sugar-producer/; https://www.mkysugar.com.au/news-updates-circulars/mackay-sugar-cyber-security-incident; https://www.rescana.com/post/ransomware-attack-on-mackay-sugar-disrupts-australian-mills-cybersecurity-incident-analysis-and-lessons-learned; https://therecord.media/mackay-sugar-cyberattack-claimed-gentlemen; https://www.teiss.co.uk/news/ransomware-attack-halts-operations-at-australias-second-largest-sugar-producer-17670; https://www.cyberdaily.au/security/13758-exclusive-mackay-sugar-cyber-attack-claimed-by-the-gentlemen-ransomware; https://www.breachsense.com/breaches/mackay-sugar-data-breach/; https://shieldworkz.com/blogs/deep-dive-the-gentlemen-ransomware-attack-on-mackay-sugar",
-        "summary": "Mackay Sugar (Australia's second-largest raw sugar producer) suffered a ransomware attack by 'The Gentlemen' (Microsoft: Storm-2697) surfacing 10 Jun 2026 that forced two of three Queensland mills offline during the crushing season. Conventional ransomware/availability incident with no AI component; included because it appears in the CC_MIT_VCDB 2026 register.",
+        "reference": "https://www.securityweek.com/ransomware-attack-shuts-down-mills-of-australias-second-largest-sugar-producer/; https://www.mkysugar.com.au/news-updates-circulars/mackay-sugar-cyber-security-incident; https://www.rescana.com/post/ransomware-attack-on-mackay-sugar-disrupts-australian-mills-cybersecurity-incident-analysis-and-lessons-learned; https://therecord.media/mackay-sugar-cyberattack-claimed-gentlemen; https://www.teiss.co.uk/news/ransomware-attack-halts-operations-at-australias-second-largest-sugar-producer-17670; https://www.cyberdaily.au/security/13758-exclusive-mackay-sugar-cyber-attack-claimed-by-the-gentlemen-ransomware; https://www.breachsense.com/breaches/mackay-sugar-data-breach/; https://shieldworkz.com/blogs/deep-dive-the-gentlemen-ransomware-attack-on-mackay-sugar; https://www.mkysugar.com.au/news-updates-circulars/mackay-sugar-cyber-security-incident-akm6l-g5bpl-kfy3a; https://www.mkysugar.com.au/news-updates-circulars/mackay-sugar-cyber-security-incident-akm6l-g5bpl-kfy3a-khz65-4sblm; https://www.abc.net.au/news/2026-06-10/cyber-attack-shuts-down-north-queensland-sugar-mills/106780304",
+        "summary": "Mackay Sugar (Australia's second-largest raw sugar producer) suffered a ransomware attack claimed by 'The Gentlemen' (Microsoft: Storm-2697) surfacing 10 Jun 2026 that forced two of three Queensland mills offline during the crushing season. Conventional ransomware/availability incident with no AI component; included because it appears in the CC_MIT_VCDB 2026 register.",
         "actor": {
           "external": {
             "variety": [
@@ -10384,7 +10477,7 @@
             }
           ],
           "cloud": [
-            "On-Premise Asset(s)"
+            "Unknown"
           ]
         },
         "attribute": {
@@ -10392,11 +10485,11 @@
             "data_disclosure": "Potentially",
             "data": [
               {
-                "variety": "Internal"
+                "variety": "Unknown"
               }
             ],
             "data_victim": [
-              "Victim organization"
+              "Unknown"
             ],
             "notes": "Availability impact primary; data exfiltration not confirmed here.",
             "state": [
@@ -10409,7 +10502,8 @@
               "Obscuration"
             ],
             "duration": {
-              "unit": "Days"
+              "unit": "Days",
+              "value": 16
             }
           },
           "integrity": {
@@ -10526,13 +10620,17 @@
       "id": "2026-048",
       "source_kind": "DB",
       "title": "Eastman Kodak - ShinyHunters hacking / extortion (VCDB; no AI component)",
-      "date": "Jun 2026",
+      "date": "2026 (disclosed Jun)",
       "sources": [
         {
           "source": "vz-risk/VCDB",
           "locator": "data/json/validated/AAEFD515-974F-4153-BCDD-6B4179F1846E.json",
           "url": "https://github.com/vz-risk/VCDB/blob/230cf22b56a481dd1a994b21e4d94c59e2bccea9/data/json/validated/AAEFD515-974F-4153-BCDD-6B4179F1846E.json",
-          "adopted": true
+          "adopted": true,
+          "overrides": {
+            "asset.assets": "Security Magazine: 'it is currently unknown how Kodak's systems were breached'; no source names a database.",
+            "reference": "SecurityWeek dates the leak-site listing (15 June) and reports the ransom demand."
+          }
         }
       ],
       "veris": {
@@ -10542,8 +10640,8 @@
         "incident_id": "2026-048",
         "security_incident": "Confirmed",
         "confidence": "Medium",
-        "reference": "https://www.bleepingcomputer.com/news/security/kodak-confirms-data-breach-claimed-by-shinyhunters-extortion-gang/; https://securityboulevard.com/2026/06/kodak-confirms-data-breach-claimed-by-shinyhunters-extortion-gang/; https://www.computing.co.uk/news/2026/security/kodak-confirms-data-breach-shinyhunters; https://www.securitymagazine.com/articles/102379-kodak-confirms-breach-following-claims-22m-records-stolen; https://www.teiss.co.uk/news/kodak-confirms-a-major-data-breach-following-shinyhunters-hacking-claim-17694; https://www.malwarebytes.com/blog/news/2026/06/kodak-confirms-breach-as-shinyhunters-leak-threat-reaches-deadline; https://cybernews.com/security/shinyhunters-claims-kodak-hack-2-million-records/",
-        "summary": "Eastman Kodak confirmed a June 2026 data breach after ShinyHunters claimed on its leak site to have stolen 2.2M+ records of customer PII and internal corporate data, threatening publication. Conventional hacking/extortion breach with no AI component; included because it appears in the CC_MIT_VCDB 2026 register.",
+        "reference": "https://www.bleepingcomputer.com/news/security/kodak-confirms-data-breach-claimed-by-shinyhunters-extortion-gang/; https://securityboulevard.com/2026/06/kodak-confirms-data-breach-claimed-by-shinyhunters-extortion-gang/; https://www.computing.co.uk/news/2026/security/kodak-confirms-data-breach-shinyhunters; https://www.securitymagazine.com/articles/102379-kodak-confirms-breach-following-claims-22m-records-stolen; https://www.teiss.co.uk/news/kodak-confirms-a-major-data-breach-following-shinyhunters-hacking-claim-17694; https://www.malwarebytes.com/blog/news/2026/06/kodak-confirms-breach-as-shinyhunters-leak-threat-reaches-deadline; https://cybernews.com/security/shinyhunters-claims-kodak-hack-2-million-records/; https://www.securityweek.com/kodak-admits-data-breach-after-shinyhunters-hack-claims/",
+        "summary": "Eastman Kodak confirmed in June 2026 a data breach after ShinyHunters claimed on its leak site to have stolen 2.2M+ records of customer PII and internal corporate data, threatening publication. Conventional hacking/extortion breach with no AI component; included because it appears in the CC_MIT_VCDB 2026 register.",
         "actor": {
           "external": {
             "variety": [
@@ -10593,7 +10691,7 @@
         "asset": {
           "assets": [
             {
-              "variety": "S - Database"
+              "variety": "S - Unknown"
             },
             {
               "variety": "P - Unknown"
@@ -10608,15 +10706,15 @@
             "data_disclosure": "Yes",
             "data": [
               {
-                "variety": "Personal",
-                "amount": 2200000
+                "variety": "Personal"
               },
               {
                 "variety": "Internal"
               }
             ],
             "data_victim": [
-              "Customer"
+              "Customer",
+              "Victim organization"
             ],
             "notes": "2.2M+ records (attacker-claimed).",
             "data_total": 2200000,
@@ -10639,8 +10737,7 @@
         },
         "timeline": {
           "incident": {
-            "year": 2026,
-            "month": 6
+            "year": 2026
           }
         },
         "victim": {
@@ -10741,7 +10838,11 @@
             "victim.employee_count": "The attackers call Lena Health 'on the small side' (DataBreaches.net); no source gives an exact size, and none supports 1,001 to 10,000 employees.",
             "plus.event_chain": "VCDB's chain has only the hacking step; this record also codes Lena Health's error (an unencrypted PHI export in a public S3 bucket, attacker-claimed via DataBreaches.net), which comes first.",
             "action.error": "DataBreaches.net: the listing claims that Lena Health 'stored 2,134 patients’ complete PHI in an unencrypted database export sitting in a public-facing S3 bucket' (attacker-claimed); the event chain already starts with this error.",
-            "actor.internal": "DataBreaches.net: Lena Health 'stored 2,134 patients’ complete PHI in an unencrypted database export sitting in a public-facing S3 bucket'; the error needs an internal actor, and no source names a person or role (Unknown)."
+            "actor.internal": "DataBreaches.net: Lena Health 'stored 2,134 patients’ complete PHI in an unencrypted database export sitting in a public-facing S3 bucket'; the error needs an internal actor, and no source names a person or role (Unknown).",
+            "confidence": "Lena Health confirms only 'a security incident affecting one of our systems'; the entry route, the bucket and the counts are FulcrumSec's claims, and FulcrumSec withdrew the counts (DataBreaches.net).",
+            "action.hacking.vector": "DataBreaches.net: FulcrumSec 'gained access via a major vulnerability that went public in early December'; no source names the component (Web application is an inference).",
+            "attribute.confidentiality.data_total": "DataBreaches.net: 'Those numbers are not quite accurate ... there were a lot of duplicates'; Lena Health: 'the limited number of individuals affected'. No reliable count exists.",
+            "targeted": "DataBreaches.net: FulcrumSec targets AI SaaS vendors 'specifically', 'Especially' those with vulnerable servers: the statement supports neither Targeted nor Opportunistic."
           }
         }
       ],
@@ -10751,7 +10852,7 @@
         "source_id": "vcdb",
         "incident_id": "2026-049",
         "security_incident": "Confirmed",
-        "confidence": "High",
+        "confidence": "Medium",
         "reference": "https://databreaches.net/2026/01/28/ai-digital-helper-lena-health-breach-exposed-some-houston-methodist-patients-medical-info/",
         "summary": "FulcrumSec listed a breach of Lena Health, an AI-based 'digital helper'/care-coordination platform (a Houston Methodist vendor), on a hacking forum (Jan 2026). The group said it exploited a major vulnerability disclosed in early December 2025 that Lena had not patched, and claimed 2,134 patients' complete PHI sat in an unencrypted export in a public-facing S3 bucket; it released a preview including a Twilio call-recording database and patient discharge documents. AI is the victim's product; the breach is an unpatched-vuln + exposed-storage compromise of health data.",
         "actor": {
@@ -10771,7 +10872,7 @@
             "region": [
               "000000"
             ],
-            "notes": "targeted follows VCDB (Opportunistic): FulcrumSec entered through a public, unpatched vulnerability. Its forum listing, quoted by DataBreaches.net (VCDB issue 23009), claims that it targets AI SaaS vendors specifically."
+            "notes": "targeted is Unknown: FulcrumSec entered through a public, unpatched vulnerability but says it targets AI SaaS vendors 'specifically'. Its forum listing, quoted by DataBreaches.net (VCDB issue 23009), claims that it targets AI SaaS vendors specifically."
           },
           "internal": {
             "variety": [
@@ -10789,7 +10890,7 @@
               "Exploit vuln"
             ],
             "vector": [
-              "Web application"
+              "Unknown"
             ],
             "result": [
               "Infiltrate",
@@ -10833,8 +10934,7 @@
           "confidentiality": {
             "data": [
               {
-                "variety": "Medical",
-                "amount": 2134
+                "variety": "Medical"
               },
               {
                 "variety": "Personal"
@@ -10845,11 +10945,10 @@
               "Patient"
             ],
             "data_disclosure": "Yes",
-            "data_total": 2134,
             "state": [
               "Stored unencrypted"
             ],
-            "notes": "~2,134 patients' PHI incl. Twilio call recordings and discharge docs (attacker-claimed)."
+            "notes": "Patient PHI incl. Twilio call recordings and discharge docs (attacker-claimed; the listing's 2,134 patients is a figure the attackers later called inaccurate because of duplicates)."
           }
         },
         "discovery_method": {
@@ -10882,7 +10981,7 @@
           "employee_count": "Small",
           "industry": "51"
         },
-        "targeted": "Opportunistic",
+        "targeted": "Unknown",
         "plus": {
           "master_id": "76f9dcd8-5db0-40e8-9335-cd929c1017b3",
           "event_chain": [
@@ -10926,7 +11025,7 @@
           "exposed unencrypted PHI storage"
         ],
         "observed_severity": "Medium",
-        "observed_severity_rationale": "Confirmed theft/exposure of ~2,134 patients' PHI including call recordings and discharge documents from an AI health vendor; bounded record count.",
+        "observed_severity_rationale": "Confirmed theft/exposure of patients' PHI including call recordings and discharge documents from an AI health vendor; a limited number of patients (the listing's 2,134 is a figure the attackers called inaccurate).",
         "potential_severity": "Medium",
         "potential_severity_rationale": "Full PHI export in the open plus foothold could expand to all platform data and downstream Houston Methodist patients, but scope appears limited to a small vendor.",
         "potential_severity_confidence": "Low",
@@ -11404,7 +11503,11 @@
           "overrides": {
             "plus.event_chain": "Step 1 gets attribute 'unk' instead of VCDB's 'ia'. No source says what the undisclosed initial access changed (HIPAA Journal: 'unauthorized access to its computer systems'), and methodology §4.6 says 'A step that changes no attribute by itself gets attribute unk'. VCDB's reviewer made the same fix in its Mackay Sugar record 49E476BC.",
             "timeline.discovery": "No source dates the discovery: Elmwood's notice says only that it 'became aware of suspicious activity in our environment'; VCDB's 3 weeks assumes discovery at the end of the access window.",
-            "value_chain.cash-out.variety": "No source names cryptocurrency or a payment. DeXpose mentions only 'ransom demands'. VCDB's note shows the value was added automatically for ransomware, and methodology §4.6 takes only value-chain activities that a source names."
+            "value_chain.cash-out.variety": "No source names cryptocurrency or a payment. DeXpose mentions only 'ransom demands'. VCDB's note shows the value was added automatically for ransomware, and methodology §4.6 takes only value-chain activities that a source names.",
+            "attribute.confidentiality.data_disclosure": "Elmwood's notice: 'an unauthorized actor accessed certain systems and may have viewed or copied certain files'; no publication of the data is reported (§3.2; as in 2026-047).",
+            "attribute.confidentiality.data": "Vermont AG listing: 'Social Security Numbers, Government ID Numbers' (Sensitive Personal added).",
+            "action.malware.result": "The theft is claimed only (data_disclosure Potentially; Elmwood: 'may have viewed or copied'), so Exfiltrate is not shown; the ransomware itself is the payload.",
+            "reference": "Elmwood's own notice (17 April 2026) and the Vermont AG listing (Social Security and government ID numbers); ClaimDepot for the ransomware and LockBit's claim."
           }
         }
       ],
@@ -11415,8 +11518,8 @@
         "incident_id": "2026-053",
         "security_incident": "Confirmed",
         "confidence": "Medium",
-        "reference": "https://www.hipaajournal.com/data-breaches-open-arms-care-elmwood-home-care/; https://www.dexpose.io/lockbit5-targets-elmwood-healthcare-in-ransomware-attack/; https://www.classaction.org/data-breach-lawsuits/elmwood-healthcare-april-2026; https://www.claimdepot.com/investigations/elmwood-home-care-data-breach-2026",
-        "summary": "Elmwood Home Care (RI/MA home-healthcare) disclosed unauthorized access between 24 Jan and 13 Feb 2026 in which a threat group (LockBit 5.0) viewed or acquired patient files (names, medical data). A conventional ransomware/data-breach incident with no AI component; included because it appears in the CC_MIT_VCDB 2026 register as context.",
+        "reference": "https://www.hipaajournal.com/data-breaches-open-arms-care-elmwood-home-care/; https://www.dexpose.io/lockbit5-targets-elmwood-healthcare-in-ransomware-attack/; https://www.classaction.org/data-breach-lawsuits/elmwood-healthcare-april-2026; https://www.claimdepot.com/investigations/elmwood-home-care-data-breach-2026; https://www.elmwoodhealthcare.com/dataevent-04cy26; https://ago.vermont.gov/categories/security-breach-notices; https://www.claimdepot.com/data-breach/elmwood-home-care-2026",
+        "summary": "Elmwood Home Care (RI/MA home-healthcare) disclosed unauthorized access between 24 Jan and 13 Feb 2026 in which an unauthorized actor may have viewed or copied patient files (names, SSNs, medical data); LockBit 5.0 claimed the attack. A conventional ransomware/data-breach incident with no AI component; included because it appears in the CC_MIT_VCDB 2026 register as context.",
         "actor": {
           "external": {
             "variety": [
@@ -11445,9 +11548,9 @@
               "Unknown"
             ],
             "result": [
-              "Exfiltrate"
+              "Deploy payload"
             ],
-            "notes": "LockBit 5.0 ransomware; patient files viewed/acquired.",
+            "notes": "LockBit 5.0 ransomware (claimed); patient files may have been viewed or copied.",
             "name": "LockBit 5.0 (LockBit5)"
           },
           "social": {
@@ -11480,19 +11583,22 @@
         },
         "attribute": {
           "confidentiality": {
-            "data_disclosure": "Yes",
+            "data_disclosure": "Potentially",
             "data": [
               {
                 "variety": "Medical"
               },
               {
                 "variety": "Personal"
+              },
+              {
+                "variety": "Sensitive Personal"
               }
             ],
             "data_victim": [
               "Patient"
             ],
-            "notes": "Patient files viewed or acquired (24 Jan–13 Feb 2026).",
+            "notes": "Patient files may have been viewed or copied (24 Jan–13 Feb 2026).",
             "state": [
               "Stored"
             ]
@@ -11559,7 +11665,7 @@
               "actor": "ext",
               "asset": "srv",
               "attribute": "cp",
-              "summary": "Patient files viewed/acquired (data exfiltration); LockBit5 ransomware incident"
+              "summary": "Patient files possibly viewed or copied (exfiltration claimed by LockBit5)"
             },
             {
               "action": "soc",
@@ -11613,9 +11719,11 @@
           "url": "https://github.com/vz-risk/VCDB/blob/230cf22b56a481dd1a994b21e4d94c59e2bccea9/data/json/validated/0418FC68-9D79-4D42-8E9E-4CEB9ECBCBEA.json",
           "adopted": true,
           "overrides": {
-            "reference": "Removed https://straussborrelli.com/data-breach-blog/: a blog index page.",
+            "reference": "Removed https://straussborrelli.com/data-breach-blog/: a blog index page. Lifepoint's letter (Nebraska AG): vendor employees only, access 22 February, discovery 23 February; Paubox (linked from VCDB's intake issue 23384) for the headquarters.",
             "plus.event_chain": "Step 1 gets attribute 'unk' instead of VCDB's 'ia'. Neither record has attribute.integrity, so 'ia' fails the event-chain check of methodology §4.6. The login with the stolen account changes no attribute by itself, and the database access (HIPAA Journal: 'gained limited access to certain internal databases') is the cp step.",
-            "timeline.compromise": "VCDB's 24 hours is the containment time, not the time to compromise: HIPAA Journal, 'The incident was fully contained within 24 hours.' No source gives the time from the first action to the database access."
+            "timeline.compromise": "VCDB's 24 hours is the containment time, not the time to compromise: HIPAA Journal, 'The incident was fully contained within 24 hours.' No source gives the time from the first action to the database access.",
+            "actor.external.motive": "Lifepoint's letter: 'we have no evidence that your information has been, or will be, misused'; no ransom, extortion or sale is reported (VCDB's note calls Financial 'an INFERENCE').",
+            "asset.cloud": "Lifepoint's letter: 'certain databases within Lifepoint's internal environment'; that says nothing about where they run."
           }
         }
       ],
@@ -11626,7 +11734,7 @@
         "incident_id": "2026-054",
         "security_incident": "Confirmed",
         "confidence": "Medium",
-        "reference": "https://www.claimdepot.com/data-breach/lifepoint-health-2026; https://www.hipaajournal.com/data-breach-lifepoint-health-southwest-behavioral-nottingham-village/; https://databreachclassaction.io/cases/lifepoint-health-data-breach-class-action-investigation; https://www.bhnet.org/64040/lifepoint-health-southwest-behavioral-nottingham-village-report-data-breaches/",
+        "reference": "https://www.claimdepot.com/data-breach/lifepoint-health-2026; https://www.hipaajournal.com/data-breach-lifepoint-health-southwest-behavioral-nottingham-village/; https://databreachclassaction.io/cases/lifepoint-health-data-breach-class-action-investigation; https://www.bhnet.org/64040/lifepoint-health-southwest-behavioral-nottingham-village-report-data-breaches/; https://www.nebraska.gov/ago/data-breach/documents/e5c32fe7-20c2-4572-8261-38e6c116a11e.pdf; https://www.paubox.com/blog/lifepoint-health-discloses-breach-after-account-exposes-vendor-employee-data",
         "summary": "Lifepoint Health disclosed that on 22 Feb 2026 an unauthorized third party used a compromised (stolen) user account to reach internal databases; detected next day and contained within 24 hours. Exposed databases held names and other data. Conventional stolen-credentials breach with no AI component; included because it appears in the CC_MIT_VCDB 2026 register.",
         "actor": {
           "external": {
@@ -11634,7 +11742,7 @@
               "Unknown"
             ],
             "motive": [
-              "Financial"
+              "Unknown"
             ],
             "country": [
               "Unknown"
@@ -11668,7 +11776,7 @@
             }
           ],
           "cloud": [
-            "On-Premise Asset(s)"
+            "Unknown"
           ]
         },
         "attribute": {
@@ -11683,8 +11791,7 @@
               }
             ],
             "data_victim": [
-              "Employee",
-              "Customer"
+              "Partner"
             ],
             "notes": "Internal databases with names/PII accessed via stolen account.",
             "state": [
@@ -11792,7 +11899,8 @@
           "overrides": {
             "attribute.confidentiality.data": "McShane & Brady: 'According to the university, the compromised information included names and Social Security numbers.' ClaimDepot shows only 'Names' and 'Social Security Numbers'. Its 'Medical Info' and 'Financial Info' entries are hidden template items (CSS class w-condition-invisible), so VCDB's Medical and Bank have no source.",
             "discovery_method.internal.variety": "SCUHS notice: 'SCUHS became aware of unauthorized activity on our computer network.' It names no method. VERIS 'Other' means 'Discovery method was internal and known but not listed', and VCDB's own note says 'the exact detection mechanism is not stated'. Our 'Incident response' (a separate incident) has no source either.",
-            "victim.industry": "ClaimDepot: 'a private nonprofit university in Whittier, California'. NAICS 611310 is 'Colleges, Universities, and Professional Schools', while 6221 is 'General Medical and Surgical Hospitals'. No source says SCUHS runs a hospital, and VCDB's note concedes 'SCUHS is functionally a university (education)'."
+            "victim.industry": "ClaimDepot: 'a private nonprofit university in Whittier, California'. NAICS 611310 is 'Colleges, Universities, and Professional Schools', while 6221 is 'General Medical and Surgical Hospitals'. No source says SCUHS runs a hospital, and VCDB's note concedes 'SCUHS is functionally a university (education)'.",
+            "reference": "SCUHS's own notice of data event is the primary source; Federman & Sherwood's page moved away, so its archived copy replaces it."
           }
         }
       ],
@@ -11803,8 +11911,8 @@
         "incident_id": "2026-055",
         "security_incident": "Confirmed",
         "confidence": "Medium",
-        "reference": "https://mcshanebradylaw.com/southern-california-univ-health-sciences-data-breach/; https://www.claimdepot.com/data-breach/southern-california-university-of-health-sciences-2026; https://www.federmanlaw.com/blog/southern-california-university-of-health-sciences-data-breach-investigated-by-federman-sherwood/; https://oag.ca.gov/ecrime/databreach/reports/sb24-623665",
-        "summary": "Southern California University of Health Sciences detected unauthorized activity on 24 Mar 2026 (initial access 23 Mar) after an external actor accessed and copied files exposing names and Social Security numbers (and, per litigation, additional data) for ~2,206 people. Conventional hacking/exfiltration breach with no AI component; included because it appears in the CC_MIT_VCDB 2026 register.",
+        "reference": "https://mcshanebradylaw.com/southern-california-univ-health-sciences-data-breach/; https://www.claimdepot.com/data-breach/southern-california-university-of-health-sciences-2026; https://oag.ca.gov/ecrime/databreach/reports/sb24-623665; https://oag.ca.gov/system/files/Southern%20California%20University%20of%20Health%20Sciences%20-%20Notice%20of%20Data%20Event%20-%20CA_0.pdf; https://web.archive.org/web/20260611195129/https://www.federmanlaw.com/blog/southern-california-university-of-health-sciences-data-breach-investigated-by-federman-sherwood/",
+        "summary": "Southern California University of Health Sciences detected unauthorized activity on 24 Mar 2026 (initial access 23 Mar) after an external actor accessed and copied files exposing names and Social Security numbers (and, per law-firm summaries, unspecified other personal information) for ~2,206 people. Conventional hacking/exfiltration breach with no AI component; included because it appears in the CC_MIT_VCDB 2026 register.",
         "actor": {
           "external": {
             "variety": [
@@ -11859,9 +11967,9 @@
               }
             ],
             "data_victim": [
-              "Customer"
+              "Unknown"
             ],
-            "notes": "~2,206 people; names + SSNs (and possibly medical/bank per litigation).",
+            "notes": "~2,206 people; names + SSNs (law-firm summaries add unspecified other information).",
             "data_total": 2206,
             "state": [
               "Stored"
@@ -14245,7 +14353,7 @@
       "id": "2026-075",
       "source_kind": "DB",
       "title": "Southern Design RV - CMD Organization extortion (VCDB; no AI component)",
-      "date": "~20 Jun 2026",
+      "date": "2026 (listed ~20 Jun)",
       "sources": [
         {
           "source": "vz-risk/VCDB",
@@ -14254,7 +14362,10 @@
           "adopted": true,
           "overrides": {
             "victim.employee_count": "No source gives the dealer's headcount. VCDB's own notes call '11 to 100' an 'ESTIMATE ... no published headcount found'. Ballarat Times (2020) shows only a sales manager, a workshop foreman and that 'we've put on two people'. Our '1 to 10' has no source either.",
-            "victim.industry": "Cyber Daily: 'Southern Design RV is a Ballarat, Victoria-based caravan and RV dealer that sells both new and used Australian-made caravans'. That is NAICS 441210 Recreational Vehicle Dealers (incl. travel-trailer dealers). VCDB's 4411 is Automobile Dealers."
+            "victim.industry": "Cyber Daily: 'Southern Design RV is a Ballarat, Victoria-based caravan and RV dealer that sells both new and used Australian-made caravans'. That is NAICS 441210 Recreational Vehicle Dealers (incl. travel-trailer dealers). VCDB's 4411 is Automobile Dealers.",
+            "action.social.vector": "Cyber Daily: the data was listed and auctioned 'on its leak site'; 2026-048 codes the same leak-site pattern as Web application.",
+            "asset.assets": "Cyber Daily: the sample was 'customer documentation'; no source names the breached system (no database).",
+            "timeline.incident": "ransomware.live: 'Discovered: 2026-06-20 08:50 UTC'; its 'Estimated attack date' copies the listing date. No source dates the attack (VCDB's notes: 'actual initial-access date is undisclosed')."
           }
         }
       ],
@@ -14266,7 +14377,7 @@
         "security_incident": "Confirmed",
         "confidence": "Medium",
         "reference": "https://www.cyberdaily.au/security/13784-exclusive-victorian-rv-dealer-suffers-alleged-cyber-attack; https://ransomware.live/id/U291dGhlcm4gZGVzaWduIFJWQGNtZG9yZ2FuaXphdGlvbg==",
-        "summary": "Southern Design RV (Ballarat, VIC caravan/RV dealer) was listed on the CMD Organization extortion leak site ~20 Jun 2026; the group claimed stolen customer data (names, addresses, emails, phones, purchase details) and launched a 5 BTC auction. Conventional extortion breach with no AI component; included because it appears in the CC_MIT_VCDB 2026 register.",
+        "summary": "Southern Design RV (Ballarat, VIC caravan/RV dealer) was listed on the CMD Organization extortion leak site ~20 Jun 2026; the group posted a sample of customer documents (names, addresses, emails, phones, purchase details) and auctioned the data (5 BTC at the time of reporting). Conventional extortion breach with no AI component; included because it appears in the CC_MIT_VCDB 2026 register.",
         "actor": {
           "external": {
             "variety": [
@@ -14305,7 +14416,7 @@
               "Extortion"
             ],
             "vector": [
-              "Unknown"
+              "Web application"
             ],
             "target": [
               "Unknown"
@@ -14316,7 +14427,7 @@
         "asset": {
           "assets": [
             {
-              "variety": "S - Database"
+              "variety": "S - Unknown"
             },
             {
               "variety": "P - Unknown"
@@ -14357,9 +14468,7 @@
         },
         "timeline": {
           "incident": {
-            "year": 2026,
-            "month": 6,
-            "day": 20
+            "year": 2026
           }
         },
         "victim": {
@@ -14396,7 +14505,7 @@
               "actor": "ext",
               "asset": "ppl",
               "attribute": "ia",
-              "summary": "Stolen data auctioned for extortion (5 BTC starting bid)"
+              "summary": "Stolen data auctioned for extortion (5 BTC at the time of reporting)"
             }
           ],
           "attribute": {
@@ -14449,7 +14558,9 @@
           "overrides": {
             "action.misuse.variety": "AFL.com.au, club statement: the leadership team 'divulged personal and sensitive information about Ms Dade' and 'this was inappropriate': handling data in an unapproved manner (Data mishandling), beside VCDB's Privilege abuse.",
             "attribute.confidentiality.state": "No source says how the information was held; VCDB's own note calls 'Stored' a default, and the AFL report says only that it was 'divulged' in meetings, one of them 'an online Microsoft Teams meeting'.",
-            "victim.industry": "AFL.com.au: Melbourne is a professional AFL club ('May, a premiership player and dual All-Australian, retired from the club'), so NAICS 2022 711211 Sports Teams and Clubs is supported and more precise than VCDB's sector 71 (Arts, Entertainment, and Recreation)."
+            "victim.industry": "AFL.com.au: Melbourne is a professional AFL club ('May, a premiership player and dual All-Australian, retired from the club'), so NAICS 2022 711211 Sports Teams and Clubs is supported and more precise than VCDB's sector 71 (Arts, Entertainment, and Recreation).",
+            "action.misuse.vector": "AFL.com.au: 'a third breach involved an online Microsoft Teams meeting attended by 15 people'; no source says any disclosure happened in person (VCDB's 'in-person' note has no source).",
+            "reference": "The club's own statement (primary) and SEN on the Teams meeting with players' partners."
           }
         }
       ],
@@ -14460,8 +14571,8 @@
         "incident_id": "2026-076",
         "security_incident": "Confirmed",
         "confidence": "Medium",
-        "reference": "https://www.afl.com.au/news/1550813/melbourne-demons-apologise-to-sachi-dade-partner-of-steven-may-for-privacy-breach; https://nit.com.au/30-06-2026/25090/demons-apologise-to-mays-partner-over-privacy-breaches",
-        "summary": "Melbourne Football Club (AFL) leadership disclosed personal/sensitive information about the partner of a retired player across incidents on 4–5 Feb 2026 and in a ~15-person Teams meeting — an internal privilege-abuse/data-mishandling incident. No AI component; included because it appears in the CC_MIT_VCDB 2026 register.",
+        "reference": "https://www.afl.com.au/news/1550813/melbourne-demons-apologise-to-sachi-dade-partner-of-steven-may-for-privacy-breach; https://nit.com.au/30-06-2026/25090/demons-apologise-to-mays-partner-over-privacy-breaches; https://www.melbournefc.com.au/news/2057974/club-statement; https://sen.com.au/news/2026/06/21/afl-news-melbourne-legal-matter-steven-may-partner-sachi-dade",
+        "summary": "Melbourne Football Club (AFL) leadership disclosed personal/sensitive information about the partner of a since-retired player in three breaches on 4–5 Feb 2026, one of them a 15-person Teams meeting — an internal privilege-abuse/data-mishandling incident. No AI component; included because it appears in the CC_MIT_VCDB 2026 register.",
         "actor": {
           "internal": {
             "variety": [
@@ -14479,9 +14590,9 @@
               "Data mishandling"
             ],
             "vector": [
-              "Physical access"
+              "Other"
             ],
-            "notes": "Internal disclosure of sensitive personal information."
+            "notes": "Disclosure of sensitive personal information by the club's leadership, incl. in a Teams meeting with players' partners."
           }
         },
         "asset": {
@@ -14508,7 +14619,7 @@
             "data_victim": [
               "Other"
             ],
-            "notes": "Sensitive personal info disclosed internally.",
+            "notes": "Sensitive personal info disclosed by club leadership, incl. to players' partners in a Teams meeting.",
             "data_total": 1
           }
         },
@@ -14555,7 +14666,7 @@
         "ai_component": [],
         "ai_security_mechanism": [],
         "observed_severity": "Low",
-        "observed_severity_rationale": "Confirmed internal privilege abuse / sensitive-data mishandling (no AI involvement); limited scope.",
+        "observed_severity_rationale": "Confirmed misuse: club leadership disclosed sensitive personal information, incl. to players' partners (no AI involvement); limited scope.",
         "potential_severity": "Low",
         "potential_severity_rationale": "Reputational/privacy harm to the affected individual; contained.",
         "potential_severity_confidence": "Low",
