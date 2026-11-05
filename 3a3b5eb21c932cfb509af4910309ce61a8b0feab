@@ -1,0 +1,42 @@
+# Severity re-check — 16 records, 3 re-rated (2026-11-04)
+
+Attached as a git note to the commit "Re-rate three incidents on the corrected facts". The commit "Check adopted VCDB
+fields against their sources" (50672f7) corrected facts in the 16 records that adopt a VCDB coding. This review rated
+all 16 again by methodology §7 and §8. A rating changes only where a corrected fact changes the result of the rubric;
+for every other record the earlier rating stands. An attacker's unverified claim does not raise the observed severity
+(§7.1, §9.1). The potential severity rates the demonstrated path as if it had completed, bounded by the documented
+reach and by controls that demonstrably worked (§7.3). Calibration: the corpus's own ratings of similar records
+(§8.2 anchors). Claude proposed every row; the user approved the table on 2026-11-04.
+
+## Changed
+
+| Record | Field | Before → after | Reason |
+|---|---|---|---|
+| 2026-004 | `report.observed_severity` | High → Medium | Novo Nordisk confirmed only that pseudonymised clinical-trial patient data and healthcare-provider contacts were copied, without a count. FulcrumSec's further claims are unverified: 1.3 TB, R&D secrets, AI model assets, credentials, a 264 GB leak. Similar confirmed thefts of health data with an unknown count are rated Medium: 2026-043, 053, 054. |
+| 2026-004 | `report.potential_severity` | Critical → High | The completed path is the publication or sale of the copied data: a large, irreversible exposure of health-related data. The step to Critical rests only on the unverified claims. Confidence stays Medium. |
+| 2026-005 | `report.observed_severity` | High → Medium | One malicious commit in one Microsoft repository; GitHub disabled 73 repositories within hours; no source reports stolen credentials (`data_disclosure` Potentially): a contained integrity compromise. 2026-046, a wave of the same Miasma campaign, is rated Medium/High. |
+| 2026-005 | `report.potential_severity` | Critical → High | Every developer who opened the repository in an AI coding tool before the takedown runs the credential harvester, and the worm spreads; GitHub's detection, which demonstrably worked, limits the window to hours. Critical would need a "major supply-chain compromise", such as 2026-025 axios. |
+| 2026-005 | `report.potential_severity_confidence` | High → Medium | The number of developers who opened the repository in that window is unknown. |
+| 2026-041 | `report.observed_severity` | Medium → High | New facts of 50672f7: 353,844 patients (HHS breach portal), Social Security numbers among the data. High's "large-scale sensitive-data exposure", like 2026-024 (1.08M members). |
+| 2026-053 | `report.observed_severity_rationale` | text only, Medium stays | The old text "Confirmed ransomware breach of patient healthcare data" contradicted `data_disclosure` Potentially. |
+
+## Kept
+
+- 2026-017 High/High (Claude's certainty low): Meta calls 20,225 "an upper bound of the users impacted as some of the
+  accounts may have been accessed legitimately by account owners"; exploitation is confirmed and most resets were
+  probably the attackers'. High's "significant credential compromise" still fits; Medium would be defensible if the
+  upper bound weighs more.
+- 2026-049 and 2026-053 Medium/Medium: 049's victim confirms an incident with "a limited number of individuals
+  affected"; 053's actor accessed the provider's systems for three weeks (Medium: "compromise of a bounded number of
+  systems").
+- 2026-043 Medium/High: the confirmed ransomware and network interruption stay within Medium's "contained …
+  availability loss".
+- 2026-047 Medium/High: an outage of at most 16 days, Medium's "recoverable production impact".
+- 2026-054 Medium/Medium: only a vendor's employees were affected, but with sensitive data; Low ("low-sensitivity")
+  does not fit.
+- 2026-016, 024, 029, 048, 055, 075, 076: 50672f7 changed no fact that the rating rests on.
+
+## Effects
+
+`ranking_table`: 2026-004 rank 4 → 27, 2026-005 5 → 28, 2026-041 42 → 22. `counts.by_observed_severity` and README:
+High 24 → 23, Medium 32 → 33. None of the 16 records has a validated CVE.
