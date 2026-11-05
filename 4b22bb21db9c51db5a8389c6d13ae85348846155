@@ -1,0 +1,48 @@
+# Sweep runs and the AI keyword screen — review (2026-11-05)
+
+Attached as a git note to the commit "Record sweep runs and the AI keyword screen". The user approved the terms and the
+reconstruction of past runs. The AIID download date (2026-08-24) and the date 2026-10-09 are the user's; the VCDB clone
+and pull times come from the clone's reflog; the runs of 2026-08-26 and 2026-10-23 from the session transcripts
+(996e833f, 7540a3cf, 13ec5c08 and its research agent; Claude checked the decisive tool output); the later runs from git
+history and the handover. Every count is known.
+
+## Reconstructed runs
+
+| Channel | swept_on | query | listed | new | attached | how reconstructed |
+|---|---|---|---|---|---|---|
+| incidentdatabase.ai_20260824_ai_incidents_2026.xlsx | 2026-08-24 | AIID incidents dated 2026 in the export of 2026-08-24 (1,641 incidents in all) | 73 | 12 | 5 | Reconstructed on 2026-11-05 from the session transcripts of 2026-08-26. The user downloaded the export on 2026-08-24; the file holds the 73 incidents dated 2026. On 2026-08-26 (session 7540a3cf, 12:01 UTC) 13 of the 73 were judged to meet §3, and 12 became records. The other 5 cited entries (AIID 1362, 1386, 1390, 1418, 1443, all False positive) entered through a report that had read the same AIID incidents through the MIT AI Risk Navigator; they cite the export, so they count as attached. |
+| vz-risk/VCDB | 2026-08-26 | VCDB-encoded records (data/json) with incident year 2026, at VCDB commit 230cf22b (2026-08-03; 10,606 files) | 11 | 11 | 0 | Reconstructed on 2026-11-05. The local clone's reflog dates the clone at 2026-08-26 10:39 (+0200); the year filter ran at 09:53 UTC (session 996e833f) and listed 11 records (a twelfth, HDFC Life, was a mis-dated 2024 breach). All 11 became records; each was found here first, 2026-004's two intake issues only at 12:06 UTC. |
+| vz-risk/VCDB | 2026-08-26 | all VCDB intake issues created in 2026 (gh issue list in three date ranges), then a regex for AI terms, for a comparison report | 1348 | 0 | 0 | Reconstructed on 2026-11-05 from session 996e833f (10:32-11:13 UTC): 1,348 issues created in 2026, 55 of them (with 142 encoded records) mentioning AI terms, 18 labelled 'AI related'. Nothing of it entered the corpus. |
+| vz-risk/VCDB | 2026-08-26 | GitHub issue search in vz-risk/VCDB: label "AI related" (all years); AI created:>=2026-01-01; LLM OR chatbot OR "AI agent" OR ChatGPT OR Claude OR OpenAI; Anthropic OR Gemini OR Copilot OR deepfake OR "vibe coding" OR "artificial intelligence" | 89 | 22 | 8 | Reconstructed on 2026-11-05 from session 7540a3cf (12:06 UTC): the four searches returned 89 distinct issues (80 created in 2026); about 34 were read, and 30 are cited. They formed 25 records: 22 found here first; 8 issues attached (4 duplicates of the same event, 2026-004's two to its encoded record, and 2026-026's and 029's to their AIID entries, built first). |
+| vz-risk/VCDB | 2026-10-09 | VCDB-encoded records for the 30 intake issues that the corpus cites (VCDB master f6f98c00, 2026-09-30) | 30 | 0 | 5 | Reconstructed on 2026-11-05 from the handover (2026-10-09, confirmed by the user) and commit c4052c9 (2026-10-11), which added the 5 encoded records for 2026-005, 016, 017, 029 and 049; the local VCDB clone was pulled to f6f98c00 on 2026-10-11 13:47. |
+| vz-risk/VCDB | 2026-10-23 | 55 GitHub issue searches in vz-risk/VCDB for the events of the once-per-record step (e.g. Lovable, Base44, RedAccess, mouse5212, Ghostcommit, 0DIN, Anthropic's evaluation incidents) | 53 | 0 | 1 | Reconstructed on 2026-11-05 from session 13ec5c08 (2026-10-23, 12:53-15:33 UTC): four loops of 55 searches printed 53 distinct issues (the largest loop printed only issues created in 2026). Issue 23405 (Lovable) was added to 2026-106, a record split from 2026-036, in commit 421c1bf; 11 further candidates (24372 to 24533) wait for screening. |
+| vz-risk/VCDB | 2026-10-26 | VCDB-encoded records for the 31 intake issues that the corpus cites (VCDB master f6f98c00) | 31 | 0 | 0 | Reconstructed on 2026-11-05: VCDB had encoded none of the 31 issues since f6f98c00. |
+| vz-risk/VCDB | 2026-11-04 | the intake issues that the 10 adopted VCDB records found through VCDB's encoded records name in plus.github | 10 | 0 | 10 | Reconstructed on 2026-11-05 from commit 4487ab8. |
+| incidentdatabase.ai | 2026-10-23 | AIID snapshot backup-20261019101022 (1,751 incidents, 267 dated 2026): keyword lookups for 19 sample records; AIID web searches and cite pages for the events of the once-per-record step | 80 | 1 | 3 | Reconstructed on 2026-11-05 from session 13ec5c08 and its research agent (2026-10-23, 15:26-15:42 UTC): their tool output names 80 distinct AIID incidents. AIID 1685 became the new record 2026-103; AIID 1627, 1628 and 1629 went to 2026-019 and to 101 and 102, split from it, in commit 25cf1d8. AIID 1613 (2026-100) and 1646 (2026-007) were found too but not added then. |
+| incidentdatabase.ai | 2026-11-04 | the cite page of AIID 1613, found in the register check of 2026-10-23 | 1 | 0 | 1 | Reconstructed on 2026-11-05 from commit 4487ab8. |
+
+## AI keyword screen
+
+Match rule: case-insensitive whole words; a term ending in * matches word starts; every other term also matches with an appended s or es; a space or hyphen in a term matches a space or a hyphen in the text. Fields: title, summary, notes.
+
+63 terms: `LLM`, `large language model`, `generative AI`, `GPT`, `ChatGPT`, `OpenAI`, `Claude`, `Anthropic`, `Gemini`, `Copilot`, `Llama`, `Mistral`, `DeepSeek`, `chatbot`, `AI assistant`, `AI agent`, `agentic`, `autonomous agent`, `MCP`, `Model Context Protocol`, `prompt injection`, `jailbreak`, `RAG`, `vector database`, `embedding`, `coding assistant`, `Cursor`, `Windsurf`, `Claude Code`, `Codex`, `Gemini CLI`, `LangChain`, `Langflow`, `LlamaIndex`, `Ollama`, `vLLM`, `LiteLLM`, `Hugging Face`, `model weights`, `fine-tun*`, `AI-generated`, `vibe cod*`, `LLMjacking`, `deepfake`, `AI`, `artificial intelligence`, `machine learning`, `facial recognition`, `voice clon*`, `multi-agent`, `Grok`, `xAI`, `OpenClaw`, `ClawHub`, `NotebookLM`, `XBOW`, `Lovable`, `Base44`, `Replit`, `robot*`, `self-driving`, `driverless`, `autonomous vehicle`.
+
+The 44 planned terms come from the sourcing plan; the user added 19 on 2026-11-05 after measurements on four sets:
+
+| Terms | AIID export 2026 (73, all AI) | AIID entries the corpus cites (17) | titles of the 93 AI records | VCDB 2025-26 (192) |
+|---|---|---|---|---|
+| 44 planned (whole words, no plural) | 51 | 11 | 61 | 7 |
+| + AI terms, plural, space = hyphen | 62 | 13 | 81 | 10 |
+| + 12 names and phrases | 67 | 17 | 87 | 10 |
+| + robot*, self-driving, driverless, autonomous vehicle | 70 | 17 | 88 | 10 |
+
+Still missed in the AIID export: 1347 (an automated shuttle bus, rear-ended), 1367 and 1376 (GPS routing, no AI): all
+outside §3. New VCDB hits beyond the 44 terms: the record of 2026-004 ("AI model assets") and an "AI-powered" firm.
+
+## Side findings (for TODO.md)
+
+- The register check of 2026-10-23 found AIID 1646 for 2026-007, never added; 007 cites deep-research reports only.
+- AIID 1386 and 1443 were excluded by the first build on 2026-08-26 as harmful model output, then came back through
+  the MIT AI Risk Navigator report; they are coded False positive.
+- The deep-research coverage of 2026-026 (Moltbook) was dropped in the merge of 2026-08-26: it cites only AIID 1364
+  and VCDB issue 23023.
