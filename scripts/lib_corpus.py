@@ -288,6 +288,21 @@ def passes_gate(rec: dict, catalog: dict) -> bool:
     return any(source_class(catalog, s) in GATE_CLASSES for s in source_names(rec))
 
 
+def keyword_pattern(term: str) -> "re.Pattern":
+    """Methodology §10.2 "Sweeps": a term of ai_keyword_screen as a pattern. Whole words, case-insensitive; a term ending in
+    * matches word starts; every other term also matches with an appended s or es; a space or hyphen in the term matches
+    a space or a hyphen in the text."""
+    stem = term.endswith("*")
+    core = r"[\s-]+".join(re.escape(p) for p in re.split(r"[ -]", term.rstrip("*")) if p)
+    return re.compile(r"(?<!\w)" + core + (r"\w*" if stem else r"(?:s|es)?") + r"(?!\w)", re.IGNORECASE)
+
+
+def keyword_hits(text: str, screen: dict) -> list:
+    """The terms of the screen (ai_keyword_screen) that occur in the text, in the screen's order."""
+    terms = screen.get("terms") if isinstance(screen, dict) else None
+    return [t for t in terms or [] if isinstance(t, str) and t.strip() and keyword_pattern(t).search(text or "")]
+
+
 def deep_research_only(rec: dict, catalog: dict) -> bool:
     """Every source of the record has the class deep-research (a record without sources is not counted here)."""
     names = source_names(rec)

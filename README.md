@@ -172,6 +172,7 @@ each array in ascending order; every record's `source_kind` as its `sources` giv
 the `source_class` of every `sources_catalog` entry and its entry form,
 the gate (a live record numbered 100 or higher needs a `register` or `curated-corpus` source,
 or an entry in the pending list `source_gate_pending`),
+the form of the AI keyword screen `ai_keyword_screen` and of every sweep run in `sources_catalog[*].sweeps`,
 the sub-threshold rule (a record there must be a vulnerability disclosure,
 and one that meets methodology §3.3 (a) KEV or (c) realized harm must be promoted to `incidents`),
 the wrappers of retired records, the `sources` of every live record (at least one entry, each with `source`,
@@ -277,6 +278,11 @@ a deep-research run cannot be repeated, and it finds what language models alread
 Records that wait for such a source are listed with their planned source in `source_gate_pending`
 (methodology §10.2).
 
+Every run of the pipeline over a channel (a register fetch, a lookup, a sweep) is recorded in that channel's
+`sources_catalog` entry under `sweeps`: date, query, trigger and the counts `listed`, `hits`, `new` and `attached`,
+so coverage claims can be checked.
+Sources without an AI tag are screened with `ai_keyword_screen` (whole words, plurals, `*` for word starts).
+
 Each record also carries **`veris.reference`**: the reporting on the incident's event, as URLs.
 It holds every link the record's sources give for the event, plus reporting found by the analyst,
 primary disclosures first (methodology §10.2).
@@ -291,9 +297,11 @@ Citation counts over the 108 live records: VCDB 59 · ClaudeCode 42 · ChatGPT 1
 An event is included when **AI was materially involved** *and* there was an actual, suspected,
 or near-miss adverse effect on the confidentiality, integrity, availability,
 or authorization of a software/information asset.
-Non-security AI controversies (deepfake fraud, disinformation, likeness/IP disputes, autonomous-vehicle safety,
-harmful model output) are out of scope, except where a register carried them —
+Non-security AI controversies (deepfake fraud, disinformation, likeness/IP disputes, harmful model output)
+are out of scope, except where a register carried them —
 in which case they are retained and clearly flagged as outside the criterion.
+Incidents of autonomous vehicles and robots are included only if AI-related software security is involved:
+an effect on a security property of a software or information asset, not a collision or a stranded vehicle alone.
 
 ## Caveats
 

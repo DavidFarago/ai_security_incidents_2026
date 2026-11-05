@@ -1364,5 +1364,173 @@ class SourceClassesAndGate(unittest.TestCase):
         self.assertEqual(vi.validate(CORPUS, UPSTREAM).measurements["deep_research_only"], want)
 
 
+class KeywordScreen(unittest.TestCase):
+    """Methodology §10.2 "Sweeps": the AI keyword screen matches whole words, case-insensitively; a term ending in * matches
+    word starts; every other term also matches with an appended s or es; a space or hyphen in a term matches a space or
+    a hyphen in the text."""
+
+    def setUp(self):
+        self.screen = CORPUS.get("ai_keyword_screen") or {}
+
+    def hits(self, text):
+        return lib_corpus.keyword_hits(text, self.screen)
+
+    def test_whole_words(self):
+        for text in ("storage", "leveraged", "the data was said to be in an email"):
+            with self.subTest(text=text):
+                self.assertEqual(self.hits(text), [])
+        self.assertIn("RAG", self.hits("a RAG pipeline"))
+        self.assertIn("AI", self.hits("an AI-powered marketing firm"))
+
+    def test_brand_names_do_not_bleed(self):
+        self.assertIn("ChatGPT", self.hits("ChatGPT"))
+        self.assertNotIn("GPT", self.hits("ChatGPT"))
+        self.assertIn("GPT", self.hits("GPT-4o"))
+        self.assertEqual(sorted(self.hits("Claude Code")), ["Claude", "Claude Code"])
+
+    def test_plurals(self):
+        self.assertIn("LLM", self.hits("LLMs"))
+        self.assertIn("chatbot", self.hits("two chatbots"))
+        self.assertIn("deepfake", self.hits("deepfakes"))
+
+    def test_stems_and_hyphens(self):
+        self.assertIn("fine-tun*", self.hits("fine-tuning"))
+        self.assertIn("fine-tun*", self.hits("fine tuned"))
+        self.assertIn("vibe cod*", self.hits("5,000 vibe-coded apps"))
+        self.assertIn("multi-agent", self.hits("a multi agent campaign"))
+
+    def test_case_insensitive(self):
+        self.assertIn("OpenClaw", self.hits("openclaw skills"))
+
+    def test_terms(self):
+        terms = self.screen.get("terms") or []
+        self.assertEqual(len(terms), len(set(terms)))
+        for t in ("AI", "artificial intelligence", "machine learning", "Grok", "OpenClaw", "XBOW", "Replit", "robot*",
+                  "autonomous vehicle"):
+            self.assertIn(t, terms)
+
+    @unittest.skipUnless(__import__("importlib").util.find_spec("openpyxl"), "openpyxl is not installed")
+    def test_every_cited_aiid_export_entry_hits(self):
+        # Regression: the screen keeps finding the AI incidents the corpus already cites (title + description of the
+        # AIID export of 2026-08-24).
+        import openpyxl
+        path = ROOT / CORPUS["sources_catalog"]["incidentdatabase.ai_20260824_ai_incidents_2026.xlsx"]["path"]
+        rows = list(openpyxl.load_workbook(path, read_only=True).worksheets[0].iter_rows(values_only=True))
+        text = {str(r[0]): f"{r[3]}\n{r[4]}" for r in rows[3:] if r[0] is not None}
+        cited = {s["locator"].split()[-1] for i in lib_corpus.records(CORPUS) for s in i["sources"]
+                 if s["source"] == "incidentdatabase.ai_20260824_ai_incidents_2026.xlsx"}
+        self.assertEqual(len(cited), 17)
+        self.assertEqual([n for n in sorted(cited) if not self.hits(text[n])], [])
+
+
+class Sweeps(unittest.TestCase):
+    """Methodology §10.2 "Sweeps": a sources_catalog entry may hold `sweeps`, one object per run of the pipeline over that
+    channel: dates, query, screen, the counts listed ≥ hits ≥ new + attached, the trigger, the script. A deep-research
+    report has none; a curated corpus at most one. Every count is an integer; a reconstructed run says how in `backfill`."""
+
+    VCDB = "vz-risk/VCDB"
+    GROK = "Grok_DeepResearch_ai_incidents_2026.md"
+
+    RUN = {"swept_on": "2026-11-10", "period": {"from": "2026-05-01", "to": "2026-05-31"},
+           "query": "VCDB issues opened in May 2026", "screen": True, "listed": 240, "hits": 9, "new": 2,
+           "attached": 1, "trigger": "monthly schedule", "script": "scripts/validate_incidents.py"}
+
+    def setUp(self):
+        self.d = copy.deepcopy(CORPUS)
+
+    def run_v(self):
+        return vi.validate(self.d, UPSTREAM)
+
+    def add(self, source=VCDB, **change):
+        run = dict(copy.deepcopy(self.RUN), **change)
+        for k in [k for k, v in change.items() if v is ...]:
+            del run[k]
+        self.d["sources_catalog"][source].setdefault("sweeps", []).append(run)
+        return run
+
+    def flagged(self, msg=None):
+        return has(self.run_v(), "sweeps", msg=msg)
+
+    def test_valid_run(self):
+        self.add()
+        self.assertFalse(self.flagged())
+
+    def test_real_backfilled_runs_pass(self):
+        self.assertFalse(has(vi.validate(CORPUS, UPSTREAM), "sweeps"))
+        self.assertTrue(any(c.get("sweeps") for c in CORPUS["sources_catalog"].values()))
+
+    def test_malformed_date(self):
+        self.add(swept_on="10 Nov 2026")
+        self.assertTrue(self.flagged("swept_on"))
+
+    def test_period_reversed(self):
+        self.add(period={"from": "2026-06-01", "to": "2026-05-31"})
+        self.assertTrue(self.flagged("period"))
+
+    def test_period_after_the_run(self):
+        self.add(period={"from": "2026-05-01", "to": "2026-12-31"})
+        self.assertTrue(self.flagged("period"))
+
+    def test_negative_count(self):
+        self.add(listed=-1)
+        self.assertTrue(self.flagged("listed"))
+
+    def test_more_hits_than_listed(self):
+        self.add(hits=241)
+        self.assertTrue(self.flagged("hits"))
+
+    def test_more_kept_than_hits(self):
+        self.add(new=8, attached=2)
+        self.assertTrue(self.flagged("new + attached"))
+
+    def test_more_kept_than_listed_without_screen(self):
+        self.add(screen=False, hits=..., listed=2, new=2, attached=1)
+        self.assertTrue(self.flagged("new + attached"))
+
+    def test_hits_without_screen(self):
+        self.add(screen=False)
+        self.assertTrue(self.flagged("hits"))
+
+    def test_screen_without_hits(self):
+        self.add(hits=...)
+        self.assertTrue(self.flagged("hits"))
+
+    def test_no_null_count(self):
+        # Every count is known, also in a reconstructed run.
+        self.add(listed=None, backfill="reconstructed from git history")
+        self.assertTrue(self.flagged("listed"))
+
+    def test_backfill_is_text(self):
+        self.add(backfill=" ")
+        self.assertTrue(self.flagged("backfill"))
+        self.d["sources_catalog"][self.VCDB]["sweeps"][-1]["backfill"] = "reconstructed from git history"
+        self.assertFalse(self.flagged())
+
+    def test_trigger_required(self):
+        self.add(trigger=" ")
+        self.assertTrue(self.flagged("trigger"))
+
+    def test_script_must_exist(self):
+        self.add(script="scripts/sweep_nothing.py")
+        self.assertTrue(self.flagged("script"))
+
+    def test_no_sweeps_on_deep_research(self):
+        self.add(source=self.GROK)
+        self.assertTrue(self.flagged(self.GROK))
+
+    def test_curated_corpus_has_at_most_one_run(self):
+        self.d["sources_catalog"][self.GROK]["source_class"] = "curated-corpus"
+        self.add(source=self.GROK)
+        self.assertFalse(self.flagged())
+        self.add(source=self.GROK)
+        self.assertTrue(self.flagged(self.GROK))
+
+    def test_screen_form(self):
+        self.d["ai_keyword_screen"]["terms"].append("AI")
+        self.assertTrue(has(self.run_v(), "ai-keyword-screen", msg="AI"))
+        del self.d["ai_keyword_screen"]
+        self.assertTrue(has(self.run_v(), "ai-keyword-screen"))
+
+
 if __name__ == "__main__":
     unittest.main()

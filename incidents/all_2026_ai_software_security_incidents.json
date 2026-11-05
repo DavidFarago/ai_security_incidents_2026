@@ -36,21 +36,143 @@
       "source_class": "register",
       "path": "incidents/sources/incidentdatabase.ai_20260824_ai_incidents_2026.xlsx",
       "home": "https://incidentdatabase.ai/",
-      "per_incident_locator": "AIID <id> + cite URL"
+      "per_incident_locator": "AIID <id> + cite URL",
+      "sweeps": [
+        {
+          "swept_on": "2026-08-24",
+          "period": {
+            "from": "2026-01-01",
+            "to": "2026-08-24"
+          },
+          "query": "AIID incidents dated 2026 in the export of 2026-08-24 (1,641 incidents in all)",
+          "screen": false,
+          "listed": 73,
+          "new": 12,
+          "attached": 5,
+          "trigger": "the initial build of the corpus (2026-08-26)",
+          "backfill": "Reconstructed on 2026-11-05 from the session transcripts of 2026-08-26. The user downloaded the export on 2026-08-24; the file holds the 73 incidents dated 2026. On 2026-08-26 (session 7540a3cf, 12:01 UTC) 13 of the 73 were judged to meet §3, and 12 became records. The other 5 cited entries (AIID 1362, 1386, 1390, 1418, 1443, all False positive) entered through a report that had read the same AIID incidents through the MIT AI Risk Navigator; they cite the export, so they count as attached."
+        }
+      ]
     },
     "vz-risk/VCDB": {
       "kind": "VERIS Community Database",
       "source_class": "register",
       "repo": "https://github.com/vz-risk/VCDB",
       "per_incident_locator": "encoded records at data/json/{validated,submitted}/<uuid>.json (blob URL), or the 2026 issue intake at issues/<n>",
-      "note": "No local VCDB snapshot in incidents/sources yet; citations point at the upstream repo."
+      "note": "No local VCDB snapshot in incidents/sources yet; citations point at the upstream repo.",
+      "sweeps": [
+        {
+          "swept_on": "2026-08-26",
+          "period": {
+            "from": "2026-01-01",
+            "to": "2026-08-03"
+          },
+          "query": "VCDB-encoded records (data/json) with incident year 2026, at VCDB commit 230cf22b (2026-08-03; 10,606 files)",
+          "screen": false,
+          "listed": 11,
+          "new": 11,
+          "attached": 0,
+          "trigger": "the initial build of the corpus (2026-08-26)",
+          "backfill": "Reconstructed on 2026-11-05. The local clone's reflog dates the clone at 2026-08-26 10:39 (+0200); the year filter ran at 09:53 UTC (session 996e833f) and listed 11 records (a twelfth, HDFC Life, was a mis-dated 2024 breach). All 11 became records; each was found here first, 2026-004's two intake issues only at 12:06 UTC."
+        },
+        {
+          "swept_on": "2026-08-26",
+          "period": {
+            "from": "2026-01-01",
+            "to": "2026-08-26"
+          },
+          "query": "all VCDB intake issues created in 2026 (gh issue list in three date ranges), then a regex for AI terms, for a comparison report",
+          "screen": false,
+          "listed": 1348,
+          "new": 0,
+          "attached": 0,
+          "trigger": "a comparison of the VCDB and MIT AI-incident lists (2026-08-26)",
+          "backfill": "Reconstructed on 2026-11-05 from session 996e833f (10:32-11:13 UTC): 1,348 issues created in 2026, 55 of them (with 142 encoded records) mentioning AI terms, 18 labelled 'AI related'. Nothing of it entered the corpus."
+        },
+        {
+          "swept_on": "2026-08-26",
+          "period": {
+            "from": "2026-01-01",
+            "to": "2026-08-26"
+          },
+          "query": "GitHub issue search in vz-risk/VCDB: label \"AI related\" (all years); AI created:>=2026-01-01; LLM OR chatbot OR \"AI agent\" OR ChatGPT OR Claude OR OpenAI; Anthropic OR Gemini OR Copilot OR deepfake OR \"vibe coding\" OR \"artificial intelligence\"",
+          "screen": false,
+          "listed": 89,
+          "new": 22,
+          "attached": 8,
+          "trigger": "the initial build of the corpus (2026-08-26)",
+          "backfill": "Reconstructed on 2026-11-05 from session 7540a3cf (12:06 UTC): the four searches returned 89 distinct issues (80 created in 2026); about 34 were read, and 30 are cited. They formed 25 records: 22 found here first; 8 issues attached (4 duplicates of the same event, 2026-004's two to its encoded record, and 2026-026's and 029's to their AIID entries, built first)."
+        },
+        {
+          "swept_on": "2026-10-09",
+          "query": "VCDB-encoded records for the 30 intake issues that the corpus cites (VCDB master f6f98c00, 2026-09-30)",
+          "screen": false,
+          "listed": 30,
+          "new": 0,
+          "attached": 5,
+          "trigger": "a check whether VCDB had encoded the intake issues that the corpus cites",
+          "backfill": "Reconstructed on 2026-11-05 from the handover (2026-10-09, confirmed by the user) and commit c4052c9 (2026-10-11), which added the 5 encoded records for 2026-005, 016, 017, 029 and 049; the local VCDB clone was pulled to f6f98c00 on 2026-10-11 13:47."
+        },
+        {
+          "swept_on": "2026-10-23",
+          "query": "55 GitHub issue searches in vz-risk/VCDB for the events of the once-per-record step (e.g. Lovable, Base44, RedAccess, mouse5212, Ghostcommit, 0DIN, Anthropic's evaluation incidents)",
+          "screen": false,
+          "listed": 53,
+          "new": 0,
+          "attached": 1,
+          "trigger": "the register check of 2026-10-23 (an adoption evaluation of candidate registers)",
+          "backfill": "Reconstructed on 2026-11-05 from session 13ec5c08 (2026-10-23, 12:53-15:33 UTC): four loops of 55 searches printed 53 distinct issues (the largest loop printed only issues created in 2026). Issue 23405 (Lovable) was added to 2026-106, a record split from 2026-036, in commit 421c1bf; 11 further candidates (24372 to 24533) wait for screening."
+        },
+        {
+          "swept_on": "2026-10-26",
+          "query": "VCDB-encoded records for the 31 intake issues that the corpus cites (VCDB master f6f98c00)",
+          "screen": false,
+          "listed": 31,
+          "new": 0,
+          "attached": 0,
+          "trigger": "re-verification of the VCDB facts before the comparison with VCDB's codings",
+          "backfill": "Reconstructed on 2026-11-05: VCDB had encoded none of the 31 issues since f6f98c00."
+        },
+        {
+          "swept_on": "2026-11-04",
+          "query": "the intake issues that the 10 adopted VCDB records found through VCDB's encoded records name in plus.github",
+          "screen": false,
+          "listed": 10,
+          "new": 0,
+          "attached": 10,
+          "trigger": "the definition of sources of 2026-11-03/04: every item of a discovery channel where the record can be found",
+          "backfill": "Reconstructed on 2026-11-05 from commit 4487ab8."
+        }
+      ]
     },
     "incidentdatabase.ai": {
       "kind": "AI Incident Database (AIID), live site",
       "source_class": "register",
       "home": "https://incidentdatabase.ai/",
       "per_incident_locator": "AIID <id> + cite URL",
-      "note": "For incidents added after the export of 2026-08-24 (incidentdatabase.ai_20260824_ai_incidents_2026.xlsx, which ends at AIID 1508); citations point at the live cite page. Report links taken from the AIID snapshot backup-20261019101022 (https://incidentdatabase.ai/research/snapshots/); AIID 1613's from its live cite page (2026-11-04)."
+      "note": "For incidents added after the export of 2026-08-24 (incidentdatabase.ai_20260824_ai_incidents_2026.xlsx, which ends at AIID 1508); citations point at the live cite page. Report links taken from the AIID snapshot backup-20261019101022 (https://incidentdatabase.ai/research/snapshots/); AIID 1613's from its live cite page (2026-11-04).",
+      "sweeps": [
+        {
+          "swept_on": "2026-10-23",
+          "query": "AIID snapshot backup-20261019101022 (1,751 incidents, 267 dated 2026): keyword lookups for 19 sample records; AIID web searches and cite pages for the events of the once-per-record step",
+          "screen": false,
+          "listed": 80,
+          "new": 1,
+          "attached": 3,
+          "trigger": "the register check of 2026-10-23 (an adoption evaluation of candidate registers)",
+          "backfill": "Reconstructed on 2026-11-05 from session 13ec5c08 and its research agent (2026-10-23, 15:26-15:42 UTC): their tool output names 80 distinct AIID incidents. AIID 1685 became the new record 2026-103; AIID 1627, 1628 and 1629 went to 2026-019 and to 101 and 102, split from it, in commit 25cf1d8. AIID 1613 (2026-100) and 1646 (2026-007) were found too but not added then."
+        },
+        {
+          "swept_on": "2026-11-04",
+          "query": "the cite page of AIID 1613, found in the register check of 2026-10-23",
+          "screen": false,
+          "listed": 1,
+          "new": 0,
+          "attached": 1,
+          "trigger": "the gate for records numbered 100 or higher (2026-100's planned source)",
+          "backfill": "Reconstructed on 2026-11-05 from commit 4487ab8."
+        }
+      ]
     }
   },
   "source_gate_pending": {
@@ -58,6 +180,79 @@
     "2026-105": "Hackmageddon, timeline 16-31 May 2026, row #56, once Hackmageddon is a register in sources_catalog",
     "2026-107": "OECD AIM 2026-05-07-1210 (\"AI-Coded Apps Leak Sensitive Data Due to Poor Security\"), once OECD AIM is a register in sources_catalog",
     "2026-108": "a sweep of Sysdig's 2026 posts (curated corpus), or OECD AIM or Hackmageddon if either holds the VAPT pipeline"
+  },
+  "ai_keyword_screen": {
+    "match": "case-insensitive whole words; a term ending in * matches word starts; every other term also matches with an appended s or es; a space or hyphen in a term matches a space or a hyphen in the text",
+    "fields": [
+      "title",
+      "summary",
+      "notes"
+    ],
+    "terms": [
+      "LLM",
+      "large language model",
+      "generative AI",
+      "GPT",
+      "ChatGPT",
+      "OpenAI",
+      "Claude",
+      "Anthropic",
+      "Gemini",
+      "Copilot",
+      "Llama",
+      "Mistral",
+      "DeepSeek",
+      "chatbot",
+      "AI assistant",
+      "AI agent",
+      "agentic",
+      "autonomous agent",
+      "MCP",
+      "Model Context Protocol",
+      "prompt injection",
+      "jailbreak",
+      "RAG",
+      "vector database",
+      "embedding",
+      "coding assistant",
+      "Cursor",
+      "Windsurf",
+      "Claude Code",
+      "Codex",
+      "Gemini CLI",
+      "LangChain",
+      "Langflow",
+      "LlamaIndex",
+      "Ollama",
+      "vLLM",
+      "LiteLLM",
+      "Hugging Face",
+      "model weights",
+      "fine-tun*",
+      "AI-generated",
+      "vibe cod*",
+      "LLMjacking",
+      "deepfake",
+      "AI",
+      "artificial intelligence",
+      "machine learning",
+      "facial recognition",
+      "voice clon*",
+      "multi-agent",
+      "Grok",
+      "xAI",
+      "OpenClaw",
+      "ClawHub",
+      "NotebookLM",
+      "XBOW",
+      "Lovable",
+      "Base44",
+      "Replit",
+      "robot*",
+      "self-driving",
+      "driverless",
+      "autonomous vehicle"
+    ]
   },
   "counts": {
     "total_incidents": 84,

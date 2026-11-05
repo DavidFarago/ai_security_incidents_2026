@@ -475,6 +475,8 @@ def check_class_b(d, up, r: Result):
 
     check_source_classes(d, r)
     check_source_gate(d, r)
+    check_keyword_screen(d, r)
+    check_sweeps(d, r)
     check_source_locators(d, r)
     check_reference(d, r)
     check_sub_threshold(d, r)
@@ -620,6 +622,93 @@ def check_source_gate(d, r):
     r.measurements["source_gate_pending"] = dict(sorted(pending.items()))
     r.measurements["deep_research_only"] = (sum(1 for i in d["incidents"] if lc.deep_research_only(i, catalog)),
                                             sum(1 for i in live.values() if lc.deep_research_only(i, catalog)))
+
+
+def check_keyword_screen(d, r):
+    """Methodology §10.2 "Sweeps": the top-level ai_keyword_screen states its match rule, the fields it screens and its
+    terms; every term once."""
+    scr = d.get("ai_keyword_screen")
+    if not isinstance(scr, dict):
+        r.add("B", "ai-keyword-screen", "ai_keyword_screen is missing or not an object (§10.2)")
+        return
+    if not (isinstance(scr.get("match"), str) and scr["match"].strip()):
+        r.add("B", "ai-keyword-screen", "ai_keyword_screen needs its match rule as text")
+    for key in ("fields", "terms"):
+        vals = scr.get(key)
+        if not (isinstance(vals, list) and vals and all(isinstance(x, str) and x.strip() for x in vals)):
+            r.add("B", "ai-keyword-screen", f"ai_keyword_screen.{key} must be a non-empty list of non-empty strings")
+    for term, n in Counter(x for x in scr.get("terms") or [] if isinstance(x, str)).items():
+        if n > 1:
+            r.add("B", "ai-keyword-screen", f"ai_keyword_screen.terms holds {term!r} {n} times")
+
+
+SWEEP_KEYS = {"swept_on", "period", "query", "screen", "listed", "hits", "new", "attached", "trigger", "script", "backfill"}
+ISO_DATE = re.compile(r"\d{4}-\d{2}-\d{2}")
+
+
+def check_sweeps(d, r, root: Path = lc.ROOT):
+    """Methodology §10.2 "Sweeps": sources_catalog[*].sweeps lists the runs of the pipeline over a discovery channel. A
+    deep-research report has none; a curated corpus of this project is one frozen run, so at most one. Per run: ISO
+    dates with period.from <= period.to <= swept_on; query and trigger as text; screen true or false; the counts
+    listed, new and attached, and hits exactly when screen is true, each an integer >= 0; new + attached <= hits <=
+    listed, or new + attached <= listed without a screen; a given script exists in this repository; a run reconstructed
+    afterwards says how in `backfill`, as text."""
+    for name, cat in sorted((d.get("sources_catalog") or {}).items()):
+        if not isinstance(cat, dict) or "sweeps" not in cat:
+            continue
+        runs, cls = cat["sweeps"], cat.get("source_class")
+        if not isinstance(runs, list):
+            r.add("B", "sweeps", f"{name}: sweeps must be a list of runs")
+            continue
+        if cls == "deep-research" and runs:
+            r.add("B", "sweeps", f"{name}: a deep-research report has no sweeps (a run cannot be repeated)")
+        if cls == "curated-corpus" and len(runs) > 1:
+            r.add("B", "sweeps", f"{name}: a curated corpus is one frozen run; a later run makes a new file")
+        for k, run in enumerate(runs):
+            where = f"{name}: sweeps[{k}]"
+            if not isinstance(run, dict):
+                r.add("B", "sweeps", f"{where} is not an object")
+                continue
+            for key in sorted(set(run) - SWEEP_KEYS):
+                r.add("B", "sweeps", f"{where}: unknown key {key!r}")
+            day = run.get("swept_on")
+            if not (isinstance(day, str) and ISO_DATE.fullmatch(day)):
+                r.add("B", "sweeps", f"{where}: swept_on {day!r} is not a date YYYY-MM-DD")
+                day = None
+            per = run.get("period")
+            if per is not None:
+                a, b = (per.get("from"), per.get("to")) if isinstance(per, dict) else (None, None)
+                if not all(isinstance(x, str) and ISO_DATE.fullmatch(x) for x in (a, b)):
+                    r.add("B", "sweeps", f"{where}: period needs dates from and to (YYYY-MM-DD)")
+                elif not (a <= b and (day is None or b <= day)):
+                    r.add("B", "sweeps", f"{where}: period must satisfy from <= to <= swept_on")
+            for key in ("query", "trigger"):
+                if not (isinstance(run.get(key), str) and run[key].strip()):
+                    r.add("B", "sweeps", f"{where}: {key} must be a non-empty text")
+            screen = run.get("screen")
+            if not isinstance(screen, bool):
+                r.add("B", "sweeps", f"{where}: screen must be true or false")
+            if (screen is True) != ("hits" in run):
+                r.add("B", "sweeps", f"{where}: hits is given exactly when screen is true")
+            for key in ("listed", "hits", "new", "attached"):
+                if key == "hits" and key not in run:
+                    continue
+                val = run.get(key)
+                if key not in run:
+                    r.add("B", "sweeps", f"{where}: {key} is missing")
+                elif isinstance(val, bool) or not isinstance(val, int) or val < 0:
+                    r.add("B", "sweeps", f"{where}: {key} must be an integer >= 0")
+            if "backfill" in run and not (isinstance(run["backfill"], str) and run["backfill"].strip()):
+                r.add("B", "sweeps", f"{where}: backfill must be a non-empty text")
+            ok = lambda x: isinstance(x, int) and not isinstance(x, bool) and x >= 0
+            kept = run.get("new") + run.get("attached") if ok(run.get("new")) and ok(run.get("attached")) else None
+            top = run.get("hits") if screen is True else run.get("listed")
+            if kept is not None and ok(top) and kept > top:
+                r.add("B", "sweeps", f"{where}: new + attached ({kept}) exceeds {'hits' if screen is True else 'listed'} ({top})")
+            if screen is True and ok(run.get("hits")) and ok(run.get("listed")) and run["hits"] > run["listed"]:
+                r.add("B", "sweeps", f"{where}: hits ({run['hits']}) exceeds listed ({run['listed']})")
+            if "script" in run and not (isinstance(run["script"], str) and (root / run["script"]).is_file()):
+                r.add("B", "sweeps", f"{where}: script {run['script']!r} is no file in this repository")
 
 
 def check_source_locators(d, r, root: Path = lc.ROOT):
