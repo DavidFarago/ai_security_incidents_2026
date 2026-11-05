@@ -403,7 +403,7 @@ def check_class_b(d, up, r: Result):
     for i in recs:
         iid, det, v, rep = i["id"], i.get("validated_cve_details") or {}, i["veris"], i["report"]
         srcs = lc.source_names(i)
-        kind, want = i.get("source_kind"), lc.source_kind(i)
+        kind, want = i.get("source_kind"), lc.source_kind(i, catalog)
         if kind not in lc.SOURCE_KINDS:
             r.add("B", "source-kind", f"source_kind {kind!r} is neither DB nor DR (§4.1)", iid)
         elif kind != want:
@@ -473,6 +473,8 @@ def check_class_b(d, up, r: Result):
         for x in sorted(exploited - in_veris):
             r.add("B", "veris-action-cve", f"exploited CVE {x} is in neither action.hacking.cve nor action.malware.cve", iid, x)
 
+    check_source_classes(d, r)
+    check_source_gate(d, r)
     check_source_locators(d, r)
     check_reference(d, r)
     check_sub_threshold(d, r)
@@ -570,6 +572,56 @@ def check_ai_initiated(i, r):
             r.add("B", "ai-initiated", "report.ai_initiated true needs the motive 'Misalignment' in an actor branch with "
                   "'Agentic system' (methodology §5.3)", iid)
 
+def check_source_classes(d, r):
+    """Methodology §10.2: every sources_catalog entry has a source_class of lc.SOURCE_CLASSES and the entry form of
+    its class. A register is cited at the register's own item, so its entry has no permalink; a curated corpus or a
+    deep-research report is a frozen file in this repository: path, permalink and sha256."""
+    for name, cat in sorted((d.get("sources_catalog") or {}).items()):
+        if not isinstance(cat, dict):
+            r.add("B", "source-class", f"sources_catalog entry {name!r} is not an object")
+            continue
+        cls = cat.get("source_class")
+        if cls not in lc.SOURCE_CLASSES:
+            r.add("B", "source-class", f"sources_catalog entry {name!r}: source_class {cls!r} is not one of "
+                  f"{', '.join(lc.SOURCE_CLASSES)}")
+        elif cls == "register" and cat.get("permalink"):
+            r.add("B", "source-class", f"sources_catalog entry {name!r}: a register is cited at its own items and has "
+                  "no permalink")
+        elif cls != "register":
+            missing = [k for k in ("path", "permalink", "sha256") if not (isinstance(cat.get(k), str) and cat[k].strip())]
+            if missing:
+                r.add("B", "source-class", f"sources_catalog entry {name!r}: a {cls} is a frozen file in this "
+                      f"repository and needs {', '.join(missing)}")
+
+
+def check_source_gate(d, r):
+    """Methodology §10.2 "The gate": a live record numbered lc.GATE_FROM or higher needs a source of class register or
+    curated-corpus, unless source_gate_pending maps its ID to the planned source. The list can only shrink: an ID
+    there must be such a live record that still fails the gate, with a non-empty planned source. The measurement
+    deep_research_only counts the records whose every source is a deep-research report (counted, live)."""
+    catalog = d.get("sources_catalog") or {}
+    pending = d.get("source_gate_pending", {})
+    if not isinstance(pending, dict):
+        r.add("B", "source-gate", "source_gate_pending must map record IDs to their planned source")
+        pending = {}
+    live = {i["id"]: i for i in lc.records(d)}
+    gated = {iid for iid in live if (lc.incident_number(iid) or 0) >= lc.GATE_FROM}
+    for iid in sorted(gated):
+        if not lc.passes_gate(live[iid], catalog) and iid not in pending:
+            r.add("B", "source-gate", f"numbered {lc.GATE_FROM} or higher, so it needs a source of class "
+                  f"{' or '.join(lc.GATE_CLASSES)}, or an entry in source_gate_pending (§10.2)", iid)
+    for iid, planned in sorted(pending.items()):
+        if iid not in gated:
+            r.add("B", "source-gate", f"source_gate_pending names no live record numbered {lc.GATE_FROM} or higher", iid)
+        elif lc.passes_gate(live[iid], catalog):
+            r.add("B", "source-gate", "already passes the gate: remove it from source_gate_pending", iid)
+        if not (isinstance(planned, str) and planned.strip()):
+            r.add("B", "source-gate", "source_gate_pending needs the planned source", iid)
+    r.measurements["source_gate_pending"] = dict(sorted(pending.items()))
+    r.measurements["deep_research_only"] = (sum(1 for i in d["incidents"] if lc.deep_research_only(i, catalog)),
+                                            sum(1 for i in live.values() if lc.deep_research_only(i, catalog)))
+
+
 def check_source_locators(d, r, root: Path = lc.ROOT):
     """Methodology §10.2: where a sources entry points. For a source with a `permalink` in sources_catalog (a report
     held in this repo), the file at `path` still has the catalog `sha256`, `url` is the permalink with a line range
@@ -613,7 +665,7 @@ def check_source_locators(d, r, root: Path = lc.ROOT):
             elif lc.is_vcdb_record(s) and lc.vcdb_pin(s) is None:
                 r.add("B", "source-locator", f"{where}: url is not pinned to a VCDB commit: "
                       f"https://github.com/vz-risk/VCDB/blob/<commit>/{loc}", i["id"])
-            elif src in lc.REGISTER_SOURCES and not url.endswith("/" + loc.split()[-1]):
+            elif lc.source_class(catalog, src) == "register" and not url.endswith("/" + loc.split()[-1]):
                 r.add("B", "source-locator", f"{where}: url {url!r} does not end with /{loc.split()[-1]}", i["id"])
 
 
@@ -815,6 +867,12 @@ def report(r: Result, verbose: bool) -> str:
     f = r.measurements.get("disclosure_rule_fails") or []
     L.append(f"measurement — disclosure incidents failing methodology §3.3 conditions (a) and (c): {len(f)}"
              + (f" ({', '.join(f)})" if f else "") + "; condition (b) is judgment")
+    pend = r.measurements.get("source_gate_pending") or {}
+    L.append(f"source_gate_pending (records ≥ {lc.GATE_FROM} waiting for a register or curated-corpus source): {len(pend)}")
+    L += [f"  {i}: {planned}" for i, planned in pend.items()]
+    if "deep_research_only" in r.measurements:
+        n, m = r.measurements["deep_research_only"]
+        L.append(f"measurement — records whose only sources are deep-research reports: {n} counted, {m} live")
     L.append(f"measurement — sub_threshold_incidents (disclosures failing §3.3; not counted): {r.measurements.get('sub_threshold_records', 0)} records"
              + (f", by class {r.measurements['sub_threshold_classes']}" if r.measurements.get("sub_threshold_classes") else "")
              + f"; retired_incidents: {r.measurements.get('retired_records', 0)}")

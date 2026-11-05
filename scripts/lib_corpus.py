@@ -55,9 +55,13 @@ RETIREMENT_REASONS = ["duplicate", "merged"]
 # caches from a pinned commit of VCDB's branch 1_4_2.
 VERIS_SCHEMA_VERSION = "1.4.2"
 
-# Incident registers (methodology §4.1: source_kind DB when at least one source is one). A planned field
-# sources_catalog[...].source_class will replace this set.
-REGISTER_SOURCES = {"incidentdatabase.ai_20260824_ai_incidents_2026.xlsx", "incidentdatabase.ai", "vz-risk/VCDB"}
+# The class of every sources_catalog entry (methodology §10.2): who selected the items of the discovery channel — the
+# curators of an incident register, a documented list selection (ours or a third party's), or a language model.
+SOURCE_CLASSES = ("register", "curated-corpus", "deep-research")
+# Methodology §10.2 "The gate": a live record numbered GATE_FROM or higher needs a source of one of these classes
+# (a repeatable discovery channel), unless source_gate_pending names it.
+GATE_FROM = 100
+GATE_CLASSES = ("register", "curated-corpus")
 
 # Cached per-identifier sources: sub-directory -> {stem: record}.
 RECORD_DIRS = ["cve.org", "ghsa", "osv", "ghsa-by-cve", "osv-by-cve"]
@@ -267,10 +271,27 @@ def source_names(rec: dict) -> list:
     return [s["source"] for s in srcs if is_source_entry(s)] if isinstance(srcs, list) else []
 
 
-def source_kind(rec: dict) -> str:
-    """The source_kind that a record's `sources` give (methodology §4.1): DB when at least one source is an incident
-    register, DR otherwise."""
-    return "DB" if any(s in REGISTER_SOURCES for s in source_names(rec)) else "DR"
+def source_class(catalog: dict, name: str):
+    """The source_class of a sources_catalog entry, or None when the entry or its class is missing."""
+    entry = catalog.get(name) if isinstance(catalog, dict) else None
+    return entry.get("source_class") if isinstance(entry, dict) else None
+
+
+def source_kind(rec: dict, catalog: dict) -> str:
+    """The source_kind that a record's `sources` give (methodology §4.1): DB when at least one source has the class
+    `register` in sources_catalog, DR otherwise."""
+    return "DB" if any(source_class(catalog, s) == "register" for s in source_names(rec)) else "DR"
+
+
+def passes_gate(rec: dict, catalog: dict) -> bool:
+    """Methodology §10.2 "The gate": the record has a source of class register or curated-corpus."""
+    return any(source_class(catalog, s) in GATE_CLASSES for s in source_names(rec))
+
+
+def deep_research_only(rec: dict, catalog: dict) -> bool:
+    """Every source of the record has the class deep-research (a record without sources is not counted here)."""
+    names = source_names(rec)
+    return bool(names) and all(source_class(catalog, s) == "deep-research" for s in names)
 
 
 LOCATOR_SEP = " › "

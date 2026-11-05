@@ -381,6 +381,7 @@ class Numbering(unittest.TestCase):
         self.assertFalse(top.get("validated_cve"), f"{top['id']} has CVEs; the test needs a record without")
         take(self.d, top["id"])
         recount(self.d)
+        self.d.get("source_gate_pending", {}).pop(top["id"], None)   # fixed by hand too, like the counts
         r = vi.validate(self.d, UPSTREAM)
         self.assertEqual([f.check for f in r.errors], ["numbering"], "\n".join(map(str, r.errors)))
         self.assertTrue(has(r, "numbering", msg=f"missing {n:03d}"))
@@ -901,8 +902,8 @@ class SourceLocators(unittest.TestCase):
         self.assertTrue(self.flagged("2026-001"))
 
     # The live AIID (incidents added after the export of 2026-08-24) is a register like VCDB.
-    LIVE_AIID = {"kind": "AI Incident Database (AIID), live site", "home": "https://incidentdatabase.ai/",
-                 "per_incident_locator": "AIID <id> + cite URL"}
+    LIVE_AIID = {"kind": "AI Incident Database (AIID), live site", "source_class": "register",
+                 "home": "https://incidentdatabase.ai/", "per_incident_locator": "AIID <id> + cite URL"}
 
     def cite_live_aiid(self, iid, url="https://incidentdatabase.ai/cite/1627"):
         self.d["sources_catalog"]["incidentdatabase.ai"] = self.LIVE_AIID
@@ -1235,6 +1236,132 @@ class DisclosureClasses(unittest.TestCase):
         self.assertFalse(lib_corpus.is_cve_disclosure(self.rec([], "self-malicious-release")))
         self.assertFalse(lib_corpus.is_cve_disclosure(self.rec([], "related")))
         self.assertFalse(lib_corpus.is_cve_disclosure(self.rec([])))
+
+
+class SourceClassesAndGate(unittest.TestCase):
+    """Methodology §10.2: every sources_catalog entry has a source_class (register, curated-corpus, deep-research) and
+    the entry form of its class; a live record numbered 100 or higher needs a register or curated-corpus source,
+    unless source_gate_pending names it with its planned source; the list can only shrink. §4.1: source_kind DB ⇔ a
+    source of class register."""
+
+    CLAUDE = "ClaudeCode_DeepResearch_ai_incidents_2026.md"
+    GROK = "Grok_DeepResearch_ai_incidents_2026.md"
+
+    def setUp(self):
+        self.d = copy.deepcopy(CORPUS)
+
+    def run_v(self):
+        return vi.validate(self.d, UPSTREAM)
+
+    def cat(self, name):
+        return self.d["sources_catalog"][name]
+
+    # ---- the class of every catalog entry and its entry form
+    def test_real_catalog_classes(self):
+        got = {k: v.get("source_class") for k, v in CORPUS["sources_catalog"].items()}
+        self.assertEqual(got, {
+            "ChatGPT_DeepResearch_ai_incidents_2026.md": "deep-research", self.CLAUDE: "deep-research",
+            self.GROK: "deep-research", "incidentdatabase.ai_20260824_ai_incidents_2026.xlsx": "register",
+            "vz-risk/VCDB": "register", "incidentdatabase.ai": "register"})
+
+    def test_missing_class(self):
+        del self.cat(self.GROK)["source_class"]
+        self.assertTrue(has(self.run_v(), "source-class", msg=self.GROK))
+
+    def test_unknown_class(self):
+        self.cat(self.GROK)["source_class"] = "primary-report"
+        self.assertTrue(has(self.run_v(), "source-class", msg="primary-report"))
+
+    def test_register_with_permalink(self):
+        self.cat("vz-risk/VCDB")["permalink"] = self.cat(self.CLAUDE)["permalink"]
+        self.assertTrue(has(self.run_v(), "source-class", msg="vz-risk/VCDB"))
+
+    def test_deep_research_without_permalink(self):
+        del self.cat(self.GROK)["permalink"]
+        self.assertTrue(has(self.run_v(), "source-class", msg=self.GROK))
+
+    def test_curated_corpus_that_is_a_live_url_list(self):
+        # Adversarial: a primary post entered as a "corpus" without a frozen file must not pass the gate unnoticed.
+        self.d["sources_catalog"]["sysdig-blog"] = {"kind": "Sysdig blog", "source_class": "curated-corpus",
+                                                    "home": "https://sysdig.com/blog/"}
+        self.assertTrue(has(self.run_v(), "source-class", msg="sysdig-blog"))
+
+    def test_switching_a_class_flips_the_source_kind(self):
+        # 2026-024 cites only VCDB; without VCDB as a register it would be DR.
+        self.cat("vz-risk/VCDB")["source_class"] = "deep-research"
+        self.assertTrue(has(self.run_v(), "source-kind", msg="DR", incident="2026-024"))
+
+    def test_source_kind_follows_the_catalog(self):
+        rec = incident(self.d, "2026-024")
+        self.assertEqual(lib_corpus.source_kind(rec, self.d["sources_catalog"]), "DB")
+        self.cat("vz-risk/VCDB")["source_class"] = "curated-corpus"
+        self.assertEqual(lib_corpus.source_kind(rec, self.d["sources_catalog"]), "DR")
+
+    # ---- the gate for records numbered 100 or higher
+    def new_record(self, source=CLAUDE):
+        """A sub-threshold record 2026-109 whose only source is `source` (no ranking row, no counts to fix)."""
+        new = add_record(self.d, "2026-104", next_id(self.d), array="sub_threshold_incidents")
+        e = next(s for s in incident(self.d, "2026-104")["sources"])
+        new["sources"] = [dict(e, source=source)] if source != self.CLAUDE else [dict(e)]
+        return new
+
+    def test_new_record_with_only_deep_research(self):
+        new = self.new_record()
+        self.assertTrue(has(self.run_v(), "source-gate", incident=new["id"]))
+
+    def test_new_record_with_a_vcdb_issue_passes(self):
+        new = self.new_record()
+        new["sources"].append({"source": "vz-risk/VCDB", "locator": "issues/23405",
+                               "url": "https://github.com/vz-risk/VCDB/issues/23405"})
+        new["source_kind"] = "DB"
+        self.assertFalse(has(self.run_v(), "source-gate", incident=new["id"]))
+
+    def test_new_record_with_a_curated_corpus_passes(self):
+        new = self.new_record(self.GROK)
+        new["sources"][0].update(locator="§3.2", url=self.cat(self.GROK)["permalink"] + "?plain=1#L1")
+        self.cat(self.GROK)["source_class"] = "curated-corpus"
+        self.assertFalse(has(self.run_v(), "source-gate", incident=new["id"]))
+
+    def test_record_below_100_is_not_gated(self):
+        # 2026-081 cites only deep-research reports and is numbered below 100.
+        self.assertFalse(has(self.run_v(), "source-gate", incident="2026-081"))
+
+    def test_real_pending_list(self):
+        self.assertEqual(sorted(CORPUS["source_gate_pending"]), ["2026-104", "2026-105", "2026-107", "2026-108"])
+        self.assertFalse(has(vi.validate(CORPUS, UPSTREAM), "source-gate"))
+
+    def test_pending_record_removed_from_the_list_fails(self):
+        del self.d["source_gate_pending"]["2026-104"]
+        self.assertTrue(has(self.run_v(), "source-gate", incident="2026-104"))
+
+    def test_pending_record_that_already_passes(self):
+        incident(self.d, "2026-104")["sources"].append(
+            {"source": "incidentdatabase.ai", "locator": "AIID 1627", "url": "https://incidentdatabase.ai/cite/1627"})
+        incident(self.d, "2026-104")["source_kind"] = "DB"
+        self.assertTrue(has(self.run_v(), "source-gate", msg="already", incident="2026-104"))
+
+    def test_pending_id_below_100(self):
+        self.d["source_gate_pending"]["2026-081"] = "a register"
+        self.assertTrue(has(self.run_v(), "source-gate", incident="2026-081"))
+
+    def test_pending_id_unknown(self):
+        self.d["source_gate_pending"]["2026-150"] = "a register"
+        self.assertTrue(has(self.run_v(), "source-gate", incident="2026-150"))
+
+    def test_pending_without_planned_source(self):
+        self.d["source_gate_pending"]["2026-104"] = " "
+        self.assertTrue(has(self.run_v(), "source-gate", incident="2026-104"))
+
+    def test_pending_list_not_a_map(self):
+        self.d["source_gate_pending"] = ["2026-104"]
+        self.assertTrue(has(self.run_v(), "source-gate"))
+
+    # ---- measurement (decision of 2026-09-20: printed, never fails)
+    def test_deep_research_only_measurement(self):
+        classes = {k: v.get("source_class") for k, v in CORPUS["sources_catalog"].items()}
+        only = lambda i: all(classes.get(s["source"]) == "deep-research" for s in i["sources"])
+        want = (sum(1 for i in CORPUS["incidents"] if only(i)), sum(1 for i in lib_corpus.records(CORPUS) if only(i)))
+        self.assertEqual(vi.validate(CORPUS, UPSTREAM).measurements["deep_research_only"], want)
 
 
 if __name__ == "__main__":

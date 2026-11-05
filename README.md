@@ -81,10 +81,10 @@ edit only the JSON.
 
 - **2 Critical · 23 High · 33 Medium · 17 Low · 9 Negligible**
 - Status: 74 Confirmed · 3 Suspected · 2 Near miss · 5 False positive
-- IDs: `2026-nnn`, and every record's `source_kind` says where it came from: `DB` (*database*:
-  at least one register source — AIID or VCDB; 54 incidents) or `DR` (*direct report*: no register source,
-  found through a deep-research or primary report; 30 counted incidents and the 24 sub-threshold records,
-  all of them so far from the three deep-research reports).
+- IDs: `2026-nnn`, and every record's `source_kind` says whether a register lists it: `DB` (*database*:
+  at least one source of class `register` — AIID or VCDB; 55 incidents) or `DR` (*direct report*: no register source;
+  29 counted incidents and the 24 sub-threshold records,
+  all of them so far citing only the three deep-research reports).
   A record switches its `source_kind`, never its ID, when a register adds it.
   For 001–099, `nnn` is the position in the priority ranking of 2026-08-27.
   New records continue from 100 (`id_scheme.highest_assigned` + 1, the highest number assigned plus one).
@@ -169,6 +169,9 @@ KEV) from the cached records (Class A) and checks the bookkeeping of the JSON: v
 the VERIS `action.*.cve` alignment, vocabularies, the ID scheme (`2026-nnn`; the numbers over `incidents`,
 `sub_threshold_incidents` and `retired_incidents` run exactly from 001 to `id_scheme.highest_assigned`,
 each array in ascending order; every record's `source_kind` as its `sources` give it),
+the `source_class` of every `sources_catalog` entry and its entry form,
+the gate (a live record numbered 100 or higher needs a `register` or `curated-corpus` source,
+or an entry in the pending list `source_gate_pending`),
 the sub-threshold rule (a record there must be a vulnerability disclosure,
 and one that meets methodology §3.3 (a) KEV or (c) realized harm must be promoted to `incidents`),
 the wrappers of retired records, the `sources` of every live record (at least one entry, each with `source`,
@@ -247,19 +250,32 @@ Both are kept verbatim and never edited.
 
 ## Sources & provenance
 
-Every incident's `sources` field cites its **original** source(s), the discovery channel: where the record was found.
+Every incident's `sources` field lists its **original** sources:
+the items of discovery channels where the record can be found, each verified, not necessarily all of them.
+A discovery channel is a `sources_catalog` entry,
+and its `source_class` names who selected the items: `register` (the curators of an incident register),
+`curated-corpus` (a documented list selection, frozen in this repository)
+or `deep-research` (a language model's report).
+A primary report, such as an advisory or a victim's notice, is evidence and belongs in `veris.reference`.
+New entries are appended at the end, so `sources[0]` is the first find.
 Each entry names the source, the item in it (`locator`) and the item's `url`:
 
-- **`incidentdatabase.ai_20260824_ai_incidents_2026.xlsx`** — AI Incident Database (AIID) export,
+- **`incidentdatabase.ai_20260824_ai_incidents_2026.xlsx`** (`register`) — AI Incident Database (AIID) export,
   2026-08-24 (cited with `AIID <id>` + the cite-page URL).
-- **`vz-risk/VCDB`** — the [VERIS Community Database](https://github.com/vz-risk/VCDB),
+- **`incidentdatabase.ai`** (`register`) — the live AIID, for incidents that AIID added after the export.
+- **`vz-risk/VCDB`** (`register`) — the [VERIS Community Database](https://github.com/vz-risk/VCDB),
   cited at the exact encoded record (`data/json/{validated,submitted}/<uuid>.json`) or the 2026 issue intake (`issues/<n>`).
   Citations point at VCDB itself; the adopted records are also cached under `incidents/upstream/vcdb/` for the verifier.
   A record that adopts the coding of a VCDB record (`adopted: true`) has, per field, VCDB's value (*theirs*), its own value (*ours*)
   or a value that differs from both (*other*); *ours* and *other* state their reason in `overrides` (methodology §10.2).
 - **`ChatGPT_DeepResearch_ai_incidents_2026.md`**, **`ClaudeCode_DeepResearch_ai_incidents_2026.md`**,
-  **`Grok_DeepResearch_ai_incidents_2026.md`** —
+  **`Grok_DeepResearch_ai_incidents_2026.md`** (`deep-research`) —
   three independent deep-research incident reviews (kept in `incidents/sources/`).
+
+A live record numbered 100 or higher needs a `register` or `curated-corpus` source:
+a deep-research run cannot be repeated, and it finds what language models already know.
+Records that wait for such a source are listed with their planned source in `source_gate_pending`
+(methodology §10.2).
 
 Each record also carries **`veris.reference`**: the reporting on the incident's event, as URLs.
 It holds every link the record's sources give for the event, plus reporting found by the analyst,
@@ -268,7 +284,7 @@ No URL appears in both fields: `veris.reference` holds no `sources` url,
 no register item and no link into this repository.
 The `.md` shows up to three of the reference URLs as the "Reporting" links.
 
-Citation counts across the corpus: VCDB 41 · ClaudeCode 36 · ChatGPT 19 · AIID 17 · Grok 9.
+Citation counts over the 108 live records: VCDB 59 · ClaudeCode 42 · ChatGPT 19 · AIID export 17 · Grok 9 · AIID live 5.
 
 ## Scope
 

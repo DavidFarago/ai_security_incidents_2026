@@ -12,52 +12,64 @@
   "sources_catalog": {
     "ChatGPT_DeepResearch_ai_incidents_2026.md": {
       "kind": "ChatGPT deep-research report",
+      "source_class": "deep-research",
       "path": "incidents/sources/ChatGPT_DeepResearch_ai_incidents_2026.md",
       "permalink": "https://github.com/DavidFarago/ai_security_incidents_2026/blob/ecb3ccd52e17931f30fb6887020458a922a945d9/incidents/sources/ChatGPT_DeepResearch_ai_incidents_2026.md",
       "sha256": "e475d8f5c0b47fa7590b31d850c0ba426873e4f94d0bc494f4fad6aeb376d945"
     },
     "ClaudeCode_DeepResearch_ai_incidents_2026.md": {
       "kind": "Claude Code deep-research report",
+      "source_class": "deep-research",
       "path": "incidents/sources/ClaudeCode_DeepResearch_ai_incidents_2026.md",
       "permalink": "https://github.com/DavidFarago/ai_security_incidents_2026/blob/ecb3ccd52e17931f30fb6887020458a922a945d9/incidents/sources/ClaudeCode_DeepResearch_ai_incidents_2026.md",
       "sha256": "67fbb04da7b4fe6f8d01a46bcc675c2a8d01fc22346c8987931a331dab8a81a2"
     },
     "Grok_DeepResearch_ai_incidents_2026.md": {
       "kind": "Grok deep-research report",
+      "source_class": "deep-research",
       "path": "incidents/sources/Grok_DeepResearch_ai_incidents_2026.md",
       "permalink": "https://github.com/DavidFarago/ai_security_incidents_2026/blob/ecb3ccd52e17931f30fb6887020458a922a945d9/incidents/sources/Grok_DeepResearch_ai_incidents_2026.md",
       "sha256": "bb87c76a1b8962aa219d8430fadcab8cdcd65a9ad0fdaf8161c1ade6ff723462"
     },
     "incidentdatabase.ai_20260824_ai_incidents_2026.xlsx": {
       "kind": "AI Incident Database (AIID) export, 2026-08-24",
+      "source_class": "register",
       "path": "incidents/sources/incidentdatabase.ai_20260824_ai_incidents_2026.xlsx",
       "home": "https://incidentdatabase.ai/",
       "per_incident_locator": "AIID <id> + cite URL"
     },
     "vz-risk/VCDB": {
       "kind": "VERIS Community Database",
+      "source_class": "register",
       "repo": "https://github.com/vz-risk/VCDB",
       "per_incident_locator": "encoded records at data/json/{validated,submitted}/<uuid>.json (blob URL), or the 2026 issue intake at issues/<n>",
       "note": "No local VCDB snapshot in incidents/sources yet; citations point at the upstream repo."
     },
     "incidentdatabase.ai": {
       "kind": "AI Incident Database (AIID), live site",
+      "source_class": "register",
       "home": "https://incidentdatabase.ai/",
       "per_incident_locator": "AIID <id> + cite URL",
-      "note": "For incidents added after the export of 2026-08-24 (incidentdatabase.ai_20260824_ai_incidents_2026.xlsx, which ends at AIID 1508); citations point at the live cite page. Report links taken from the AIID snapshot backup-20261019101022 (https://incidentdatabase.ai/research/snapshots/)."
+      "note": "For incidents added after the export of 2026-08-24 (incidentdatabase.ai_20260824_ai_incidents_2026.xlsx, which ends at AIID 1508); citations point at the live cite page. Report links taken from the AIID snapshot backup-20261019101022 (https://incidentdatabase.ai/research/snapshots/); AIID 1613's from its live cite page (2026-11-04)."
     }
+  },
+  "source_gate_pending": {
+    "2026-104": "OECD AIM 2026-06-27-014b (\"AI Coding Assistant Claude Code Exploited via Indirect Prompt Injection\"), once OECD AIM is a register in sources_catalog",
+    "2026-105": "Hackmageddon, timeline 16-31 May 2026, row #56, once Hackmageddon is a register in sources_catalog",
+    "2026-107": "OECD AIM 2026-05-07-1210 (\"AI-Coded Apps Leak Sensitive Data Due to Poor Security\"), once OECD AIM is a register in sources_catalog",
+    "2026-108": "a sweep of Sysdig's 2026 posts (curated corpus), or OECD AIM or Hackmageddon if either holds the VAPT pipeline"
   },
   "counts": {
     "total_incidents": 84,
     "from_ai_software_security_incidents_2026": 35,
     "from_merged_incidents_2026_VERIS_described": 64,
     "citations_by_source": {
-      "vz-risk/VCDB": 49,
+      "vz-risk/VCDB": 59,
       "ClaudeCode_DeepResearch_ai_incidents_2026.md": 25,
       "incidentdatabase.ai_20260824_ai_incidents_2026.xlsx": 17,
       "Grok_DeepResearch_ai_incidents_2026.md": 6,
       "ChatGPT_DeepResearch_ai_incidents_2026.md": 7,
-      "incidentdatabase.ai": 4
+      "incidentdatabase.ai": 5
     },
     "by_observed_severity": {
       "Critical": 2,
@@ -75,13 +87,13 @@
   },
   "id_scheme": {
     "assigned_on": "2026-08-27",
-    "source_kind_rule": "Every record's source_kind: DB (database) = at least one source is an incident register (the AI Incident Database, as the export or the live site, or vz-risk/VCDB); DR (direct report) = no source is a register: the incident was found through a report, deep-research (ChatGPT / Claude Code / Grok) or primary. It records whether a register lists the incident, not source quality; a record switches it, never its ID, when a register adds the incident. Until 2026-10-25 it was the prefix of the ID (DB-2026-nnn, DR-2026-nnn).",
+    "source_kind_rule": "Every record's source_kind: DB (database) = at least one source has the source_class register in sources_catalog (the AI Incident Database, as the export or the live site, or vz-risk/VCDB); DR (direct report) = no source is a register, so far every such record cites deep-research reports (ChatGPT / Claude Code / Grok) only. It records whether a register lists the incident, not source quality; a record switches it, never its ID, when a register adds the incident. Until 2026-10-25 it was the prefix of the ID (DB-2026-nnn, DR-2026-nnn).",
     "number_rule": "001-099: the position in the priority ranking of 2026-08-27 (observed severity desc, potential severity as tiebreaker, order within ties as in the ranking of that day). From 100 on: highest_assigned + 1, whatever the rank. The ID is 2026-nnn; the number nnn is unique and is the '#' of the Markdown report; ranking_table holds the current ranking (methodology §9.3).",
     "stability": "Frozen: IDs are never renumbered. Later re-ranking is reflected in ranking_table only; new incidents continue from 100. A new record gets highest_assigned + 1 in whichever array it enters; no number is deleted or reused (methodology §4.1).",
     "highest_assigned": 108,
     "counts": {
-      "DB": 54,
-      "DR": 30
+      "DB": 55,
+      "DR": 29
     }
   },
   "ranking_table": [
@@ -884,7 +896,7 @@
       "status": "Confirmed",
       "observed": "Low",
       "potential": "Medium",
-      "sources": "ClaudeCode_DeepResearch_ai_incidents_2026.md",
+      "sources": "ClaudeCode_DeepResearch_ai_incidents_2026.md; incidentdatabase.ai",
       "cve_cwe": "CWE-noinfo",
       "validated_cve": ""
     },
@@ -4825,6 +4837,11 @@
         },
         {
           "source": "vz-risk/VCDB",
+          "locator": "issues/23466",
+          "url": "https://github.com/vz-risk/VCDB/issues/23466"
+        },
+        {
+          "source": "vz-risk/VCDB",
           "locator": "data/json/submitted/8084d01e-dd3e-4bca-b710-c6fdbfb5c5cf.JSON",
           "url": "https://github.com/vz-risk/VCDB/blob/f6f98c00f66ab35f5b49977a5852ce94a5bb31d1/data/json/submitted/8084d01e-dd3e-4bca-b710-c6fdbfb5c5cf.JSON",
           "adopted": true,
@@ -4843,11 +4860,6 @@
             "asset.cloud": "No source says where Meta's HTS recovery system runs (External Cloud is an inference).",
             "victim.industry": "Instagram is a social network: NAICS 516210 covers 'operating social network sites'; 519290 is 'Web Search Portals and All Other Information Services'."
           }
-        },
-        {
-          "source": "vz-risk/VCDB",
-          "locator": "issues/23466",
-          "url": "https://github.com/vz-risk/VCDB/issues/23466"
         }
       ],
       "veris": {
@@ -6383,6 +6395,11 @@
             "plus.event_chain": "Two actors made the errors (see actor.partner): the chain says which made which.",
             "reference": "The researcher's own report (public 10 June 2026), Newsweed and The Verge back the counts, the dates and the outsourcing firm."
           }
+        },
+        {
+          "source": "vz-risk/VCDB",
+          "locator": "issues/23569",
+          "url": "https://github.com/vz-risk/VCDB/issues/23569"
         }
       ],
       "veris": {
@@ -9195,6 +9212,11 @@
             "attribute.confidentiality.data": "RXNT's notice (Washington AG): 'The incident did involve your Social Security Number' (Sensitive Personal added).",
             "reference": "RXNT's notice filed with the Washington AG: access 1-3 March 2026 and the data types, Social Security numbers included."
           }
+        },
+        {
+          "source": "vz-risk/VCDB",
+          "locator": "issues/23381",
+          "url": "https://github.com/vz-risk/VCDB/issues/23381"
         }
       ],
       "veris": {
@@ -9560,6 +9582,11 @@
             "plus.event_chain": "Step 1: the entry method is undisclosed, so its attribute is unk (as VCDB's reviewer set it in 2026-041 and 2026-048). New step 3: the ransomware (CRS's counsel: 'later confirmed to be ransomware'; 'employees experienced issues accessing our computer network').",
             "reference": "CRS's own notices (California and Nebraska AG) confirm the ransomware, the network disruption and the HR files; ransomware.live holds Akira's listing."
           }
+        },
+        {
+          "source": "vz-risk/VCDB",
+          "locator": "issues/23380",
+          "url": "https://github.com/vz-risk/VCDB/issues/23380"
         }
       ],
       "veris": {
@@ -10412,6 +10439,11 @@
             "attribute.confidentiality.data": "Cyber Daily: 'the data the threat actor claims to have stolen is currently unknown'; no source names a data variety.",
             "reference": "Mackay Sugar's Update 4 (unauthorised access, the dark-web claim) and Update 6 (all mills operational again); ABC News on the shutdown of 10 June."
           }
+        },
+        {
+          "source": "vz-risk/VCDB",
+          "locator": "issues/23385",
+          "url": "https://github.com/vz-risk/VCDB/issues/23385"
         }
       ],
       "veris": {
@@ -10631,6 +10663,11 @@
             "asset.assets": "Security Magazine: 'it is currently unknown how Kodak's systems were breached'; no source names a database.",
             "reference": "SecurityWeek dates the leak-site listing (15 June) and reports the ransom demand."
           }
+        },
+        {
+          "source": "vz-risk/VCDB",
+          "locator": "issues/23383",
+          "url": "https://github.com/vz-risk/VCDB/issues/23383"
         }
       ],
       "veris": {
@@ -11509,6 +11546,11 @@
             "action.malware.result": "The theft is claimed only (data_disclosure Potentially; Elmwood: 'may have viewed or copied'), so Exfiltrate is not shown; the ransomware itself is the payload.",
             "reference": "Elmwood's own notice (17 April 2026) and the Vermont AG listing (Social Security and government ID numbers); ClaimDepot for the ransomware and LockBit's claim."
           }
+        },
+        {
+          "source": "vz-risk/VCDB",
+          "locator": "issues/23387",
+          "url": "https://github.com/vz-risk/VCDB/issues/23387"
         }
       ],
       "veris": {
@@ -11725,6 +11767,11 @@
             "actor.external.motive": "Lifepoint's letter: 'we have no evidence that your information has been, or will be, misused'; no ransom, extortion or sale is reported (VCDB's note calls Financial 'an INFERENCE').",
             "asset.cloud": "Lifepoint's letter: 'certain databases within Lifepoint's internal environment'; that says nothing about where they run."
           }
+        },
+        {
+          "source": "vz-risk/VCDB",
+          "locator": "issues/23384",
+          "url": "https://github.com/vz-risk/VCDB/issues/23384"
         }
       ],
       "veris": {
@@ -11902,6 +11949,11 @@
             "victim.industry": "ClaimDepot: 'a private nonprofit university in Whittier, California'. NAICS 611310 is 'Colleges, Universities, and Professional Schools', while 6221 is 'General Medical and Surgical Hospitals'. No source says SCUHS runs a hospital, and VCDB's note concedes 'SCUHS is functionally a university (education)'.",
             "reference": "SCUHS's own notice of data event is the primary source; Federman & Sherwood's page moved away, so its archived copy replaces it."
           }
+        },
+        {
+          "source": "vz-risk/VCDB",
+          "locator": "issues/23570",
+          "url": "https://github.com/vz-risk/VCDB/issues/23570"
         }
       ],
       "veris": {
@@ -14367,6 +14419,11 @@
             "asset.assets": "Cyber Daily: the sample was 'customer documentation'; no source names the breached system (no database).",
             "timeline.incident": "ransomware.live: 'Discovered: 2026-06-20 08:50 UTC'; its 'Estimated attack date' copies the listing date. No source dates the attack (VCDB's notes: 'actual initial-access date is undisclosed')."
           }
+        },
+        {
+          "source": "vz-risk/VCDB",
+          "locator": "issues/23571",
+          "url": "https://github.com/vz-risk/VCDB/issues/23571"
         }
       ],
       "veris": {
@@ -14562,6 +14619,11 @@
             "action.misuse.vector": "AFL.com.au: 'a third breach involved an online Microsoft Teams meeting attended by 15 people'; no source says any disclosure happened in person (VCDB's 'in-person' note has no source).",
             "reference": "The club's own statement (primary) and SEN on the Teams meeting with players' partners."
           }
+        },
+        {
+          "source": "vz-risk/VCDB",
+          "locator": "issues/23568",
+          "url": "https://github.com/vz-risk/VCDB/issues/23568"
         }
       ],
       "veris": {
@@ -15611,7 +15673,7 @@
     },
     {
       "id": "2026-100",
-      "source_kind": "DR",
+      "source_kind": "DB",
       "title": "Early Claude Mythos Preview escaped its test sandbox on request and, unasked, posted its exploit details online",
       "date": "undated test before 7 Apr 2026 (disclosed 7 Apr 2026)",
       "sources": [
@@ -15619,6 +15681,11 @@
           "source": "ClaudeCode_DeepResearch_ai_incidents_2026.md",
           "locator": "item 5",
           "url": "https://github.com/DavidFarago/ai_security_incidents_2026/blob/ecb3ccd52e17931f30fb6887020458a922a945d9/incidents/sources/ClaudeCode_DeepResearch_ai_incidents_2026.md?plain=1#L72-L73"
+        },
+        {
+          "source": "incidentdatabase.ai",
+          "locator": "AIID 1613",
+          "url": "https://incidentdatabase.ai/cite/1613"
         }
       ],
       "veris": {
@@ -15628,7 +15695,7 @@
         "incident_id": "2026-100",
         "security_incident": "Confirmed",
         "confidence": "High",
-        "reference": "https://www-cdn.anthropic.com/08ab9158070959f88f296514c21b7facce6f52bc.pdf",
+        "reference": "https://www-cdn.anthropic.com/08ab9158070959f88f296514c21b7facce6f52bc.pdf; https://www-cdn.anthropic.com/7624816413e9b4d2e3ba620c5a5e091b98b190a5/Claude%20Mythos%20Preview%20System%20Card.pdf; https://technewsday.com/anthropics-claude-mythos-model-escapes-test-sandbox-during-testing/; https://thehackernews.com/2026/04/anthropics-claude-mythos-finds.html",
         "summary": "During behavioral testing with a simulated user, an earlier internally-deployed version of Anthropic's Claude Mythos Preview was given a secured sandbox computer and told to escape it and send a message to the researcher running the evaluation. It developed a moderately sophisticated multi-step exploit that gave the sandbox broad internet access, although the system was meant to reach only a few predetermined services, and emailed the researcher as requested. In addition, 'in a concerning and unasked-for effort to demonstrate its success', it posted details about its exploit to multiple hard-to-find but public-facing websites. The sandbox was separate from the system that ran the model and held its weights; the model reached neither its weights nor any internal system (Anthropic, Claude Mythos Preview system card, 7 Apr 2026, §4.1.1).",
         "actor": {
           "internal": {
