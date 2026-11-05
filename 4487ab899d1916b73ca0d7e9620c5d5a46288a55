@@ -1,0 +1,28 @@
+# Source classes and the gate — data review (2026-11-04)
+
+Attached as a git note to the commit "Gate new records on a repeatable source". Every `sources` entry that the commit
+adds or moves, with what Claude verified; the user approved the commit on 2026-11-05.
+
+| Record | Change | Verified |
+|---|---|---|
+| 2026-100 | New `sources` entry, appended: `incidentdatabase.ai` AIID 1613 (https://incidentdatabase.ai/cite/1613). `source_kind` DR → DB. `veris.reference` gains AIID's three report links: the Mythos Preview system card at https://www-cdn.anthropic.com/7624816413e9b4d2e3ba620c5a5e091b98b190a5/Claude%20Mythos%20Preview%20System%20Card.pdf (a newer version, 15 Apr 2026, of the card the record already cited, 9 Apr), Technewsday, The Hacker News | The cite page, "Incident 1613: Claude Mythos Preview Reportedly Posted Sandbox Exploit Details to Public Websites During Anthropic Evaluation", describes exactly this escape; all three links report it. |
+| 2026-024 | + `vz-risk/VCDB` issues/23569, appended | VCDB record names it in `plus.github`; "PuffPal, an App for Accessing Cannabis Clubs, Leaked 1 Million Users' Passports"; its link is in `veris.reference` |
+| 2026-041 | + issues/23381 | "First Sight Family Vision (Jason R Egbert OD PC) reports third party data breach": a client's report of the RXNT breach, the same event; its link is in `veris.reference` |
+| 2026-043 | + issues/23380 | "Clinical Registry Solutions data breach"; link present |
+| 2026-047 | + issues/23385 | "Ransomware Attack Shuts Down Mills of Australia's Second-Largest Sugar Producer". Of its three links, two are present; the third, SecurityWeek's roundup "In Other News: Anthropic Maps AI Threats, Unpatched Comodo Flaw, Palantir Chief Eyed for CISA" of 5 June 2026, predates the attack (10 June) and covers The Gentlemen in general, so it stays out (§10.2: background reading); VCDB's record leaves it out too. |
+| 2026-048 | + issues/23383 | "Kodak confirms data breach claimed by ShinyHunters extortion gang"; link present |
+| 2026-053 | + issues/23387 | "Data Breach Announced by Elmwood Home Care"; link present |
+| 2026-054 | + issues/23384 | "Lifepoint Health Data Breach Exposes Social Security Numbers of Contracted Vendor …"; link present |
+| 2026-055 | + issues/23570 | "Southern California Univ. Health Sciences Data Breach - McShane & Brady"; link present |
+| 2026-075 | + issues/23571 | "Exclusive: Victorian RV dealer suffers alleged cyber attack - Southern Design RV"; link present |
+| 2026-076 | + issues/23568 | "Demons apologise to partner of Steven May for privacy breach - Melbourne Demons"; link present |
+| 2026-017 | The VCDB-encoded record (data/json/submitted/8084d01e…) moves from position 2 to the end | It was inserted between issues/23309 and issues/23466 by c4052c9 (2026-10-11); a history check of all 34 commits of the JSON found no other insertion or reordering. |
+
+All 10 issues were filed by VCDB's maintainer `swidup` on 2026-06-17 to 2026-06-30 and are closed; each VCDB record
+names its issue in `plus.github`.
+
+`sources_catalog[*].source_class`: the three deep-research reports `deep-research`; the AIID export, the live AIID and
+VCDB `register`. `source_gate_pending`: 2026-104 and 107 wait for OECD AIM (`2026-06-27-014b`, `2026-05-07-1210`),
+105 for Hackmageddon (16–31 May 2026, row #56), 108 for a sweep of Sysdig's 2026 posts, or OECD AIM or Hackmageddon if
+either holds the VAPT pipeline. Records citing deep-research reports only: 29 counted, 53 live (49 of them numbered
+below 100, where the gate does not apply yet).
